@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "vcissuer.fullname" . }}
+  labels:
+    {{- include "vcissuer.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "vcissuer.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "vcissuer.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "vcissuer.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: init-properties
+          image: alpine
+          command:
+            - "sh"
+            - "-c"
+          # DON'T DO THIS IN PRODUCTION
+          # generate ed25519.pem and ed25519.pem.pub without passphrase
+          args:
+            - |
+              apk update
+              apk add --no-cache openssh-keygen
+              ssh-keygen -t ed25519 -f ./ed25519.pem -q -N ""
+              touch /app/application.properties
+              cat ./ed25519.pem | sed ':a;N;$!ba;s/\n/\\n/g' | sed '1s/^/ed25519.pem=/' >> /app/application.properties
+              cat ./ed25519.pem.pub | sed ':a;N;$!ba;s/\n/\\n/g' | sed '1s/^/ed25519.pub=/' >> /app/application.properties
+              echo "host.name=${HOST_NAME}" >> /app/application.properties
+              echo "logging.level.root=${LOG_LEVEL}" >> /app/application.properties
+          env:
+            - name: HOST_NAME
+              value: {{ .Values.app.host | quote }}
+            - name: LOG_LEVEL
+              value: {{ .Values.app.logging.level | quote }}
+          volumeMounts:
+            - name: application-properties
+              mountPath: /app
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /.well-known/did.json
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /.well-known/did.json
+              port: http
+          volumeMounts:
+            - name: application-properties
+              mountPath: /application.properties
+              readOnly: true
+              subPath: application.properties
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: application-properties
+          emptyDir:
+            medium: Memory
