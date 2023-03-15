@@ -1,0 +1,52 @@
+---
+name: Release - Chart
+
+on:
+  repository_dispatch:
+    types: [trigger-workflow-release]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # PREPARE
+      - name: Check whether secrets exist
+        if: github.ref == 'refs/heads/main'
+        id: secret-presence
+        run: |
+          [ ! -z "${{ secrets.CXNG_GHCR_PAT }}" ] && echo "::set-output name=CXNG_GHCR_PAT::true"
+          exit 0
+
+      - uses: actions/checkout@v2
+        with:
+          ref: main
+
+      # HELM - PACKAGE AND PUSH
+      - name: Install Helm
+        uses: azure/setup-helm@v3.5
+        with:
+          version: v3.8.1
+
+      - name: Package helm, update index.yaml and push to gh-pages
+        run: |
+          # Prepare git env
+          git config user.name "GitHub actions"
+          git config user.email noreply@github.com
+          
+          # Package all charts
+          find charts -name Chart.yaml | xargs -n1 dirname | xargs -n1 helm package -u -d helm-charts
+          
+          # Generate helm repo index.yaml
+          helm repo index . --merge index.yaml --url https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/
+          
+          # Commit and push to gh-pages
+          git add index.yaml helm-charts
+          git stash save
+          git fetch origin
+          git checkout gh-pages
+          git stash pop
+          git commit -s -m "Release ${{ github.event.client_payload.version }}"
+          
+          git push origin gh-pages
