@@ -23,7 +23,7 @@ public class DocumentController {
     public static final String DOCUMENT = """
             {
               "@context": [
-                "https://www.w3.org/ns/did/v1",
+                "https://www.w3.org/ns/did/v1"
               ],
               "id": "<did>",
               "verificationMethod": [{
@@ -31,7 +31,7 @@ public class DocumentController {
                 "type": "Ed25519VerificationKey2020",
                 "controller": "<did>",
                 "publicKeyMultibase": "<key>"
-              }],
+              }]
             }
             """;
 
