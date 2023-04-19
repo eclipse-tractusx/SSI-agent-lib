@@ -2,7 +2,7 @@ FROM openjdk:17-alpine as builder
 
 COPY . .
 RUN ./mvnw clean package
-ARG JAR_FILE=target/*.jar
+ARG JAR_FILE=cx-ssi-agent-app/target/*.jar
 COPY ${JAR_FILE} app.jar
 
 FROM openjdk:17-alpine
@@ -23,8 +23,13 @@ RUN adduser \
      --uid "$APP_UID" \
      "$APP_USER"
 
+WORKDIR /app
+
 COPY --from=builder --chown=$APP_USER:$APP_USER app.jar app.jar
 
 USER $APP_USER:$APP_USER
 ENTRYPOINT ["java", \
+            "-XX:+UseContainerSupport", \
+            "-Dspring.config.location=/app/", \
+            "-Djava.security.egd=file:/dev/./urandom", \
             "-jar","app.jar"]
