@@ -1,0 +1,204 @@
+openapi: "3.0.0"
+info:
+  title: agent
+  description: Common Api Definition of Catena-X SSI Agents
+  version: 0.0.2
+  contact:
+    name: Dominik Pinsel
+    email: dominik.pinsel@mercedes-benz.com
+paths:
+  /.well-known/did.json:
+    get:
+      summary: Get the DID Web Document
+      operationId: did-document
+      tags:
+        - did:web
+        - public
+      responses:
+        '200':
+          description: DID Document
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DidDocument'
+#            examples:
+#              example:
+#                data:
+#                id: did:web:did.example.com
+#                verificationMethod:
+#                    id: did:web:did.example.com#key-1
+#                    type: Ed25519VerificationKey2020
+#                    controller: did:web:did.example.com
+#                    publicKeyMultibase: z6MkpTHR8VNsBxYAAWHut2Geadd9jSwuBV8xRoAnwWsdvktH
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /verifiable-credentials:
+    post:
+      summary: Stores Verifiable Credential
+      operationId: store-credential
+      tags:
+        - verifiable-credentials
+        - private
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifiableCredential'
+        required: true
+      responses:
+        '201':
+          description: Stored Verifiable Credential
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifiableCredential'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      summary: Get all Verifiable Credentials
+      operationId: get-credentials
+      tags:
+        - credentials
+        - private
+      responses:
+        '200':
+          description: Verifiable Credentials
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VerifiableCredential'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /verifiable-credentials/sign:
+    post:
+      summary: Create a signed Verifiable Credential and store it
+      operationId: sign-credential
+      tags:
+        - verifiable-credentials
+        - private
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifiableCredential'
+        required: true
+      responses:
+        '201':
+          description: Created Verifiable Credential
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifiableCredential'
+        '400':
+          description: Bad Request if credential is already signed
+        '409':
+          description: Conflict if credential with same id already exists.
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Map:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/MapItem'
+    MapItem:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: object
+    DidDocument:
+      type: object
+      required:
+        - id
+      properties:
+        '@context':
+          type: array
+          items:
+            type: string
+        id:
+          type: string
+          format: uri
+        verificationMethod:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - type
+              - controller
+              - publicKeyBase58
+            properties:
+              id:
+                type: string
+              type:
+                type: string
+              controller:
+                type: string
+              publicKeyBase58:
+                type: string
+    VerifiableCredential:
+      type: object
+      required:
+        - id
+        - type
+        - issuer
+        - issuanceDate
+      properties:
+        '@context':
+          type: array
+          items:
+            type: string
+        id:
+          type: string
+          format: uri
+        type:
+          type: array
+          items:
+            type: string
+        issuer:
+          type: string
+          format: uri
+        issuanceDate:
+          type: string
+          format: date-time
+        expirationDate:
+          type: string
+          format: date-time
+        credentialSubject:
+          $ref: '#/components/schemas/Map'
+        proof:
+          $ref: '#/components/schemas/Map'
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
