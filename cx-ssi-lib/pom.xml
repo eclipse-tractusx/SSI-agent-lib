@@ -13,8 +13,6 @@
     <artifactId>cx-ssi-lib</artifactId>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <delombokSourceDirectory>${project.build.directory}/delombok</delombokSourceDirectory>
     </properties>
@@ -47,6 +45,19 @@
             <groupId>com.danubetech</groupId>
             <artifactId>verifiable-credentials-java</artifactId>
             <version>1.0.0</version>
+        </dependency>
+
+        <!-- Google Tink -->
+        <!-- Note: that for EdDSA you need to include the optional Tink dependency in your project. For Nimbus JOSE+JWT 6.0 that would be -->
+        <dependency>
+            <groupId>com.google.crypto.tink</groupId>
+            <artifactId>tink</artifactId>
+        </dependency>
+        <!-- Net Crypto EDDSA -->
+        <!-- Required for the EDSA Security Provider -->
+        <dependency>
+            <groupId>net.i2p.crypto</groupId>
+            <artifactId>eddsa</artifactId>
         </dependency>
 
         <!-- Testing -->

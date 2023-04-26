@@ -28,6 +28,7 @@ public class DidWebDocumentResolver implements DidDocumentResolver {
 
   private final HttpClient client;
   private final DidWebParser parser;
+  private final boolean enforceHttps;
 
   @Override
   public DidMethod getSupportedMethod() {
@@ -40,7 +41,7 @@ public class DidWebDocumentResolver implements DidDocumentResolver {
       throw new SsiException(
           "Handler can only handle the following methods:" + Constants.DID_WEB_METHOD);
 
-    final URI uri = parser.parse(did);
+    final URI uri = parser.parse(did, enforceHttps);
 
     final HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
 
@@ -48,8 +49,11 @@ public class DidWebDocumentResolver implements DidDocumentResolver {
       final HttpResponse<String> response =
           client.send(request, HttpResponse.BodyHandlers.ofString());
 
-      if (response.statusCode() < 400) {
-        throw new DidWebException(response.body());
+      if (response.statusCode() < 200 || response.statusCode() > 299) {
+        throw new DidWebException(
+            String.format(
+                "Unexpected response when resolving did document [Code=%s, Payload=%s]",
+                response.statusCode(), response.body()));
       }
       if (response.body() == null) {
         throw new DidWebException("Empty response body");

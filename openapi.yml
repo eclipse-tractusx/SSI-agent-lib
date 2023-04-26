@@ -2,7 +2,7 @@ openapi: "3.0.0"
 info:
   title: agent
   description: Common Api Definition of Catena-X SSI Agents
-  version: 0.0.2
+  version: 0.0.3
   contact:
     name: Dominik Pinsel
     email: dominik.pinsel@mercedes-benz.com
@@ -66,7 +66,7 @@ paths:
       summary: Get all Verifiable Credentials
       operationId: get-credentials
       tags:
-        - credentials
+        - verifiable-credentials
         - private
       responses:
         '200':
@@ -83,6 +83,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  # TODO add signing method (and expected issuer did)
   /verifiable-credentials/sign:
     post:
       summary: Create a signed Verifiable Credential and store it
