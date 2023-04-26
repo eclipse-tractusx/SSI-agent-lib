@@ -1,0 +1,9 @@
+hostName: "192.168.49.2"
+ssiApi:
+  port: 32667
+dataMgmtApi:
+  port: 30444
+  authKey: "password"
+idsApi:
+  port: 8084
+  host: "bob-controlplane"

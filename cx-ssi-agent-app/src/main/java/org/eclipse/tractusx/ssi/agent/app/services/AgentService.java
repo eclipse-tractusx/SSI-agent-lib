@@ -58,11 +58,7 @@ public class AgentService {
   @Synchronized
   private void initializeAgentSynchronized() {
     log.trace("Initializing SSI Agent Service");
-    agent =
-        WebAgent.builder()
-            .hostName(hostName)
-            .signingKeySet(signingKeyService.getSigningKeySet())
-            .build();
+    agent = new WebAgent(hostName, signingKeyService.getSigningKeySet());
   }
 
   public VerifiableCredential signVerifiableCredential(VerifiableCredential credential)

@@ -42,7 +42,7 @@ public class VerifiableCredential extends HashMap<String, Object> {
     super(json);
 
     try {
-      // verify getters
+      // validate getters
       Objects.requireNonNull(this.getContext());
       Objects.requireNonNull(this.getId());
       Objects.requireNonNull(this.getTypes());

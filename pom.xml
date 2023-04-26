@@ -13,10 +13,15 @@
         <module>cx-ssi-lib</module>
         <module>cx-ssi-agent-lib</module>
         <module>cx-ssi-agent-interface</module>
+        <module>cx-ssi-agent-client-apache</module>
         <module>cx-ssi-agent-client-okhttp3</module>
+        <module>lab-cx-ssi-connector</module>
+        <module>lab-cx-ssi-system-test</module>
     </modules>
     <properties>
-        <java.version>17</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lombok.version>1.18.26</lombok.version>
         <com.diffplug.spotless.maven.plugin.version>2.28.0</com.diffplug.spotless.maven.plugin.version>
         <spring-boot.version>2.5.5</spring-boot.version>
@@ -25,6 +30,18 @@
         <spring-boot-starter-test.version>3.0.4</spring-boot-starter-test.version>
         <spring-security-core.version>6.0.2</spring-security-core.version>
         <org-sl4j.version>2.0.7</org-sl4j.version>
+        <org.eclipse.txdc.version>0.3.0</org.eclipse.txdc.version>
+        <org.eclipse.edc.version>0.0.1-20230220-SNAPSHOT</org.eclipse.edc.version>
+        <com.nimbusds.version>9.31</com.nimbusds.version>
+        <com.fasterxml.jackson.version>2.14.0-rc2</com.fasterxml.jackson.version>
+        <jakarta.ws.rs.version>3.1.0</jakarta.ws.rs.version>
+        <junit.version>5.9.2</junit.version>
+        <org.apache.httpcomponents.httpclient.version>5.2.1</org.apache.httpcomponents.httpclient.version>
+        <org.awaitility.version>4.2.0</org.awaitility.version>
+        <org.openapitools.jackson-databind-nullable.version>0.2.6</org.openapitools.jackson-databind-nullable.version>
+        <com.google.code.gson.version>2.10.1</com.google.code.gson.version>
+        <com.google.code.tink.version>1.7.0</com.google.code.tink.version>
+        <net.i2p.crypto.eddsa.version>0.3.0</net.i2p.crypto.eddsa.version>
     </properties>
 
     <dependencyManagement>
@@ -38,12 +55,42 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.tractusx.ssi</groupId>
+                <artifactId>cx-ssi-agent-client-apache</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi</groupId>
+                <artifactId>cx-ssi-agent-client-okhttp3</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi</groupId>
                 <artifactId>cx-ssi-lib</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.tractusx.ssi</groupId>
                 <artifactId>cx-ssi-agent-lib</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
+                <artifactId>ssi-spi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
+                <artifactId>ssi-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
+                <artifactId>ssi-iam</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
+                <artifactId>ssi-agent-self-hosted</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -69,7 +116,7 @@
                 <version>${spring-boot-starter.version}</version>
             </dependency>
 
-            <!-- Projects -->
+            <!-- Lombok -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
@@ -77,12 +124,267 @@
                 <optional>true</optional>
             </dependency>
 
-            <!-- Logging -->
+            <!-- Open API Tools -->
+            <dependency>
+                <groupId>org.openapitools</groupId>
+                <artifactId>jackson-databind-nullable</artifactId>
+                <version>${org.openapitools.jackson-databind-nullable.version}</version>
+            </dependency>
+
+            <!-- sl4j -->
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${org-sl4j.version}</version>
             </dependency>
+
+            <!-- Apache Http Client -->
+            <dependency>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>${org.apache.httpcomponents.httpclient.version}</version>
+            </dependency>
+
+            <!-- Google Gson -->
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${com.google.code.gson.version}</version>
+            </dependency>
+
+            <!-- Google Tink -->
+            <!-- Note that for EdDSA you need to include the optional Tink dependency in your project. For Nimbus JOSE+JWT 6.0 that would be -->
+            <dependency>
+                <groupId>com.google.crypto.tink</groupId>
+                <artifactId>tink</artifactId>
+                <version>${com.google.code.tink.version}</version>
+            </dependency>
+
+            <!-- Net Crypto EDDSA -->
+            <!-- Required for the EDSA Security Provider -->
+            <dependency>
+                <groupId>net.i2p.crypto</groupId>
+                <artifactId>eddsa</artifactId>
+                <version>${net.i2p.crypto.eddsa.version}</version>
+            </dependency>
+
+            <!-- Jakarta -->
+            <dependency>
+                <groupId>jakarta.ws.rs</groupId>
+                <artifactId>jakarta.ws.rs-api</artifactId>
+                <version>${jakarta.ws.rs.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <!-- Jackson -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${com.fasterxml.jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${com.fasterxml.jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${com.fasterxml.jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.jaxrs</groupId>
+                <artifactId>jackson-jaxrs-json-provider</artifactId>
+                <version>${com.fasterxml.jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>${com.fasterxml.jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-yaml</artifactId>
+                <version>${com.fasterxml.jackson.version}</version>
+            </dependency>
+
+
+            <!-- Nimbus JWT -->
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${com.nimbusds.version}</version>
+            </dependency>
+            <!-- Tractus-X Eclipse Data Space Connector -->
+            <dependency>
+                <groupId>org.eclipse.tractusx.edc.extensions</groupId>
+                <artifactId>business-partner-validation</artifactId>
+                <version>${org.eclipse.txdc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.edc.extensions</groupId>
+                <artifactId>dataplane-selector-configuration</artifactId>
+                <version>${org.eclipse.txdc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.edc.extensions</groupId>
+                <artifactId>data-encryption</artifactId>
+                <version>${org.eclipse.txdc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.edc.extensions</groupId>
+                <artifactId>custom-jsonld</artifactId>
+                <version>${org.eclipse.txdc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.edc.extensions</groupId>
+                <artifactId>hashicorp-vault</artifactId>
+                <version>${org.eclipse.txdc.version}</version>
+            </dependency>
+
+            <!-- Eclipse Data Space Components -->
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>core-spi</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>control-plane-core</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>configuration-filesystem</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>management-api</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>api-observability</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>ids-api-configuration</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>ids-api-multipart-dispatcher-v1</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>ids-api-multipart-endpoint-v1</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>ids-transform-v1</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>ids-core</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>ids-spi</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>jwt-spi</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>provision-oauth2</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <!--            <dependency>-->
+            <!--                <groupId>org.eclipse.edc</groupId>-->
+            <!--                <artifactId>data-plane-transfer-sync</artifactId>-->
+            <!--                <version>${org.eclipse.edc.version}</version>-->
+            <!--            </dependency>-->
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>data-plane-selector-core</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>data-plane-selector-client</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>data-plane-selector-spi</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <!--            <dependency>-->
+            <!--                <groupId>org.eclipse.edc</groupId>-->
+            <!--                <artifactId>data-plane-transfer-client</artifactId>-->
+            <!--                <version>${org.eclipse.edc.version}</version>-->
+            <!--            </dependency>-->
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>micrometer-core</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>jersey-micrometer</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>jetty-micrometer</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>monitor-jdk-logger</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>http</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>transfer-pull-http-dynamic-receiver</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.edc</groupId>
+                <artifactId>edc-controlplane-base</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+
+            <!-- Awaitility -->
+            <dependency>
+                <groupId>org.awaitility</groupId>
+                <artifactId>awaitility</artifactId>
+                <version>${org.awaitility.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- JUnit -->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -104,8 +406,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>17</source>
-                    <target>17</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -149,9 +451,35 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <!-- Eclipse DataSpace Components "Releases" -->
+        <repository>
+            <id>sonatype-snapshots</id>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+        <!-- IDS Information Model. Dependency of Eclipse DataSpace Components -->
+        <repository>
+            <id>fraunhofer-iais-eis</id>
+            <name>Fraunhofer IAIS</name>
+            <url>https://maven.iais.fraunhofer.de/artifactory/eis-ids-public</url>
+        </repository>
+        <!-- Product EDC Libraries -->
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/catenax-ng/product-edc</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 
     <distributionManagement>
+        <!-- Library Publish Repository -->
         <repository>
             <id>github</id>
             <name>GitHub Packages</name>
