@@ -1,5 +1,6 @@
 package org.eclipse.tractusx.ssi.lib.did.web;
 
+import java.util.Objects;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethodIdentifier;
@@ -7,6 +8,8 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidMethodIdentifier;
 public class DidWebFactory {
 
   public static Did fromHostname(String hostName) {
+    Objects.requireNonNull(hostName, "Hostname must not be null");
+
     if (hostName.contains("http"))
       throw new IllegalArgumentException("Hostname should not contain http(s)://");
 

@@ -22,7 +22,7 @@ public class WellKnownApiDelegateImpl implements WellKnownApiDelegate {
   public ResponseEntity<DidDocument> didDocument() {
     final var didDocument = agentService.getDidDocument();
 
-    log.info(LOG_RETURN_DID_DOCUMENT);
+    log.trace(LOG_RETURN_DID_DOCUMENT);
     return new ResponseEntity<>(didDocument, null, HttpStatus.OK);
   }
 }

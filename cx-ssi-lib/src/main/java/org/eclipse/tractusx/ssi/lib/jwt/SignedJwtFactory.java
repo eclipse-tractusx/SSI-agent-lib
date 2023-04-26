@@ -11,9 +11,9 @@ import com.nimbusds.jwt.SignedJWT;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
+import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.keys.Ed25519Key;
-import org.eclipse.tractusx.ssi.lib.resolver.SigningKeyResolver;
+import org.eclipse.tractusx.ssi.lib.resolver.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresentation;
 
 /**
@@ -22,10 +22,10 @@ import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresen
  */
 public class SignedJwtFactory {
 
-  private final SigningKeyResolver ocketKeyPairFactory;
+  private final OctetKeyPairFactory octetKeyPairFactory;
 
-  public SignedJwtFactory(SigningKeyResolver ocketKeyPairFactory) {
-    this.ocketKeyPairFactory = Objects.requireNonNull(ocketKeyPairFactory);
+  public SignedJwtFactory(OctetKeyPairFactory octetKeyPairFactory) {
+    this.octetKeyPairFactory = Objects.requireNonNull(octetKeyPairFactory);
   }
 
   /**
@@ -59,7 +59,7 @@ public class SignedJwtFactory {
             .jwtID(UUID.randomUUID().toString())
             .build();
 
-    final OctetKeyPair octetKeyPair = ocketKeyPairFactory.get(signingKey);
+    final OctetKeyPair octetKeyPair = octetKeyPairFactory.get(signingKey);
     return createSignedES256Jwt(octetKeyPair, claimsSet);
   }
 

@@ -1,0 +1,9 @@
+hostName: "192.168.49.2"
+ssiApi:
+  port: 30277
+dataMgmtApi:
+  port: 31406
+  authKey: "password"
+idsApi:
+  port: 8084
+  host: "alice-controlplane"
