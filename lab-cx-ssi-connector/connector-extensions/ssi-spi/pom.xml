@@ -27,6 +27,12 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
+        <!-- Eclipse Data Space Components -->
+        <dependency>
+            <groupId>org.eclipse.edc</groupId>
+            <artifactId>core-spi</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

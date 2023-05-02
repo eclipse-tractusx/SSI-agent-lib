@@ -9,10 +9,20 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class Connector {
 
-  String hostName;
+  String bpn;
+  HostName hostName;
   DataManagementApi dataMgmtApi;
+  DidDocumentApi didDocumentApi;
   SsiApi ssiApi;
   IdsApi idsApi;
+
+  @Data
+  @Builder
+  @Jacksonized
+  public static class HostName {
+    String internal;
+    String external;
+  }
 
   @Data
   @Builder
@@ -32,8 +42,14 @@ public class Connector {
   @Data
   @Builder
   @Jacksonized
+  public static class DidDocumentApi {
+    int port;
+  }
+
+  @Data
+  @Builder
+  @Jacksonized
   public static class IdsApi {
     int port;
-    String host;
   }
 }

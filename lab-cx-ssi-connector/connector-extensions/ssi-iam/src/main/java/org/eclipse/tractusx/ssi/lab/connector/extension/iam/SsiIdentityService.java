@@ -68,6 +68,8 @@ public class SsiIdentityService implements IdentityService {
     final SsiAgent agent = agentRegistry.getConfiguredAgent();
     final VerifiablePresentation verifiablePresentation = agent.check(jwt, audience);
 
+    // TODO check that JWT issuer is the one the membership credential was issued to
+
     // TODO Parse Information from Verifiable Credentials and add to ClaimToken (e.g.
     // BusinessPartnerNumber)
     // TODO Check whether credentials issues by dataspace operator
@@ -86,14 +88,22 @@ public class SsiIdentityService implements IdentityService {
 
     final URI credentialIssuer = membershipCredential.getIssuer();
     if (!credentialIssuer.equals(membershipIssuer)) {
-      return Result.failure("Membership credential not issued by dataspace operator");
+      return Result.failure(
+          String.format(
+              "Identity validation failed. Membership credential not issued by dataspace operator. Issuer: %s, Operator: %s",
+              credentialIssuer, membershipIssuer));
     }
 
     final String businessPartnerNumber =
-        (String) membershipCredential.getCredentialSubject().get("holderIdentifier");
+        (String) membershipCredential.getCredentialSubject().get("businessPartnerNumber");
+    final String did = (String) membershipCredential.getCredentialSubject().get("id");
+    // TODO BPN is not optional!
     if (businessPartnerNumber != null) {
-      claimTokenBuilder.claim("bpn", businessPartnerNumber);
+      // TODO Magic String1044
+
+      claimTokenBuilder.claim("businessPartnerNumber", businessPartnerNumber);
     }
+    claimTokenBuilder.claim("did", did);
 
     // TODO TBD
     // invalidate presentation e.g. by agent.invalidatePresentation(jwt);

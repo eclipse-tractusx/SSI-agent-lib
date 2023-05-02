@@ -25,27 +25,51 @@ public class AgentClient {
 
   private final SsiAgent agent;
 
-  @SneakyThrows(ApiException.class)
   public org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential
       issueMembershipCredential(Connector connector) {
 
+    final Did connectorDid =
+        DidWebFactory.fromHostname(
+            connector.getHostName().getInternal() + ":" + connector.getDidDocumentApi().getPort());
+
+    return issueCredential(
+        connector,
+        VerifiableCredentialType.MEMBERSHIP_CREDENTIAL,
+        Map.of("id", connectorDid.toString(), "bpn", connector.getBpn()));
+  }
+
+  public org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential
+      issueDismantlerCredential(Connector connector, String activityType) {
+
+    final Did connectorDid =
+        DidWebFactory.fromHostname(
+            connector.getHostName().getInternal() + ":" + connector.getDidDocumentApi().getPort());
+    return issueCredential(
+        connector,
+        "DismantlerCredential",
+        Map.of("id", connectorDid.toString(), "activity", Map.of("activityType", activityType)));
+  }
+
+  @SneakyThrows(ApiException.class)
+  public org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential
+      issueCredential(
+          Connector connector, String credentialType, Map<String, Object> credentialSubject) {
     final String agentUrl =
         String.format("http://%s:%s", agent.getHostName(), agent.getAgentApi().getPort());
     final ApiClient apiClient = new ApiClient();
     apiClient.setBasePath(agentUrl);
     final VerifiableCredentialsApi credentialsApi = new VerifiableCredentialsApi(apiClient);
 
-    final Did connectorDid = DidWebFactory.fromHostname(connector.getHostName());
+    final Did connectorDid =
+        DidWebFactory.fromHostname(
+            connector.getHostName().getInternal() + ":" + connector.getDidDocumentApi().getPort());
 
     final VerifiableCredential membershipCredential = new VerifiableCredential();
     membershipCredential.setAtContext(List.of("https://www.w3.org/2018/credentials/v1"));
     membershipCredential.setId(URI.create(UUID.randomUUID().toString()));
     membershipCredential.setType(
-        List.of(
-            VerifiableCredentialType.VERIFIABLE_CREDENTIAL,
-            VerifiableCredentialType.MEMBERSHIP_CREDENTIAL));
-    membershipCredential.credentialSubject(
-        Map.of("id", connectorDid.toString(), "bpn", "BNPN1234"));
+        List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL, credentialType));
+    membershipCredential.credentialSubject(credentialSubject);
     membershipCredential.setExpirationDate(OffsetDateTime.now().plusDays(1));
     membershipCredential.setIssuer(connectorDid.toUri());
     membershipCredential.setIssuanceDate(OffsetDateTime.now());

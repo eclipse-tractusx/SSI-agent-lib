@@ -29,6 +29,14 @@
             <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
             <artifactId>ssi-iam</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
+            <artifactId>ssi-ids</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
+            <artifactId>ssi-policy</artifactId>
+        </dependency>
 
         <!-- Tractus-X Eclipse DataSpace Connector -->
         <dependency>
