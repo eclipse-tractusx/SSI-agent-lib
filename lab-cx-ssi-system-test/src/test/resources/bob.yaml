@@ -1,9 +1,13 @@
-hostName: "192.168.49.2"
+bpn: "BPNBOB"
+hostName:
+  external: "192.168.49.2"
+  internal: "bob-controlplane"
 ssiApi:
-  port: 32667
+  port: 31283
+didDocumentApi:
+  port: 8086
 dataMgmtApi:
-  port: 30444
+  port: 31269
   authKey: "password"
 idsApi:
   port: 8084
-  host: "bob-controlplane"

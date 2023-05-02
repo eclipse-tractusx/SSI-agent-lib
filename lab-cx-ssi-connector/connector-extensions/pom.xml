@@ -17,7 +17,9 @@
         <module>ssi-agent-self-hosted</module>
         <module>ssi-core</module>
         <module>ssi-iam</module>
+        <module>ssi-policy</module>
         <module>ssi-spi</module>
+        <module>ssi-ids</module>
     </modules>
 
 </project>
