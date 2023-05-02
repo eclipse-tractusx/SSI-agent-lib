@@ -1,9 +1,13 @@
-hostName: "192.168.49.2"
+bpn: "BPNALICE"
+hostName:
+  external: "192.168.49.2"
+  internal: "alice-controlplane"
 ssiApi:
-  port: 30277
+  port: 31700
+didDocumentApi:
+  port: 8086
 dataMgmtApi:
-  port: 31406
+  port: 30711
   authKey: "password"
 idsApi:
   port: 8084
-  host: "alice-controlplane"

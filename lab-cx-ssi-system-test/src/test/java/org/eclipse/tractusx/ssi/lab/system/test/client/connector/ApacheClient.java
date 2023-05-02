@@ -87,7 +87,7 @@ public abstract class ApacheClient {
     final CloseableHttpResponse response = httpClient.execute(request);
 
     if (200 > response.getCode() || response.getCode() >= 300) {
-      throw new RuntimeException(String.format("Unexpected response: %s", response.getCode()));
+      throw new RuntimeException(String.format("Unexpected response: %s", response));
     }
 
     return response;

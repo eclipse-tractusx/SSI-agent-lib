@@ -42,6 +42,7 @@
         <com.google.code.gson.version>2.10.1</com.google.code.gson.version>
         <com.google.code.tink.version>1.7.0</com.google.code.tink.version>
         <net.i2p.crypto.eddsa.version>0.3.0</net.i2p.crypto.eddsa.version>
+        <com.jayway.jsonpath.version>2.8.0</com.jayway.jsonpath.version>
     </properties>
 
     <dependencyManagement>
@@ -86,6 +87,16 @@
             <dependency>
                 <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
                 <artifactId>ssi-iam</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
+                <artifactId>ssi-ids</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
+                <artifactId>ssi-policy</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -176,6 +187,13 @@
                 <scope>compile</scope>
             </dependency>
 
+            <!-- Jayway Jsonpath -->
+            <dependency>
+                <groupId>com.jayway.jsonpath</groupId>
+                <artifactId>json-path</artifactId>
+                <version>${com.jayway.jsonpath.version}</version>
+            </dependency>
+
             <!-- Jackson -->
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
@@ -250,7 +268,27 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
+                <artifactId>policy-spi</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>transform-spi</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>policy-engine-spi</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
                 <artifactId>control-plane-core</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>catalog-spi</artifactId>
                 <version>${org.eclipse.edc.version}</version>
             </dependency>
             <dependency>

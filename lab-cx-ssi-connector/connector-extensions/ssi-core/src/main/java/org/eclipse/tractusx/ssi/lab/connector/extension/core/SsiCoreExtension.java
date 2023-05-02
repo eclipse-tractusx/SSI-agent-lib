@@ -20,8 +20,9 @@ import org.eclipse.tractusx.ssi.lab.connector.extension.core.exceptions.InvalidS
 import org.eclipse.tractusx.ssi.lab.connector.extension.core.exceptions.MandatorySettingMissingException;
 import org.eclipse.tractusx.ssi.lab.connector.extension.core.exceptions.SigningKeyNotFoundException;
 import org.eclipse.tractusx.ssi.lab.connector.extension.spi.agent.SsiAgentRegistry;
+import org.eclipse.tractusx.ssi.lab.connector.extension.spi.registry.IdsConnectorRegistry;
 
-@Provides({SsiAgentRegistry.class})
+@Provides({SsiAgentRegistry.class, IdsConnectorRegistry.class})
 @Requires({WebService.class, Vault.class})
 public class SsiCoreExtension implements ServiceExtension {
   public static final String EXTENSION_NAME = "SSI Core Extension";
@@ -74,5 +75,9 @@ public class SsiCoreExtension implements ServiceExtension {
 
     this.registry = new SsiAgentRegistryImpl(settings.getAgentType());
     context.registerService(SsiAgentRegistry.class, this.registry);
+
+    // ids connector registry
+    final IdsConnectorRegistryImpl idsConnectorRegistry = new IdsConnectorRegistryImpl();
+    context.registerService(IdsConnectorRegistry.class, idsConnectorRegistry);
   }
 }

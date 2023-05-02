@@ -38,22 +38,31 @@ public class DanubTechMapper {
     }
     // VerifiablePresentation Type is automatically added in Builder
     List<String> types = new ArrayList<>(presentation.getTypes());
-    types.remove(0);
+    types.remove(0); // TODO remove default type differently
 
     com.danubetech.verifiablecredentials.VerifiablePresentation.Builder<
             ? extends com.danubetech.verifiablecredentials.VerifiablePresentation.Builder<?>>
         builder = com.danubetech.verifiablecredentials.VerifiablePresentation.builder();
 
-    return builder
+    builder
         .defaultContexts(true)
         .forceContextsArray(true)
         .forceTypesArray(true)
         .id(presentation.getId())
         .types(types)
         .holder(presentation.getHolder())
-        .verifiableCredential(dtCredentials.get(0))
-        .ldProof(null) // set to null, as presentation will be used within JWT
-        .build();
+        .ldProof(null); // set to null, as presentation will be used within JWT
+
+    // TODO handle more than one verifiable credential per presentation
+    if (dtCredentials.size() > 1) {
+      throw new RuntimeException(
+          "More than one verifiable credential per presentation is not supported"); // TODO
+    }
+    if (dtCredentials.size() == 1) {
+      builder.verifiableCredential(dtCredentials.get(0));
+    }
+
+    return builder.build();
   }
 
   @NonNull

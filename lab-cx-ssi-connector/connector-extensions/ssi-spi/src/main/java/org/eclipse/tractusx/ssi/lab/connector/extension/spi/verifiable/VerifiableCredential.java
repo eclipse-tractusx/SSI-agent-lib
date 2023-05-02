@@ -68,6 +68,7 @@ public class VerifiableCredential extends HashMap<String, Object> {
       return null;
     }
 
+    // TODO might be an array of credential subjects
     return new VerifiableCredentialSubject((Map<String, Object>) subject);
   }
 }

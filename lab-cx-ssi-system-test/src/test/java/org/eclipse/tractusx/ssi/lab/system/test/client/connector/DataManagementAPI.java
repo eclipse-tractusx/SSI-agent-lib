@@ -20,6 +20,7 @@
 
 package org.eclipse.tractusx.ssi.lab.system.test.client.connector;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
@@ -256,7 +257,7 @@ public class DataManagementAPI extends ApacheClient {
               "keyName",
               a.getKeyName()));
     } else if (dataAddress instanceof NullDataAddress) {
-      // set something that passes validation
+      // set something that passes validkgp -n cation
       apiObject.setProperties(Map.of("type", "HttpData", "baseUrl", "http://localhost"));
     } else {
       throw new UnsupportedOperationException(
@@ -327,25 +328,26 @@ public class DataManagementAPI extends ApacheClient {
     return apiObject;
   }
 
-  private ManagementConstraint mapConstraint(Constraint constraint) {
-    if (OrConstraint.class.equals(constraint.getClass())) {
-      return mapConstraint((OrConstraint) constraint);
-    } else if (BusinessPartnerNumberConstraint.class.equals(constraint.getClass())) {
-      return mapConstraint((BusinessPartnerNumberConstraint) constraint);
-    } else if (PayMeConstraint.class.equals(constraint.getClass())) {
-      return mapConstraint((PayMeConstraint) constraint);
-    } else {
-      throw new UnsupportedOperationException(
-          "Unsupported constraint type: " + constraint.getClass().getName());
-    }
-  }
-
-  private ManagementAtomicConstraint mapConstraint(PayMeConstraint constraint) {
+  private ManagementAtomicConstraint mapConstraint(VerifiableCredentialConstraint constraint) {
     final ManagementApiLiteralExpression leftExpression = new ManagementApiLiteralExpression();
-    leftExpression.value = "PayMe";
+    leftExpression.value = "VerifiableCredential";
 
-    final ManagementApiLiteralExpression rightExpression = new ManagementApiLiteralExpression();
-    rightExpression.value = String.valueOf(constraint.getAmount());
+    final List<ManagementApiVerifiableCredentialExpressionPath> paths =
+        constraint.getPaths().stream()
+            .map(
+                e -> {
+                  final ManagementApiVerifiableCredentialExpressionPath expressionPath =
+                      new ManagementApiVerifiableCredentialExpressionPath();
+                  expressionPath.jsonPath = e.getJsonPath();
+                  expressionPath.value = e.getValue();
+                  return expressionPath;
+                })
+            .collect(Collectors.toList());
+
+    final ManagementApiVerifiableCredentialExpression rightExpression =
+        new ManagementApiVerifiableCredentialExpression();
+    rightExpression.paths = paths;
+    rightExpression.type = constraint.getCredentialType();
 
     final ManagementAtomicConstraint dataManagementApiConstraint = new ManagementAtomicConstraint();
     dataManagementApiConstraint.leftExpression = leftExpression;
@@ -353,28 +355,6 @@ public class DataManagementAPI extends ApacheClient {
     dataManagementApiConstraint.operator = "EQ";
 
     return dataManagementApiConstraint;
-  }
-
-  private ManagementAtomicConstraint mapConstraint(BusinessPartnerNumberConstraint constraint) {
-    final ManagementApiLiteralExpression leftExpression = new ManagementApiLiteralExpression();
-    leftExpression.value = "BusinessPartnerNumber";
-
-    final ManagementApiLiteralExpression rightExpression = new ManagementApiLiteralExpression();
-    rightExpression.value = constraint.getBusinessPartnerNumber();
-
-    final ManagementAtomicConstraint dataManagementApiConstraint = new ManagementAtomicConstraint();
-    dataManagementApiConstraint.leftExpression = leftExpression;
-    dataManagementApiConstraint.rightExpression = rightExpression;
-    dataManagementApiConstraint.operator = "EQ";
-
-    return dataManagementApiConstraint;
-  }
-
-  private ManagementOrConstraint mapConstraint(OrConstraint constraint) {
-    var orConstraint = new ManagementOrConstraint();
-    orConstraint.constraints =
-        constraint.getConstraints().stream().map(this::mapConstraint).collect(Collectors.toList());
-    return orConstraint;
   }
 
   private ContractOffer mapOffer(ManagementApiContractOffer managementApiContractOffer) {
@@ -509,28 +489,34 @@ public class DataManagementAPI extends ApacheClient {
     private String edctype = "dataspaceconnector:permission";
     private ManagementApiRuleAction action;
     private String target;
-    private List<ManagementConstraint> constraints = new ArrayList<>();
+    private List<ManagementAtomicConstraint> constraints = new ArrayList<>();
   }
 
   @Data
-  private static class ManagementAtomicConstraint implements ManagementConstraint {
+  private static class ManagementAtomicConstraint {
     private String edctype = "AtomicConstraint";
     private ManagementApiLiteralExpression leftExpression;
-    private ManagementApiLiteralExpression rightExpression;
+    private ManagementApiVerifiableCredentialExpression rightExpression;
     private String operator;
   }
 
   @Data
-  private static class ManagementOrConstraint implements ManagementConstraint {
-    private String edctype = "dataspaceconnector:orconstraint";
-    private List<ManagementConstraint> constraints;
-  }
-
-  private interface ManagementConstraint {}
-
-  @Data
   private static class ManagementApiLiteralExpression {
     private String edctype = "dataspaceconnector:literalexpression";
+    private String value;
+  }
+
+  @Data
+  @JsonTypeName("tx:verifiableCredentialExpression")
+  private static class ManagementApiVerifiableCredentialExpression {
+    private String edctype = "tx:verifiableCredentialExpression";
+    private String type;
+    private List<ManagementApiVerifiableCredentialExpressionPath> paths;
+  }
+
+  @Data
+  private static class ManagementApiVerifiableCredentialExpressionPath {
+    private String jsonPath;
     private String value;
   }
 

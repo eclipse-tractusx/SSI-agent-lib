@@ -38,28 +38,36 @@ operatorPort=$(kubectl get service operator -o jsonpath='{.spec.ports[?(@.name==
 
 rm ./lab-cx-ssi-system-test/src/test/resources/bob.yaml
 cat <<EOT >>./lab-cx-ssi-system-test/src/test/resources/bob.yaml
-hostName: "${hostName}"
+bpn: "BPNBOB"
+hostName:
+  external: "${hostName}"
+  internal: "bob-controlplane"
 ssiApi:
   port: ${bobSsiPort}
+didDocumentApi:
+  port: 8086
 dataMgmtApi:
   port: ${bobDataMgmtPort}
   authKey: "password"
 idsApi:
   port: 8084
-  host: "bob-controlplane"
 EOT
 
 rm ./lab-cx-ssi-system-test/src/test/resources/alice.yaml
 cat <<EOT >>./lab-cx-ssi-system-test/src/test/resources/alice.yaml
-hostName: "${hostName}"
+bpn: "BPNALICE"
+hostName:
+  external: "${hostName}"
+  internal: "alice-controlplane"
 ssiApi:
   port: ${aliceSsiPort}
+didDocumentApi:
+  port: 8086
 dataMgmtApi:
   port: ${aliceDataMgmtPort}
   authKey: "password"
 idsApi:
   port: 8084
-  host: "alice-controlplane"
 EOT
 
 rm ./lab-cx-ssi-system-test/src/test/resources/operator.yaml

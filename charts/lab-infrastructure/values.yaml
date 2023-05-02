@@ -48,10 +48,14 @@ bob:
       enabled: false
     readinessProbe:
       enabled: false
+    internationalDataSpaces:
+      id: "did:web:bob-controlplane%3A8086"
   dataplane:
     debug:
       enabled: true
       suspendOnStart: false
+    internationalDataSpaces:
+      id: "did:web:bob%3A8087"
   backendService:
     service:
       type: NodePort
@@ -94,6 +98,8 @@ alice:
       enabled: false
     readinessProbe:
       enabled: false
+    internationalDataSpaces:
+      id: "did:web:alice-controlplane%3A8087"
   dataplane:
     debug:
       enabled: true
