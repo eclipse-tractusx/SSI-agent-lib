@@ -44,7 +44,7 @@ public class MyMultipartCatalogDescriptionRequestSender
 
   /**
    * Builds a {@link de.fraunhofer.iais.eis.DescriptionRequestMessage} for requesting another
-   * connector's self description. Includes paging information defined in the {@link
+   * connector's self-description. Includes paging information defined in the {@link
    * CatalogRequest}.
    *
    * @param request the request.
@@ -69,12 +69,12 @@ public class MyMultipartCatalogDescriptionRequestSender
   }
 
   @Override
-  public String buildMessagePayload(CatalogRequest request) throws Exception {
+  public String buildMessagePayload(CatalogRequest request) {
     return null;
   }
 
   /**
-   * Parses the response content and extracts the catalog from the received self description.
+   * Parses the response content and extracts the catalog from the received self-description.
    *
    * @param parts container object for response header and payload {@link InputStream}s.
    * @return the other connector's catalog

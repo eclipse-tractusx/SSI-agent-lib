@@ -4,7 +4,7 @@ public class NullDataAddress implements DataAddress {
 
   private static final NullDataAddress _instance = new NullDataAddress();
 
-  public static DataAddress INSTANCE = new NullDataAddress();
+  public static final DataAddress INSTANCE = new NullDataAddress();
 
   private NullDataAddress() {}
 }

@@ -64,7 +64,7 @@ public class SignedJwtFactory {
   }
 
   private static SignedJWT createSignedES256Jwt(OctetKeyPair privateKey, JWTClaimsSet claimsSet) {
-    JWSSigner signer = null;
+    JWSSigner signer;
     try {
 
       signer = new Ed25519Signer(privateKey);
@@ -76,7 +76,7 @@ public class SignedJwtFactory {
                     .map(JWSAlgorithm::getName)
                     .collect(Collectors.joining(", "))));
       }
-      var algorithm = JWSAlgorithm.EdDSA; // TODO Shouldn't this be ES256?
+      var algorithm = JWSAlgorithm.EdDSA;
       var header = new JWSHeader(algorithm);
       var vc = new SignedJWT(header, claimsSet);
 

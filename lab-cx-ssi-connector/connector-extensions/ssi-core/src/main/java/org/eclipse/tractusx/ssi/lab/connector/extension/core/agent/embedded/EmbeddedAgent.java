@@ -1,7 +1,6 @@
 package org.eclipse.tractusx.ssi.lab.connector.extension.core.agent.embedded;
 
 import com.nimbusds.jwt.SignedJWT;
-import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +14,6 @@ import org.eclipse.tractusx.ssi.lab.connector.extension.spi.verifiable.Verifiabl
 public class EmbeddedAgent implements SsiAgent {
 
   private final WebAgent webAgent;
-
-  @Override
-  public URI getConnectorDid() {
-    return webAgent.getDidDocument().getId();
-  }
 
   @Override
   public VerifiablePresentation check(

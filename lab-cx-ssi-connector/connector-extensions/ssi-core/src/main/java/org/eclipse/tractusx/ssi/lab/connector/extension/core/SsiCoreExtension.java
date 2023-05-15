@@ -51,9 +51,6 @@ public class SsiCoreExtension implements ServiceExtension {
   })
   public void initialize(ServiceExtensionContext context) {
 
-    //        HashicorpVaultVaultExtension vaultExtension = new HashicorpVaultVaultExtension();
-    //        vaultExtension.initialize(context);
-
     final Monitor monitor = context.getMonitor();
 
     // ssi agent

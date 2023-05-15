@@ -61,8 +61,7 @@ public class AgentService {
     agent = new WebAgent(hostName, signingKeyService.getSigningKeySet());
   }
 
-  public VerifiableCredential signVerifiableCredential(VerifiableCredential credential)
-      throws CredentialAlreadyStoredException, CredentialNotFoundException {
+  public VerifiableCredential signVerifiableCredential(VerifiableCredential credential) {
     initializeAgent();
     final Did issuer = agent.getDid();
     return signingKeyService.signVerifiableCredential(credential, issuer);

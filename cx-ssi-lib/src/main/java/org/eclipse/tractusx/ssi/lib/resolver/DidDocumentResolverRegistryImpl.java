@@ -2,6 +2,7 @@ package org.eclipse.tractusx.ssi.lib.resolver;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
@@ -10,9 +11,10 @@ public class DidDocumentResolverRegistryImpl implements DidDocumentResolverRegis
   private final Map<DidMethod, DidDocumentResolver> resolvers = new HashMap<>();
 
   @Override
-  public DidDocumentResolver get(DidMethod didMethod) {
+  public DidDocumentResolver get(DidMethod didMethod)
+      throws DidDocumentResolverNotRegisteredException {
     if (!resolvers.containsKey(didMethod))
-      throw new SsiException(String.format("Resolver for method '%s' not found", didMethod));
+      throw new DidDocumentResolverNotRegisteredException(didMethod);
 
     return resolvers.get(didMethod);
   }

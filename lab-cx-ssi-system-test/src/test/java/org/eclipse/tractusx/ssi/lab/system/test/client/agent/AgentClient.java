@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.agent.client.ApiClient;
@@ -69,7 +70,7 @@ public class AgentClient {
     membershipCredential.setId(URI.create(UUID.randomUUID().toString()));
     membershipCredential.setType(
         List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL, credentialType));
-    membershipCredential.credentialSubject(credentialSubject);
+    membershipCredential.credentialSubject(List.of(credentialSubject));
     membershipCredential.setExpirationDate(OffsetDateTime.now().plusDays(1));
     membershipCredential.setIssuer(connectorDid.toUri());
     membershipCredential.setIssuanceDate(OffsetDateTime.now());
@@ -98,11 +99,12 @@ public class AgentClient {
       builder.proof(proof);
     }
 
-    if (credential.getCredentialSubject() != null) {
-      VerifiableCredentialSubject subject =
-          new VerifiableCredentialSubject(credential.getCredentialSubject());
-      builder.credentialSubject(subject);
-    }
+    final List<VerifiableCredentialSubject> subject =
+        credential.getCredentialSubject().stream()
+            .map(VerifiableCredentialSubject::new)
+            .collect(Collectors.toList());
+
+    builder.credentialSubject(subject);
 
     return builder.build();
   }

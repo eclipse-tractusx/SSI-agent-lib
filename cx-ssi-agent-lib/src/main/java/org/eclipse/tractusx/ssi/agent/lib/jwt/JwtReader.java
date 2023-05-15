@@ -2,11 +2,12 @@ package org.eclipse.tractusx.ssi.agent.lib.jwt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
 import java.text.ParseException;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.tractusx.ssi.lib.exception.UnsupportedDidMethodException;
+import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidJsonLdException;
+import org.eclipse.tractusx.ssi.lib.exception.JwtException;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtValidator;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtVerifier;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -34,36 +35,23 @@ public class JwtReader {
   private final JsonLdSerializer jsonLdSerializer;
   private final LinkedDataProofValidation linkedDataProofValidation;
 
-  public VerifiablePresentation read(SignedJWT jwt, String audience)
-      throws UnsupportedDidMethodException, JOSEException, ParseException, JsonProcessingException {
+  public VerifiablePresentation read(SignedJWT jwt, String audience, boolean validateJsonLd)
+      throws ParseException, JsonProcessingException, JwtException,
+          DidDocumentResolverNotRegisteredException, InvalidJsonLdException {
 
     jwtVerifier.verify(jwt);
-    jwtValidator.validate(
-        jwt, audience); // TODO is audience and expiry date enough for validation ?
+    jwtValidator.validate(jwt, audience);
 
     final Object vpClaimValue = jwt.getJWTClaimsSet().getClaim("vp");
     var vpClaimValueSerialized = new ObjectMapper().writeValueAsString(vpClaimValue);
     final SerializedVerifiablePresentation vpSerialized =
         new SerializedVerifiablePresentation(vpClaimValueSerialized);
 
-    // TODO Add Verifiable Credential check into jsonLd deserialize method,
-    // because in our domain it is not possible anymore
-    VerifiablePresentation verifiablePresentation =
-        jsonLdSerializer.deserializePresentation(vpSerialized);
-
-    // Todo refactor with ObjectMapper
+    final VerifiablePresentation verifiablePresentation =
+        jsonLdSerializer.deserializePresentation(vpSerialized, validateJsonLd);
 
     for (final VerifiableCredential credential :
         verifiablePresentation.getVerifiableCredentials()) {
-
-      //      JsonLDObject jsonLDObject =
-      //          JsonLDObject.fromJson(credential.toString()); // Todo JsonParser for Credential
-      //      var isValidJson = jsonLdValidator.validate(jsonLDObject);
-      //
-      //      if (!isValidJson) {
-      //        throw new RuntimeException("Invalid Json"); // TODO
-      //      }
-
       if (credential.getProof() == null) {
         throw new RuntimeException("No proof"); // TODO
       }

@@ -4,8 +4,8 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
-import lombok.*;
 import org.eclipse.tractusx.ssi.lib.base.MultibaseFactory;
+import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
 
 /**
  * E.g. "proof": { "type": "Ed25519Signature2020", "created": "2021-11-13T18:19:39Z",
@@ -50,7 +50,7 @@ public class Ed25519Signature2020 extends Proof {
   }
 
   public URI getVerificationMethod() {
-    return URI.create((String) this.get(VERIFICATION_METHOD));
+    return SerializeUtil.asURI(this.get(VERIFICATION_METHOD));
   }
 
   public Instant getCreated() {
