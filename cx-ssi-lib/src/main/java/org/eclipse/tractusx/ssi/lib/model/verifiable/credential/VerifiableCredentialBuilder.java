@@ -13,13 +13,13 @@ import org.eclipse.tractusx.ssi.lib.model.Proof;
 @NoArgsConstructor
 public class VerifiableCredentialBuilder {
 
-  private List<String> context;
+  private List<String> context = List.of(VerifiableCredential.DEFAULT_CONTEXT);
   private URI id;
   private List<String> types;
   private URI issuer;
   private Instant issuanceDate;
   private Instant expirationDate;
-  private VerifiableCredentialSubject credentialSubject;
+  private List<VerifiableCredentialSubject> credentialSubject;
   private Proof proof;
 
   public VerifiableCredentialBuilder context(List<String> context) {
@@ -53,8 +53,14 @@ public class VerifiableCredentialBuilder {
   }
 
   public VerifiableCredentialBuilder credentialSubject(
-      VerifiableCredentialSubject credentialSubject) {
+      List<VerifiableCredentialSubject> credentialSubject) {
     this.credentialSubject = credentialSubject;
+    return this;
+  }
+
+  public VerifiableCredentialBuilder credentialSubject(
+      VerifiableCredentialSubject credentialSubject) {
+    this.credentialSubject = List.of(credentialSubject);
     return this;
   }
 
@@ -76,7 +82,7 @@ public class VerifiableCredentialBuilder {
     map.put(VerifiableCredential.ISSUANCE_DATE, formatter.format(issuanceDate));
     map.put(VerifiableCredential.EXPIRATION_DATE, formatter.format(expirationDate));
     map.put(VerifiableCredential.CREDENTIAL_SUBJECT, credentialSubject);
-    map.put(VerifiableCredential.PROOF, proof);
+    if (proof != null) map.put(VerifiableCredential.PROOF, proof);
 
     return new VerifiableCredential(map);
   }

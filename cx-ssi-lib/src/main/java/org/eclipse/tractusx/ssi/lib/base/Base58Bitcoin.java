@@ -1,6 +1,7 @@
 package org.eclipse.tractusx.ssi.lib.base;
 
 import io.ipfs.multibase.Multibase;
+import java.util.Objects;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Value;
@@ -11,6 +12,8 @@ import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 public class Base58Bitcoin implements MultibaseString {
 
   public static boolean canDecode(String encoded) {
+    Objects.requireNonNull(encoded, "encoded must not be null");
+
     return Multibase.encoding(encoded).equals(Multibase.Base.Base58BTC);
   }
 

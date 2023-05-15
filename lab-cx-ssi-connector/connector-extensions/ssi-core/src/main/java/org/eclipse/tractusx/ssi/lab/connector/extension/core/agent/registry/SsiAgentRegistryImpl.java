@@ -22,11 +22,6 @@ public class SsiAgentRegistryImpl implements SsiAgentRegistry {
   private final List<SsiAgentFactory> agentFactory = new ArrayList<>();
 
   @Override
-  public SsiAgent getAgent(String agentIdentifier) {
-    return resolveSingletonAgent(agentIdentifier);
-  }
-
-  @Override
   public SsiAgent getConfiguredAgent() {
     return resolveSingletonAgent(configuredAgentIdentifier);
   }

@@ -10,6 +10,7 @@ import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentationBuilder;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentationType;
 import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdSerializer;
 
@@ -23,16 +24,16 @@ public class SerializedJwtPresentationFactoryImpl implements SerializedJwtPresen
   @Override
   public SignedJWT createPresentation(
       Did issuer, List<VerifiableCredential> credentials, String audience, Ed25519Key signingKey) {
+    final VerifiablePresentationBuilder verifiablePresentationBuilder =
+        new VerifiablePresentationBuilder();
     final VerifiablePresentation verifiablePresentation =
-        VerifiablePresentation.builder()
+        verifiablePresentationBuilder
             .id(
                 URI.create(
                     agentDid.toUri()
                         + "#"
                         + UUID.randomUUID())) // TODO This is possible, but there are better ways to
-            // generate this ID
-            .holder(agentDid.toUri())
-            .types(List.of(VerifiablePresentationType.VERIFIABLE_PRESENTATION))
+            .type(List.of(VerifiablePresentationType.VERIFIABLE_PRESENTATION))
             .verifiableCredentials(credentials)
             .build();
 

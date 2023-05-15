@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.NonNull;
 import lombok.ToString;
 
@@ -62,13 +63,19 @@ public class VerifiableCredential extends HashMap<String, Object> {
   }
 
   @NonNull
-  public VerifiableCredentialSubject getCredentialSubject() {
+  public List<VerifiableCredentialSubject> getCredentialSubject() {
     final Object subject = this.get(CREDENTIAL_SUBJECT);
-    if (subject == null) {
-      return null;
-    }
 
-    // TODO might be an array of credential subjects
-    return new VerifiableCredentialSubject((Map<String, Object>) subject);
+    if (subject instanceof List) {
+      return ((List<Map<String, Object>>) subject)
+          .stream().map(VerifiableCredentialSubject::new).collect(Collectors.toList());
+    } else if (subject instanceof Map) {
+      return List.of(new VerifiableCredentialSubject((Map<String, Object>) subject));
+    } else {
+      throw new IllegalArgumentException(
+          "Invalid credential subject type. "
+              + subject.getClass().getName()
+              + " is not supported.");
+    }
   }
 }

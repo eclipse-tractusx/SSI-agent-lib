@@ -4,6 +4,7 @@ import com.nimbusds.jwt.SignedJWT;
 import java.net.URI;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.edc.spi.iam.ClaimToken;
 import org.eclipse.edc.spi.iam.IdentityService;
@@ -24,7 +25,7 @@ public class SsiIdentityService implements IdentityService {
   private final Monitor monitor;
 
   /**
-   * This function is called to get the JWT token, that is send to another connector via IDS
+   * This function is called to get the JWT token, that is sent to another connector via IDS
    * protocol.
    *
    * @param tokenParameters token parameters
@@ -58,7 +59,7 @@ public class SsiIdentityService implements IdentityService {
     String token = tokenRepresentation.getToken();
     monitor.info("Received JWT: " + token);
 
-    SignedJWT jwt = null;
+    SignedJWT jwt;
     try {
       jwt = SignedJWT.parse(token);
     } catch (ParseException e) {
@@ -94,12 +95,14 @@ public class SsiIdentityService implements IdentityService {
               credentialIssuer, membershipIssuer));
     }
 
+    final Map<String, Object> businessPartnerSubject =
+        membershipCredential.getCredentialSubject().get(0);
     final String businessPartnerNumber =
-        (String) membershipCredential.getCredentialSubject().get("businessPartnerNumber");
-    final String did = (String) membershipCredential.getCredentialSubject().get("id");
+        (String) businessPartnerSubject.get("businessPartnerNumber");
+    final String did = (String) businessPartnerSubject.get("id");
     // TODO BPN is not optional!
     if (businessPartnerNumber != null) {
-      // TODO Magic String1044
+      // TODO Magic String
 
       claimTokenBuilder.claim("businessPartnerNumber", businessPartnerNumber);
     }
