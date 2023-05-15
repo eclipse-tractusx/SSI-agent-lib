@@ -3,11 +3,11 @@ hostName:
   external: "192.168.49.2"
   internal: "alice-controlplane"
 ssiApi:
-  port: 31700
+  port: 30009
 didDocumentApi:
   port: 8086
 dataMgmtApi:
-  port: 30711
+  port: 31553
   authKey: "password"
 idsApi:
   port: 8084

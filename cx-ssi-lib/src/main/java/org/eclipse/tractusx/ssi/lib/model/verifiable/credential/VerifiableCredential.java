@@ -2,12 +2,14 @@ package org.eclipse.tractusx.ssi.lib.model.verifiable.credential;
 
 import java.net.URI;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.*;
+import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.Proof;
+import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
 
 // @formatter:off
 /**
@@ -26,10 +28,10 @@ import org.eclipse.tractusx.ssi.lib.model.Proof;
  */
 // @formatter:on
 @ToString
-public class VerifiableCredential extends HashMap<String, Object> {
+public class VerifiableCredential extends JsonLdObject {
 
+  public static final String DEFAULT_CONTEXT = "https://www.w3.org/2018/credentials/v1";
   public static final String TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-  public static final String CONTEXT = "@context";
   public static final String ID = "id";
   public static final String TYPE = "type";
   public static final String ISSUER = "issuer";
@@ -43,7 +45,6 @@ public class VerifiableCredential extends HashMap<String, Object> {
 
     try {
       // validate getters
-      Objects.requireNonNull(this.getContext());
       Objects.requireNonNull(this.getId());
       Objects.requireNonNull(this.getTypes());
       Objects.requireNonNull(this.getIssuer());
@@ -52,17 +53,20 @@ public class VerifiableCredential extends HashMap<String, Object> {
       this.getExpirationDate();
       this.getProof();
     } catch (Exception e) {
-      throw new IllegalArgumentException("Invalid VerifiableCredential", e);
+      throw new IllegalArgumentException(
+          String.format("Invalid VerifiableCredential: %s", SerializeUtil.toJson(json)), e);
     }
-  }
 
-  public List<String> getContext() {
-    return (List<String>) this.get(CONTEXT);
+    if (this.getCredentialSubject().isEmpty())
+      throw new IllegalArgumentException(
+          String.format(
+              "Invalid VerifiableCredential. CredentialSubject must not be empty: %s",
+              SerializeUtil.toJson(json)));
   }
 
   @NonNull
   public URI getId() {
-    return URI.create((String) this.get(ID));
+    return SerializeUtil.asURI(this.get(ID));
   }
 
   @NonNull
@@ -72,7 +76,7 @@ public class VerifiableCredential extends HashMap<String, Object> {
 
   @NonNull
   public URI getIssuer() {
-    return URI.create((String) this.get(ISSUER));
+    return SerializeUtil.asURI(this.get(ISSUER));
   }
 
   @NonNull
@@ -81,17 +85,26 @@ public class VerifiableCredential extends HashMap<String, Object> {
   }
 
   public Instant getExpirationDate() {
+    if (!this.containsKey(EXPIRATION_DATE)) return null;
+
     return Instant.parse((String) this.get(EXPIRATION_DATE));
   }
 
   @NonNull
-  public VerifiableCredentialSubject getCredentialSubject() {
+  public List<VerifiableCredentialSubject> getCredentialSubject() {
     final Object subject = this.get(CREDENTIAL_SUBJECT);
-    if (subject == null) {
-      return null;
-    }
 
-    return new VerifiableCredentialSubject((Map<String, Object>) subject);
+    if (subject instanceof List) {
+      return ((List<Map<String, Object>>) subject)
+          .stream().map(VerifiableCredentialSubject::new).collect(Collectors.toList());
+    } else if (subject instanceof Map) {
+      return List.of(new VerifiableCredentialSubject((Map<String, Object>) subject));
+    } else {
+      throw new IllegalArgumentException(
+          "Invalid credential subject type. "
+              + subject.getClass().getName()
+              + " is not supported.");
+    }
   }
 
   public Proof getProof() {

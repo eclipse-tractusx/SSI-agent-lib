@@ -8,7 +8,11 @@ import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.DanubTechMapper;
 
 public class LinkedDataTransformer {
   public TransformedLinkedData transform(VerifiableCredential credential) {
-    var dtCredential = DanubTechMapper.map(credential);
+    // make a copy and remove proof from credential, as it is not part of the linked data
+    VerifiableCredential copyCredential = new VerifiableCredential(credential);
+    copyCredential.remove(VerifiableCredential.PROOF);
+
+    var dtCredential = DanubTechMapper.map(copyCredential);
     try {
 
       var normalized = dtCredential.normalize("urdna2015");

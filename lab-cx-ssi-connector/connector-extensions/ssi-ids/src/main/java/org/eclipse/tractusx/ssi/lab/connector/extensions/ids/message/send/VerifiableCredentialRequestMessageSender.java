@@ -32,7 +32,7 @@ public class VerifiableCredentialRequestMessageSender
 
   @Override
   public Message buildMessageHeader(
-      VerifiableCredentialRequest request, DynamicAttributeToken token) throws Exception {
+      VerifiableCredentialRequest request, DynamicAttributeToken token) {
     var message =
         new DescriptionRequestMessageBuilder()
             ._modelVersion_(IdsConstants.INFORMATION_MODEL_VERSION)

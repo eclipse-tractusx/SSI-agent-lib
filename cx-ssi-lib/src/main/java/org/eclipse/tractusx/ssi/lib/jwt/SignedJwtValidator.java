@@ -4,18 +4,24 @@ import com.nimbusds.jwt.SignedJWT;
 import java.util.Date;
 import java.util.List;
 import lombok.SneakyThrows;
+import org.eclipse.tractusx.ssi.lib.exception.JwtAudienceCheckFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.JwtExpiredException;
 
 public class SignedJwtValidator {
 
   @SneakyThrows
-  public boolean validate(SignedJWT jwt, String expectedAudience) {
+  public void validate(SignedJWT jwt, String expectedAudience) {
 
     Date expiryDate = jwt.getJWTClaimsSet().getExpirationTime();
-    boolean isNotExpired = expiryDate.after(new Date()); // Todo add Timezone
+    boolean isExpired = expiryDate.before(new Date()); // Todo add Timezone
+    if (isExpired) {
+      throw new JwtExpiredException(expiryDate);
+    }
 
     List<String> audiences = jwt.getJWTClaimsSet().getAudience();
     boolean isValidAudience = audiences.stream().anyMatch(x -> x.equals(expectedAudience));
-
-    return isNotExpired && isValidAudience;
+    if (!isValidAudience) {
+      throw new JwtAudienceCheckFailedException(expectedAudience, audiences);
+    }
   }
 }

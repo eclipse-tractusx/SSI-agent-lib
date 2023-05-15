@@ -150,7 +150,7 @@ components:
               - id
               - type
               - controller
-              - publicKeyBase58
+              - publicKeyMultibase
             properties:
               id:
                 type: string
@@ -158,7 +158,7 @@ components:
                 type: string
               controller:
                 type: string
-              publicKeyBase58:
+              publicKeyMultibase:
                 type: string
     VerifiableCredential:
       type: object
@@ -167,6 +167,7 @@ components:
         - type
         - issuer
         - issuanceDate
+        - credentialSubject
       properties:
         '@context':
           type: array
@@ -189,7 +190,9 @@ components:
           type: string
           format: date-time
         credentialSubject:
-          $ref: '#/components/schemas/Map'
+          type: array
+          items:
+            $ref: '#/components/schemas/Map'
         proof:
           $ref: '#/components/schemas/Map'
     Error:

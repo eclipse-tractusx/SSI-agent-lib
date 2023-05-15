@@ -57,6 +57,14 @@
             <artifactId>swagger-annotations</artifactId>
             <version>1.6.10</version>
         </dependency>
+
+        <!-- JUnit -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${org.junit.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 
@@ -79,6 +87,8 @@
                             <generatorName>java</generatorName>
                             <apiPackage>org.eclipse.tractusx.ssi.agent.client.api</apiPackage>
                             <modelPackage>org.eclipse.tractusx.ssi.agent.client.model</modelPackage>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
                             <groupId>org.eclipse.tractusx.ssi</groupId>
                             <artifactId>cx-ssi-agent-client-okhttp3</artifactId>
                             <configOptions>

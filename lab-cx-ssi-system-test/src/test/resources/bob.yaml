@@ -3,11 +3,11 @@ hostName:
   external: "192.168.49.2"
   internal: "bob-controlplane"
 ssiApi:
-  port: 31283
+  port: 30565
 didDocumentApi:
   port: 8086
 dataMgmtApi:
-  port: 31269
+  port: 30193
   authKey: "password"
 idsApi:
   port: 8084

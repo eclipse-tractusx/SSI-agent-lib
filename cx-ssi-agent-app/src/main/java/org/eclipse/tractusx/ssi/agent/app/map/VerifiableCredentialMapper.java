@@ -1,7 +1,7 @@
 package org.eclipse.tractusx.ssi.agent.app.map;
 
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 import org.eclipse.tractusx.ssi.agent.model.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.Proof;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
@@ -14,11 +14,14 @@ public class VerifiableCredentialMapper {
           verifiableCredential) {
     Objects.requireNonNull(verifiableCredential, "VerifiableCredential must not be null");
 
+    List<Map> verifiableCredentialSubject =
+        new ArrayList<>(verifiableCredential.getCredentialSubject());
+
     final VerifiableCredential credential = new VerifiableCredential();
     credential.atContext(verifiableCredential.getContext());
     credential.id(verifiableCredential.getId());
     credential.type(verifiableCredential.getTypes());
-    credential.credentialSubject(verifiableCredential.getCredentialSubject());
+    credential.credentialSubject(verifiableCredentialSubject);
     credential.issuer(verifiableCredential.getIssuer());
     credential.issuanceDate(
         verifiableCredential.getIssuanceDate().atOffset(java.time.ZoneOffset.UTC));
@@ -33,8 +36,10 @@ public class VerifiableCredentialMapper {
       VerifiableCredential verifiableCredential) {
     Objects.requireNonNull(verifiableCredential, "VerifiableCredential must not be null");
 
-    final VerifiableCredentialSubject verifiableCredentialSubject =
-        new VerifiableCredentialSubject(verifiableCredential.getCredentialSubject());
+    final List<VerifiableCredentialSubject> verifiableCredentialSubject =
+        verifiableCredential.getCredentialSubject().stream()
+            .map(VerifiableCredentialSubject::new)
+            .collect(Collectors.toList());
     final Proof proof =
         Optional.ofNullable(verifiableCredential.getProof()).map(Proof::new).orElse(null);
 

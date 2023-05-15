@@ -1,11 +1,11 @@
 package org.eclipse.tractusx.ssi.agent.lib;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
 import org.eclipse.tractusx.ssi.agent.lib.exceptions.CredentialAlreadyStoredException;
@@ -15,15 +15,17 @@ import org.eclipse.tractusx.ssi.agent.lib.jwt.JwtReader;
 import org.eclipse.tractusx.ssi.agent.lib.wallet.SsiMemoryStorageWallet;
 import org.eclipse.tractusx.ssi.agent.lib.wallet.VerifiableCredentialWallet;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
+import org.eclipse.tractusx.ssi.lib.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
 import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519KeySet;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebDocumentResolver;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
-import org.eclipse.tractusx.ssi.lib.exception.UnsupportedDidMethodException;
-import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
-import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
+import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidJsonLdException;
+import org.eclipse.tractusx.ssi.lib.exception.JwtException;
+import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
+import org.eclipse.tractusx.ssi.lib.model.did.*;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistryImpl;
@@ -72,10 +74,24 @@ public class WebAgent {
 
   public DidDocument getDidDocument() {
     final Did did = DidWebFactory.fromHostname(hostName);
-    return new DidDocumentBuilder()
-        .withDid(did)
-        .withEd25519PublicKey(signingKeySet.getPublicKey())
-        .build();
+
+    final List<VerificationMethod> verificationMethods = new ArrayList<>();
+    final byte[] publicKey = signingKeySet.getPublicKey();
+    final MultibaseString publicKeyBase = MultibaseFactory.create(publicKey);
+    final Ed25519VerificationKey2020Builder builder = new Ed25519VerificationKey2020Builder();
+    final Ed25519VerificationKey2020 key =
+        builder
+            .id(URI.create(did.toUri() + "#key-" + 1))
+            .controller(did.toUri())
+            .publicKeyMultiBase(publicKeyBase)
+            .build();
+    verificationMethods.add(key);
+
+    final DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();
+    didDocumentBuilder.id(did.toUri());
+    didDocumentBuilder.verificationMethods(verificationMethods);
+
+    return didDocumentBuilder.build();
   }
 
   public void storeCredential(VerifiableCredential verifiableCredential)
@@ -102,14 +118,17 @@ public class WebAgent {
   public VerifiablePresentation readCredentials(
       SignedJWT verifiablePresentation, String expectedAudience) {
     try {
-      return jwtReader.read(verifiablePresentation, expectedAudience);
-    } catch (UnsupportedDidMethodException e) {
-      throw new RuntimeException(e);
-    } catch (JOSEException e) {
-      throw new RuntimeException(e);
+      return jwtReader.read(
+          verifiablePresentation, expectedAudience, false); // TODO make configurable
     } catch (ParseException e) {
       throw new RuntimeException(e);
     } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    } catch (DidDocumentResolverNotRegisteredException e) {
+      throw new RuntimeException(e);
+    } catch (JwtException e) {
+      throw new RuntimeException(e);
+    } catch (InvalidJsonLdException e) {
       throw new RuntimeException(e);
     }
   }

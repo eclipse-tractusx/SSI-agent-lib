@@ -27,30 +27,8 @@ public class LinkedDataProofValidation {
 
   @SneakyThrows
   public boolean checkProof(VerifiableCredential verifiableCredential) {
-
-    if (true) return true; // TODO enable again
-
-    // TODO Assert proof is linked data proof
     final TransformedLinkedData transformedData = transformer.transform(verifiableCredential);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
-    final boolean isProofed = verifier.verify(hashedData, verifiableCredential);
-
-    if (isProofed) {
-      //            monitor.debug(
-      //                    String.format(
-      //                            "Successfully verified signature of verifiable credential proof
-      // (id=%s, issuer=%s)",
-      //                            verifiableCredential.getId(),
-      // verifiableCredential.getIssuer()));
-    } else {
-      //            monitor.warning(
-      //                    String.format(
-      //                            "Signature verification failed for verifiable credential proof
-      // (id=%s, issuer=%s)",
-      //                            verifiableCredential.getId(),
-      // verifiableCredential.getIssuer()));
-    }
-
-    return isProofed;
+    return verifier.verify(hashedData, verifiableCredential);
   }
 }

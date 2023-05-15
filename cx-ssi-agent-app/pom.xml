@@ -59,11 +59,6 @@
         <!-- Project -->
         <dependency>
             <groupId>org.eclipse.tractusx.ssi</groupId>
-            <artifactId>cx-ssi-agent-interface</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.tractusx.ssi</groupId>
             <artifactId>cx-ssi-agent-lib</artifactId>
             <version>${project.version}</version>
         </dependency>
