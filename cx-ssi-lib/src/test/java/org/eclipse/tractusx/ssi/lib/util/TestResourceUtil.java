@@ -15,7 +15,7 @@ import org.eclipse.tractusx.ssi.lib.util.identity.KeyResourceLoader;
 public class TestResourceUtil {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
-  private static final String DID_DOCUMENT_ED25519 = "/did-document/document.ed25519.json";
+  private static final String DID_DOCUMENT_ED25519 = "did-document/document.ed25519.json";
   private static final String PUBLIC_KEY_ED25519 = "keys/ed25519/public.pem";
   private static final String PRIVATE_KEY_ED25519 = "keys/ed25519/private.pem";
   private static String VERIFIABLE_CREDENTIAL_ALUMNI =
