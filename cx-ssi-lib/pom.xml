@@ -46,6 +46,13 @@
             <artifactId>verifiable-credentials-java</artifactId>
             <version>1.0.0</version>
         </dependency>
+        
+        
+        <dependency>
+	        <groupId>decentralized-identity</groupId>
+	        <artifactId>did-common-java</artifactId>
+	        <version>1.0.0</version>
+        </dependency>
 
         <!-- Google Tink -->
         <!-- Note: that for EdDSA you need to include the optional Tink dependency in your project. For Nimbus JOSE+JWT 6.0 that would be -->
