@@ -1,9 +1,7 @@
- package org.eclipse.tractusx.ssi.examples;
+package org.eclipse.tractusx.ssi.examples;
 
-import java.net.URI;
+import com.nimbusds.jwt.SignedJWT;
 import java.util.List;
-import java.util.UUID;
-
 import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
 import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519KeySet;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
@@ -17,11 +15,10 @@ import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdSerializerImpl;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationFactory;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationFactoryImpl;
 
-import com.nimbusds.jwt.SignedJWT;
-
 class VP {
 
- public static VerifiablePresentation createVP( Did issuer, List<VerifiableCredential> credentials){
+  public static VerifiablePresentation createVP(
+      Did issuer, List<VerifiableCredential> credentials) {
     final VerifiablePresentationBuilder verifiablePresentationBuilder =
         new VerifiablePresentationBuilder();
     final VerifiablePresentation verifiablePresentation =
@@ -31,22 +28,23 @@ class VP {
             .verifiableCredentials(credentials)
             .build();
     return verifiablePresentation;
- }
+  }
 
- public static SignedJWT createVPAsJWT(Did issuer,List<VerifiableCredential> credentials, String audience,byte[] privateKey,byte[] publicKey){
- 
-    //Extracting keys 
+  public static SignedJWT createVPAsJWT(
+      Did issuer,
+      List<VerifiableCredential> credentials,
+      String audience,
+      byte[] privateKey,
+      byte[] publicKey) {
+
+    // Extracting keys
     final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
-    final Ed25519Key signingKey = new Ed25519Key(keySet.getPrivateKey()); 
+    final Ed25519Key signingKey = new Ed25519Key(keySet.getPrivateKey());
 
-    final SerializedJwtPresentationFactory presentationFactory = new SerializedJwtPresentationFactoryImpl(
+    final SerializedJwtPresentationFactory presentationFactory =
+        new SerializedJwtPresentationFactoryImpl(
             new SignedJwtFactory(new OctetKeyPairFactory()), new JsonLdSerializerImpl(), issuer);
 
-
-    return presentationFactory.createPresentation(
-        issuer, credentials, audience, signingKey);
-
-
-   }
+    return presentationFactory.createPresentation(issuer, credentials, audience, signingKey);
+  }
 }
- 

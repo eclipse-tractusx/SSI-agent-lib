@@ -1,11 +1,9 @@
 package org.eclipse.tractusx.ssi.examples;
 
-
 import java.net.URI;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.tractusx.ssi.lib.model.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -14,21 +12,19 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialType;
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofGenerator;
 
-public class VC 
-{
-    public static VerifiableCredential createVCWithoutProof() { 
-       
+public class VC {
+  public static VerifiableCredential createVCWithoutProof() {
 
-        //VC Bulider
-        final VerifiableCredentialBuilder verifiableCredentialBuilder =
+    // VC Bulider
+    final VerifiableCredentialBuilder verifiableCredentialBuilder =
         new VerifiableCredentialBuilder();
 
-        //VC Subject
-        final VerifiableCredentialSubject verifiableCredentialSubject =
+    // VC Subject
+    final VerifiableCredentialSubject verifiableCredentialSubject =
         new VerifiableCredentialSubject(Map.of("test", "test"));
-       
-        //Using Builder
-        final VerifiableCredential credentialWithoutProof =
+
+    // Using Builder
+    final VerifiableCredential credentialWithoutProof =
         verifiableCredentialBuilder
             .id(URI.create("did:test:id"))
             .type(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
@@ -38,14 +34,14 @@ public class VC
             .credentialSubject(verifiableCredentialSubject)
             .build();
 
-        return credentialWithoutProof;
+    return credentialWithoutProof;
+  }
 
-    }
+  public static VerifiableCredential createVCWithProof(
+      VerifiableCredential credential, byte[] privateKey, Did issuer) {
 
-    public static VerifiableCredential createVCWithProof(VerifiableCredential credential, byte[] privateKey, Did issuer){
-
-        //VC Builder
-        final VerifiableCredentialBuilder builder =
+    // VC Builder
+    final VerifiableCredentialBuilder builder =
         new VerifiableCredentialBuilder()
             .context(credential.getContext())
             .id(credential.getId())
@@ -55,17 +51,15 @@ public class VC
             .expirationDate(credential.getExpirationDate())
             .type(credential.getTypes());
 
-         //Ed25519 Proof Builder
-        final LinkedDataProofGenerator generator = LinkedDataProofGenerator.create();
-        final Ed25519Signature2020 proof =  generator.createEd25519Signature2020(builder.build(), URI.create(issuer + "#key-1"), privateKey);
-    
-        //Adding Proof to VC
-        builder.proof(proof);
+    // Ed25519 Proof Builder
+    final LinkedDataProofGenerator generator = LinkedDataProofGenerator.create();
+    final Ed25519Signature2020 proof =
+        generator.createEd25519Signature2020(
+            builder.build(), URI.create(issuer + "#key-1"), privateKey);
 
-        return builder.build();
-    }
+    // Adding Proof to VC
+    builder.proof(proof);
 
+    return builder.build();
+  }
 }
-
-
-
