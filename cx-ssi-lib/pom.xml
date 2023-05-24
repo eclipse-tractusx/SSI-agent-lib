@@ -3,17 +3,17 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.eclipse.tractusx.ssi</groupId>
-        <artifactId>cx-ssi</artifactId>
-        <version>0.0.3</version>
-    </parent>
+    <groupId>org.eclipse.tractusx.ssi.lib</groupId>
+    <version>0.0.4</version>
     <packaging>jar</packaging>
+
 
     <artifactId>cx-ssi-lib</artifactId>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <delombokSourceDirectory>${project.build.directory}/delombok</delombokSourceDirectory>
     </properties>
 
@@ -24,6 +24,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+            <version>1.18.26</version>
         </dependency>
 
         <!-- Multibase -->
@@ -47,35 +48,33 @@
             <version>1.0.0</version>
         </dependency>
         
-        
-        <dependency>
-	        <groupId>decentralized-identity</groupId>
-	        <artifactId>did-common-java</artifactId>
-	        <version>1.0.0</version>
-        </dependency>
 
         <!-- Google Tink -->
         <!-- Note: that for EdDSA you need to include the optional Tink dependency in your project. For Nimbus JOSE+JWT 6.0 that would be -->
         <dependency>
             <groupId>com.google.crypto.tink</groupId>
             <artifactId>tink</artifactId>
+            <version>1.9.0</version>
         </dependency>
         <!-- Net Crypto EDDSA -->
         <!-- Required for the EDSA Security Provider -->
         <dependency>
             <groupId>net.i2p.crypto</groupId>
             <artifactId>eddsa</artifactId>
+            <version>0.3.0</version>
         </dependency>
 
         <!-- JUnit -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <version>5.9.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.3</version>
             <scope>test</scope>
         </dependency>
 
@@ -83,6 +82,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
+            <version>5.3.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -122,5 +122,16 @@
             </properties>
         </profile>
     </profiles>
+
+    <repositories>
+	    <repository>
+		    <id>danubetech-maven-public</id>
+		    <url>https://repo.danubetech.com/repository/maven-public/</url>
+	    </repository>
+        <repository>
+            <id>jitpack.io</id>
+             <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
 </project>
