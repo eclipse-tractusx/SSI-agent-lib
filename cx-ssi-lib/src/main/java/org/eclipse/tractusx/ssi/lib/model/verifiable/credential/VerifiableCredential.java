@@ -30,89 +30,91 @@ import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
 @ToString
 public class VerifiableCredential extends JsonLdObject {
 
-  public static final String DEFAULT_CONTEXT = "https://www.w3.org/2018/credentials/v1";
-  public static final String TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-  public static final String ID = "id";
-  public static final String TYPE = "type";
-  public static final String ISSUER = "issuer";
-  public static final String ISSUANCE_DATE = "issuanceDate";
-  public static final String EXPIRATION_DATE = "expirationDate";
-  public static final String CREDENTIAL_SUBJECT = "credentialSubject";
-  public static final String PROOF = "proof";
+    public static final String DEFAULT_CONTEXT = "https://www.w3.org/2018/credentials/v1";
+    public static final String TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    public static final String ID = "id";
+    public static final String TYPE = "type";
+    public static final String ISSUER = "issuer";
+    public static final String ISSUANCE_DATE = "issuanceDate";
+    public static final String EXPIRATION_DATE = "expirationDate";
+    public static final String CREDENTIAL_SUBJECT = "credentialSubject";
+    public static final String PROOF = "proof";
 
-  public VerifiableCredential(Map<String, Object> json) {
-    super(json);
+    public VerifiableCredential(Map<String, Object> json) {
+        super(json);
 
-    try {
-      // validate getters
-      Objects.requireNonNull(this.getId());
-      Objects.requireNonNull(this.getTypes());
-      Objects.requireNonNull(this.getIssuer());
-      Objects.requireNonNull(this.getIssuanceDate());
-      Objects.requireNonNull(this.getCredentialSubject());
-      this.getExpirationDate();
-      this.getProof();
-    } catch (Exception e) {
-      throw new IllegalArgumentException(
-          String.format("Invalid VerifiableCredential: %s", SerializeUtil.toJson(json)), e);
+        try {
+            // validate getters
+            Objects.requireNonNull(this.getId());
+            Objects.requireNonNull(this.getTypes());
+            Objects.requireNonNull(this.getIssuer());
+            Objects.requireNonNull(this.getIssuanceDate());
+            Objects.requireNonNull(this.getCredentialSubject());
+            this.getExpirationDate();
+            this.getProof();
+        } catch (Exception e) {
+            throw new IllegalArgumentException(
+                    String.format("Invalid VerifiableCredential: %s", SerializeUtil.toJson(json)), e);
+        }
+
+        if (this.getCredentialSubject().isEmpty())
+            throw new IllegalArgumentException(
+                    String.format(
+                            "Invalid VerifiableCredential. CredentialSubject must not be empty: %s",
+                            SerializeUtil.toJson(json)));
     }
 
-    if (this.getCredentialSubject().isEmpty())
-      throw new IllegalArgumentException(
-          String.format(
-              "Invalid VerifiableCredential. CredentialSubject must not be empty: %s",
-              SerializeUtil.toJson(json)));
-  }
-
-  @NonNull
-  public URI getId() {
-    return SerializeUtil.asURI(this.get(ID));
-  }
-
-  @NonNull
-  public List<String> getTypes() {
-    return (List<String>) this.get(TYPE);
-  }
-
-  @NonNull
-  public URI getIssuer() {
-    return SerializeUtil.asURI(this.get(ISSUER));
-  }
-
-  @NonNull
-  public Instant getIssuanceDate() {
-    return Instant.parse((String) this.get(ISSUANCE_DATE));
-  }
-
-  public Instant getExpirationDate() {
-    if (!this.containsKey(EXPIRATION_DATE)) return null;
-
-    return Instant.parse((String) this.get(EXPIRATION_DATE));
-  }
-
-  @NonNull
-  public List<VerifiableCredentialSubject> getCredentialSubject() {
-    final Object subject = this.get(CREDENTIAL_SUBJECT);
-
-    if (subject instanceof List) {
-      return ((List<Map<String, Object>>) subject)
-          .stream().map(VerifiableCredentialSubject::new).collect(Collectors.toList());
-    } else if (subject instanceof Map) {
-      return List.of(new VerifiableCredentialSubject((Map<String, Object>) subject));
-    } else {
-      throw new IllegalArgumentException(
-          "Invalid credential subject type. "
-              + subject.getClass().getName()
-              + " is not supported.");
-    }
-  }
-
-  public Proof getProof() {
-    final Object subject = this.get(PROOF);
-    if (subject == null) {
-      return null;
+    @NonNull
+    public URI getId() {
+        return SerializeUtil.asURI(this.get(ID));
     }
 
-    return new Proof((Map<String, Object>) subject);
-  }
+    @NonNull
+    public List<String> getTypes() {
+        return (List<String>) this.get(TYPE);
+    }
+
+    @NonNull
+    public URI getIssuer() {
+        return SerializeUtil.asURI(this.get(ISSUER));
+    }
+
+    @NonNull
+    public Instant getIssuanceDate() {
+        return Instant.parse((String) this.get(ISSUANCE_DATE));
+    }
+
+    public Instant getExpirationDate() {
+        if (!this.containsKey(EXPIRATION_DATE))
+            return null;
+
+        return Instant.parse((String) this.get(EXPIRATION_DATE));
+    }
+
+    @NonNull
+    public List<VerifiableCredentialSubject> getCredentialSubject() {
+        final Object subject = this.get(CREDENTIAL_SUBJECT);
+
+        if (subject instanceof List) {
+            return ((List<Map<String, Object>>) subject)
+                    .stream().map(VerifiableCredentialSubject::new).collect(Collectors.toList());
+        } else if (subject instanceof Map) {
+            return List.of(new VerifiableCredentialSubject((Map<String, Object>) subject));
+        } else {
+            throw new IllegalArgumentException(
+                    "Invalid credential subject type. "
+                            + subject.getClass().getName()
+                            + " is not supported.");
+        }
+    }
+
+    public Proof getProof() {
+        final Object subject = this.get(PROOF);
+        if (subject == null) {
+            return null;
+        }
+
+        return new Proof((Map<String, Object>) subject);
+    }
+
 }
