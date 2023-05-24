@@ -9,8 +9,8 @@
     <name>cx-ssi</name>
     <description>cx-ssi</description>
     <modules>
-        <module>cx-ssi-agent-app</module>
         <module>cx-ssi-lib</module>
+        <module>cx-ssi-agent-app</module>
         <module>cx-ssi-agent-lib</module>
         <module>cx-ssi-agent-interface</module>
         <module>cx-ssi-agent-client-apache</module>
