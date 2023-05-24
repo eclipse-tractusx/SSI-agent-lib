@@ -29,38 +29,38 @@ import org.junit.jupiter.api.Test;
 
 public class DidDocumentTest {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+  private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    @Test
-    public void canCreateDidDocument() {
-        final List<Map<String, Object>> documents = TestResourceUtil.getAllDidDocuments();
+  @Test
+  public void canCreateDidDocument() {
+    final List<Map<String, Object>> documents = TestResourceUtil.getAllDidDocuments();
 
-        for (Map<String, Object> document : documents) {
-            Assertions.assertDoesNotThrow(() -> new DidDocument(document));
-        }
+    for (Map<String, Object> document : documents) {
+      Assertions.assertDoesNotThrow(() -> new DidDocument(document));
     }
+  }
 
-    @Test
-    @SneakyThrows
-    public void canSerializeDidDocument() {
-        final List<Map<String, Object>> documents = TestResourceUtil.getAllDidDocuments();
-        for (Map<String, Object> document : documents) {
-            var doc = new DidDocument(document);
-            var json = doc.toJson();
-            var mapFromJson = MAPPER.readValue(json, Map.class);
-            Assertions.assertEquals(mapFromJson.get(DidDocument.ID), doc.get(DidDocument.ID));
-        }
+  @Test
+  @SneakyThrows
+  public void canSerializeDidDocument() {
+    final List<Map<String, Object>> documents = TestResourceUtil.getAllDidDocuments();
+    for (Map<String, Object> document : documents) {
+      var doc = new DidDocument(document);
+      var json = doc.toJson();
+      var mapFromJson = MAPPER.readValue(json, Map.class);
+      Assertions.assertEquals(mapFromJson.get(DidDocument.ID), doc.get(DidDocument.ID));
     }
+  }
 
-    @Test
-    @SneakyThrows
-    public void canDeserializeDidDocument() {
-        final List<Map<String, Object>> documents = TestResourceUtil.getAllDidDocuments();
-        for (Map<String, Object> document : documents) {
-            var docFromMap = new DidDocument(document);
-            var json = docFromMap.toJson();
-            var docFromJson = DidDocument.fromJson(json);
-            Assertions.assertEquals(docFromJson.get(DidDocument.ID), docFromMap.get(DidDocument.ID));
-        }
+  @Test
+  @SneakyThrows
+  public void canDeserializeDidDocument() {
+    final List<Map<String, Object>> documents = TestResourceUtil.getAllDidDocuments();
+    for (Map<String, Object> document : documents) {
+      var docFromMap = new DidDocument(document);
+      var json = docFromMap.toJson();
+      var docFromJson = DidDocument.fromJson(json);
+      Assertions.assertEquals(docFromJson.get(DidDocument.ID), docFromMap.get(DidDocument.ID));
     }
+  }
 }

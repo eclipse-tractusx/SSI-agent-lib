@@ -1,4 +1,3 @@
-
 package org.eclipse.tractusx.ssi.lab.connector.extension.spi.exceptions;
 
 public class SsiException extends RuntimeException {
