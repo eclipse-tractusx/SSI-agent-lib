@@ -1,28 +1,107 @@
-# CX SSI Library
+<a name="readme-top"></a>
 
-This open-source project, written in Java, aims to provide low-level DID (Decentralized Identifier) and cryptographic functionality to facilitate the development of a Self-Sovereign Identity (SSI) agent. By incorporating this library into your SSI agent, you can leverage the provided features to simplify the management and usage of DIDs and cryptographic operations.
+<!-- Shields -->
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
 
-## Table of Contents
 
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
-## Features
+<!-- Caption -->
 
-1. **DID Management**: The project offers comprehensive support for managing Decentralized Identifiers (DIDs). It includes functions to create DIDs, as well as methods for resolving and verifying the validity of DIDs.
+<br />
+<div align="center">
+  <a href="https://eclipse-tractusx.github.io/img/logo_tractus-x.svg">
+    <img src="https://eclipse-tractusx.github.io/img/logo_tractus-x.svg" alt="Logo" width="80" height="80">
+  </a>
 
-2. **Cryptographic Operations**: The library provides a range of cryptographic operations necessary for SSI agent development. It includes support for key generation, digital signatures,hashing, and more.
+<h3 align="center">Tractus-X SSI Library</h3>
 
-3. **Credential Management**: The library includes functionality to create, sign, verify, and manage credentials.
+  <p align="center">
+    This open source project has emerged with a goal to foster collaborative development and innovation in the area of Self-Sovereign Identity.
+    <br />
+        <a href="https://github.com/catenax-ng/product-lab-ssi/tree/main/cx-ssi-lib/docs"><strong>Explore the docs »</strong></a>
+        <br />
+    <br />
+    <a href="https://github.com/catenax-ng/product-lab-ssi/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/catenax-ng/product-lab-ssi/issues">Request Feature</a>
+  </p>
+</div>
 
-4. **Interoperability**: The project adheres to industry standards for DIDs and cryptographic algorithms, ensuring compatibility with other SSI-related tools and systems.
 
+
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+    </li>
+    <li>
+      <a href="#key-features-and-objectives">Key Features and Objectives</a>
+    </li>
+    <li><a href="#benefits-and-impact">Benefits and Impact</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
+
+
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+This projects facilitates the implementation of Self-Sovereign Identity solution. Self-Sovereign Identity refers to a
+decentralized model where individuals have control over their digital identities and can manage their personal data
+securely and autonomously. It is developed within the [Tractus-X project](https://eclipse-tractusx.github.io/) under the umbrella of the Eclipse Foundation,
+
+The Eclipse Foundation provides a neutral environment and governance structure for various
+projects, enabling individuals and organizations to contribute and build upon each other's work.
+Key Features and Objectives:
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- KEY FEATURES AND OBJECTIVES -->
+# Key Features and Objectives
+
+1. **Identity Management**: The project focuses on developing robust and flexible identity management capabilities, enabling individuals to maintain control over their digital identities, establish trust relationships, and selectively disclose personal information.
+
+2. **Privacy and Security**: With privacy as a central principle, the project emphasizes implementing strong security measures and cryptographic protocols to safeguard sensitive data. It provides encryption, digital signatures, and other mechanisms to ensure data integrity and confidentiality.
+
+3. **Community-Driven Development**: Emphasizing collaboration and inclusivity, the project encourages a vibrant and diverse community of developers, contributors, and users. It fosters active engagement through mailing lists, forums, and regular meetups, ensuring continuous improvement and knowledge sharing.
+
+4. **Standards Compliance**: The project adheres to established industry standards, ensuring compatibility and interoperability with existing technologies. This facilitates seamless integration with other software systems and promotes widespread adoption.
+
+5. **Extensibility**: The project offers extensibility options, allowing developers to customize and extend its functionalities to meet specific project requirements. This flexibility enables developers to adapt the software to their unique needs.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- BENEFITS AND IMPACT -->
+# Benefits and Impact
+
+By operating under the Eclipse Foundation, the project benefits from a robust ecosystem and collaborative environment. Some notable impacts and benefits of the project include:
+
+1. **Accelerated Development**: The project's tools and frameworks enable developers to streamline their workflows, resulting in faster development cycles and increased productivity.
+
+2. **Community Collaboration**: The open and inclusive nature of the project fosters collaboration, knowledge sharing, and innovation among developers and contributors, leading to continuous improvement and growth.
+
+3. **Cost Savings**: As an open source project, the software is freely available, reducing licensing costs and enabling organizations to allocate resources towards other critical areas.
+
+4. **Quality Assurance**: The project benefits from community involvement in testing, bug fixing, and security auditing, resulting in more reliable and secure software.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- INSTALLATION -->
 ## Installation
 
-To install and use the project, you have two options: building from source or using the pre-built package from Maven Central Repository.
+To install and use this lib , you have two options: building from source or using the pre-built package from Maven Central Repository.
 
 ### Build from Source
 
@@ -61,270 +140,45 @@ Make sure to update the version number if a newer version is available.
 
 Once you've added the dependency, your build tool (e.g., Maven or Gradle) will automatically download the library and include it in your project.
 
-
-## Usage
-
-To integrate this library into your SSI agent, follow these guidelines:
-
-1. Import the required classes then Initialize SSiLibrary:
-
-```java
-import org.eclipse.tractusx.ssi.lib.SsiLibrary;
-public static void main(String[] args){
-    SsiLibrary.initialize();
-}
-// ...
-```
-
-2. To bulid a DID Document:
-
-```java
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.tractusx.ssi.lib.base.MultibaseFactory;
-import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519KeySet;
-import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
-import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
-import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
-import org.eclipse.tractusx.ssi.lib.model.did.DidDocumentBuilder;
-import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020;
-import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020Builder;
-public static DidDocument buildDidDocument(String hostName,byte[] privateKey,byte[] publicKey) {
-    final Did did = DidWebFactory.fromHostname(hostName);
-    
-    //Extracting keys 
-    final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
-    final MultibaseString publicKeyBase = MultibaseFactory.create(keySet.getPublicKey());
-    
-     
+<!-- ROADMAP -->
+# Roadmap
 
-    //Building Verification Methods:
-    final List<VerificationMethod> verificationMethods = new ArrayList<>();
-    final Ed25519VerificationKey2020Builder builder = new Ed25519VerificationKey2020Builder();
-    final Ed25519VerificationKey2020 key =
-         builder
-             .id(URI.create(did.toUri() + "#key-" + 1))
-             .controller(did.toUri())
-             .publicKeyMultiBase(publicKeyBase)
-             .build();
-    verificationMethods.add(key);
-    
-    final DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();
-    didDocumentBuilder.id(did.toUri());
-    didDocumentBuilder.verificationMethods(verificationMethods);
-    
-    return didDocumentBuilder.build();
-}
+Our roadmap for future development includes the following key milestones:
+
+1. **Enhanced DID Management**: We plan to further enhance the DID management functionality by adding support for additional DID methods and advanced features such as Using new methods for DID resolution and DID document updates.
+
+2. **Extended Cryptographic Operations**: We aim to expand the cryptographic operations offered by the library, including support for more signing algorithms, advanced key management features.
+
+3. **Credential Ecosystem**: We will focus on improving the credential management capabilities, including support for different credential formats, revocation mechanisms, and interoperability with existing credential ecosystems such as Verifiable Credentials.
+
+4. **Standard Compliance**: We are committed to ensuring compliance with emerging SSI-related standards and specifications. We will continuously update the project to align with evolving standards and ensure compatibility with other SSI tools and platforms.
+
+5. **Performance Optimization**: We will invest in optimizing the performance of the library, aiming to reduce computational overhead, improve efficiency, and provide better scalability for large-scale SSI agent deployments.
+
+6. **Comprehensive Documentation and Tutorials**: We will continue to improve the project's documentation, providing comprehensive guides, examples, and tutorials to assist developers in effectively utilizing the library's features and integrating it into their SSI agent projects.
+
+Please note that the roadmap is subject to change based on community feedback, emerging standards, and the evolving needs of the SSI ecosystem. We welcome contributions and suggestions from the community to help shape the future direction of the project.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-// ...
-```
-
-3. To Resolve DID document using DID Web: 
-
-```java
-import java.net.http.HttpClient;
-
-import org.eclipse.tractusx.ssi.lib.did.web.DidWebDocumentResolver;
-import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
-import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
-import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
-import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
-import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
-import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistryImpl;
-
-public static DidDocument ResovleDocument(String didUrl) throws DidDocumentResolverNotRegisteredException {
-        
-    //DID Resolver Constracture params
-    DidWebParser didParser = new DidWebParser();
-    var httpClient = HttpClient.newHttpClient();
-    var enforceHttps = false; 
-
-    //DID Method
-    DidMethod didWeb = new DidMethod("web");
-
-    //DID
-    Did did = DidWebFactory.fromHostname(didUrl);
-
-    var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
-    didDocumentResolverRegistry.register(new DidWebDocumentResolver(httpClient,didParser , enforceHttps) );
-    return didDocumentResolverRegistry.get(didWeb).resolve(did);
-}
-
-```
-
-
-4. To Generate VerifiableCredential:
-
-```java
-import java.net.URI;
-import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialType;
-
-public static VerifiableCredential createVCWithoutProof() { 
-       
-
-    //VC Bulider
-    final VerifiableCredentialBuilder verifiableCredentialBuilder =
-    new VerifiableCredentialBuilder();
-
-    //VC Subject
-    final VerifiableCredentialSubject verifiableCredentialSubject =
-    new VerifiableCredentialSubject(Map.of("test", "test"));
-       
-    //Using Builder
-    final VerifiableCredential credentialWithoutProof =
-    verifiableCredentialBuilder
-        .id(URI.create("did:test:id"))
-        .type(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
-        .issuer(URI.create("did:test:isser"))
-        .expirationDate(Instant.now().plusSeconds(3600))
-        .issuanceDate(Instant.now())
-        .credentialSubject(verifiableCredentialSubject)
-        .build();
-
-    return credentialWithoutProof;
-
-}
-
-```
-
-5. To Generate VerifiableCredential with proof:
-
-
-```java
-import java.net.URI;
-import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-
-import org.eclipse.tractusx.ssi.lib.model.Ed25519Signature2020;
-import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialType;
-import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofGenerator;
-
-
-public static VerifiableCredential createVCWithProof(VerifiableCredential credential, byte[] privateKey, Did issuer){
-
-    //VC Builder
-    final VerifiableCredentialBuilder builder =
-    new VerifiableCredentialBuilder()
-        .context(credential.getContext())
-        .id(credential.getId())
-        .issuer(issuer.toUri())
-        .issuanceDate(Instant.now())
-        .credentialSubject(credential.getCredentialSubject())
-        .expirationDate(credential.getExpirationDate())
-        .type(credential.getTypes());
-
-         //Ed25519 Proof Builder
-        final LinkedDataProofGenerator generator = LinkedDataProofGenerator.create();
-        final Ed25519Signature2020 proof =  generator.createEd25519Signature2020(builder.build(), URI.create(issuer + "#key-1"), privateKey);
-    
-        //Adding Proof to VC
-        builder.proof(proof);
-
-        return builder.build();
-}
-
-
-```
-
-6. To Generate Verifiable Presentation
-
-```java
-import java.util.List;
-import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-
-public static VerifiablePresentation createVP( Did issuer, List<VerifiableCredential> credentials){
-    //VP Builder
-    final VerifiablePresentationBuilder verifiablePresentationBuilder =
-        new VerifiablePresentationBuilder();
-
-    // Build VP
-    final VerifiablePresentation verifiablePresentation =
-        verifiablePresentationBuilder
-            .id(issuer.toUri()) // NOTE: Provide unique ID number to each VP you create!!
-            .type(List.of(VerifiablePresentationType.VERIFIABLE_PRESENTATION))
-            .verifiableCredentials(credentials)
-            .build();
-    return verifiablePresentation;
- }
-
-```
-
-7. To Generate Signed Verifiable Presentation
-```java
-import java.util.List;
-
-import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
-import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519KeySet;
-import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
-import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentationBuilder;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentationType;
-import org.eclipse.tractusx.ssi.lib.resolver.OctetKeyPairFactory;
-import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdSerializerImpl;
-import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationFactory;
-import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationFactoryImpl;
-
-import com.nimbusds.jwt.SignedJWT;
-
-
- public static SignedJWT createVPAsJWT(Did issuer,List<VerifiableCredential> credentials, String audience,byte[] privateKey,byte[] publicKey){
- 
-    //Extracting keys 
-    final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
-    final Ed25519Key signingKey = new Ed25519Key(keySet.getPrivateKey()); 
-    
-    //JWT Factory
-    final SerializedJwtPresentationFactory presentationFactory = new SerializedJwtPresentationFactoryImpl(
-            new SignedJwtFactory(new OctetKeyPairFactory()), new JsonLdSerializerImpl(), issuer);
-
-    //Build JWT
-    return presentationFactory.createPresentation(
-        issuer, credentials, audience, signingKey);
-
-
-}
-
-```
-
-
-Refer to the project's documentation and code comments for more detailed instructions on using specific features.
-
+<!-- CONTRIBUTING -->
 ## Contributing
 
-Contributions to this open-source project are welcome. If you would like to contribute, please follow these guidelines:
+We are thrilled to have you here and excited about your interest in contributing to our project. Your contributions play a vital role in making our project successful and we truly appreciate your support.
 
-1. Fork the project repository.
-2. Create a new branch for your feature or bug fix.
-3. Make your changes and commit them with descriptive commit messages.
-4. Push your changes to your forked repository.
-5. Submit a pull request to the original project repository.
+To ensure a smooth and enjoyable experience for everyone involved, we have put together this guide to help you understand how you can contribute effectively. Please take a moment to read through the [CONTRIBUTING.md](CONTRIBUTING.md) before you start contributing.
 
 Please ensure that you adhere to the project's coding style, write unit tests for your changes if applicable, and provide clear documentation for any new features or changes.
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## License
+
+<!-- LICENSE -->
+# License
 
 This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for more information.
 
@@ -337,4 +191,29 @@ http://www.apache.org/licenses/
 You can freely use, modify, and distribute this project under the terms of the Apache License 2.0.
 
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+
+<!-- CONTACT -->
+# Contact
+
+If you have any questions, suggestions, or feedback regarding this project, please feel free to reach out to us. You can contact our team at:
+
+- Email: TBD! 
+- Issue Tracker:TBD! 
+
+We value your input and appreciate your interest in contributing to the project. Don't hesitate to contact us if you need any assistance or want to get involved.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+[contributors-shield]: https://img.shields.io/github/contributors/catenax-ng/product-lab-ssi.svg?style=for-the-badge
+[contributors-url]: https://github.com/catenax-ng/product-lab-ssi/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/catenax-ng/product-lab-ssi.svg?style=for-the-badge
+[forks-url]: https://github.com/catenax-ng/product-lab-ssi/network/members
+[stars-shield]: https://img.shields.io/github/stars/catenax-ng/product-lab-ssi.svg?style=for-the-badge
+[stars-url]: https://github.com/catenax-ng/product-lab-ssi/stargazers
+[issues-shield]: https://img.shields.io/github/issues/catenax-ng/product-lab-ssi.svg?style=for-the-badge
+[issues-url]: https://github.com/catenax-ng/product-lab-ssi/issues
+[license-shield]: https://img.shields.io/github/license/catenax-ng/product-lab-ssi.svg?style=for-the-badge
+[license-url]: https://github.com/catenax-ng/product-lab-ssi/blob/master/LICENSE.txt
