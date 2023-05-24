@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:lab-cx-ssi-connector/connector-extensions/ssi-spi/src/main/java/org/eclipse/tractusx/ssi/lab/connector/extension/spi/exceptions/SsiException.java
 package org.eclipse.tractusx.ssi.lab.connector.extension.spi.exceptions;
+========
+package org.eclipse.tractusx.ssi.lib.exception;
+>>>>>>>> main:cx-ssi-lib/src/main/java/org/eclipse/tractusx/ssi/lib/exception/SsiException.java
 
 public class SsiException extends RuntimeException {
 
