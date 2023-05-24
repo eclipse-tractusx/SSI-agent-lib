@@ -577,12 +577,4 @@
         </repository>
     </distributionManagement>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/catenax-ng/product-vcissuer</url>
-        </repository>
-    </distributionManagement>
-
 </project>
