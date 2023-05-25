@@ -53,6 +53,7 @@ jobs:
         name: Bump version in pom.xml
         run: |-
           ./mvnw -s settings.xml -B versions:set -DnewVersion=${{ env.RELEASE_VERSION }} -DprocessAllModules
+          ./mvnw -s settings.xml -B versions:set --file ./cx-ssi-lib/pom.xml -DnewVersion=${{ env.RELEASE_VERSION }} -DprocessAllModules
         env:
           GITHUB_PACKAGE_USERNAME: ${{ github.actor }}
           GITHUB_PACKAGE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
