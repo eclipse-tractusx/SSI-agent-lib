@@ -62,7 +62,7 @@ jobs:
 #        with:
 #          cmd: |-
 #            find charts -name Chart.yaml | xargs -n1 yq -i '.appVersion = "${{ env.RELEASE_VERSION }}" | .version = "${{ env.RELEASE_VERSION }}"'
-      -
+#      -
 #        name: Update Chart READMEs
 #        uses: addnab/docker-run-action@v3
 #        with:
