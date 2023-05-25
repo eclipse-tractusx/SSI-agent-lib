@@ -1,16 +1,10 @@
-FROM openjdk:17-alpine as builder
-
-COPY . .
-RUN ./mvnw clean package
-ARG JAR_FILE=cx-ssi-agent-app/target/*.jar
-COPY ${JAR_FILE} app.jar
-
 FROM openjdk:17-alpine
 
 EXPOSE 8080
 
 ARG APP_USER=docker
 ARG APP_UID=10100
+ARG JAR_FILE=target/*.jar
 
 RUN addgroup --system "$APP_USER"
 
@@ -25,7 +19,7 @@ RUN adduser \
 
 WORKDIR /app
 
-COPY --from=builder --chown=$APP_USER:$APP_USER app.jar app.jar
+COPY --chown=$APP_USER:$APP_USER ${JAR_FILE} app.jar
 
 USER $APP_USER:$APP_USER
 ENTRYPOINT ["java", \

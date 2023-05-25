@@ -1,3 +1,22 @@
+/********************************************************************************
+ * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ *
+ * See the NOTICE file(s) distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0.
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
+
 package org.eclipse.tractusx.ssi.lib.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,9 +30,9 @@ import com.nimbusds.jwt.SignedJWT;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
+import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.keys.Ed25519Key;
-import org.eclipse.tractusx.ssi.lib.resolver.SigningKeyResolver;
+import org.eclipse.tractusx.ssi.lib.resolver.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresentation;
 
 /**
@@ -22,10 +41,10 @@ import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresen
  */
 public class SignedJwtFactory {
 
-  private final SigningKeyResolver ocketKeyPairFactory;
+  private final OctetKeyPairFactory octetKeyPairFactory;
 
-  public SignedJwtFactory(SigningKeyResolver ocketKeyPairFactory) {
-    this.ocketKeyPairFactory = Objects.requireNonNull(ocketKeyPairFactory);
+  public SignedJwtFactory(OctetKeyPairFactory octetKeyPairFactory) {
+    this.octetKeyPairFactory = Objects.requireNonNull(octetKeyPairFactory);
   }
 
   /**
@@ -59,12 +78,12 @@ public class SignedJwtFactory {
             .jwtID(UUID.randomUUID().toString())
             .build();
 
-    final OctetKeyPair octetKeyPair = ocketKeyPairFactory.get(signingKey);
+    final OctetKeyPair octetKeyPair = octetKeyPairFactory.get(signingKey);
     return createSignedES256Jwt(octetKeyPair, claimsSet);
   }
 
   private static SignedJWT createSignedES256Jwt(OctetKeyPair privateKey, JWTClaimsSet claimsSet) {
-    JWSSigner signer = null;
+    JWSSigner signer;
     try {
 
       signer = new Ed25519Signer(privateKey);
@@ -76,7 +95,7 @@ public class SignedJwtFactory {
                     .map(JWSAlgorithm::getName)
                     .collect(Collectors.joining(", "))));
       }
-      var algorithm = JWSAlgorithm.EdDSA; // TODO Shouldn't this be ES256?
+      var algorithm = JWSAlgorithm.EdDSA;
       var header = new JWSHeader(algorithm);
       var vc = new SignedJWT(header, claimsSet);
 

@@ -23,16 +23,17 @@ jobs:
         with:
           java-version: 17
 
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
+      - name: Build Lib with Maven
+        run: ./mvnw -s settings.xml  -B install --file ./cx-ssi-lib/pom.xml
+        env:
+          GITHUB_PACKAGE_USERNAME: ${{ github.actor }}
+          GITHUB_PACKAGE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
+#      - name: Build cx with Maven
+#        run: ./mvnw -s settings.xml  -B package --file pom.xml
+#        env:
+#          GITHUB_PACKAGE_USERNAME: ${{ github.actor }}
+#          GITHUB_PACKAGE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run tests
-        run: mvn -B test --file pom.xml
-
-      - name: Build Docker image
-        if: github.ref != 'refs/heads/main'
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: false
-          tags: username/repository:latest
+        run: ./mvnw -B test --file ./cx-ssi-lib/pom.xml

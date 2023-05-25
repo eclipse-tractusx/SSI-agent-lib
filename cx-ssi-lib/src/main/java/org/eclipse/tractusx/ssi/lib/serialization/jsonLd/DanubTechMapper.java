@@ -1,3 +1,22 @@
+/********************************************************************************
+ * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ *
+ * See the NOTICE file(s) distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0.
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
+
 package org.eclipse.tractusx.ssi.lib.serialization.jsonLd;
 
 import com.danubetech.verifiablecredentials.CredentialSubject;
@@ -18,6 +37,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialType;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentationBuilder;
 
 @PackagePrivate
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -38,22 +58,31 @@ public class DanubTechMapper {
     }
     // VerifiablePresentation Type is automatically added in Builder
     List<String> types = new ArrayList<>(presentation.getTypes());
-    types.remove(0);
+    types.remove(0); // TODO remove default type differently
 
     com.danubetech.verifiablecredentials.VerifiablePresentation.Builder<
             ? extends com.danubetech.verifiablecredentials.VerifiablePresentation.Builder<?>>
         builder = com.danubetech.verifiablecredentials.VerifiablePresentation.builder();
 
-    return builder
+    builder
         .defaultContexts(true)
         .forceContextsArray(true)
         .forceTypesArray(true)
         .id(presentation.getId())
         .types(types)
-        .holder(presentation.getHolder())
-        .verifiableCredential(dtCredentials.get(0))
-        .ldProof(null) // set to null, as presentation will be used within JWT
-        .build();
+        // .holder(presentation.getHolder())
+        .ldProof(null); // set to null, as presentation will be used within JWT
+
+    // TODO handle more than one verifiable credential per presentation
+    if (dtCredentials.size() > 1) {
+      throw new RuntimeException(
+          "More than one verifiable credential per presentation is not supported"); // TODO
+    }
+    if (dtCredentials.size() == 1) {
+      builder.verifiableCredential(dtCredentials.get(0));
+    }
+
+    return builder.build();
   }
 
   @NonNull
@@ -66,11 +95,12 @@ public class DanubTechMapper {
 
     List<VerifiableCredential> credentials = List.of(map(dtPresentation.getVerifiableCredential()));
 
-    return VerifiablePresentation.builder()
+    final VerifiablePresentationBuilder verifiablePresentationBuilder =
+        new VerifiablePresentationBuilder();
+    return verifiablePresentationBuilder
         .id(dtPresentation.getId())
-        .types(dtPresentation.getTypes())
+        .type(dtPresentation.getTypes())
         .verifiableCredentials(credentials)
-        .holder(dtPresentation.getHolder())
         .build();
   }
 
@@ -89,8 +119,13 @@ public class DanubTechMapper {
             .filter(t -> !t.equals(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
             .collect(Collectors.toList());
 
+    if (credential.getCredentialSubject().size() != 1) {
+      throw new SsiException(
+          "Only one credential subject is supported by the Danubetech library used.");
+    }
+
     final CredentialSubject subject =
-        CredentialSubject.builder().properties(credential.getCredentialSubject()).build();
+        CredentialSubject.builder().properties(credential.getCredentialSubject().get(0)).build();
 
     return com.danubetech.verifiablecredentials.VerifiableCredential.builder()
         .defaultContexts(true)
