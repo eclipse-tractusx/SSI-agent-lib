@@ -1,13 +1,13 @@
-# tractusx-connector
+# lab-ssi-connector
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.2.0](https://img.shields.io/badge/AppVersion-0.2.0-informational?style=flat-square)
+![Version: 0.0.4](https://img.shields.io/badge/Version-0.0.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.4](https://img.shields.io/badge/AppVersion-0.0.4-informational?style=flat-square)
 
-A Helm chart for Tractus-X Eclipse Data Space Connector
+A Helm chart for lab ssi connector
 
 ## TL;DR
 ```shell
 $ helm repo add catenax-ng-product-edc https://catenax-ng.github.io/product-edc
-$ helm install tractusx-connector catenax-ng-product-edc/tractusx-connector --version 0.2.0
+$ helm install tractusx-connector catenax-ng-product-edc/tractusx-connector --version 0.0.4
 ```
 
 ## Values
@@ -24,7 +24,7 @@ $ helm install tractusx-connector catenax-ng-product-edc/tractusx-connector --ve
 | controlplane.debug.enabled | bool | `false` |  |
 | controlplane.debug.port | int | `1044` |  |
 | controlplane.debug.suspendOnStart | bool | `false` |  |
-| controlplane.endpoints | object | `{"control":{"path":"/control","port":8083},"data":{"authKey":"","path":"/data","port":8081},"default":{"path":"/api","port":8080},"ids":{"path":"/api/v1/ids","port":8084},"metrics":{"path":"/metrics","port":8085},"validation":{"path":"/validation","port":8082}}` | endpoints of the control plane |
+| controlplane.endpoints | object | `{"control":{"path":"/control","port":8083},"data":{"authKey":"","path":"/data","port":8081},"default":{"path":"/api","port":8080},"ids":{"path":"/api/v1/ids","port":8084},"metrics":{"path":"/metrics","port":8085},"ssi":{"path":"/api/ssi","port":8087},"validation":{"path":"/validation","port":8082},"wellknown":{"path":"/.well-known","port":8086}}` | endpoints of the control plane |
 | controlplane.endpoints.control | object | `{"path":"/control","port":8083}` | control api, used for internal control calls. can be added to the internal ingress, but should probably not |
 | controlplane.endpoints.control.path | string | `"/control"` | path for incoming api calls |
 | controlplane.endpoints.control.port | int | `8083` | port for incoming api calls |
@@ -41,16 +41,22 @@ $ helm install tractusx-connector catenax-ng-product-edc/tractusx-connector --ve
 | controlplane.endpoints.metrics | object | `{"path":"/metrics","port":8085}` | metrics api, used for application metrics, must not be internet facing |
 | controlplane.endpoints.metrics.path | string | `"/metrics"` | path for incoming api calls |
 | controlplane.endpoints.metrics.port | int | `8085` | port for incoming api calls |
+| controlplane.endpoints.ssi | object | `{"path":"/api/ssi","port":8087}` | public api, used by ssi agent |
+| controlplane.endpoints.ssi.path | string | `"/api/ssi"` | path for incoming api calls |
+| controlplane.endpoints.ssi.port | int | `8087` | port for incoming api calls |
 | controlplane.endpoints.validation | object | `{"path":"/validation","port":8082}` | validation api, only used by the data plane and should not be added to any ingress |
 | controlplane.endpoints.validation.path | string | `"/validation"` | path for incoming api calls |
 | controlplane.endpoints.validation.port | int | `8082` | port for incoming api calls |
+| controlplane.endpoints.wellknown | object | `{"path":"/.well-known","port":8086}` | public api, used by internet facing components like did web |
+| controlplane.endpoints.wellknown.path | string | `"/.well-known"` | path for incoming api calls |
+| controlplane.endpoints.wellknown.port | int | `8086` | port for incoming api calls |
 | controlplane.env | object | `{}` |  |
 | controlplane.envConfigMapNames | list | `[]` |  |
 | controlplane.envSecretNames | list | `[]` |  |
 | controlplane.envValueFrom | object | `{}` |  |
 | controlplane.image.pullPolicy | string | `"IfNotPresent"` | [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) to use |
-| controlplane.image.repository | string | `""` | Which derivate of the control plane to use. when left empty the deployment will select the correct image automatically |
-| controlplane.image.tag | string | `"0.1.2"` | Overrides the image tag whose default is the chart appVersion |
+| controlplane.image.repository | string | `"ghcr.io/catenax-ng/product-vcissuer/lab-cx-ssi-connector-app"` |  |
+| controlplane.image.tag | string | `""` | Overrides the image tag whose default is the chart appVersion |
 | controlplane.ingresses[0].annotations | object | `{}` | Additional ingress annotations to add |
 | controlplane.ingresses[0].certManager.clusterIssuer | string | `""` | If preset enables certificate generation via cert-manager cluster-wide issuer |
 | controlplane.ingresses[0].certManager.issuer | string | `""` | If preset enables certificate generation via cert-manager namespace scoped issuer |
@@ -115,10 +121,6 @@ $ helm install tractusx-connector catenax-ng-product-edc/tractusx-connector --ve
 | controlplane.volumeMounts | list | `[]` | declare where to mount [volumes](https://kubernetes.io/docs/concepts/storage/volumes/) into the container |
 | controlplane.volumes | list | `[]` | [volume](https://kubernetes.io/docs/concepts/storage/volumes/) directories |
 | customLabels | object | `{}` |  |
-| daps.clientId | string | `""` |  |
-| daps.paths.jwks | string | `"/jwks.json"` |  |
-| daps.paths.token | string | `"/token"` |  |
-| daps.url | string | `""` |  |
 | dataplane.affinity | object | `{}` |  |
 | dataplane.autoscaling.enabled | bool | `false` | Enables [horizontal pod autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) |
 | dataplane.autoscaling.maxReplicas | int | `100` | Maximum replicas if resource consumption exceeds resource threshholds |
@@ -146,8 +148,8 @@ $ helm install tractusx-connector catenax-ng-product-edc/tractusx-connector --ve
 | dataplane.envSecretNames | list | `[]` |  |
 | dataplane.envValueFrom | object | `{}` |  |
 | dataplane.image.pullPolicy | string | `"IfNotPresent"` | [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) to use |
-| dataplane.image.repository | string | `""` | Which derivate of the data plane to use. when left empty the deployment will select the correct image automatically |
-| dataplane.image.tag | string | `"0.1.2"` | Overrides the image tag whose default is the chart appVersion |
+| dataplane.image.repository | string | `"ghcr.io/catenax-ng/product-edc/edc-dataplane-hashicorp-vault"` |  |
+| dataplane.image.tag | string | `""` | Overrides the image tag whose default is the chart appVersion |
 | dataplane.ingresses[0].annotations | object | `{}` | Additional ingress annotations to add |
 | dataplane.ingresses[0].certManager.clusterIssuer | string | `""` | If preset enables certificate generation via cert-manager cluster-wide issuer |
 | dataplane.ingresses[0].certManager.issuer | string | `""` | If preset enables certificate generation via cert-manager namespace scoped issuer |
@@ -198,21 +200,15 @@ $ helm install tractusx-connector catenax-ng-product-edc/tractusx-connector --ve
 | fullnameOverride | string | `""` |  |
 | imagePullSecrets | list | `[]` | Existing image pull secret to use to [obtain the container image from private registries](https://kubernetes.io/docs/concepts/containers/images/#using-a-private-registry) |
 | nameOverride | string | `""` |  |
-| postgresql.enabled | bool | `false` |  |
-| postgresql.jdbcUrl | string | `""` |  |
-| postgresql.password | string | `""` |  |
-| postgresql.username | string | `""` |  |
 | serviceAccount.annotations | object | `{}` |  |
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.imagePullSecrets | list | `[]` | Existing image pull secret bound to the servic eaccount to use to [obtain the container image from private registries](https://kubernetes.io/docs/concepts/containers/images/#using-a-private-registry) |
 | serviceAccount.name | string | `""` |  |
-| vault.azure.certificate | string | `""` |  |
-| vault.azure.client | string | `""` |  |
-| vault.azure.enabled | bool | `false` |  |
-| vault.azure.name | string | `""` |  |
-| vault.azure.secret | string | `""` |  |
-| vault.azure.tenant | string | `""` |  |
-| vault.hashicorp.enabled | bool | `false` |  |
+| ssi.agent.embedded.enforceHttpsToResolveDidWeb | bool | `true` |  |
+| ssi.agent.embedded.hostname | string | `""` |  |
+| ssi.agent.embedded.signingKey.privateKeyVaultAlias | string | `"ssi-private-key"` |  |
+| ssi.agent.embedded.signingKey.publicKeyVaultAlias | string | `"ssi-public-key"` |  |
+| ssi.dataspace.operator | string | `""` |  |
 | vault.hashicorp.healthCheck.enabled | bool | `true` |  |
 | vault.hashicorp.healthCheck.standbyOk | bool | `true` |  |
 | vault.hashicorp.paths.health | string | `"/v1/sys/health"` |  |
@@ -220,8 +216,6 @@ $ helm install tractusx-connector catenax-ng-product-edc/tractusx-connector --ve
 | vault.hashicorp.timeout | int | `30` |  |
 | vault.hashicorp.token | string | `""` |  |
 | vault.hashicorp.url | string | `""` |  |
-| vault.secretNames.dapsPrivateKey | string | `"daps-private-key"` |  |
-| vault.secretNames.dapsPublicKey | string | `"daps-public-key"` |  |
 | vault.secretNames.transferProxyTokenEncryptionAesKey | string | `"transfer-proxy-token-encryption-aes-key"` |  |
 | vault.secretNames.transferProxyTokenSignerPrivateKey | string | `"transfer-proxy-token-signer-private-key"` |  |
 | vault.secretNames.transferProxyTokenSignerPublicKey | string | `"transfer-proxy-token-signer-public-key"` |  |
