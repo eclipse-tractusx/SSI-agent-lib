@@ -70,6 +70,7 @@ SPDX-License-Identifier: Apache-2.0
         </dependency>
         
 
+
         <!-- Google Tink -->
         <!-- Note: that for EdDSA you need to include the optional Tink dependency in your project. For Nimbus JOSE+JWT 6.0 that would be -->
         <dependency>
@@ -176,15 +177,15 @@ SPDX-License-Identifier: Apache-2.0
     </profiles>
 
     <repositories>
-	    <repository>
-		    <id>danubetech-maven-public</id>
-		    <url>https://repo.danubetech.com/repository/maven-public/</url>
-	    </repository>
+        <repository>
+            <id>danubetech-maven-public</id>
+            <url>https://repo.danubetech.com/repository/maven-public/</url>
+        </repository>
         <repository>
             <id>jitpack.io</id>
-             <url>https://jitpack.io</url>
+            <url>https://jitpack.io</url>
         </repository>
-                <!-- Eclipse DataSpace Components "Releases" -->
+        <!-- Eclipse DataSpace Components "Releases" -->
         <repository>
             <id>sonatype-snapshots</id>
             <snapshots>
@@ -218,5 +219,13 @@ SPDX-License-Identifier: Apache-2.0
         </pluginRepository>
     </pluginRepositories>
 
+    <distributionManagement>
+        <!-- Library Publish Repository -->
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/catenax-ng/product-lab-ssi</url>
+        </repository>
+    </distributionManagement>
 
 </project>

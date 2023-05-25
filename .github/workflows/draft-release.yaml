@@ -57,20 +57,6 @@ jobs:
           GITHUB_PACKAGE_USERNAME: ${{ github.actor }}
           GITHUB_PACKAGE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
       -
-#        name: Bump version in /charts
-#        uses: mikefarah/yq@v4.30.8
-#        with:
-#          cmd: |-
-#            find charts -name Chart.yaml | xargs -n1 yq -i '.appVersion = "${{ env.RELEASE_VERSION }}" | .version = "${{ env.RELEASE_VERSION }}"'
-      -
-#        name: Update Chart READMEs
-#        uses: addnab/docker-run-action@v3
-#        with:
-#          image: jnorwood/helm-docs:v1.10.0
-#          options: -v ${{ github.workspace }}/charts:/helm-docs
-#          run: |
-#            helm-docs --log-level debug
-      -
         name: Commit changelog and manifest files
         id: make-commit
         run: |
