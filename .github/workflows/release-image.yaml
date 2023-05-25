@@ -49,13 +49,10 @@ jobs:
         with:
           java-version: 17
 
+      #            -Pdelombok -pl 'cx-ssi-lib,cx-ssi-agent-lib' \
       - name: Publish Libraries to GitHub Packages
         run: |-
-          ./mvnw -s settings.xml \
-            -Pdelombok -pl 'cx-ssi-lib' \
-#            -Pdelombok -pl 'cx-ssi-lib,cx-ssi-agent-lib' \
-            -DaltReleaseDeploymentRepository=github::https://maven.pkg.github.com/${{ github.repository }} \
-            -Dmaven.test.skip=true -B package deploy:deploy
+          ./mvnw -s settings.xml -Pdelombok --file ./cx-ssi-lib/pom.xml -DaltReleaseDeploymentRepository=github::https://maven.pkg.github.com/${{ github.repository }} -Dmaven.test.skip=true -B package deploy:deploy
         env:
           GITHUB_PACKAGE_USERNAME: ${{ github.actor }}
           GITHUB_PACKAGE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
