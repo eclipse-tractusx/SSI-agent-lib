@@ -34,6 +34,11 @@ public final class SerializeUtil {
     return OBJECT_MAPPER.writeValueAsString(map);
   }
 
+  @SneakyThrows
+  public static Map<String, Object> fromJson(String json) {
+    return OBJECT_MAPPER.readValue(json, Map.class);
+  }
+
   /**
    * Sometimes SSI uri is serialized as string, sometimes as URI. If it starts with 'http://' it is
    * handled as URI, if it starts with 'did:<method>' it is handled as string.
