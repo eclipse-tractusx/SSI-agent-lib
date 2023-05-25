@@ -1,70 +1,70 @@
----
-name: Release - Chart
-
-on:
-  pull_request:
-    types: [closed ]
-    branches: [ main ]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    permissions:
-      # see https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
-      contents: write
-
-    steps:
-      - uses: actions/checkout@v2
-
-      # RELEASE VERSION
-      -
-        name: Extract version from branch name (for release branches)
-        if: startsWith(github.event.pull_request.head.ref, 'release/')
-        run: |
-          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
-          VERSION=${BRANCH_NAME#release/}
-
-          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
-      -
-        name: Extract version from branch name (for hotfix branches)
-        if: startsWith(github.event.pull_request.head.ref, 'hotfix/')
-        run: |
-          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
-          VERSION=${BRANCH_NAME#hotfix/}
-
-          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
-      -
-        name: Output release version
-        run: |
-          echo "::set-output name=RELEASE_VERSION::${{ env.RELEASE_VERSION }}"
-
-      # HELM - PACKAGE AND PUSH
-      - name: Install Helm
-        uses: azure/setup-helm@v3.5
-        with:
-          version: v3.8.1
-
-      - name: Package helm, update index.yaml and push to gh-pages
-        run: |
-          # Prepare git env
-          git config user.name "GitHub actions"
-          git config user.email noreply@github.com
-
-          # Package all charts
-          find charts -name Chart.yaml | xargs -n1 dirname | xargs -n1 helm package -u -d helm-charts
-
-          # Commit and push to gh-pages
-          git add helm-charts
-          git stash save
-          git fetch origin
-          git checkout gh-pages
-          git stash pop
-          
-          # Generate helm repo index.yaml
-          helm repo index . --merge index.yaml --url https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/
-          git add index.yaml
-
-          git commit -s -m "Release ${{ env.RELEASE_VERSION }}"
-
-          git push origin gh-pages
+#---
+#name: Release - Chart
+#
+#on:
+#  pull_request:
+#    types: [closed ]
+#    branches: [ main ]
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#
+#    permissions:
+#      # see https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+#      contents: write
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      # RELEASE VERSION
+#      -
+#        name: Extract version from branch name (for release branches)
+#        if: startsWith(github.event.pull_request.head.ref, 'release/')
+#        run: |
+#          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+#          VERSION=${BRANCH_NAME#release/}
+#
+#          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+#      -
+#        name: Extract version from branch name (for hotfix branches)
+#        if: startsWith(github.event.pull_request.head.ref, 'hotfix/')
+#        run: |
+#          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+#          VERSION=${BRANCH_NAME#hotfix/}
+#
+#          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+#      -
+#        name: Output release version
+#        run: |
+#          echo "::set-output name=RELEASE_VERSION::${{ env.RELEASE_VERSION }}"
+#
+#      # HELM - PACKAGE AND PUSH
+#      - name: Install Helm
+#        uses: azure/setup-helm@v3.5
+#        with:
+#          version: v3.8.1
+#
+#      - name: Package helm, update index.yaml and push to gh-pages
+#        run: |
+#          # Prepare git env
+#          git config user.name "GitHub actions"
+#          git config user.email noreply@github.com
+#
+#          # Package all charts
+#          find charts -name Chart.yaml | xargs -n1 dirname | xargs -n1 helm package -u -d helm-charts
+#
+#          # Commit and push to gh-pages
+#          git add helm-charts
+#          git stash save
+#          git fetch origin
+#          git checkout gh-pages
+#          git stash pop
+#
+#          # Generate helm repo index.yaml
+#          helm repo index . --merge index.yaml --url https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/
+#          git add index.yaml
+#
+#          git commit -s -m "Release ${{ env.RELEASE_VERSION }}"
+#
+#          git push origin gh-pages
