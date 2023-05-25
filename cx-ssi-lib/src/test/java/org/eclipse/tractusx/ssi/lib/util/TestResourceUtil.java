@@ -34,11 +34,13 @@ import org.eclipse.tractusx.ssi.lib.util.identity.KeyResourceLoader;
 public class TestResourceUtil {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
-  private static final String DID_DOCUMENT_ED25519 = "/did-document/document.ed25519.json";
+  private static final String DID_DOCUMENT_ED25519 = "did-document/document.ed25519.json";
   private static final String PUBLIC_KEY_ED25519 = "keys/ed25519/public.pem";
   private static final String PRIVATE_KEY_ED25519 = "keys/ed25519/private.pem";
   private static String VERIFIABLE_CREDENTIAL_ALUMNI =
       "verifiable-credential/alumni-credential.json";
+  private static String VERIFIABLE_PRESENTATION_ALUMNI =
+      "verifiable-presentation/alumni-presentation.json";
 
   public static List<Map<String, Object>> getAllDidDocuments() {
     return Arrays.asList(readJsonResource(DID_DOCUMENT_ED25519));
@@ -46,6 +48,10 @@ public class TestResourceUtil {
 
   public static Map<String, Object> getAlumniVerifiableCredential() {
     return readJsonResource(VERIFIABLE_CREDENTIAL_ALUMNI);
+  }
+
+  public static Map<String, Object> getAlumniVerifiablePresentation() {
+    return readJsonResource(VERIFIABLE_PRESENTATION_ALUMNI);
   }
 
   public static Map<String, Object> getDidDocument(String verificationKeyType) {

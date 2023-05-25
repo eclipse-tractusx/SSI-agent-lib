@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Objects;
 import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
 
-public class JsonLdObject extends HashMap<String, Object> {
+public abstract class JsonLdObject extends HashMap<String, Object> {
 
   public static final String CONTEXT = "@context";
 
@@ -54,5 +54,9 @@ public class JsonLdObject extends HashMap<String, Object> {
               "Context must be of type string or list. Context Type: %s",
               context.getClass().getName()));
     }
+  }
+
+  public String toJson() {
+    return SerializeUtil.toJson(this);
   }
 }
