@@ -1,5 +1,5 @@
 ---
-name: Release - Image
+name: Release - Library
 
 on:
   pull_request:
