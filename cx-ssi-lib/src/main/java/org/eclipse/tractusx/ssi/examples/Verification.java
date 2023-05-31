@@ -34,17 +34,17 @@ public class Verification {
   }
 
   public static boolean verifyLD(VerifiableCredential verifiableCredential) {
-     // DID Resolver Constracture params
-     DidWebParser didParser = new DidWebParser();
-     var httpClient = HttpClient.newHttpClient();
-     var enforceHttps = false;
- 
-     var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
-     didDocumentResolverRegistry.register(
-         new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
+    // DID Resolver Constracture params
+    DidWebParser didParser = new DidWebParser();
+    var httpClient = HttpClient.newHttpClient();
+    var enforceHttps = false;
 
-    LinkedDataProofValidation proofValidation = LinkedDataProofValidation.newInstance(didDocumentResolverRegistry);
+    var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
+    didDocumentResolverRegistry.register(
+        new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
+
+    LinkedDataProofValidation proofValidation =
+        LinkedDataProofValidation.newInstance(didDocumentResolverRegistry);
     return proofValidation.checkProof(verifiableCredential);
-   
   }
 }
