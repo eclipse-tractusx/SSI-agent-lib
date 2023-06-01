@@ -20,6 +20,7 @@
 package org.eclipse.tractusx.ssi.lib.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSSigner;
@@ -79,10 +80,10 @@ public class SignedJwtFactory {
             .build();
 
     final OctetKeyPair octetKeyPair = octetKeyPairFactory.get(signingKey);
-    return createSignedES256Jwt(octetKeyPair, claimsSet);
+    return createSignedES256Jwt(octetKeyPair, claimsSet,issuer);
   }
 
-  private static SignedJWT createSignedES256Jwt(OctetKeyPair privateKey, JWTClaimsSet claimsSet) {
+  private static SignedJWT createSignedES256Jwt(OctetKeyPair privateKey, JWTClaimsSet claimsSet,String issuer) {
     JWSSigner signer;
     try {
 
@@ -96,7 +97,8 @@ public class SignedJwtFactory {
                     .collect(Collectors.joining(", "))));
       }
       var algorithm = JWSAlgorithm.EdDSA;
-      var header = new JWSHeader(algorithm);
+      var type = JOSEObjectType.JWT;
+      var header = new JWSHeader(algorithm,type,null,null,null,null,null,null,null,null,issuer,true,null,null);
       var vc = new SignedJWT(header, claimsSet);
 
       vc.sign(signer);
