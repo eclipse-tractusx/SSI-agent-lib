@@ -80,10 +80,11 @@ public class SignedJwtFactory {
             .build();
 
     final OctetKeyPair octetKeyPair = octetKeyPairFactory.get(signingKey);
-    return createSignedES256Jwt(octetKeyPair, claimsSet,issuer);
+    return createSignedES256Jwt(octetKeyPair, claimsSet, issuer);
   }
 
-  private static SignedJWT createSignedES256Jwt(OctetKeyPair privateKey, JWTClaimsSet claimsSet,String issuer) {
+  private static SignedJWT createSignedES256Jwt(
+      OctetKeyPair privateKey, JWTClaimsSet claimsSet, String issuer) {
     JWSSigner signer;
     try {
 
@@ -98,7 +99,10 @@ public class SignedJwtFactory {
       }
       var algorithm = JWSAlgorithm.EdDSA;
       var type = JOSEObjectType.JWT;
-      var header = new JWSHeader(algorithm,type,null,null,null,null,null,null,null,null,issuer,true,null,null);
+      var header =
+          new JWSHeader(
+              algorithm, type, null, null, null, null, null, null, null, null, issuer, true, null,
+              null);
       var vc = new SignedJWT(header, claimsSet);
 
       vc.sign(signer);
