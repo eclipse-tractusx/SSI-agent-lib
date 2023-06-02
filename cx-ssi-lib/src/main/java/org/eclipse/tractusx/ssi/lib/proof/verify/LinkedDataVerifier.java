@@ -20,12 +20,11 @@
 package org.eclipse.tractusx.ssi.lib.proof.verify;
 
 import java.net.URI;
-import java.security.KeyFactory;
-import java.security.PublicKey;
-import java.security.Signature;
-import java.security.spec.X509EncodedKeySpec;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.bouncycastle.crypto.Signer;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.Ed25519Signature2020;
@@ -80,12 +79,11 @@ public class LinkedDataVerifier {
 
     final byte[] message = hashedLinkedData.getValue();
 
-    final Signature sig = Signature.getInstance("Ed25519");
-    final KeyFactory kf = KeyFactory.getInstance("Ed25519");
-    final PublicKey pk = kf.generatePublic(new X509EncodedKeySpec(publicKey));
+    Signer verifier = new Ed25519Signer();
+    Ed25519PublicKeyParameters publicKeyParameters = new Ed25519PublicKeyParameters(publicKey, 0);
+    verifier.init(false, publicKeyParameters);
+    verifier.update(message, 0, message.length);
 
-    sig.initVerify(pk);
-    sig.update(message);
-    return sig.verify(signature);
+    return verifier.verifySignature(signature);
   }
 }
