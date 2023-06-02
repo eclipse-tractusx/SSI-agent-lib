@@ -50,9 +50,7 @@ public class LinkedDataProofValidationComponentTest {
   private TestDidDocumentResolver didDocumentResolver;
 
   @BeforeEach
-  public void setup() {
-
-  }
+  public void setup() {}
 
   @Test
   public void testLinkedDataProofCheck() throws IOException {

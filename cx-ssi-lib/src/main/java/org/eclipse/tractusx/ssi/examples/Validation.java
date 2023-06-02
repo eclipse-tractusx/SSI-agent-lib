@@ -1,12 +1,14 @@
 package org.eclipse.tractusx.ssi.examples;
 
+import com.nimbusds.jwt.SignedJWT;
+import org.eclipse.tractusx.ssi.lib.exception.JwtAudienceCheckFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.JwtExpiredException;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtValidator;
 
-import com.nimbusds.jwt.SignedJWT;
-
 public class Validation {
-    public static boolean validateJWT(SignedJWT signedJWT, String audience){
-        SignedJwtValidator jwtValidator = new SignedJwtValidator();
-        return jwtValidator.validate(signedJWT, audience);
-    }
+  public static void validateJWT(SignedJWT signedJWT, String audience)
+      throws JwtAudienceCheckFailedException, JwtExpiredException {
+    SignedJwtValidator jwtValidator = new SignedJwtValidator();
+    jwtValidator.validate(signedJWT, audience);
+  }
 }
