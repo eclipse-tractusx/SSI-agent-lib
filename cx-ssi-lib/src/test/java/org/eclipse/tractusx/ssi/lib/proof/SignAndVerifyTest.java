@@ -19,6 +19,7 @@
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
+import java.io.IOException;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.verify.LinkedDataSigner;
 import org.eclipse.tractusx.ssi.lib.proof.verify.LinkedDataVerifier;
@@ -30,10 +31,10 @@ import org.junit.jupiter.api.Test;
 public class SignAndVerifyTest {
 
   @Test
-  public void testSignAndVerify() {
+  public void testSignAndVerify() throws IOException {
     final TestDidDocumentResolver didDocumentResolver = new TestDidDocumentResolver();
 
-    var testIdentity = TestIdentityFactory.newIdentity();
+    var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys(false);
 
     didDocumentResolver.register(testIdentity);
 

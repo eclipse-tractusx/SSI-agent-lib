@@ -19,6 +19,7 @@
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
+import java.io.IOException;
 import java.net.URI;
 import java.time.Instant;
 import java.util.List;
@@ -51,27 +52,14 @@ public class LinkedDataProofValidationComponentTest {
   @BeforeEach
   public void setup() {
 
-    this.didDocumentResolver = new TestDidDocumentResolver();
-
-    credentialIssuer = TestIdentityFactory.newIdentity();
-    didDocumentResolver.register(credentialIssuer);
-
-    linkedDataProofValidation =
-        new LinkedDataProofValidation(
-            new LinkedDataHasher(),
-            new LinkedDataTransformer(),
-            new LinkedDataVerifier(didDocumentResolver.withRegistry()));
-    linkedDataProofGenerator =
-        new LinkedDataProofGenerator(
-            new LinkedDataHasher(), new LinkedDataTransformer(), new LinkedDataSigner());
   }
 
   @Test
-  public void testLinkedDataProofCheck() {
+  public void testLinkedDataProofCheck() throws IOException {
 
     this.didDocumentResolver = new TestDidDocumentResolver();
 
-    credentialIssuer = TestIdentityFactory.newIdentity();
+    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys(false);
     didDocumentResolver.register(credentialIssuer);
 
     linkedDataProofValidation =
