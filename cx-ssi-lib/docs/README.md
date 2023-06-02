@@ -364,11 +364,17 @@ import org.eclipse.tractusx.ssi.lib.exception.JwtExpiredException;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtValidator;
 
 public class Validation {
-  public static void validateJWT(SignedJWT signedJWT, String audience)
-      throws JwtAudienceCheckFailedException, JwtExpiredException {
-    SignedJwtValidator jwtValidator = new SignedJwtValidator();
-    jwtValidator.validate(signedJWT, audience);
-  }
+    public static void validateJWTDate(SignedJWT signedJWT, String audience)
+            throws JwtAudienceCheckFailedException, JwtExpiredException {
+        SignedJwtValidator jwtValidator = new SignedJwtValidator();
+        jwtValidator.validateDate(signedJWT);
+    }
+
+    public static void validateJWTAudiences(SignedJWT signedJWT, String audience)
+            throws JwtAudienceCheckFailedException, JwtExpiredException {
+        SignedJwtValidator jwtValidator = new SignedJwtValidator();
+        jwtValidator.validateAudiences(signedJWT, audience);
+    }
 }
 ```
 
