@@ -85,13 +85,5 @@ public class LinkedDataVerifier {
     verifier.update(message, 0, message.length);
 
     return verifier.verifySignature(signature);
-
-    // final Signature sig = Signature.getInstance("Ed25519");
-    // final KeyFactory kf = KeyFactory.getInstance("Ed25519");
-    // final PublicKey pk = kf.generatePublic(new X509EncodedKeySpec(publicKey));
-
-    // sig.initVerify(pk);
-    // sig.update(message);
-    // return sig.verify(signature);
   }
 }

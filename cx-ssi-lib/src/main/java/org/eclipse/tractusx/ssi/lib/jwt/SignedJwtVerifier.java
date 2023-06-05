@@ -77,16 +77,8 @@ public class SignedJwtVerifier {
     for (VerificationMethod verificationMethod : verificationMethods) {
       if (!Ed25519VerificationKey2020.isInstance(verificationMethod)) continue;
 
-      // var keyId = verificationMethod.getId();
-
       var method = new Ed25519VerificationKey2020(verificationMethod);
       var multibase = method.getPublicKeyBase58();
-
-      // final X509EncodedKeySpec spec = new X509EncodedKeySpec(multibase.getDecoded());
-      // final KeyFactory kf = KeyFactory.getInstance("Ed25519");
-      // var publicKey = kf.generatePublic(spec);
-      // var length = publicKey.getEncoded().length;
-      // byte[] b1 = Arrays.copyOfRange(publicKey.getEncoded(), length - 32, length);
 
       Ed25519PublicKeyParameters publicKeyParameters =
           new Ed25519PublicKeyParameters(multibase.getDecoded(), 0);

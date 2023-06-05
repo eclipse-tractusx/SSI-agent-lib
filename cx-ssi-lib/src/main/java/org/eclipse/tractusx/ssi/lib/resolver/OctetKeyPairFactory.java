@@ -26,12 +26,6 @@ import com.nimbusds.jose.util.Base64URL;
 public class OctetKeyPairFactory {
 
   public OctetKeyPair get(byte[] signingKeyBytes) {
-
-    // var key = signingKeyBytes.length;
-    var length = signingKeyBytes.length;
-    // TODO Document why last 32 bytes
-    // byte[] b1 = Arrays.copyOfRange(key, length - 32, length);
-
     return new OctetKeyPair.Builder(Curve.Ed25519, new Base64URL(""))
         .d(Base64URL.encode(signingKeyBytes))
         .build();
