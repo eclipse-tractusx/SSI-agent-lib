@@ -26,15 +26,11 @@ import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.JwtException;
 import org.eclipse.tractusx.ssi.lib.exception.JwtSignatureCheckFailedException;
@@ -57,11 +53,7 @@ public class SignedJwtVerifier {
    * @param jwt a {@link SignedJWT} that was sent by the claiming party.
    * @return true if verified, false otherwise
    */
-  @SneakyThrows({
-    NoSuchAlgorithmException.class,
-    InvalidKeySpecException.class,
-    JOSEException.class
-  })
+  @SneakyThrows({JOSEException.class})
   public void verify(SignedJWT jwt) throws JwtException, DidDocumentResolverNotRegisteredException {
 
     JWTClaimsSet jwtClaimsSet;
@@ -89,14 +81,21 @@ public class SignedJwtVerifier {
 
       var method = new Ed25519VerificationKey2020(verificationMethod);
       var multibase = method.getPublicKeyBase58();
-      final X509EncodedKeySpec spec = new X509EncodedKeySpec(multibase.getDecoded());
-      final KeyFactory kf = KeyFactory.getInstance("Ed25519");
-      var publicKey = kf.generatePublic(spec);
-      var length = publicKey.getEncoded().length;
-      byte[] b1 = Arrays.copyOfRange(publicKey.getEncoded(), length - 32, length);
-      var keyPair = new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(b1)).build();
 
+      // final X509EncodedKeySpec spec = new X509EncodedKeySpec(multibase.getDecoded());
+      // final KeyFactory kf = KeyFactory.getInstance("Ed25519");
+      // var publicKey = kf.generatePublic(spec);
+      // var length = publicKey.getEncoded().length;
+      // byte[] b1 = Arrays.copyOfRange(publicKey.getEncoded(), length - 32, length);
+
+      Ed25519PublicKeyParameters publicKeyParameters =
+          new Ed25519PublicKeyParameters(multibase.getDecoded(), 0);
+      var keyPair =
+          new OctetKeyPair.Builder(
+                  Curve.Ed25519, Base64URL.encode(publicKeyParameters.getEncoded()))
+              .build();
       var isValid = jwt.verify(new Ed25519Verifier(keyPair));
+
       if (!isValid) {
         throw new JwtSignatureCheckFailedException(issuerDid, verificationMethod.getId());
       }
