@@ -25,6 +25,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import lombok.SneakyThrows;
+import org.eclipse.tractusx.ssi.lib.SsiLibrary;
 import org.eclipse.tractusx.ssi.lib.model.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
@@ -54,7 +55,7 @@ public class LinkedDataProofValidationComponentTest {
 
   @Test
   public void testLinkedDataProofCheck() throws IOException {
-
+    SsiLibrary.initialize();
     this.didDocumentResolver = new TestDidDocumentResolver();
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys(false);
@@ -86,6 +87,61 @@ public class LinkedDataProofValidationComponentTest {
 
     Assertions.assertTrue(isOk);
   }
+
+  //   @Test
+  //   public void testLinkedDataProofCheckBPNCredential() throws IOException {
+
+  //     this.didDocumentResolver = new TestDidDocumentResolver();
+
+  //     credentialIssuer = TestIdentityFactory.newBPNIdentityWithED25519Keys(false);
+
+  //     didDocumentResolver.register(credentialIssuer);
+
+  //     linkedDataProofValidation =
+  //         new LinkedDataProofValidation(
+  //             new LinkedDataHasher(),
+  //             new LinkedDataTransformer(),
+  //             new LinkedDataVerifier(didDocumentResolver.withRegistry()));
+
+  //     final VerifiableCredential credentialWithProof =
+  //         new VerifiableCredential(TestResourceUtil.getBPNVerifiableCredential());
+
+  //     var isOk = linkedDataProofValidation.checkProof(credentialWithProof);
+
+  //     Assertions.assertTrue(isOk);
+  //   }
+
+  //   @Test
+  //   public void testJWTProofCheck() throws IOException {
+
+  //     this.didDocumentResolver = new TestDidDocumentResolver();
+
+  //     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys(false);
+  //     didDocumentResolver.register(credentialIssuer);
+
+  //     // prepare key
+  //     final URI verificationMethod =
+  //         credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
+  //     final byte[] privateKey = credentialIssuer.getPrivateKey();
+
+  //     VerifiableCredential credential = createCredential(null);
+
+  //     // Ed25519 Proof Builder
+  //     final LinkedDataProofGenerator generator = LinkedDataProofGenerator.create();
+  //     final Ed25519Signature2020 proof =
+  //         generator.createEd25519Signature2020(
+  //             credential,verificationMethod , privateKey);
+
+  //     final Ed25519Signature2020 proof =
+  //         linkedDataProofGenerator.createEd25519Signature2020(
+  //             credential, verificationMethod, privateKey);
+
+  //     final VerifiableCredential credentialWithProof = createCredential(proof);
+
+  //     var isOk = linkedDataProofValidation.checkProof(credentialWithProof);
+
+  //     Assertions.assertTrue(isOk);
+  //   }
 
   @SneakyThrows
   private VerifiableCredential createCredential(Ed25519Signature2020 proof) {

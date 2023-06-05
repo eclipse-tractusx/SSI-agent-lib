@@ -36,6 +36,7 @@ import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocumentBuilder;
+import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020Builder;
 import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
@@ -49,8 +50,19 @@ public class TestIdentityFactory {
     final Did did = TestDidFactory.createRandom();
 
     if (PKCS8Format) {
+
+      // PKCS8 keys format
       publicKey = TestResourceUtil.getPublicKeyEd25519();
       privateKey = TestResourceUtil.getPrivateKeyEd25519();
+
+      Ed25519PrivateKeyParameters ed25519PrivateKeyParameters =
+          (Ed25519PrivateKeyParameters) PrivateKeyFactory.createKey(privateKey);
+      Ed25519PublicKeyParameters ed25519publicKeyParameters =
+          (Ed25519PublicKeyParameters) PublicKeyFactory.createKey(publicKey);
+
+      // 32-byte Ed25519 format
+      publicKey = ed25519publicKeyParameters.getEncoded();
+      privateKey = ed25519PrivateKeyParameters.getEncoded();
     } else {
       KeyPairGeneratorSpi.Ed25519 ed25519 = new KeyPairGeneratorSpi.Ed25519();
       ed25519.initialize(256, new SecureRandom());
@@ -80,6 +92,47 @@ public class TestIdentityFactory {
     final DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();
     final DidDocument didDocument =
         didDocumentBuilder.id(did.toUri()).verificationMethods(List.of(verificationMethod)).build();
+
+    return new TestIdentity(did, didDocument, publicKey, privateKey);
+  }
+
+  public static TestIdentity newBPNIdentityWithED25519Keys(boolean PKCS8Format) throws IOException {
+
+    byte[] publicKey = null;
+    byte[] privateKey = null;
+
+    if (PKCS8Format) {
+      // PKCS8 keys format
+      publicKey = TestResourceUtil.getPublicKeyEd25519();
+      privateKey = TestResourceUtil.getPrivateKeyEd25519();
+
+      Ed25519PrivateKeyParameters ed25519PrivateKeyParameters =
+          (Ed25519PrivateKeyParameters) PrivateKeyFactory.createKey(privateKey);
+      Ed25519PublicKeyParameters ed25519publicKeyParameters =
+          (Ed25519PublicKeyParameters) PublicKeyFactory.createKey(publicKey);
+
+      // 32-byte Ed25519 format
+      publicKey = ed25519publicKeyParameters.getEncoded();
+      privateKey = ed25519PrivateKeyParameters.getEncoded();
+    } else {
+      KeyPairGeneratorSpi.Ed25519 ed25519 = new KeyPairGeneratorSpi.Ed25519();
+      ed25519.initialize(256, new SecureRandom());
+      KeyPair keyPair = ed25519.generateKeyPair();
+      PublicKey PubKey = keyPair.getPublic();
+      PrivateKey PivKey = keyPair.getPrivate();
+      Ed25519PrivateKeyParameters ed25519PrivateKeyParameters =
+          (Ed25519PrivateKeyParameters) PrivateKeyFactory.createKey(PivKey.getEncoded());
+      Ed25519PublicKeyParameters publicKeyParameters =
+          (Ed25519PublicKeyParameters) PublicKeyFactory.createKey(PubKey.getEncoded());
+
+      publicKey = publicKeyParameters.getEncoded();
+
+      privateKey = ed25519PrivateKeyParameters.getEncoded();
+    }
+
+    DidDocument didDocument = new DidDocument(TestResourceUtil.getBPNDidDocument());
+    Did did = DidParser.parse(didDocument.getId()); // new Did(new DidMethod("web"),new
+    // DidMethodIdentifier(didDocument.getId().toString()));
 
     return new TestIdentity(did, didDocument, publicKey, privateKey);
   }

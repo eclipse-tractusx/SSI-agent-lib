@@ -1,6 +1,7 @@
 package org.eclipse.tractusx.ssi.examples;
 
 import com.nimbusds.jwt.SignedJWT;
+import java.io.IOException;
 import java.util.List;
 import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
 import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519KeySet;
@@ -35,11 +36,12 @@ class VP {
       List<VerifiableCredential> credentials,
       String audience,
       byte[] privateKey,
-      byte[] publicKey) {
+      byte[] publicKey)
+      throws IOException {
 
     // Extracting keys
     final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
-    final Ed25519Key signingKey = new Ed25519Key(keySet.getPrivateKey());
+    final Ed25519Key signingKey = Ed25519Key.asPrivateKey(keySet.getPrivateKey());
 
     final SerializedJwtPresentationFactory presentationFactory =
         new SerializedJwtPresentationFactoryImpl(

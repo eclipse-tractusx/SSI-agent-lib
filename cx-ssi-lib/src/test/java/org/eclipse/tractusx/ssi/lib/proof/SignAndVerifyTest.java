@@ -34,7 +34,7 @@ public class SignAndVerifyTest {
   public void testSignAndVerify() throws IOException {
     final TestDidDocumentResolver didDocumentResolver = new TestDidDocumentResolver();
 
-    var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys(false);
+    var testIdentity = TestIdentityFactory.newBPNIdentityWithED25519Keys(true);
 
     didDocumentResolver.register(testIdentity);
 

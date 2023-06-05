@@ -35,15 +35,18 @@ public class TestResourceUtil {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
   private static final String DID_DOCUMENT_ED25519 = "did-document/document.ed25519.json";
+  private static final String DID_DOCUMENT_ED25519_BPN = "did-document/document.ed25519.bpn.json";
   private static final String PUBLIC_KEY_ED25519 = "keys/ed25519/public.pem";
   private static final String PRIVATE_KEY_ED25519 = "keys/ed25519/private.pem";
   private static String VERIFIABLE_CREDENTIAL_ALUMNI =
       "verifiable-credential/alumni-credential.json";
   private static String VERIFIABLE_PRESENTATION_ALUMNI =
       "verifiable-presentation/alumni-presentation.json";
+  private static String VERIFIABLE_CREDENTIAL_BPN = "verifiable-credential/bpn-credential.json";
 
   public static List<Map<String, Object>> getAllDidDocuments() {
-    return Arrays.asList(readJsonResource(DID_DOCUMENT_ED25519));
+    return Arrays.asList(
+        readJsonResource(DID_DOCUMENT_ED25519), readJsonResource(DID_DOCUMENT_ED25519_BPN));
   }
 
   public static Map<String, Object> getAlumniVerifiableCredential() {
@@ -54,12 +57,20 @@ public class TestResourceUtil {
     return readJsonResource(VERIFIABLE_PRESENTATION_ALUMNI);
   }
 
+  public static Map<String, Object> getBPNVerifiableCredential() {
+    return readJsonResource(VERIFIABLE_CREDENTIAL_BPN);
+  }
+
   public static Map<String, Object> getDidDocument(String verificationKeyType) {
     if (Ed25519VerificationKey2020.DEFAULT_TYPE.equals(verificationKeyType)) {
       return readJsonResource(DID_DOCUMENT_ED25519);
     }
 
     throw new IllegalArgumentException("Unsupported verification key type: " + verificationKeyType);
+  }
+
+  public static Map<String, Object> getBPNDidDocument() {
+    return readJsonResource(DID_DOCUMENT_ED25519_BPN);
   }
 
   public static byte[] getPublicKeyEd25519() {

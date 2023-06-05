@@ -19,9 +19,34 @@
 
 package org.eclipse.tractusx.ssi.lib.crypt.ed25519;
 
-import lombok.Value;
+import java.io.IOException;
+import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.bouncycastle.crypto.util.PrivateKeyFactory;
+import org.bouncycastle.crypto.util.PublicKeyFactory;
 
-@Value
 public class Ed25519Key {
   byte[] encoded;
+
+  public static Ed25519Key asPrivateKey(byte[] privateKey) throws IOException {
+    Ed25519PrivateKeyParameters ed25519PrivateKeyParameters =
+        (Ed25519PrivateKeyParameters) PrivateKeyFactory.createKey(privateKey);
+
+    return new Ed25519Key(ed25519PrivateKeyParameters.getEncoded());
+  }
+
+  public static Ed25519Key asPublicKey(byte[] publicKey) throws IOException {
+    Ed25519PublicKeyParameters ed25519publicKeyParameters =
+        (Ed25519PublicKeyParameters) PublicKeyFactory.createKey(publicKey);
+
+    return new Ed25519Key(ed25519publicKeyParameters.getEncoded());
+  }
+
+  private Ed25519Key(byte[] key) {
+    this.encoded = key;
+  }
+
+  public byte[] getEncoded() {
+    return this.encoded;
+  }
 }
