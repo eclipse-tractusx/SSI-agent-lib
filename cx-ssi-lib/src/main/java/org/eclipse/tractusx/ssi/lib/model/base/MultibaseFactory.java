@@ -17,39 +17,32 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.base;
+package org.eclipse.tractusx.ssi.lib.model.base;
 
-import io.ipfs.multibase.Multibase;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.Value;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 
-@Value
-@EqualsAndHashCode
-public class Base64WithPadding implements MultibaseString {
+public class MultibaseFactory {
 
-  public static boolean canDecode(String encoded) {
-    return Multibase.encoding(encoded).equals(Multibase.Base.Base64Pad);
+  public static MultibaseString create(byte[] decoded) {
+    return Base58Bitcoin.create(decoded);
   }
 
-  public static Base64WithPadding create(byte[] decoded) {
-    final String encoded = Multibase.encode(Multibase.Base.Base64Pad, decoded);
-    return new Base64WithPadding(decoded, encoded);
-  }
+  public static MultibaseString create(String encoded) {
 
-  public static Base64WithPadding create(String encoded) {
-
-    if (!canDecode(encoded)) {
-      throw new IllegalArgumentException(
-          "Encoded base64 String not in Base64 format (with padding)");
+    if (Base58Bitcoin.canDecode(encoded)) {
+      return Base58Bitcoin.create(encoded);
+    }
+    if (Base58Flickr.canDecode(encoded)) {
+      return Base58Flickr.create(encoded);
+    }
+    if (Base64WithPadding.canDecode(encoded)) {
+      return Base64WithPadding.create(encoded);
+    }
+    if (Base64.canDecode(encoded)) {
+      return Base64.create(encoded);
     }
 
-    final byte[] base64 = Multibase.decode(encoded);
-
-    return new Base64WithPadding(base64, encoded);
+    throw new IllegalArgumentException(
+        "Encoded Multibase String is not supported. Must be Base64, Base64_WithPadding, Base58_Bitcoin or Base58_Flickr.");
   }
-
-  byte @NonNull [] decoded;
-  @NonNull String encoded;
 }

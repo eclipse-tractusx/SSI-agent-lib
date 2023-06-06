@@ -17,32 +17,17 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.base;
+package org.eclipse.tractusx.ssi.lib.did.resolver;
 
-import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
+import com.nimbusds.jose.jwk.Curve;
+import com.nimbusds.jose.jwk.OctetKeyPair;
+import com.nimbusds.jose.util.Base64URL;
 
-public class MultibaseFactory {
+public class OctetKeyPairFactory {
 
-  public static MultibaseString create(byte[] decoded) {
-    return Base58Bitcoin.create(decoded);
-  }
-
-  public static MultibaseString create(String encoded) {
-
-    if (Base58Bitcoin.canDecode(encoded)) {
-      return Base58Bitcoin.create(encoded);
-    }
-    if (Base58Flickr.canDecode(encoded)) {
-      return Base58Flickr.create(encoded);
-    }
-    if (Base64WithPadding.canDecode(encoded)) {
-      return Base64WithPadding.create(encoded);
-    }
-    if (Base64.canDecode(encoded)) {
-      return Base64.create(encoded);
-    }
-
-    throw new IllegalArgumentException(
-        "Encoded Multibase String is not supported. Must be Base64, Base64_WithPadding, Base58_Bitcoin or Base58_Flickr.");
+  public OctetKeyPair get(byte[] signingKeyBytes) {
+    return new OctetKeyPair.Builder(Curve.Ed25519, new Base64URL(""))
+        .d(Base64URL.encode(signingKeyBytes))
+        .build();
   }
 }

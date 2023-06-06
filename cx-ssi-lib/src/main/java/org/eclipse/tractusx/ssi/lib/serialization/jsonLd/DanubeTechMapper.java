@@ -41,14 +41,14 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePres
 
 @PackagePrivate
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class DanubTechMapper {
+public class DanubeTechMapper {
   @NonNull
   public static com.danubetech.verifiablecredentials.VerifiablePresentation map(
       VerifiablePresentation presentation) {
 
     final List<com.danubetech.verifiablecredentials.VerifiableCredential> dtCredentials =
         presentation.getVerifiableCredentials().stream()
-            .map(DanubTechMapper::map)
+            .map(DanubeTechMapper::map)
             .collect(Collectors.toList());
 
     // TODO Throw Exception if more or less than one

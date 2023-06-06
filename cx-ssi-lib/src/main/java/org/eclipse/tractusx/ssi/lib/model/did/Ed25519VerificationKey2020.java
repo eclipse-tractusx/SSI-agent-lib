@@ -22,9 +22,9 @@ package org.eclipse.tractusx.ssi.lib.model.did;
 import java.util.Map;
 import java.util.Objects;
 import lombok.ToString;
-import org.eclipse.tractusx.ssi.lib.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
-import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
+import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
+import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 @ToString
 public class Ed25519VerificationKey2020 extends VerificationMethod {

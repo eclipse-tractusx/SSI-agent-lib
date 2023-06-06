@@ -21,16 +21,9 @@ package org.eclipse.tractusx.ssi.lib.proof;
 
 import java.io.IOException;
 import java.net.URI;
-import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
 import org.eclipse.tractusx.ssi.lib.model.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialType;
 import org.eclipse.tractusx.ssi.lib.proof.hash.LinkedDataHasher;
 import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
 import org.eclipse.tractusx.ssi.lib.proof.verify.LinkedDataSigner;
@@ -38,6 +31,7 @@ import org.eclipse.tractusx.ssi.lib.proof.verify.LinkedDataVerifier;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestDidDocumentResolver;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityFactory;
+import org.eclipse.tractusx.ssi.lib.util.vc.TestCredentialFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,41 +69,43 @@ public class LinkedDataProofValidationComponentTest {
         credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
     final byte[] privateKey = credentialIssuer.getPrivateKey();
 
-    final VerifiableCredential credential = createCredential(null);
+    final VerifiableCredential credential =
+        TestCredentialFactory.createCredential(credentialIssuer, null);
 
     final Ed25519Signature2020 proof =
         linkedDataProofGenerator.createEd25519Signature2020(
             credential, verificationMethod, privateKey);
 
-    final VerifiableCredential credentialWithProof = createCredential(proof);
+    final VerifiableCredential credentialWithProof =
+        TestCredentialFactory.createCredential(credentialIssuer, proof);
 
     var isOk = linkedDataProofValidation.checkProof(credentialWithProof);
 
     Assertions.assertTrue(isOk);
   }
 
-  //   @Test
-  //   public void testLinkedDataProofCheckBPNCredential() throws IOException {
-
-  //     this.didDocumentResolver = new TestDidDocumentResolver();
-
-  //     credentialIssuer = TestIdentityFactory.newBPNIdentityWithED25519Keys(false);
-
-  //     didDocumentResolver.register(credentialIssuer);
-
-  //     linkedDataProofValidation =
-  //         new LinkedDataProofValidation(
-  //             new LinkedDataHasher(),
-  //             new LinkedDataTransformer(),
-  //             new LinkedDataVerifier(didDocumentResolver.withRegistry()));
-
-  //     final VerifiableCredential credentialWithProof =
-  //         new VerifiableCredential(TestResourceUtil.getBPNVerifiableCredential());
-
-  //     var isOk = linkedDataProofValidation.checkProof(credentialWithProof);
-
-  //     Assertions.assertTrue(isOk);
-  //   }
+  //  @Test
+  //  public void testLinkedDataProofCheckBPNCredential() throws IOException {
+  //
+  //    this.didDocumentResolver = new TestDidDocumentResolver();
+  //
+  //    credentialIssuer = TestIdentityFactory.newBPNIdentityWithED25519Keys(false);
+  //
+  //    didDocumentResolver.register(credentialIssuer);
+  //
+  //    linkedDataProofValidation =
+  //        new LinkedDataProofValidation(
+  //            new LinkedDataHasher(),
+  //            new LinkedDataTransformer(),
+  //            new LinkedDataVerifier(didDocumentResolver.withRegistry()));
+  //
+  //    final VerifiableCredential credentialWithProof =
+  //        new VerifiableCredential(TestResourceUtil.getBPNVerifiableCredential());
+  //
+  //    var isOk = linkedDataProofValidation.checkProof(credentialWithProof);
+  //
+  //    Assertions.assertTrue(isOk);
+  //  }
 
   //   @Test
   //   public void testJWTProofCheck() throws IOException {
@@ -142,23 +138,4 @@ public class LinkedDataProofValidationComponentTest {
 
   //     Assertions.assertTrue(isOk);
   //   }
-
-  @SneakyThrows
-  private VerifiableCredential createCredential(Ed25519Signature2020 proof) {
-    final VerifiableCredentialBuilder verifiableCredentialBuilder =
-        new VerifiableCredentialBuilder();
-
-    final VerifiableCredentialSubject verifiableCredentialSubject =
-        new VerifiableCredentialSubject(Map.of("foo", "bar"));
-
-    return verifiableCredentialBuilder
-        .id(URI.create("did:test:id"))
-        .type(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
-        .issuer(credentialIssuer.getDid().toUri())
-        .expirationDate(Instant.parse("2025-02-15T17:21:42Z").plusSeconds(3600))
-        .issuanceDate(Instant.parse("2023-02-15T17:21:42Z"))
-        .proof(proof)
-        .credentialSubject(verifiableCredentialSubject)
-        .build();
-  }
 }

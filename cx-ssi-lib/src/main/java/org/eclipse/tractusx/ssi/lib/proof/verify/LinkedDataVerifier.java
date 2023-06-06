@@ -25,6 +25,8 @@ import lombok.SneakyThrows;
 import org.bouncycastle.crypto.Signer;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.Ed25519Signature2020;
@@ -36,8 +38,6 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
-import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolver;
-import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistry;
 
 @RequiredArgsConstructor
 public class LinkedDataVerifier {

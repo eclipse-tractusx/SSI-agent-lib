@@ -23,7 +23,7 @@ import foundation.identity.jsonld.JsonLDException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.DanubTechMapper;
+import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.DanubeTechMapper;
 
 public class LinkedDataTransformer {
   public TransformedLinkedData transform(VerifiableCredential credential) {
@@ -31,7 +31,7 @@ public class LinkedDataTransformer {
     VerifiableCredential copyCredential = new VerifiableCredential(credential);
     copyCredential.remove(VerifiableCredential.PROOF);
 
-    var dtCredential = DanubTechMapper.map(copyCredential);
+    var dtCredential = DanubeTechMapper.map(copyCredential);
     try {
 
       var normalized = dtCredential.normalize("urdna2015");

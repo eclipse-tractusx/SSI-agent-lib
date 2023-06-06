@@ -21,13 +21,13 @@ package org.eclipse.tractusx.ssi.lib.proof;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.hash.LinkedDataHasher;
 import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
 import org.eclipse.tractusx.ssi.lib.proof.transform.TransformedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.verify.LinkedDataVerifier;
-import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistry;
 
 @RequiredArgsConstructor
 public class LinkedDataProofValidation {

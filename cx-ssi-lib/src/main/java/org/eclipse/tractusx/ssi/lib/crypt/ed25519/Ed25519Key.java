@@ -27,9 +27,6 @@ public class Ed25519Key {
   byte[] encoded;
 
   public static Ed25519Key asPrivateKey(byte[] privateKey) throws IOException {
-    //    Ed25519PrivateKeyParameters ed25519PrivateKeyParameters =
-    //        (Ed25519PrivateKeyParameters) PrivateKeyFactory.createKey(privateKey);
-    // @TODO: check with Koptan if this change is acceptable
     Ed25519PrivateKeyParameters ed25519PrivateKeyParameters =
         new Ed25519PrivateKeyParameters(privateKey, 0);
 

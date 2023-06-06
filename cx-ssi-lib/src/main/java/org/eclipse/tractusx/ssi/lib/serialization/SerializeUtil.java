@@ -17,7 +17,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.util;
+package org.eclipse.tractusx.ssi.lib.serialization;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
