@@ -3,7 +3,7 @@ package org.eclipse.tractusx.ssi.agent.app.map;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.eclipse.tractusx.ssi.agent.model.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.model.Proof;
+import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
 

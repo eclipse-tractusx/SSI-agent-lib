@@ -24,7 +24,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import lombok.SneakyThrows;
-import org.eclipse.tractusx.ssi.lib.model.Proof;
+
+import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;

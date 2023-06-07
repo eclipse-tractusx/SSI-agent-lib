@@ -17,7 +17,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.model;
+package org.eclipse.tractusx.ssi.lib.model.proof;
 
 import java.util.HashMap;
 import java.util.Map;

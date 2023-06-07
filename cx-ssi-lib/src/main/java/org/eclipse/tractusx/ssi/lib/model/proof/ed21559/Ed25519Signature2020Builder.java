@@ -17,7 +17,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.model;
+package org.eclipse.tractusx.ssi.lib.model.proof.ed21559;
 
 import java.net.URI;
 import java.time.Instant;

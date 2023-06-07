@@ -27,7 +27,7 @@ import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredEx
 import org.eclipse.tractusx.ssi.lib.exception.JwtException;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtVerifier;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
+import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.LinkedDataProofValidation;
 import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistryImpl;
 
 public class Verification {

@@ -32,7 +32,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.PackagePrivate;
 import org.eclipse.tractusx.ssi.lib.exception.SsiException;
-import org.eclipse.tractusx.ssi.lib.model.Proof;
+import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialType;

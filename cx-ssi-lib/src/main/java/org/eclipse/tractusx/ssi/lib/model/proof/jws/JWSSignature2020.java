@@ -17,46 +17,49 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.model;
+package org.eclipse.tractusx.ssi.lib.model.proof.jws;
 
 import java.net.URI;
 import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
 import org.eclipse.tractusx.ssi.lib.base.MultibaseFactory;
+import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
+import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
 
 /**
- * E.g. "proof": { "type": "Ed25519Signature2020", "created": "2021-11-13T18:19:39Z",
- * "verificationMethod": "https://example.edu/issuers/14#key-1", "proofPurpose": "assertionMethod",
- * "proofValue": "z58DAdFfa9SkqZMVPxAQpic7ndSayn1PzZs6ZjWp1CktyGesjuTSwRdo
- * WhAfGFCF5bppETSTojQCrfFPP2oumHKtz" }
+     E.g. "proof": {"type": "JsonWebSignature2020",
+      "created": "2019-12-11T03:50:55Z",
+      "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..MJ5GwWRMsadCyLNXU_flgJtsS32584MydBxBuygps_cM0sbU3abTEOMyUvmLNcKOwOBE1MfDoB1_YY425W3sAg",
+      "proofPurpose": "assertionMethod",
+      "verificationMethod": "https://example.com/issuer/123#ovsDKYBjFemIy8DVhc-w2LSi8CvXMw2AYDzHj04yxkc"}
  */
-public class Ed25519Signature2020 extends Proof {
+public class JWSSignature2020 extends Proof {
 
-  public static final String ED25519_VERIFICATION_KEY_2018 = "Ed25519Signature2020";
+  public static final String JWS_VERIFICATION_KEY_2020 = "JsonWebSignature2020";
   public static final String TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
   public static final String PROOF_PURPOSE = "proofPurpose";
-  public static final String PROOF_VALUE = "proofValue";
+  public static final String JWS = "jws";
   public static final String CREATED = "created";
-  public static final String VERIFICATION_METHOD = "verificationMethod";
+  public static final String VERIFICATION_METHOD = "assertionMethod";
 
-  public Ed25519Signature2020(Map<String, Object> json) {
+  public JWSSignature2020(Map<String, Object> json) {
     super(json);
 
-    if (!ED25519_VERIFICATION_KEY_2018.equals(json.get(TYPE))) {
-      throw new IllegalArgumentException("Invalid Ed25519Signature2020 Type: " + json);
+    if (!JWS_VERIFICATION_KEY_2020.equals(json.get(TYPE))) {
+      throw new IllegalArgumentException("Invalid JsonWebSignature2020 Type: " + json);
     }
 
     try {
       // verify getters
       Objects.requireNonNull(this.getProofPurpose());
-      Objects.requireNonNull(this.getProofValue());
+      Objects.requireNonNull(this.getJws());
       Objects.requireNonNull(this.getVerificationMethod());
       Objects.requireNonNull(this.getCreated());
     } catch (Exception e) {
-      throw new IllegalArgumentException("Invalid Ed25519Signature2020", e);
+      throw new IllegalArgumentException("Invalid JsonWebSignature2020", e);
     }
   }
 
@@ -64,8 +67,8 @@ public class Ed25519Signature2020 extends Proof {
     return (String) this.get(PROOF_PURPOSE);
   }
 
-  public MultibaseString getProofValue() {
-    return MultibaseFactory.create((String) this.get(PROOF_VALUE));
+  public MultibaseString getJws() {
+    return MultibaseFactory.create((String) this.get(JWS));
   }
 
   public URI getVerificationMethod() {
