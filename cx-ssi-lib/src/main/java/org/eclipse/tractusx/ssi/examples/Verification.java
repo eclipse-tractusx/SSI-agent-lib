@@ -21,14 +21,16 @@ package org.eclipse.tractusx.ssi.examples;
 
 import com.nimbusds.jwt.SignedJWT;
 import java.net.http.HttpClient;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistryImpl;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebDocumentResolver;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.JwtException;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtVerifier;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.LinkedDataProofValidation;
-import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistryImpl;
+import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
+import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
+
 
 public class Verification {
 
@@ -63,7 +65,7 @@ public class Verification {
         new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
 
     LinkedDataProofValidation proofValidation =
-        LinkedDataProofValidation.newInstance(didDocumentResolverRegistry);
-    return proofValidation.checkProof(verifiableCredential);
+        LinkedDataProofValidation.newInstance(SignatureType.ED21559,didDocumentResolverRegistry);
+    return proofValidation.verifiyProof(verifiableCredential);
   }
 }

@@ -17,17 +17,15 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.resolver;
+package org.eclipse.tractusx.ssi.lib.did.resolver;
 
-import com.nimbusds.jose.jwk.Curve;
-import com.nimbusds.jose.jwk.OctetKeyPair;
-import com.nimbusds.jose.util.Base64URL;
+import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
+import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
-public class OctetKeyPairFactory {
+public interface DidDocumentResolverRegistry {
+  DidDocumentResolver get(DidMethod did) throws DidDocumentResolverNotRegisteredException;
 
-  public OctetKeyPair get(byte[] signingKeyBytes) {
-    return new OctetKeyPair.Builder(Curve.Ed25519, new Base64URL(""))
-        .d(Base64URL.encode(signingKeyBytes))
-        .build();
-  }
+  void register(DidDocumentResolver resolver);
+
+  void unregister(DidDocumentResolver resolver);
 }

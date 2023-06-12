@@ -17,15 +17,33 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.resolver;
+package org.eclipse.tractusx.ssi.lib.model.base;
 
-import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
-import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
+import io.ipfs.multibase.Multibase;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.Value;
+import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 
-public interface DidDocumentResolverRegistry {
-  DidDocumentResolver get(DidMethod did) throws DidDocumentResolverNotRegisteredException;
+@Value
+@EqualsAndHashCode
+public class Base58Flickr implements MultibaseString {
 
-  void register(DidDocumentResolver resolver);
+  public static boolean canDecode(String encoded) {
+    return Multibase.encoding(encoded).equals(Multibase.Base.Base58Flickr);
+  }
 
-  void unregister(DidDocumentResolver resolver);
+  public static Base58Flickr create(String encoded) {
+
+    if (!canDecode(encoded)) {
+      throw new IllegalArgumentException("Encoded base58 String not in Base58Flickr format");
+    }
+
+    final byte[] base58 = Multibase.decode(encoded);
+
+    return new Base58Flickr(base58, encoded);
+  }
+
+  byte @NonNull [] decoded;
+  @NonNull String encoded;
 }

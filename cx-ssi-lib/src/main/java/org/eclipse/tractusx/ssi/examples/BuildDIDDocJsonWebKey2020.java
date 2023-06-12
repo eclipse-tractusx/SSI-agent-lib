@@ -19,37 +19,26 @@
 
 package org.eclipse.tractusx.ssi.examples;
 
-import java.net.URI;
+import com.nimbusds.jose.jwk.Curve;
+import com.nimbusds.jose.jwk.OctetKeyPair;
+import com.nimbusds.jose.jwk.gen.OctetKeyPairGenerator;
 import java.util.ArrayList;
 import java.util.List;
-import org.eclipse.tractusx.ssi.lib.base.MultibaseFactory;
-import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519KeySet;
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
-import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
-import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
-import org.eclipse.tractusx.ssi.lib.model.did.DidDocumentBuilder;
-import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020;
-import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020Builder;
-import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
+import org.eclipse.tractusx.ssi.lib.model.did.*;
 
-public class BuildDIDDoc {
-  public static DidDocument buildDidDocument(String hostName, byte[] privateKey, byte[] publicKey) {
+public class BuildDIDDocJsonWebKey2020 {
+  @SneakyThrows
+  public static DidDocument buildDidDocument(String hostName) {
+    // Building DID and Key
     final Did did = DidWebFactory.fromHostname(hostName);
-
-    // Extracting keys
-    final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
-    final MultibaseString publicKeyBase = MultibaseFactory.create(keySet.getPublicKey());
+    OctetKeyPair octetKeyPair = new OctetKeyPairGenerator(Curve.Ed25519).keyID("1").generate();
 
     // Building Verification Methods:
     final List<VerificationMethod> verificationMethods = new ArrayList<>();
-    final Ed25519VerificationKey2020Builder builder = new Ed25519VerificationKey2020Builder();
-    final Ed25519VerificationKey2020 key =
-        builder
-            .id(URI.create(did.toUri() + "#key-" + 1))
-            .controller(did.toUri())
-            .publicKeyMultiBase(publicKeyBase)
-            .build();
+    final JsonWebKey2020Builder builder = new JsonWebKey2020Builder();
+    final JsonWebKey2020 key = builder.did(did).octetKeyPair(octetKeyPair).build();
     verificationMethods.add(key);
 
     final DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();

@@ -17,9 +17,10 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.base;
+package org.eclipse.tractusx.ssi.lib.model.base;
 
 import io.ipfs.multibase.Multibase;
+import java.util.Objects;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Value;
@@ -27,26 +28,30 @@ import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 
 @Value
 @EqualsAndHashCode
-public class Base64 implements MultibaseString {
+public class Base58Bitcoin implements MultibaseString {
 
   public static boolean canDecode(String encoded) {
-    return Multibase.encoding(encoded).equals(Multibase.Base.Base64);
+    Objects.requireNonNull(encoded, "encoded must not be null");
+
+    return Multibase.encoding(encoded).equals(Multibase.Base.Base58BTC);
   }
 
-  public static Base64 create(byte[] decoded) {
-    final String encoded = Multibase.encode(Multibase.Base.Base64, decoded);
-    return new Base64(decoded, encoded);
+  public static Base58Bitcoin create(byte[] decoded) {
+
+    final String encoded = Multibase.encode(Multibase.Base.Base58BTC, decoded);
+
+    return new Base58Bitcoin(decoded, encoded);
   }
 
-  public static Base64 create(String encoded) {
+  public static Base58Bitcoin create(String encoded) {
 
     if (!canDecode(encoded)) {
-      throw new IllegalArgumentException();
+      throw new IllegalArgumentException("Encoded base58 String not in Base58BTC format");
     }
 
     final byte[] decoded = Multibase.decode(encoded);
 
-    return new Base64(decoded, encoded);
+    return new Base58Bitcoin(decoded, encoded);
   }
 
   byte @NonNull [] decoded;

@@ -17,46 +17,47 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.model;
+package org.eclipse.tractusx.ssi.lib.model.did;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.ToString;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
-public abstract class JsonLdObject extends HashMap<String, Object> {
+@ToString
+public class JsonWebKey2020 extends VerificationMethod {
+  public static final String DEFAULT_TYPE = "JsonWebKey2020";
+  public static final String PUBLIC_KEY_JWK = "publicKeyJwk";
 
-  public static final String CONTEXT = "@context";
-
-  public JsonLdObject(Map<String, Object> json) {
+  public JsonWebKey2020(Map<String, Object> json) {
     super(json);
+
+    if (!DEFAULT_TYPE.equals(this.getType())) {
+      throw new IllegalArgumentException(
+          String.format("Invalid type %s. Expected %s", this.getType(), DEFAULT_TYPE));
+    }
 
     try {
       // validate getters
-      Objects.requireNonNull(this.getContext());
+      Objects.requireNonNull(this.getPublicKeyJwk(), "publicKeyJwk is null");
     } catch (Exception e) {
       throw new IllegalArgumentException(
-          String.format("Invalid JsonLdObject: %s", SerializeUtil.toJson(json)), e);
+          String.format("Invalid JsonWebKey2020: %s", SerializeUtil.toJson(json)), e);
     }
   }
 
-  public List<String> getContext() {
-    final Object context = this.get(CONTEXT);
-    if (context instanceof String) {
-      return List.of((String) context);
-    }
-    if (context instanceof List) {
-      return (List<String>) context;
-    } else {
-      throw new IllegalArgumentException(
-          String.format(
-              "Context must be of type string or list. Context Type: %s",
-              context.getClass().getName()));
-    }
+  public PublicKeyJwk getPublicKeyJwk() {
+    var publicKeyJwk = (Map<String, String>) this.get(PUBLIC_KEY_JWK);
+
+    return new PublicKeyJwk(
+        publicKeyJwk.get("kty"), publicKeyJwk.get("crv"), publicKeyJwk.get("x"));
   }
 
-  public String toJson() {
-    return SerializeUtil.toJson(this);
+  @Data
+  @AllArgsConstructor
+  public static class PublicKeyJwk {
+    private String kty, crv, x;
   }
 }

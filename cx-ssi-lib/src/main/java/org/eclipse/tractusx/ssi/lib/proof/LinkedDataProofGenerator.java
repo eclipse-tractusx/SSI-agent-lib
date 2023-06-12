@@ -23,11 +23,11 @@ import java.net.URI;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 
-import org.eclipse.tractusx.ssi.lib.base.ISigner;
-import org.eclipse.tractusx.ssi.lib.base.MultibaseFactory;
+
 import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
+import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020Builder;
