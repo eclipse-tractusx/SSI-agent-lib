@@ -17,31 +17,44 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.did.resolver;
+package org.eclipse.tractusx.ssi.lib.crypt.jwk;
 
-import com.nimbusds.jose.jwk.Curve;
+import java.io.IOException;
+import org.eclipse.tractusx.ssi.lib.did.resolver.OctetKeyPairFactory;
+
 import com.nimbusds.jose.jwk.OctetKeyPair;
-import com.nimbusds.jose.util.Base64URL;
 
-public class OctetKeyPairFactory {
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 
-  public OctetKeyPair fromPrivateKey(byte[] privateKey) {
-    return new OctetKeyPair.Builder(Curve.Ed25519, new Base64URL(""))
-        .d(Base64URL.encode(privateKey))
-        .build();
-  }
-
-  public OctetKeyPair fromKeyPair(byte []publicKey,byte[] privateKey) {
-    return new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey))
-        .d(Base64URL.encode(privateKey))
-        .build();
-  }
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+public class JsonWebKey {
+  private final OctetKeyPair keyPair;
   
 
-  public OctetKeyPair fromKeyPairWithKeyID(String keyID,byte []publicKey,byte[] privateKey) {
-    return new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey))
-        .d(Base64URL.encode(privateKey))
-        .keyID(keyID)
-        .build();
+  public static JsonWebKey fromED21559(String id,byte [] publicKey,byte[] privateKey) throws IOException {
+    OctetKeyPairFactory keyPairFactory = new OctetKeyPairFactory();
+    OctetKeyPair keyOctetKeyPair = keyPairFactory.fromKeyPairWithKeyID(id,publicKey, privateKey);
+
+    return new JsonWebKey(keyOctetKeyPair);
   }
+
+  public String getCurv(){
+    return keyPair.getCurve().getName();
+  }
+
+  public String getKeyID(){
+    return keyPair.getKeyID();
+  }
+
+  public String getKeyType(){
+    return this.keyPair.getKeyType().getValue();
+  }
+
+  public String getX(){
+    return this.keyPair.getX().toString();
+  }
+
 }
+
+  

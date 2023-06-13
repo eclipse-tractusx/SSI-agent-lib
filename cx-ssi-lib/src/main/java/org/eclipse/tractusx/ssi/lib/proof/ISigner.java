@@ -17,11 +17,11 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.serialization.jsonLd;
+package org.eclipse.tractusx.ssi.lib.proof;
 
-import foundation.identity.jsonld.JsonLDObject;
+import org.eclipse.tractusx.ssi.lib.exception.SsiException;
+import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
-public interface JsonLdValidator {
-
-  public boolean validate(JsonLDObject jsonLdObject);
+public interface ISigner {
+    public byte[] sign(HashedLinkedData hashedLinkedData, byte[] signingKey) throws SsiException ;
 }

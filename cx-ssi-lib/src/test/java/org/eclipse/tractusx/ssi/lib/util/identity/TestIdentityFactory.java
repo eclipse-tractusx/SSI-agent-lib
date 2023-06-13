@@ -31,14 +31,17 @@ import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.util.PrivateKeyFactory;
 import org.bouncycastle.crypto.util.PublicKeyFactory;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.KeyPairGeneratorSpi;
+import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocumentBuilder;
 import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
-import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020;
-import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020Builder;
+import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
+import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethodBuilder;
+import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethod;
+import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethodBuilder;
 import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
 
 public class TestIdentityFactory {
@@ -69,29 +72,50 @@ public class TestIdentityFactory {
       KeyPair keyPair = ed25519.generateKeyPair();
       PublicKey PubKey = keyPair.getPublic();
       PrivateKey PivKey = keyPair.getPrivate();
-      Ed25519PrivateKeyParameters ed25519PrivateKeyParameters =
-          (Ed25519PrivateKeyParameters) PrivateKeyFactory.createKey(PivKey.getEncoded());
+      
+      
+      // Ed25519PrivateKeyParameters privateKeyParameters =
+      // new Ed25519PrivateKeyParameters (PivKey.getEncoded(),0);
+      // Ed25519PublicKeyParameters publicKeyParameters =
+      //     new  Ed25519PublicKeyParameters(PubKey.getEncoded(),0);
+
+      Ed25519PrivateKeyParameters privateKeyParameters =
+      (Ed25519PrivateKeyParameters) PrivateKeyFactory.createKey(PivKey.getEncoded());
       Ed25519PublicKeyParameters publicKeyParameters =
-          (Ed25519PublicKeyParameters) PublicKeyFactory.createKey(PubKey.getEncoded());
+      (Ed25519PublicKeyParameters) PublicKeyFactory.createKey(PubKey.getEncoded());
 
       publicKey = publicKeyParameters.getEncoded();
 
-      privateKey = ed25519PrivateKeyParameters.getEncoded();
+      privateKey = privateKeyParameters.getEncoded();
     }
 
+   
+
+    System.out.println(new String(publicKey));
     final MultibaseString publicKeyMultiBase = MultibaseFactory.create(publicKey);
-    final Ed25519VerificationKey2020Builder ed25519VerificationKey2020Builder =
-        new Ed25519VerificationKey2020Builder();
-    final Ed25519VerificationKey2020 verificationMethod =
+    System.out.println(new String(publicKeyMultiBase.getDecoded()));
+
+    final Ed25519VerificationMethodBuilder ed25519VerificationKey2020Builder =
+        new Ed25519VerificationMethodBuilder();
+    
+    final Ed25519VerificationMethod ed25519VerificationMethod =
         ed25519VerificationKey2020Builder
             .id(URI.create(did + "#key-1"))
             .controller(URI.create(did + "#controller"))
             .publicKeyMultiBase(publicKeyMultiBase)
             .build();
 
+
+    //JWK 
+    JsonWebKey jwk = JsonWebKey.fromED21559("key-2",publicKey, privateKey);
+
+    final JWKVerificationMethod jwkVerificationMethod =
+           new JWKVerificationMethodBuilder().did(did).jwk(jwk).build();
+
+
     final DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();
     final DidDocument didDocument =
-        didDocumentBuilder.id(did.toUri()).verificationMethods(List.of(verificationMethod)).build();
+        didDocumentBuilder.id(did.toUri()).verificationMethods(List.of(ed25519VerificationMethod,jwkVerificationMethod)).build();
 
     return new TestIdentity(did, didDocument, publicKey, privateKey);
   }

@@ -23,10 +23,9 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
-import org.eclipse.tractusx.ssi.lib.base.MultibaseFactory;
-import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
-import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
+import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
+
 
 /**
      E.g. "proof": {"type": "JsonWebSignature2020",
@@ -67,8 +66,8 @@ public class JWSSignature2020 extends Proof {
     return (String) this.get(PROOF_PURPOSE);
   }
 
-  public MultibaseString getJws() {
-    return MultibaseFactory.create((String) this.get(JWS));
+  public String getJws() {
+    return  (String)this.get(JWS);
   }
 
   public URI getVerificationMethod() {

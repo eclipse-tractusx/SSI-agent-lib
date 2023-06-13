@@ -78,8 +78,8 @@ public class WebAgent {
     final List<VerificationMethod> verificationMethods = new ArrayList<>();
     final byte[] publicKey = signingKeySet.getPublicKey();
     final MultibaseString publicKeyBase = MultibaseFactory.create(publicKey);
-    final Ed25519VerificationKey2020Builder builder = new Ed25519VerificationKey2020Builder();
-    final Ed25519VerificationKey2020 key =
+    final Ed25519VerificationMethodBuilder builder = new Ed25519VerificationMethodBuilder();
+    final Ed25519VerificationMethod key =
         builder
             .id(URI.create(did.toUri() + "#key-" + 1))
             .controller(did.toUri())

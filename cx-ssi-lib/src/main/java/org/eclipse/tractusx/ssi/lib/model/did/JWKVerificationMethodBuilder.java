@@ -19,39 +19,41 @@
 
 package org.eclipse.tractusx.ssi.lib.model.did;
 
-import com.nimbusds.jose.jwk.OctetKeyPair;
 import java.net.URI;
 import java.util.Map;
+
+import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
+
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class JsonWebKey2020Builder {
+public class JWKVerificationMethodBuilder {
   private Did did;
-  private OctetKeyPair octetKeyPair;
+  private JsonWebKey jwk;
 
-  public JsonWebKey2020Builder did(Did did) {
+  public JWKVerificationMethodBuilder did(Did did) {
     this.did = did;
     return this;
   }
 
-  public JsonWebKey2020Builder octetKeyPair(OctetKeyPair octetKeyPair) {
-    this.octetKeyPair = octetKeyPair;
+  public JWKVerificationMethodBuilder jwk(JsonWebKey jwk) {
+    this.jwk = jwk;
     return this;
   }
 
-  public JsonWebKey2020 build() {
-    return new JsonWebKey2020(
+  public JWKVerificationMethod build() {
+    return new JWKVerificationMethod(
         Map.of(
-            JsonWebKey2020.ID,
-            URI.create(did.toUri() + "#" + octetKeyPair.getKeyID()),
-            JsonWebKey2020.TYPE,
-            JsonWebKey2020.DEFAULT_TYPE,
-            JsonWebKey2020.CONTROLLER,
+            JWKVerificationMethod.ID,
+            URI.create(did.toUri() + "#" + jwk.getKeyID()),
+            JWKVerificationMethod.TYPE,
+            JWKVerificationMethod.DEFAULT_TYPE,
+            JWKVerificationMethod.CONTROLLER,
             this.did.toUri(),
-            JsonWebKey2020.PUBLIC_KEY_JWK,
+            JWKVerificationMethod.PUBLIC_KEY_JWK,
             Map.of(
-                "kty", octetKeyPair.getKeyType().getValue(),
-                "crv", octetKeyPair.getCurve().getName(),
-                "x", octetKeyPair.getX().toString())));
+                "kty", jwk.getKeyType(),
+                "crv", jwk.getCurv(),
+                "x", jwk.getX())));
   }
 }

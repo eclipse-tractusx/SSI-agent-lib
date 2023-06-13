@@ -20,33 +20,59 @@
 package org.eclipse.tractusx.ssi.lib.proof;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
-import org.eclipse.tractusx.ssi.lib.proof.verify.LinkedDataSigner;
-import org.eclipse.tractusx.ssi.lib.proof.verify.LinkedDataVerifier;
+import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.ED21559ProofSigner;
+import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.ED25519ProofVerifier;
+import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofSigner;
+import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofVerifier;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestDidDocumentResolver;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import com.nimbusds.jose.JOSEException;
+
 public class SignAndVerifyTest {
 
-  @Test
-  public void testSignAndVerify() throws IOException {
-    final TestDidDocumentResolver didDocumentResolver = new TestDidDocumentResolver();
+    @Test
+    public void testSignAndVerify_ED201559() throws IOException {
+        final TestDidDocumentResolver didDocumentResolver = new TestDidDocumentResolver();
 
-    var testIdentity = TestIdentityFactory.newBPNIdentityWithED25519Keys(true);
+        var testIdentity = TestIdentityFactory.newBPNIdentityWithED25519Keys(true);
 
-    didDocumentResolver.register(testIdentity);
+        didDocumentResolver.register(testIdentity);
 
-    var data = "Hello World".getBytes();
+        var data = "Hello World".getBytes();
 
-    var signer = new LinkedDataSigner();
-    var verifier = new LinkedDataVerifier(didDocumentResolver.withRegistry());
+        var signer = new ED21559ProofSigner();
+        var verifier = new ED25519ProofVerifier(didDocumentResolver.withRegistry());
 
-    var signature = signer.sign(new HashedLinkedData(data), testIdentity.getPrivateKey());
-    var isSigned =
-        verifier.verify(new HashedLinkedData(data), signature, testIdentity.getPublicKey());
+        var signature = signer.sign(new HashedLinkedData(data), testIdentity.getPrivateKey());
+        var isSigned = verifier.verify(new HashedLinkedData(data), signature, testIdentity.getPublicKey());
 
-    Assertions.assertTrue(isSigned);
-  }
+        Assertions.assertTrue(isSigned);
+    }
+
+    @Test
+    public void testSignAndVerify_JWS() throws IOException, JOSEException, NoSuchAlgorithmException {
+        final TestDidDocumentResolver didDocumentResolver = new TestDidDocumentResolver();
+        var testIdentity = TestIdentityFactory.newBPNIdentityWithED25519Keys(false);
+        
+        didDocumentResolver.register(testIdentity);
+
+        var data = "Hello World".getBytes();
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        var value = digest.digest(data);
+
+        var signer = new JWSProofSigner();
+        var verifier = new JWSProofVerifier(didDocumentResolver.withRegistry());
+
+        var signature = signer.sign(new HashedLinkedData(value), testIdentity.getPrivateKey());
+        var isSigned = verifier.verify(new HashedLinkedData(value), signature, testIdentity.getPublicKey());
+
+        Assertions.assertTrue(isSigned);
+    }
 }

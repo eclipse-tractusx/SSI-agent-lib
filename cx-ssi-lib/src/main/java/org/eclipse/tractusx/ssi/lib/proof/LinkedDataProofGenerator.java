@@ -20,12 +20,10 @@
 package org.eclipse.tractusx.ssi.lib.proof;
 
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 
-
-import org.eclipse.tractusx.ssi.lib.exception.SsiException;
-import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
@@ -41,29 +39,23 @@ import org.eclipse.tractusx.ssi.lib.proof.transform.TransformedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.ED21559ProofSigner;
 import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofSigner;
 
-import com.nimbusds.jose.JOSEException;
-
 @RequiredArgsConstructor
 public class LinkedDataProofGenerator {
 
-  public static LinkedDataProofGenerator newInstance(SignatureType type) throws UnsupportedSignatureTypeException {
-    switch (type) {
-      case ED21559:
-        return new LinkedDataProofGenerator(
-            new LinkedDataHasher(), new LinkedDataTransformer(), new ED21559ProofSigner(),
-            type);
-      case JWS:
-        return new LinkedDataProofGenerator(
-            new LinkedDataHasher(), new LinkedDataTransformer(), new JWSProofSigner(), type);
-      default:
-        throw new UnsupportedSignatureTypeException("Currently we only support JWS and ED25519 signature!");
+  public static LinkedDataProofGenerator newInstance(SignatureType type) {
+    if (type == SignatureType.ED21559) {
+      return new LinkedDataProofGenerator(type,
+          new LinkedDataHasher(), new LinkedDataTransformer(), new ED21559ProofSigner());
+    } else {
+      return new LinkedDataProofGenerator(type,
+          new LinkedDataHasher(), new LinkedDataTransformer(), new JWSProofSigner());
     }
   }
 
+  private final SignatureType type;
   private final LinkedDataHasher hasher;
   private final LinkedDataTransformer transformer;
   private final ISigner signer;
-  private final SignatureType type;
 
   public Proof createProof(
       VerifiableCredential verifiableCredential, URI verificationMethodId, byte[] signingKey) {
@@ -71,33 +63,26 @@ public class LinkedDataProofGenerator {
     final TransformedLinkedData transformedData = transformer.transform(verifiableCredential);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
     byte[] signature;
-    
-    try {
-      signature = signer.sign(hashedData, signingKey);
-    } catch (JOSEException e) {
-      throw new SsiException(e.getMessage());
-    }
+    signature = signer.sign(new HashedLinkedData(hashedData.getValue()), signingKey);
 
+    if (type == SignatureType.ED21559) {
 
-    final MultibaseString multibaseString = MultibaseFactory.create(signature);
+      final MultibaseString multibaseString = MultibaseFactory.create(signature);
+      return new Ed25519Signature2020Builder()
+          .proofPurpose(Ed25519Signature2020.PROOF_PURPOSE)
+          .proofValue(multibaseString.getEncoded())
+          .verificationMethod(verificationMethodId)
+          .created(Instant.now())
+          .build();
+    } else {
 
-    switch (type) {
-      case ED21559:
-        return new Ed25519Signature2020Builder()
-            .proofPurpose(Ed25519Signature2020.PROOF_PURPOSE)
-            .proofValue(multibaseString.getEncoded())
-            .verificationMethod(verificationMethodId)
-            .created(Instant.now())
-            .build();
-      case JWS:
-        return new JWSSignature2020Builder()
-            .proofPurpose(JWSSignature2020.PROOF_PURPOSE)
-            .proofValue(multibaseString.getEncoded())
-            .verificationMethod(verificationMethodId)
-            .created(Instant.now())
-            .build();
-      default:
-        throw new UnsupportedOperationException("Currently we only support JWS and ED25519 signature!");
+      return new JWSSignature2020Builder()
+          .proofPurpose(JWSSignature2020.PROOF_PURPOSE)
+          .proofValue(new String(signature, StandardCharsets.UTF_8))
+          .verificationMethod(verificationMethodId)
+          .created(Instant.now())
+          .build();
+
     }
 
   }

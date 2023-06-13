@@ -9,12 +9,13 @@ import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
 import org.eclipse.tractusx.ssi.lib.did.resolver.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtVerifier;
-import org.eclipse.tractusx.ssi.lib.model.Ed25519Signature2020;
+import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofGenerator;
+import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 import org.eclipse.tractusx.ssi.lib.proof.hash.LinkedDataHasher;
 import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
-import org.eclipse.tractusx.ssi.lib.proof.verify.LinkedDataSigner;
+import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.ED21559ProofSigner;
 import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdSerializerImpl;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestDidDocumentResolver;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
@@ -41,9 +42,10 @@ class SerializedJwtPresentationFactoryImplTest {
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys(false);
     didDocumentResolver.register(credentialIssuer);
     jwtVerifier = new SignedJwtVerifier(didDocumentResolver.withRegistry());
+    
     linkedDataProofGenerator =
-        new LinkedDataProofGenerator(
-            new LinkedDataHasher(), new LinkedDataTransformer(), new LinkedDataSigner());
+        new LinkedDataProofGenerator(SignatureType.JWS,
+            new LinkedDataHasher(), new LinkedDataTransformer(), new ED21559ProofSigner());
 
     // prepare key
     final URI verificationMethod =
@@ -53,8 +55,8 @@ class SerializedJwtPresentationFactoryImplTest {
     final VerifiableCredential credential =
         TestCredentialFactory.createCredential(credentialIssuer, null);
 
-    final Ed25519Signature2020 proof =
-        linkedDataProofGenerator.createEd25519Signature2020(
+    final Proof proof =
+        linkedDataProofGenerator.createProof(
             credential, verificationMethod, privateKey);
 
     final VerifiableCredential credentialWithProof =

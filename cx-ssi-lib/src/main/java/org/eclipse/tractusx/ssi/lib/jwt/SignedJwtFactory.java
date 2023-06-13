@@ -79,7 +79,7 @@ public class SignedJwtFactory {
             .jwtID(UUID.randomUUID().toString())
             .build();
 
-    final OctetKeyPair octetKeyPair = octetKeyPairFactory.get(privateKey);
+    final OctetKeyPair octetKeyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
     return createSignedES256Jwt(octetKeyPair, claimsSet, issuer);
   }
 

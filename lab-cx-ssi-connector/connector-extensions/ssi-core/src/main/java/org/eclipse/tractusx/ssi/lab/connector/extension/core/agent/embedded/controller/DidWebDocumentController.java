@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.agent.lib.WebAgent;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
-import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020;
+import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
 
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/did.json")
@@ -43,9 +43,9 @@ public class DidWebDocumentController {
         .replace(
             "<key>",
             didDocument.getVerificationMethods().stream()
-                .filter(Ed25519VerificationKey2020::isInstance)
+                .filter(Ed25519VerificationMethod::isInstance)
                 .findFirst()
-                .map(Ed25519VerificationKey2020::new)
+                .map(Ed25519VerificationMethod::new)
                 .map(v -> v.getPublicKeyBase58().getEncoded())
                 .orElseThrow());
   }

@@ -24,20 +24,21 @@ import java.net.URI;
 import org.bouncycastle.crypto.Signer;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
-import org.eclipse.tractusx.ssi.lib.base.IVerifier;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
-import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020;
+import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.proof.IVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
-import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolver;
-import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistry;
+
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -65,11 +66,11 @@ public class ED25519ProofVerifier implements IVerifier {
       final Ed25519Signature2020 ed25519Signature2020 = new Ed25519Signature2020(proof);
   
       final URI verificationMethodId = ed25519Signature2020.getVerificationMethod();
-      final Ed25519VerificationKey2020 key =
+      final Ed25519VerificationMethod key =
           document.getVerificationMethods().stream()
               .filter(v -> v.getId().equals(verificationMethodId))
-              .filter(Ed25519VerificationKey2020::isInstance)
-              .map(Ed25519VerificationKey2020::new)
+              .filter(Ed25519VerificationMethod::isInstance)
+              .map(Ed25519VerificationMethod::new)
               .findFirst()
               .orElseThrow();
   
@@ -85,6 +86,7 @@ public class ED25519ProofVerifier implements IVerifier {
   
       Signer verifier = new Ed25519Signer();
       Ed25519PublicKeyParameters publicKeyParameters = new Ed25519PublicKeyParameters(publicKey, 0);
+      
       verifier.init(false, publicKeyParameters);
       verifier.update(message, 0, message.length);
   

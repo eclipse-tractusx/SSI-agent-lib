@@ -21,17 +21,22 @@ package org.eclipse.tractusx.ssi.lib.model.did;
 
 import java.util.Map;
 import java.util.Objects;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.ToString;
+import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
+import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 @ToString
-public class JsonWebKey2020 extends VerificationMethod {
-  public static final String DEFAULT_TYPE = "JsonWebKey2020";
-  public static final String PUBLIC_KEY_JWK = "publicKeyJwk";
+public class Ed25519VerificationMethod extends VerificationMethod {
+  public static final String DEFAULT_TYPE = "Ed25519VerificationKey2020";
 
-  public JsonWebKey2020(Map<String, Object> json) {
+  public static final String PUBLIC_KEY_BASE_58 = "publicKeyMultibase";
+
+  public static boolean isInstance(Map<String, Object> json) {
+    return DEFAULT_TYPE.equals(json.get(TYPE));
+  }
+
+  public Ed25519VerificationMethod(Map<String, Object> json) {
     super(json);
 
     if (!DEFAULT_TYPE.equals(this.getType())) {
@@ -41,23 +46,14 @@ public class JsonWebKey2020 extends VerificationMethod {
 
     try {
       // validate getters
-      Objects.requireNonNull(this.getPublicKeyJwk(), "publicKeyJwk is null");
+      Objects.requireNonNull(this.getPublicKeyBase58(), "publicKeyBase58 is null");
     } catch (Exception e) {
       throw new IllegalArgumentException(
-          String.format("Invalid JsonWebKey2020: %s", SerializeUtil.toJson(json)), e);
+          String.format("Invalid Ed25519VerificationKey2020: %s", SerializeUtil.toJson(json)), e);
     }
   }
 
-  public PublicKeyJwk getPublicKeyJwk() {
-    var publicKeyJwk = (Map<String, String>) this.get(PUBLIC_KEY_JWK);
-
-    return new PublicKeyJwk(
-        publicKeyJwk.get("kty"), publicKeyJwk.get("crv"), publicKeyJwk.get("x"));
-  }
-
-  @Data
-  @AllArgsConstructor
-  public static class PublicKeyJwk {
-    private String kty, crv, x;
+  public MultibaseString getPublicKeyBase58() {
+    return MultibaseFactory.create((String) this.get(PUBLIC_KEY_BASE_58));
   }
 }

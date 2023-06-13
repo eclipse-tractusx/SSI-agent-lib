@@ -17,11 +17,14 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.serialization.jsonLd;
+package org.eclipse.tractusx.ssi.lib.proof;
 
-import foundation.identity.jsonld.JsonLDObject;
+import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
+import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
-public interface JsonLdValidator {
-
-  public boolean validate(JsonLDObject jsonLdObject);
+public interface IVerifier {
+    public boolean verify(HashedLinkedData hashedLinkedData, VerifiableCredential credential)
+    throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException;
 }

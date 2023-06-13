@@ -21,22 +21,17 @@ package org.eclipse.tractusx.ssi.lib.model.did;
 
 import java.util.Map;
 import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.ToString;
-import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
-import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 @ToString
-public class Ed25519VerificationKey2020 extends VerificationMethod {
-  public static final String DEFAULT_TYPE = "Ed25519VerificationKey2020";
+public class JWKVerificationMethod extends VerificationMethod {
+  public static final String DEFAULT_TYPE = "JsonWebKey2020";
+  public static final String PUBLIC_KEY_JWK = "publicKeyJwk";
 
-  public static final String PUBLIC_KEY_BASE_58 = "publicKeyMultibase";
-
-  public static boolean isInstance(Map<String, Object> json) {
-    return DEFAULT_TYPE.equals(json.get(TYPE));
-  }
-
-  public Ed25519VerificationKey2020(Map<String, Object> json) {
+  public JWKVerificationMethod(Map<String, Object> json) {
     super(json);
 
     if (!DEFAULT_TYPE.equals(this.getType())) {
@@ -46,14 +41,27 @@ public class Ed25519VerificationKey2020 extends VerificationMethod {
 
     try {
       // validate getters
-      Objects.requireNonNull(this.getPublicKeyBase58(), "publicKeyBase58 is null");
+      Objects.requireNonNull(this.getPublicKeyJwk(), "publicKeyJwk is null");
     } catch (Exception e) {
       throw new IllegalArgumentException(
-          String.format("Invalid Ed25519VerificationKey2020: %s", SerializeUtil.toJson(json)), e);
+          String.format("Invalid JsonWebKey2020: %s", SerializeUtil.toJson(json)), e);
     }
   }
 
-  public MultibaseString getPublicKeyBase58() {
-    return MultibaseFactory.create((String) this.get(PUBLIC_KEY_BASE_58));
+  public PublicKeyJwk getPublicKeyJwk() {
+    var publicKeyJwk = (Map<String, String>) this.get(PUBLIC_KEY_JWK);
+
+    return new PublicKeyJwk(
+        publicKeyJwk.get("kty"), publicKeyJwk.get("crv"), publicKeyJwk.get("x"));
+  }
+
+  public static boolean isInstance(Map<String, Object> json) {
+    return DEFAULT_TYPE.equals(json.get(TYPE));
+  }
+
+  @Data
+  @AllArgsConstructor
+  public static class PublicKeyJwk {
+    private String kty, crv, x;
   }
 }

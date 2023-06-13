@@ -25,32 +25,32 @@ import lombok.NoArgsConstructor;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 
 @NoArgsConstructor
-public class Ed25519VerificationKey2020Builder {
+public class Ed25519VerificationMethodBuilder {
   private URI id;
   private URI controller;
   private String publicKeyMultiBase;
 
-  public Ed25519VerificationKey2020Builder id(URI id) {
+  public Ed25519VerificationMethodBuilder id(URI id) {
     this.id = id;
     return this;
   }
 
-  public Ed25519VerificationKey2020Builder controller(URI controller) {
+  public Ed25519VerificationMethodBuilder controller(URI controller) {
     this.controller = controller;
     return this;
   }
 
-  public Ed25519VerificationKey2020Builder publicKeyMultiBase(MultibaseString multibaseString) {
+  public Ed25519VerificationMethodBuilder publicKeyMultiBase(MultibaseString multibaseString) {
     this.publicKeyMultiBase = multibaseString.getEncoded();
     return this;
   }
 
-  public Ed25519VerificationKey2020 build() {
-    return new Ed25519VerificationKey2020(
+  public Ed25519VerificationMethod build() {
+    return new Ed25519VerificationMethod(
         Map.of(
-            Ed25519VerificationKey2020.ID, id,
-            Ed25519VerificationKey2020.TYPE, Ed25519VerificationKey2020.DEFAULT_TYPE,
-            Ed25519VerificationKey2020.CONTROLLER, controller,
-            Ed25519VerificationKey2020.PUBLIC_KEY_BASE_58, publicKeyMultiBase));
+            Ed25519VerificationMethod.ID, id,
+            Ed25519VerificationMethod.TYPE, Ed25519VerificationMethod.DEFAULT_TYPE,
+            Ed25519VerificationMethod.CONTROLLER, controller,
+            Ed25519VerificationMethod.PUBLIC_KEY_BASE_58, publicKeyMultiBase));
   }
 }

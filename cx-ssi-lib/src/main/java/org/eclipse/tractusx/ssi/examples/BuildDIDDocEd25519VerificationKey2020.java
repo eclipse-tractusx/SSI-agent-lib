@@ -29,8 +29,8 @@ import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocumentBuilder;
-import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020;
-import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020Builder;
+import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
+import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethodBuilder;
 import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 
 public class BuildDIDDocEd25519VerificationKey2020 {
@@ -43,8 +43,8 @@ public class BuildDIDDocEd25519VerificationKey2020 {
 
     // Building Verification Methods:
     final List<VerificationMethod> verificationMethods = new ArrayList<>();
-    final Ed25519VerificationKey2020Builder builder = new Ed25519VerificationKey2020Builder();
-    final Ed25519VerificationKey2020 key =
+    final Ed25519VerificationMethodBuilder builder = new Ed25519VerificationMethodBuilder();
+    final Ed25519VerificationMethod key =
         builder
             .id(URI.create(did.toUri() + "#key-" + 1))
             .controller(did.toUri())

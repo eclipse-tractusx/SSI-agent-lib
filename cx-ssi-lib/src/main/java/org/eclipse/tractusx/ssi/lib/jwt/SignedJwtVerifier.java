@@ -75,9 +75,9 @@ public class SignedJwtVerifier {
     // verify JWT signature
     // TODO Don't try out each key. Better -> use key authorization key
     for (VerificationMethod verificationMethod : verificationMethods) {
-      if (!Ed25519VerificationKey2020.isInstance(verificationMethod)) continue;
+      if (!Ed25519VerificationMethod.isInstance(verificationMethod)) continue;
 
-      var method = new Ed25519VerificationKey2020(verificationMethod);
+      var method = new Ed25519VerificationMethod(verificationMethod);
       var multibase = method.getPublicKeyBase58();
 
       Ed25519PublicKeyParameters publicKeyParameters =

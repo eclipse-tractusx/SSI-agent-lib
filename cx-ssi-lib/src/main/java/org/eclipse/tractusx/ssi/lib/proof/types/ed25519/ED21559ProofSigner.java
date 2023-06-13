@@ -21,7 +21,7 @@ package org.eclipse.tractusx.ssi.lib.proof.types.ed25519;
 
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
-import org.eclipse.tractusx.ssi.lib.base.ISigner;
+import org.eclipse.tractusx.ssi.lib.proof.ISigner;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
 public class ED21559ProofSigner implements ISigner {

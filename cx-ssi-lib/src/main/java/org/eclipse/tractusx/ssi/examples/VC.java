@@ -30,7 +30,8 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialType;
-import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.LinkedDataProofGenerator;
+import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofGenerator;
+import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 
 public class VC {
   public static VerifiableCredential createVCWithoutProof() {
@@ -72,10 +73,10 @@ public class VC {
             .type(credential.getTypes());
 
     // Ed25519 Proof Builder
-    final LinkedDataProofGenerator generator = LinkedDataProofGenerator.create();
+    final LinkedDataProofGenerator generator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
     final Ed25519Signature2020 proof =
-        generator.createEd25519Signature2020(
-            builder.build(), URI.create(issuer + "#key-1"), privateKey);
+        (Ed25519Signature2020) generator.createProof(
+        builder.build(), URI.create(issuer + "#key-1"), privateKey);
 
     // Adding Proof to VC
     builder.proof(proof);
