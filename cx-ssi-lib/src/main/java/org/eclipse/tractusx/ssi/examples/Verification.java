@@ -31,7 +31,6 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
 import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 
-
 public class Verification {
 
   public static void verifyJWT(SignedJWT jwt) {
@@ -65,7 +64,7 @@ public class Verification {
         new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
 
     LinkedDataProofValidation proofValidation =
-        LinkedDataProofValidation.newInstance(SignatureType.ED21559,didDocumentResolverRegistry);
+        LinkedDataProofValidation.newInstance(SignatureType.ED21559, didDocumentResolverRegistry);
     return proofValidation.verifiyProof(verifiableCredential);
   }
 
@@ -80,7 +79,7 @@ public class Verification {
         new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
 
     LinkedDataProofValidation proofValidation =
-        LinkedDataProofValidation.newInstance(SignatureType.JWS,didDocumentResolverRegistry);
+        LinkedDataProofValidation.newInstance(SignatureType.JWS, didDocumentResolverRegistry);
     return proofValidation.verifiyProof(verifiableCredential);
   }
 }

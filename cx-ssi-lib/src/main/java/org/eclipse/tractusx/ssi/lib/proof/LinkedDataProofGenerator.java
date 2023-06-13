@@ -23,7 +23,6 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
-
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
@@ -44,11 +43,11 @@ public class LinkedDataProofGenerator {
 
   public static LinkedDataProofGenerator newInstance(SignatureType type) {
     if (type == SignatureType.ED21559) {
-      return new LinkedDataProofGenerator(type,
-          new LinkedDataHasher(), new LinkedDataTransformer(), new ED21559ProofSigner());
+      return new LinkedDataProofGenerator(
+          type, new LinkedDataHasher(), new LinkedDataTransformer(), new ED21559ProofSigner());
     } else {
-      return new LinkedDataProofGenerator(type,
-          new LinkedDataHasher(), new LinkedDataTransformer(), new JWSProofSigner());
+      return new LinkedDataProofGenerator(
+          type, new LinkedDataHasher(), new LinkedDataTransformer(), new JWSProofSigner());
     }
   }
 
@@ -82,8 +81,6 @@ public class LinkedDataProofGenerator {
           .verificationMethod(verificationMethodId)
           .created(Instant.now())
           .build();
-
     }
-
   }
 }

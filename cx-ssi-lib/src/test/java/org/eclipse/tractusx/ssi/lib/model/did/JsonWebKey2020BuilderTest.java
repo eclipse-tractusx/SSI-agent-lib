@@ -7,7 +7,6 @@ import com.nimbusds.jose.jwk.KeyUse;
 import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.jwk.gen.OctetKeyPairGenerator;
 import lombok.SneakyThrows;
-
 import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
 import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
@@ -20,15 +19,15 @@ class JsonWebKey2020BuilderTest {
   public void testJsonWebKey2020VerificationMethod() {
     final Did did = DidWebFactory.fromHostname("localhost");
     String keyId = "1";
-    OctetKeyPair octetKeyPair = new OctetKeyPairGenerator(Curve.Ed25519).keyID(keyId).keyUse(KeyUse.SIGNATURE)
-        .generate();
+    OctetKeyPair octetKeyPair =
+        new OctetKeyPairGenerator(Curve.Ed25519).keyID(keyId).keyUse(KeyUse.SIGNATURE).generate();
 
     Ed25519Key privateKey = Ed25519Key.asPrivateKey(octetKeyPair.getDecodedD());
     Ed25519Key publicKey = Ed25519Key.asPrivateKey(octetKeyPair.getDecodedX());
 
     // JWK
-    JsonWebKey jwk = JsonWebKey.fromED21559(keyId,publicKey.getEncoded(), privateKey.getEncoded());
-    
+    JsonWebKey jwk = JsonWebKey.fromED21559(keyId, publicKey.getEncoded(), privateKey.getEncoded());
+
     final JWKVerificationMethodBuilder builder = new JWKVerificationMethodBuilder();
     final JWKVerificationMethod jwk2020VerificationMethod = builder.did(did).jwk(jwk).build();
 

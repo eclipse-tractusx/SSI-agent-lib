@@ -97,7 +97,7 @@ public class SignedJwtFactory {
                     .map(JWSAlgorithm::getName)
                     .collect(Collectors.joining(", "))));
       }
-       
+
       var algorithm = JWSAlgorithm.EdDSA;
       var type = JOSEObjectType.JWT;
       var header =

@@ -21,7 +21,6 @@ package org.eclipse.tractusx.ssi.lib.proof;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
@@ -34,12 +33,13 @@ import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofVerifier;
 @RequiredArgsConstructor
 public class LinkedDataProofValidation {
 
-  public static LinkedDataProofValidation newInstance(SignatureType type,
-      DidDocumentResolverRegistry didDocumentResolverRegistry) {
+  public static LinkedDataProofValidation newInstance(
+      SignatureType type, DidDocumentResolverRegistry didDocumentResolverRegistry) {
     return new LinkedDataProofValidation(
         new LinkedDataHasher(),
         new LinkedDataTransformer(),
-        type == SignatureType.ED21559 ? new ED25519ProofVerifier(didDocumentResolverRegistry)
+        type == SignatureType.ED21559
+            ? new ED25519ProofVerifier(didDocumentResolverRegistry)
             : new JWSProofVerifier(didDocumentResolverRegistry));
   }
 
@@ -50,9 +50,10 @@ public class LinkedDataProofValidation {
   @SneakyThrows
   public boolean verifiyProof(VerifiableCredential verifiableCredential) {
 
-    final TransformedLinkedData transformedData = transformer.transform(verifiableCredential.removeProof());
+    final TransformedLinkedData transformedData =
+        transformer.transform(verifiableCredential.removeProof());
     final HashedLinkedData hashedData = hasher.hash(transformedData);
-        
+
     return verifier.verify(hashedData, verifiableCredential);
   }
 }

@@ -42,10 +42,13 @@ class SerializedJwtPresentationFactoryImplTest {
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys(false);
     didDocumentResolver.register(credentialIssuer);
     jwtVerifier = new SignedJwtVerifier(didDocumentResolver.withRegistry());
-    
+
     linkedDataProofGenerator =
-        new LinkedDataProofGenerator(SignatureType.JWS,
-            new LinkedDataHasher(), new LinkedDataTransformer(), new ED21559ProofSigner());
+        new LinkedDataProofGenerator(
+            SignatureType.JWS,
+            new LinkedDataHasher(),
+            new LinkedDataTransformer(),
+            new ED21559ProofSigner());
 
     // prepare key
     final URI verificationMethod =
@@ -56,8 +59,7 @@ class SerializedJwtPresentationFactoryImplTest {
         TestCredentialFactory.createCredential(credentialIssuer, null);
 
     final Proof proof =
-        linkedDataProofGenerator.createProof(
-            credential, verificationMethod, privateKey);
+        linkedDataProofGenerator.createProof(credential, verificationMethod, privateKey);
 
     final VerifiableCredential credentialWithProof =
         TestCredentialFactory.createCredential(credentialIssuer, proof);

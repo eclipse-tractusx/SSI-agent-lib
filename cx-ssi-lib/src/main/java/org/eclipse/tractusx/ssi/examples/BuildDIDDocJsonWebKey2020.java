@@ -25,7 +25,6 @@ import com.nimbusds.jose.jwk.gen.OctetKeyPairGenerator;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.SneakyThrows;
-
 import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
 import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
@@ -37,12 +36,14 @@ public class BuildDIDDocJsonWebKey2020 {
     // Building DID and Key
     final Did did = DidWebFactory.fromHostname(hostName);
     OctetKeyPair octetKeyPair = new OctetKeyPairGenerator(Curve.Ed25519).keyID("1").generate();
-    
+
     Ed25519Key privateKey = Ed25519Key.asPrivateKey(octetKeyPair.getDecodedD());
     Ed25519Key publicKey = Ed25519Key.asPrivateKey(octetKeyPair.getDecodedX());
-    
-    //JWK
-    JsonWebKey jwk = JsonWebKey.fromED21559(octetKeyPair.getKeyID(),publicKey.getEncoded(), privateKey.getEncoded());
+
+    // JWK
+    JsonWebKey jwk =
+        JsonWebKey.fromED21559(
+            octetKeyPair.getKeyID(), publicKey.getEncoded(), privateKey.getEncoded());
 
     // Building Verification Methods:
     final List<VerificationMethod> verificationMethods = new ArrayList<>();

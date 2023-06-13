@@ -25,6 +25,6 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
 public interface IVerifier {
-    public boolean verify(HashedLinkedData hashedLinkedData, VerifiableCredential credential)
-    throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException;
+  public boolean verify(HashedLinkedData hashedLinkedData, VerifiableCredential credential)
+      throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException;
 }

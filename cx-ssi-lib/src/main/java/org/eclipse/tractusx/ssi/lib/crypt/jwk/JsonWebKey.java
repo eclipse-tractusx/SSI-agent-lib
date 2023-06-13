@@ -19,42 +19,37 @@
 
 package org.eclipse.tractusx.ssi.lib.crypt.jwk;
 
-import java.io.IOException;
-import org.eclipse.tractusx.ssi.lib.did.resolver.OctetKeyPairFactory;
-
 import com.nimbusds.jose.jwk.OctetKeyPair;
-
+import java.io.IOException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.eclipse.tractusx.ssi.lib.did.resolver.OctetKeyPairFactory;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonWebKey {
   private final OctetKeyPair keyPair;
-  
 
-  public static JsonWebKey fromED21559(String id,byte [] publicKey,byte[] privateKey) throws IOException {
+  public static JsonWebKey fromED21559(String id, byte[] publicKey, byte[] privateKey)
+      throws IOException {
     OctetKeyPairFactory keyPairFactory = new OctetKeyPairFactory();
-    OctetKeyPair keyOctetKeyPair = keyPairFactory.fromKeyPairWithKeyID(id,publicKey, privateKey);
+    OctetKeyPair keyOctetKeyPair = keyPairFactory.fromKeyPairWithKeyID(id, publicKey, privateKey);
 
     return new JsonWebKey(keyOctetKeyPair);
   }
 
-  public String getCurv(){
+  public String getCurv() {
     return keyPair.getCurve().getName();
   }
 
-  public String getKeyID(){
+  public String getKeyID() {
     return keyPair.getKeyID();
   }
 
-  public String getKeyType(){
+  public String getKeyType() {
     return this.keyPair.getKeyType().getValue();
   }
 
-  public String getX(){
+  public String getX() {
     return this.keyPair.getX().toString();
   }
-
 }
-
-  

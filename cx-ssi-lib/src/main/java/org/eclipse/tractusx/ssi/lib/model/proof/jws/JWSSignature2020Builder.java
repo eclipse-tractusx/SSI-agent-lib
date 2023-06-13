@@ -60,9 +60,9 @@ public class JWSSignature2020Builder {
 
     Map<String, Object> map =
         Map.of(
-          JWSSignature2020.TYPE,
-          JWSSignature2020.JWS_VERIFICATION_KEY_2020,
-          JWSSignature2020.PROOF_PURPOSE,
+            JWSSignature2020.TYPE,
+            JWSSignature2020.JWS_VERIFICATION_KEY_2020,
+            JWSSignature2020.PROOF_PURPOSE,
             proofPurpose,
             JWSSignature2020.JWS,
             jws,

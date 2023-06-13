@@ -23,7 +23,6 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
@@ -74,10 +73,11 @@ public class VC {
             .type(credential.getTypes());
 
     // Ed25519 Proof Builder
-    final LinkedDataProofGenerator generator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
+    final LinkedDataProofGenerator generator =
+        LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
     final Ed25519Signature2020 proof =
-        (Ed25519Signature2020) generator.createProof(
-        builder.build(), URI.create(issuer + "#key-1"), privateKey);
+        (Ed25519Signature2020)
+            generator.createProof(builder.build(), URI.create(issuer + "#key-1"), privateKey);
 
     // Adding Proof to VC
     builder.proof(proof);
@@ -86,29 +86,29 @@ public class VC {
   }
 
   public static VerifiableCredential createVCWithJWSProof(
-    VerifiableCredential credential, byte[] privateKey, Did issuer) {
+      VerifiableCredential credential, byte[] privateKey, Did issuer) {
 
-  // VC Builder
-  final VerifiableCredentialBuilder builder =
-      new VerifiableCredentialBuilder()
-          .context(credential.getContext())
-          .id(credential.getId())
-          .issuer(issuer.toUri())
-          .issuanceDate(Instant.now())
-          .credentialSubject(credential.getCredentialSubject())
-          .expirationDate(credential.getExpirationDate())
-          .type(credential.getTypes());
+    // VC Builder
+    final VerifiableCredentialBuilder builder =
+        new VerifiableCredentialBuilder()
+            .context(credential.getContext())
+            .id(credential.getId())
+            .issuer(issuer.toUri())
+            .issuanceDate(Instant.now())
+            .credentialSubject(credential.getCredentialSubject())
+            .expirationDate(credential.getExpirationDate())
+            .type(credential.getTypes());
 
-  // JWS Proof Builder
-  final LinkedDataProofGenerator generator = LinkedDataProofGenerator.newInstance(SignatureType.JWS);
-  final JWSSignature2020 proof =
-      (JWSSignature2020) generator.createProof(
-      builder.build(), URI.create(issuer + "#key-1"), privateKey);
+    // JWS Proof Builder
+    final LinkedDataProofGenerator generator =
+        LinkedDataProofGenerator.newInstance(SignatureType.JWS);
+    final JWSSignature2020 proof =
+        (JWSSignature2020)
+            generator.createProof(builder.build(), URI.create(issuer + "#key-1"), privateKey);
 
-  // Adding Proof to VC
-  builder.proof(proof);
+    // Adding Proof to VC
+    builder.proof(proof);
 
-  return builder.build();
-}
-
+    return builder.build();
+  }
 }

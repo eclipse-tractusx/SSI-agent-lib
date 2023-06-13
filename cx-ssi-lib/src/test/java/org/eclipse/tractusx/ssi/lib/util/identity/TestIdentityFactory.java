@@ -72,24 +72,21 @@ public class TestIdentityFactory {
       KeyPair keyPair = ed25519.generateKeyPair();
       PublicKey PubKey = keyPair.getPublic();
       PrivateKey PivKey = keyPair.getPrivate();
-      
-      
+
       // Ed25519PrivateKeyParameters privateKeyParameters =
       // new Ed25519PrivateKeyParameters (PivKey.getEncoded(),0);
       // Ed25519PublicKeyParameters publicKeyParameters =
       //     new  Ed25519PublicKeyParameters(PubKey.getEncoded(),0);
 
       Ed25519PrivateKeyParameters privateKeyParameters =
-      (Ed25519PrivateKeyParameters) PrivateKeyFactory.createKey(PivKey.getEncoded());
+          (Ed25519PrivateKeyParameters) PrivateKeyFactory.createKey(PivKey.getEncoded());
       Ed25519PublicKeyParameters publicKeyParameters =
-      (Ed25519PublicKeyParameters) PublicKeyFactory.createKey(PubKey.getEncoded());
+          (Ed25519PublicKeyParameters) PublicKeyFactory.createKey(PubKey.getEncoded());
 
       publicKey = publicKeyParameters.getEncoded();
 
       privateKey = privateKeyParameters.getEncoded();
     }
-
-   
 
     System.out.println(new String(publicKey));
     final MultibaseString publicKeyMultiBase = MultibaseFactory.create(publicKey);
@@ -97,7 +94,7 @@ public class TestIdentityFactory {
 
     final Ed25519VerificationMethodBuilder ed25519VerificationKey2020Builder =
         new Ed25519VerificationMethodBuilder();
-    
+
     final Ed25519VerificationMethod ed25519VerificationMethod =
         ed25519VerificationKey2020Builder
             .id(URI.create(did + "#key-1"))
@@ -105,17 +102,18 @@ public class TestIdentityFactory {
             .publicKeyMultiBase(publicKeyMultiBase)
             .build();
 
-
-    //JWK 
-    JsonWebKey jwk = JsonWebKey.fromED21559("key-2",publicKey, privateKey);
+    // JWK
+    JsonWebKey jwk = JsonWebKey.fromED21559("key-2", publicKey, privateKey);
 
     final JWKVerificationMethod jwkVerificationMethod =
-           new JWKVerificationMethodBuilder().did(did).jwk(jwk).build();
-
+        new JWKVerificationMethodBuilder().did(did).jwk(jwk).build();
 
     final DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();
     final DidDocument didDocument =
-        didDocumentBuilder.id(did.toUri()).verificationMethods(List.of(ed25519VerificationMethod,jwkVerificationMethod)).build();
+        didDocumentBuilder
+            .id(did.toUri())
+            .verificationMethods(List.of(ed25519VerificationMethod, jwkVerificationMethod))
+            .build();
 
     return new TestIdentity(did, didDocument, publicKey, privateKey);
   }

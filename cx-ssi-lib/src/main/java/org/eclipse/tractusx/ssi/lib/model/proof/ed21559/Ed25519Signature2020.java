@@ -23,12 +23,10 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
-
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
-
 
 /**
  * E.g. "proof": { "type": "Ed25519Signature2020", "created": "2021-11-13T18:19:39Z",

@@ -19,8 +19,18 @@
 
 package org.eclipse.tractusx.ssi.lib.proof.types.jws;
 
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSObject;
+import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.Payload;
+import com.nimbusds.jose.crypto.Ed25519Verifier;
+import com.nimbusds.jose.jwk.Curve;
+import com.nimbusds.jose.jwk.OctetKeyPair;
+import com.nimbusds.jose.util.Base64URL;
 import java.net.URI;
 import java.text.ParseException;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
@@ -35,17 +45,6 @@ import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.proof.IVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
-
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JWSObject;
-import com.nimbusds.jose.JWSVerifier;
-import com.nimbusds.jose.Payload;
-import com.nimbusds.jose.crypto.Ed25519Verifier;
-import com.nimbusds.jose.jwk.Curve;
-import com.nimbusds.jose.jwk.OctetKeyPair;
-import com.nimbusds.jose.util.Base64URL;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 
 @RequiredArgsConstructor
 public class JWSProofVerifier implements IVerifier {
@@ -62,7 +61,7 @@ public class JWSProofVerifier implements IVerifier {
     didDocumentResolver = didDocumentResolverRegistry.get(issuerDid.getMethod());
 
     final DidDocument document = didDocumentResolver.resolve(issuerDid);
-   
+
     final Proof proof = credential.getProof();
     if (!proof.getType().equals(JWSSignature2020.JWS_VERIFICATION_KEY_2020)) {
       throw new UnsupportedSignatureTypeException(proof.getType());
@@ -72,22 +71,21 @@ public class JWSProofVerifier implements IVerifier {
 
     final URI verificationMethodId = jwsSignature2020.getVerificationMethod();
 
-    final JWKVerificationMethod key = document.getVerificationMethods().stream()
-        .filter(v -> v.getId().equals(verificationMethodId))
-        .filter(JWKVerificationMethod::isInstance)
-        .map(JWKVerificationMethod::new)
-        .findFirst()
-        .orElseThrow();
-   
+    final JWKVerificationMethod key =
+        document.getVerificationMethods().stream()
+            .filter(v -> v.getId().equals(verificationMethodId))
+            .filter(JWKVerificationMethod::isInstance)
+            .map(JWKVerificationMethod::new)
+            .findFirst()
+            .orElseThrow();
+
     var x = Base64URL.from(key.getPublicKeyJwk().getX());
 
-    var keyPair = new OctetKeyPair.Builder(
-         Curve.Ed25519,x)
-         .build();
+    var keyPair = new OctetKeyPair.Builder(Curve.Ed25519, x).build();
 
     Payload payload = new Payload(hashedLinkedData.getValue());
     JWSObject jws;
-    
+
     try {
       jws = JWSObject.parse(jwsSignature2020.getJws(), payload);
     } catch (ParseException e) {
@@ -111,9 +109,7 @@ public class JWSProofVerifier implements IVerifier {
   @SneakyThrows
   public boolean verify(HashedLinkedData hashedLinkedData, byte[] signature, byte[] publicKey) {
 
-    var keyPair = new OctetKeyPair.Builder(
-        Curve.Ed25519, Base64URL.encode(publicKey))
-        .build();
+    var keyPair = new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey)).build();
     JWSVerifier verifier = (JWSVerifier) new Ed25519Verifier(keyPair.toPublicJWK());
     Payload payload = new Payload(hashedLinkedData.getValue());
     JWSObject jws;

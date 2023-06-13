@@ -31,14 +31,13 @@ public class OctetKeyPairFactory {
         .build();
   }
 
-  public OctetKeyPair fromKeyPair(byte []publicKey,byte[] privateKey) {
+  public OctetKeyPair fromKeyPair(byte[] publicKey, byte[] privateKey) {
     return new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey))
         .d(Base64URL.encode(privateKey))
         .build();
   }
-  
 
-  public OctetKeyPair fromKeyPairWithKeyID(String keyID,byte []publicKey,byte[] privateKey) {
+  public OctetKeyPair fromKeyPairWithKeyID(String keyID, byte[] publicKey, byte[] privateKey) {
     return new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey))
         .d(Base64URL.encode(privateKey))
         .keyID(keyID)

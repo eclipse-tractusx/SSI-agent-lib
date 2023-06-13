@@ -5,9 +5,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import lombok.SneakyThrows;
-
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
-import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
@@ -17,8 +15,7 @@ import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
 public class TestCredentialFactory {
 
   @SneakyThrows
-  public static VerifiableCredential createCredential(
-      TestIdentity issuer, Proof proof) {
+  public static VerifiableCredential createCredential(TestIdentity issuer, Proof proof) {
     final VerifiableCredentialBuilder verifiableCredentialBuilder =
         new VerifiableCredentialBuilder();
 
@@ -37,18 +34,18 @@ public class TestCredentialFactory {
   }
 
   public static VerifiableCredential attachProof(
-    VerifiableCredential verifiableCredential, Proof proof) {
-      final VerifiableCredentialBuilder verifiableCredentialBuilder =
+      VerifiableCredential verifiableCredential, Proof proof) {
+    final VerifiableCredentialBuilder verifiableCredentialBuilder =
         new VerifiableCredentialBuilder();
 
-  return verifiableCredentialBuilder
-      .id(verifiableCredential.getId())
-      .type(verifiableCredential.getTypes())
-      .issuer(verifiableCredential.getIssuer())
-      .expirationDate(verifiableCredential.getExpirationDate())
-      .issuanceDate(verifiableCredential.getIssuanceDate())
-      .proof(proof)
-      .credentialSubject(verifiableCredential.getCredentialSubject())
-      .build();
-}
+    return verifiableCredentialBuilder
+        .id(verifiableCredential.getId())
+        .type(verifiableCredential.getTypes())
+        .issuer(verifiableCredential.getIssuer())
+        .expirationDate(verifiableCredential.getExpirationDate())
+        .issuanceDate(verifiableCredential.getIssuanceDate())
+        .proof(proof)
+        .credentialSubject(verifiableCredential.getCredentialSubject())
+        .build();
+  }
 }

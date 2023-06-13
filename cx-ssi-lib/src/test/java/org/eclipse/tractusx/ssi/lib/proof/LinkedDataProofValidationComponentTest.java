@@ -22,7 +22,6 @@ package org.eclipse.tractusx.ssi.lib.proof;
 import java.io.IOException;
 import java.net.URI;
 import java.security.NoSuchAlgorithmException;
-
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
@@ -38,78 +37,86 @@ import org.junit.jupiter.api.Test;
 
 public class LinkedDataProofValidationComponentTest {
 
-    private LinkedDataProofValidation linkedDataProofValidation;
-    private LinkedDataProofGenerator linkedDataProofGenerator;
+  private LinkedDataProofValidation linkedDataProofValidation;
+  private LinkedDataProofGenerator linkedDataProofGenerator;
 
-    private TestIdentity credentialIssuer;
-    private TestDidDocumentResolver didDocumentResolver;
+  private TestIdentity credentialIssuer;
+  private TestDidDocumentResolver didDocumentResolver;
 
-    @BeforeEach
-    public void setup() {
-    }
+  @BeforeEach
+  public void setup() {}
 
-    @Test
-    public void testEd21559ProofGenerationAndVerification() throws IOException {
-        SsiLibrary.initialize();
-        this.didDocumentResolver = new TestDidDocumentResolver();
+  @Test
+  public void testEd21559ProofGenerationAndVerification() throws IOException {
+    SsiLibrary.initialize();
+    this.didDocumentResolver = new TestDidDocumentResolver();
 
-        credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys(false);
-        didDocumentResolver.register(credentialIssuer);
+    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys(true);
+    didDocumentResolver.register(credentialIssuer);
 
-        // Generator
-        linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
+    // Generator
+    linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
 
-        // Verification
-        linkedDataProofValidation = LinkedDataProofValidation.newInstance(SignatureType.ED21559,didDocumentResolver.withRegistry());
+    // Verification
+    linkedDataProofValidation =
+        LinkedDataProofValidation.newInstance(
+            SignatureType.ED21559, didDocumentResolver.withRegistry());
 
-        // prepare key
-        final URI verificationMethod = credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
-        final byte[] privateKey = credentialIssuer.getPrivateKey();
+    // prepare key
+    final URI verificationMethod =
+        credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
+    final byte[] privateKey = credentialIssuer.getPrivateKey();
 
-        final VerifiableCredential credential = TestCredentialFactory.createCredential(credentialIssuer, null);
+    final VerifiableCredential credential =
+        TestCredentialFactory.createCredential(credentialIssuer, null);
 
-        final Proof proof = linkedDataProofGenerator.createProof(
-                credential, verificationMethod, privateKey);
+    final Proof proof =
+        linkedDataProofGenerator.createProof(credential, verificationMethod, privateKey);
 
-        final VerifiableCredential credentialWithProof =   TestCredentialFactory.attachProof(credential,
-                proof);
+    final VerifiableCredential credentialWithProof =
+        TestCredentialFactory.attachProof(credential, proof);
 
-        var isOk = linkedDataProofValidation.verifiyProof(credentialWithProof);
+    var isOk = linkedDataProofValidation.verifiyProof(credentialWithProof);
 
-        Assertions.assertTrue(isOk);
-    }
+    Assertions.assertTrue(isOk);
+  }
 
-    @Test
-    public void testJWSproofGenerationAndVerification()
-            throws IOException, UnsupportedSignatureTypeException, NoSuchAlgorithmException {
-        SsiLibrary.initialize();
-        this.didDocumentResolver = new TestDidDocumentResolver();
+  @Test
+  public void testJWSproofGenerationAndVerification()
+      throws IOException, UnsupportedSignatureTypeException, NoSuchAlgorithmException {
+    SsiLibrary.initialize();
+    this.didDocumentResolver = new TestDidDocumentResolver();
 
-        credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys(false);
-        didDocumentResolver.register(credentialIssuer);
+    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys(true);
+    didDocumentResolver.register(credentialIssuer);
 
-        // Generator
-        linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.JWS);
-        // Verifier
-        linkedDataProofValidation = LinkedDataProofValidation.newInstance(SignatureType.JWS,
-                didDocumentResolver.withRegistry());
+    // Generator
+    linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.JWS);
+    // Verifier
+    linkedDataProofValidation =
+        LinkedDataProofValidation.newInstance(
+            SignatureType.JWS, didDocumentResolver.withRegistry());
 
-        // prepare key
-        // 0 == ED21559
-        // 1 == JWS
-        final URI verificationMethod = credentialIssuer.getDidDocument().getVerificationMethods().get(1).getId();
+    // prepare key
+    // 0 == ED21559
+    // 1 == JWS
+    final URI verificationMethod =
+        credentialIssuer.getDidDocument().getVerificationMethods().get(1).getId();
 
-        final byte[] privateKey = credentialIssuer.getPrivateKey();
+    final byte[] privateKey = credentialIssuer.getPrivateKey();
 
-        final VerifiableCredential credential = TestCredentialFactory.createCredential(credentialIssuer, null);
+    final VerifiableCredential credential =
+        TestCredentialFactory.createCredential(credentialIssuer, null);
 
-        final JWSSignature2020 proof = (JWSSignature2020) linkedDataProofGenerator.createProof(
-                credential, verificationMethod, privateKey);
+    final JWSSignature2020 proof =
+        (JWSSignature2020)
+            linkedDataProofGenerator.createProof(credential, verificationMethod, privateKey);
 
-        final VerifiableCredential credentialWithProof = TestCredentialFactory.attachProof(credential, proof);
-         
-        var isOk = linkedDataProofValidation.verifiyProof(credentialWithProof);
-        
-        Assertions.assertTrue(isOk);
-    }
+    final VerifiableCredential credentialWithProof =
+        TestCredentialFactory.attachProof(credential, proof);
+
+    var isOk = linkedDataProofValidation.verifiyProof(credentialWithProof);
+
+    Assertions.assertTrue(isOk);
+  }
 }

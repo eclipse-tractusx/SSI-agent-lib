@@ -26,13 +26,11 @@ import java.util.Objects;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
-
 /**
-     E.g. "proof": {"type": "JsonWebSignature2020",
-      "created": "2019-12-11T03:50:55Z",
-      "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..MJ5GwWRMsadCyLNXU_flgJtsS32584MydBxBuygps_cM0sbU3abTEOMyUvmLNcKOwOBE1MfDoB1_YY425W3sAg",
-      "proofPurpose": "assertionMethod",
-      "verificationMethod": "https://example.com/issuer/123#ovsDKYBjFemIy8DVhc-w2LSi8CvXMw2AYDzHj04yxkc"}
+ * E.g. "proof": {"type": "JsonWebSignature2020", "created": "2019-12-11T03:50:55Z", "jws":
+ * "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..MJ5GwWRMsadCyLNXU_flgJtsS32584MydBxBuygps_cM0sbU3abTEOMyUvmLNcKOwOBE1MfDoB1_YY425W3sAg",
+ * "proofPurpose": "assertionMethod", "verificationMethod":
+ * "https://example.com/issuer/123#ovsDKYBjFemIy8DVhc-w2LSi8CvXMw2AYDzHj04yxkc"}
  */
 public class JWSSignature2020 extends Proof {
 
@@ -67,7 +65,7 @@ public class JWSSignature2020 extends Proof {
   }
 
   public String getJws() {
-    return  (String)this.get(JWS);
+    return (String) this.get(JWS);
   }
 
   public URI getVerificationMethod() {
