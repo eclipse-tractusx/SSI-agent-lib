@@ -184,7 +184,7 @@ public static VerifiableCredential createVCWithoutProof() {
 
 ```
 
-5. To Generate VerifiableCredential with proof:
+5. To Generate VerifiableCredential with ED21559/JWS proof:
 
 
 ```java
@@ -202,27 +202,56 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofGenerator;
 
 
-public static VerifiableCredential createVCWithProof(VerifiableCredential credential, byte[] privateKey, Did issuer){
+ public static VerifiableCredential createVCWithED21559Proof(
+      VerifiableCredential credential, byte[] privateKey, Did issuer) {
 
-    //VC Builder
+    // VC Builder
     final VerifiableCredentialBuilder builder =
-    new VerifiableCredentialBuilder()
-        .context(credential.getContext())
-        .id(credential.getId())
-        .issuer(issuer.toUri())
-        .issuanceDate(Instant.now())
-        .credentialSubject(credential.getCredentialSubject())
-        .expirationDate(credential.getExpirationDate())
-        .type(credential.getTypes());
+        new VerifiableCredentialBuilder()
+            .context(credential.getContext())
+            .id(credential.getId())
+            .issuer(issuer.toUri())
+            .issuanceDate(Instant.now())
+            .credentialSubject(credential.getCredentialSubject())
+            .expirationDate(credential.getExpirationDate())
+            .type(credential.getTypes());
 
-         //Ed25519 Proof Builder
-        final LinkedDataProofGenerator generator = LinkedDataProofGenerator.create();
-        final Ed25519Signature2020 proof =  generator.createEd25519Signature2020(builder.build(), URI.create(issuer + "#key-1"), privateKey);
-    
-        //Adding Proof to VC
-        builder.proof(proof);
+    // Ed25519 Proof Builder
+    final LinkedDataProofGenerator generator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
+    final Ed25519Signature2020 proof =
+        (Ed25519Signature2020) generator.createProof(
+        builder.build(), URI.create(issuer + "#key-1"), privateKey);
 
-        return builder.build();
+    // Adding Proof to VC
+    builder.proof(proof);
+
+    return builder.build();
+  }
+
+  public static VerifiableCredential createVCWithJWSProof(
+    VerifiableCredential credential, byte[] privateKey, Did issuer) {
+
+  // VC Builder
+  final VerifiableCredentialBuilder builder =
+      new VerifiableCredentialBuilder()
+          .context(credential.getContext())
+          .id(credential.getId())
+          .issuer(issuer.toUri())
+          .issuanceDate(Instant.now())
+          .credentialSubject(credential.getCredentialSubject())
+          .expirationDate(credential.getExpirationDate())
+          .type(credential.getTypes());
+
+  // JWS Proof Builder
+  final LinkedDataProofGenerator generator = LinkedDataProofGenerator.newInstance(SignatureType.JWS);
+  final JWSSignature2020 proof =
+      (JWSSignature2020) generator.createProof(
+      builder.build(), URI.create(issuer + "#key-1"), privateKey);
+
+  // Adding Proof to VC
+  builder.proof(proof);
+
+  return builder.build();
 }
 
 
@@ -339,21 +368,37 @@ import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
 import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistryImpl;
+import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 
-public static boolean verifyLD(VerifiableCredential verifiableCredential) {
-     // DID Resolver Constracture params
-     DidWebParser didParser = new DidWebParser();
-     var httpClient = HttpClient.newHttpClient();
-     var enforceHttps = false;
- 
-     var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
-     didDocumentResolverRegistry.register(
-         new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
+ public static boolean verifyED21559LD(VerifiableCredential verifiableCredential) {
+    // DID Resolver Constracture params
+    DidWebParser didParser = new DidWebParser();
+    var httpClient = HttpClient.newHttpClient();
+    var enforceHttps = false;
 
-    LinkedDataProofValidation proofValidation = LinkedDataProofValidation.newInstance(didDocumentResolverRegistry);
-    return proofValidation.checkProof(verifiableCredential);
-   
-}
+    var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
+    didDocumentResolverRegistry.register(
+        new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
+
+    LinkedDataProofValidation proofValidation =
+        LinkedDataProofValidation.newInstance(SignatureType.ED21559,didDocumentResolverRegistry);
+    return proofValidation.verifiyProof(verifiableCredential);
+  }
+
+  public static boolean verifyJWSLD(VerifiableCredential verifiableCredential) {
+    // DID Resolver Constracture params
+    DidWebParser didParser = new DidWebParser();
+    var httpClient = HttpClient.newHttpClient();
+    var enforceHttps = false;
+
+    var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
+    didDocumentResolverRegistry.register(
+        new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
+
+    LinkedDataProofValidation proofValidation =
+        LinkedDataProofValidation.newInstance(SignatureType.JWS,didDocumentResolverRegistry);
+    return proofValidation.verifiyProof(verifiableCredential);
+  }
 ```
 
 10. To Validate JWT expiry date and audience:

@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
+import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
@@ -58,7 +59,7 @@ public class VC {
     return credentialWithoutProof;
   }
 
-  public static VerifiableCredential createVCWithProof(
+  public static VerifiableCredential createVCWithED21559Proof(
       VerifiableCredential credential, byte[] privateKey, Did issuer) {
 
     // VC Builder
@@ -83,4 +84,31 @@ public class VC {
 
     return builder.build();
   }
+
+  public static VerifiableCredential createVCWithJWSProof(
+    VerifiableCredential credential, byte[] privateKey, Did issuer) {
+
+  // VC Builder
+  final VerifiableCredentialBuilder builder =
+      new VerifiableCredentialBuilder()
+          .context(credential.getContext())
+          .id(credential.getId())
+          .issuer(issuer.toUri())
+          .issuanceDate(Instant.now())
+          .credentialSubject(credential.getCredentialSubject())
+          .expirationDate(credential.getExpirationDate())
+          .type(credential.getTypes());
+
+  // JWS Proof Builder
+  final LinkedDataProofGenerator generator = LinkedDataProofGenerator.newInstance(SignatureType.JWS);
+  final JWSSignature2020 proof =
+      (JWSSignature2020) generator.createProof(
+      builder.build(), URI.create(issuer + "#key-1"), privateKey);
+
+  // Adding Proof to VC
+  builder.proof(proof);
+
+  return builder.build();
+}
+
 }
