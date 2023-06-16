@@ -1,0 +1,27 @@
+@startuml Create and parse DID
+interface DidFactory {
+    Did : create(DidMethod method, DidMethodOptions options)
+}
+class DidWebFactory implements DidFactory {
+    Did : create(DidMethod method, DidMethodOptions options)
+}
+interface DidMethod<T extends CreateDidOptions> {
+    T: newCreateOptions()
+}
+class DidWebMethod<CreateDidWebOptions> implements DidMethod {
+    + CreateDidWebOptions: newCreateOptions()
+}
+
+interface CreateDidOptions
+class CreateDidWebOptions implements CreateDidOptions
+
+
+class Did {
+    -DidDocument didDoc
+    {static} Did : +parse(String didString)
+}
+class DidDocument {
+}
+DidWebFactory --> Did : creates
+Did --> DidDocument : relates to
+@endml

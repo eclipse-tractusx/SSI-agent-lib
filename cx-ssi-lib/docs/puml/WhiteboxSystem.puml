@@ -1,0 +1,39 @@
+@startuml SystemScope
+
+component "SSI-Lib" as LIB {
+    component resolver
+    component jwt
+    component model
+    component proof
+    component serialization
+    component util
+    note right: should this be part\nof serialization?
+    component validation
+    component exception
+    component did
+    note right: can we merge this with resolver?
+    component base
+    note right: should be part of crypt
+    component crypt
+    note right: duplicate of ED25519 Key in model, can this be merged in model?
+}
+
+
+
+interface DidDocumentResolver
+resolver --- DidDocumentResolver
+
+interface LinkedDataProofGenerator
+interface validateLdProofValidation
+proof --- LinkedDataProofGenerator
+proof --- validateLdProofValidation
+
+interface SignedJwtVerifier
+jwt --- SignedJwtVerifier
+
+interface SignedJwtFactory
+jwt --- SignedJwtFactory
+
+interface JsonLdValidator
+validation --- JsonLdValidator
+@enduml
