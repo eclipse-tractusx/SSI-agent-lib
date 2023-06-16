@@ -1,0 +1,20 @@
+@startuml
+skinparam participantPadding 10
+
+actor User
+
+participant "KeyPairGeneratorSpi.Ed25519" as KPG
+participant "SecureRandom" as Random
+participant "KeyPair" as KP
+participant "PrivateKeyFactory" as PKFactory
+participant "PublicKeyFactory" as PubKFactory
+
+User -> KPG: ed25519 = new KeyPairGeneratorSpi.Ed25519()
+User -> KPG: ed25519.initialize(256, Random)
+User -> KPG: keyPair = ed25519.generateKeyPair()
+User -> KP: keyPair.getPublic()
+User -> KP: keyPair.getPrivate()
+User -> PKFactory: PrivateKeyFactory.createKey(PivKey.getEncoded())
+User -> PubKFactory: PublicKeyFactory.createKey(PubKey.getEncoded())
+
+@enduml
