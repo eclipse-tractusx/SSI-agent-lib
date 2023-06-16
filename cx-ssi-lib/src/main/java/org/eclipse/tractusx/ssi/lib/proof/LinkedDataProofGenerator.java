@@ -23,6 +23,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
+import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
@@ -41,13 +42,16 @@ import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofSigner;
 @RequiredArgsConstructor
 public class LinkedDataProofGenerator {
 
-  public static LinkedDataProofGenerator newInstance(SignatureType type) {
+  public static LinkedDataProofGenerator newInstance(SignatureType type)
+      throws UnsupportedSignatureTypeException {
     if (type == SignatureType.ED21559) {
       return new LinkedDataProofGenerator(
           type, new LinkedDataHasher(), new LinkedDataTransformer(), new ED21559ProofSigner());
-    } else {
+    } else if (type == SignatureType.JWS) {
       return new LinkedDataProofGenerator(
           type, new LinkedDataHasher(), new LinkedDataTransformer(), new JWSProofSigner());
+    } else {
+      throw new UnsupportedSignatureTypeException("Invalide signautre type");
     }
   }
 

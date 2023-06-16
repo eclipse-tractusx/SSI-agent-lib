@@ -26,7 +26,7 @@ class JsonWebKey2020BuilderTest {
     Ed25519Key publicKey = Ed25519Key.asPrivateKey(octetKeyPair.getDecodedX());
 
     // JWK
-    JsonWebKey jwk = JsonWebKey.fromED21559(keyId, publicKey.getEncoded(), privateKey.getEncoded());
+    JsonWebKey jwk = JsonWebKey.fromED25519(keyId, publicKey.getEncoded(), privateKey.getEncoded());
 
     final JWKVerificationMethodBuilder builder = new JWKVerificationMethodBuilder();
     final JWKVerificationMethod jwk2020VerificationMethod = builder.did(did).jwk(jwk).build();

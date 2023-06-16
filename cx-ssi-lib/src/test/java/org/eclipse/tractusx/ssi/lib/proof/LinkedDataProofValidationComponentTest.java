@@ -47,7 +47,8 @@ public class LinkedDataProofValidationComponentTest {
   public void setup() {}
 
   @Test
-  public void testEd21559ProofGenerationAndVerification() throws IOException {
+  public void testEd21559ProofGenerationAndVerification()
+      throws IOException, UnsupportedSignatureTypeException {
     SsiLibrary.initialize();
     this.didDocumentResolver = new TestDidDocumentResolver();
 
@@ -63,6 +64,8 @@ public class LinkedDataProofValidationComponentTest {
             SignatureType.ED21559, didDocumentResolver.withRegistry());
 
     // prepare key
+    // 0 == ED21559
+    // 1 == JWS
     final URI verificationMethod =
         credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
     final byte[] privateKey = credentialIssuer.getPrivateKey();

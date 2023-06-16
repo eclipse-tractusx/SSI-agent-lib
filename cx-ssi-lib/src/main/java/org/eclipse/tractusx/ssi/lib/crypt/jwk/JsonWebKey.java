@@ -29,7 +29,7 @@ import org.eclipse.tractusx.ssi.lib.did.resolver.OctetKeyPairFactory;
 public class JsonWebKey {
   private final OctetKeyPair keyPair;
 
-  public static JsonWebKey fromED21559(String id, byte[] publicKey, byte[] privateKey)
+  public static JsonWebKey fromED25519(String id, byte[] publicKey, byte[] privateKey)
       throws IOException {
     OctetKeyPairFactory keyPairFactory = new OctetKeyPairFactory();
     OctetKeyPair keyOctetKeyPair = keyPairFactory.fromKeyPairWithKeyID(id, publicKey, privateKey);

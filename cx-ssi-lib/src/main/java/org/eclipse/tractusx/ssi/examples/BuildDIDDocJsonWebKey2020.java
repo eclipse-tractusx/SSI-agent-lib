@@ -42,7 +42,7 @@ public class BuildDIDDocJsonWebKey2020 {
 
     // JWK
     JsonWebKey jwk =
-        JsonWebKey.fromED21559(
+        JsonWebKey.fromED25519(
             octetKeyPair.getKeyID(), publicKey.getEncoded(), privateKey.getEncoded());
 
     // Building Verification Methods:

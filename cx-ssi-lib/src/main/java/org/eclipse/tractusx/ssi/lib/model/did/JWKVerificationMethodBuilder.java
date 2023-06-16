@@ -50,8 +50,8 @@ public class JWKVerificationMethodBuilder {
             this.did.toUri(),
             JWKVerificationMethod.PUBLIC_KEY_JWK,
             Map.of(
-                "kty", jwk.getKeyType(),
-                "crv", jwk.getCurv(),
-                "x", jwk.getX())));
+                JWKVerificationMethod.JWK_KEK_TYPE, jwk.getKeyType(),
+                JWKVerificationMethod.JWk_CURVE, jwk.getCurv(),
+                JWKVerificationMethod.JWK_X, jwk.getX())));
   }
 }

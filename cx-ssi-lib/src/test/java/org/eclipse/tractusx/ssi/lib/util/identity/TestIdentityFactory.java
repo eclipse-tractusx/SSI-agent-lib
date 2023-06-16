@@ -103,7 +103,7 @@ public class TestIdentityFactory {
             .build();
 
     // JWK
-    JsonWebKey jwk = JsonWebKey.fromED21559("key-2", publicKey, privateKey);
+    JsonWebKey jwk = JsonWebKey.fromED25519("key-2", publicKey, privateKey);
 
     final JWKVerificationMethod jwkVerificationMethod =
         new JWKVerificationMethodBuilder().did(did).jwk(jwk).build();
