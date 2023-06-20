@@ -23,6 +23,9 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
@@ -60,8 +63,8 @@ public class VC {
   }
 
   public static VerifiableCredential createVCWithED21559Proof(
-      VerifiableCredential credential, byte[] privateKey, Did issuer)
-      throws UnsupportedSignatureTypeException {
+      VerifiableCredential credential, IPrivateKey privateKey, Did issuer)
+      throws UnsupportedSignatureTypeException, SsiException, InvalidePrivateKeyFormat {
 
     // VC Builder
     final VerifiableCredentialBuilder builder =
@@ -88,8 +91,8 @@ public class VC {
   }
 
   public static VerifiableCredential createVCWithJWSProof(
-      VerifiableCredential credential, byte[] privateKey, Did issuer)
-      throws UnsupportedSignatureTypeException {
+      VerifiableCredential credential, IPrivateKey privateKey, Did issuer)
+      throws UnsupportedSignatureTypeException, SsiException, InvalidePrivateKeyFormat {
 
     // VC Builder
     final VerifiableCredentialBuilder builder =

@@ -5,8 +5,7 @@ import java.net.URI;
 import java.util.List;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
-import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
-import org.eclipse.tractusx.ssi.lib.did.resolver.OctetKeyPairFactory;
+import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtVerifier;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
@@ -53,13 +52,13 @@ class SerializedJwtPresentationFactoryImplTest {
     // prepare key
     final URI verificationMethod =
         credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
-    final byte[] privateKey = credentialIssuer.getPrivateKey();
 
     final VerifiableCredential credential =
         TestCredentialFactory.createCredential(credentialIssuer, null);
 
     final Proof proof =
-        linkedDataProofGenerator.createProof(credential, verificationMethod, privateKey);
+        linkedDataProofGenerator.createProof(
+            credential, verificationMethod, credentialIssuer.getPrivateKey());
 
     final VerifiableCredential credentialWithProof =
         TestCredentialFactory.createCredential(credentialIssuer, proof);
@@ -76,7 +75,7 @@ class SerializedJwtPresentationFactoryImplTest {
             credentialIssuer.getDid(),
             List.of(credentialWithProof),
             "test-audience",
-            Ed25519Key.asPrivateKey(credentialIssuer.getPrivateKey()));
+            credentialIssuer.getPrivateKey());
 
     Assertions.assertNotNull(presentation);
     Assertions.assertDoesNotThrow(() -> jwtVerifier.verify(presentation));

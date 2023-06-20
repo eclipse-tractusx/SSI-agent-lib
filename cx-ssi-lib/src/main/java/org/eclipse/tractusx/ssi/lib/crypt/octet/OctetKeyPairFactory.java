@@ -17,29 +17,33 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.did.resolver;
+package org.eclipse.tractusx.ssi.lib.crypt.octet;
 
 import com.nimbusds.jose.jwk.Curve;
 import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.util.Base64URL;
+import java.io.IOException;
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
+import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 
 public class OctetKeyPairFactory {
 
-  public OctetKeyPair fromPrivateKey(byte[] privateKey) {
+  public OctetKeyPair fromPrivateKey(IPrivateKey privateKey) throws IOException {
     return new OctetKeyPair.Builder(Curve.Ed25519, new Base64URL(""))
-        .d(Base64URL.encode(privateKey))
+        .d(Base64URL.encode(privateKey.asByte()))
         .build();
   }
 
-  public OctetKeyPair fromKeyPair(byte[] publicKey, byte[] privateKey) {
-    return new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey))
-        .d(Base64URL.encode(privateKey))
+  public OctetKeyPair fromKeyPair(IPublicKey publicKey, IPrivateKey privateKey) throws IOException {
+    return new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey.asByte()))
+        .d(Base64URL.encode(privateKey.asByte()))
         .build();
   }
 
-  public OctetKeyPair fromKeyPairWithKeyID(String keyID, byte[] publicKey, byte[] privateKey) {
-    return new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey))
-        .d(Base64URL.encode(privateKey))
+  public OctetKeyPair fromKeyPairWithKeyID(
+      String keyID, IPublicKey publicKey, IPrivateKey privateKey) throws IOException {
+    return new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey.asByte()))
+        .d(Base64URL.encode(privateKey.asByte()))
         .keyID(keyID)
         .build();
   }

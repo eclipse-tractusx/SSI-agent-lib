@@ -20,8 +20,10 @@
 package org.eclipse.tractusx.ssi.lib.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +81,24 @@ public class TestResourceUtil {
 
   public static byte[] getPrivateKeyEd25519() {
     return readPemResource(PRIVATE_KEY_ED25519);
+  }
+
+  public static String getPublicKeyEd25519AsString() {
+    try {
+      return new String(
+          readResource(PUBLIC_KEY_ED25519).readAllBytes(), StandardCharsets.ISO_8859_1);
+    } catch (IOException e) {
+      throw new RuntimeException(e.getCause());
+    }
+  }
+
+  public static String getPrivateKeyEd25519AsString() {
+    try {
+      return new String(
+          readResource(PRIVATE_KEY_ED25519).readAllBytes(), StandardCharsets.ISO_8859_1);
+    } catch (IOException e) {
+      throw new RuntimeException(e.getCause());
+    }
   }
 
   @SneakyThrows

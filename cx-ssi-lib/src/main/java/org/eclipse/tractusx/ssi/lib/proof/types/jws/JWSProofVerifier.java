@@ -31,6 +31,7 @@ import java.net.URI;
 import java.text.ParseException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
@@ -107,9 +108,10 @@ public class JWSProofVerifier implements IVerifier {
   }
 
   @SneakyThrows
-  public boolean verify(HashedLinkedData hashedLinkedData, byte[] signature, byte[] publicKey) {
+  public boolean verify(HashedLinkedData hashedLinkedData, byte[] signature, IPublicKey publicKey) {
 
-    var keyPair = new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey)).build();
+    var keyPair =
+        new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey.asByte())).build();
     JWSVerifier verifier = (JWSVerifier) new Ed25519Verifier(keyPair.toPublicJWK());
     Payload payload = new Payload(hashedLinkedData.getValue());
     JWSObject jws;

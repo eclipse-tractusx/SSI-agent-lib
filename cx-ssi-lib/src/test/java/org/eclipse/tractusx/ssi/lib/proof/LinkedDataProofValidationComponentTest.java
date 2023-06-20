@@ -23,6 +23,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.security.NoSuchAlgorithmException;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
@@ -48,7 +51,8 @@ public class LinkedDataProofValidationComponentTest {
 
   @Test
   public void testEd21559ProofGenerationAndVerification()
-      throws IOException, UnsupportedSignatureTypeException {
+      throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
+          KeyGenerationException, InvalidePublicKeyFormat {
     SsiLibrary.initialize();
     this.didDocumentResolver = new TestDidDocumentResolver();
 
@@ -68,13 +72,13 @@ public class LinkedDataProofValidationComponentTest {
     // 1 == JWS
     final URI verificationMethod =
         credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
-    final byte[] privateKey = credentialIssuer.getPrivateKey();
 
     final VerifiableCredential credential =
         TestCredentialFactory.createCredential(credentialIssuer, null);
 
     final Proof proof =
-        linkedDataProofGenerator.createProof(credential, verificationMethod, privateKey);
+        linkedDataProofGenerator.createProof(
+            credential, verificationMethod, credentialIssuer.getPrivateKey());
 
     final VerifiableCredential credentialWithProof =
         TestCredentialFactory.attachProof(credential, proof);
@@ -86,11 +90,12 @@ public class LinkedDataProofValidationComponentTest {
 
   @Test
   public void testJWSproofGenerationAndVerification()
-      throws IOException, UnsupportedSignatureTypeException, NoSuchAlgorithmException {
+      throws IOException, UnsupportedSignatureTypeException, NoSuchAlgorithmException,
+          InvalidePrivateKeyFormat, KeyGenerationException, InvalidePublicKeyFormat {
     SsiLibrary.initialize();
     this.didDocumentResolver = new TestDidDocumentResolver();
 
-    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys(true);
+    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys(false);
     didDocumentResolver.register(credentialIssuer);
 
     // Generator
@@ -106,14 +111,13 @@ public class LinkedDataProofValidationComponentTest {
     final URI verificationMethod =
         credentialIssuer.getDidDocument().getVerificationMethods().get(1).getId();
 
-    final byte[] privateKey = credentialIssuer.getPrivateKey();
-
     final VerifiableCredential credential =
         TestCredentialFactory.createCredential(credentialIssuer, null);
 
     final JWSSignature2020 proof =
         (JWSSignature2020)
-            linkedDataProofGenerator.createProof(credential, verificationMethod, privateKey);
+            linkedDataProofGenerator.createProof(
+                credential, verificationMethod, credentialIssuer.getPrivateKey());
 
     final VerifiableCredential credentialWithProof =
         TestCredentialFactory.attachProof(credential, proof);

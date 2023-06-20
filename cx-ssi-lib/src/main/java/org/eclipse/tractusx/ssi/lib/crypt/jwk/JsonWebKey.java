@@ -23,18 +23,19 @@ import com.nimbusds.jose.jwk.OctetKeyPair;
 import java.io.IOException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.tractusx.ssi.lib.did.resolver.OctetKeyPairFactory;
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
+import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
+import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonWebKey {
   private final OctetKeyPair keyPair;
 
-  public static JsonWebKey fromED25519(String id, byte[] publicKey, byte[] privateKey)
-      throws IOException {
+  public JsonWebKey(String id, IPublicKey publicKey, IPrivateKey privateKey) throws IOException {
     OctetKeyPairFactory keyPairFactory = new OctetKeyPairFactory();
     OctetKeyPair keyOctetKeyPair = keyPairFactory.fromKeyPairWithKeyID(id, publicKey, privateKey);
 
-    return new JsonWebKey(keyOctetKeyPair);
+    this.keyPair = keyOctetKeyPair;
   }
 
   public String getCurv() {
