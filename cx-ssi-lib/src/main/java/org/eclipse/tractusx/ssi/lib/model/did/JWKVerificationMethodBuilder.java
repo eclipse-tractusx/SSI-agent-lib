@@ -51,7 +51,7 @@ public class JWKVerificationMethodBuilder {
             JWKVerificationMethod.PUBLIC_KEY_JWK,
             Map.of(
                 JWKVerificationMethod.JWK_KEK_TYPE, jwk.getKeyType(),
-                JWKVerificationMethod.JWk_CURVE, jwk.getCurv(),
+                JWKVerificationMethod.JWK_CURVE, jwk.getCurv(),
                 JWKVerificationMethod.JWK_X, jwk.getX())));
   }
 }

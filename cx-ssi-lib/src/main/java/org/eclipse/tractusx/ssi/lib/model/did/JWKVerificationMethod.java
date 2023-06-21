@@ -31,7 +31,7 @@ public class JWKVerificationMethod extends VerificationMethod {
   public static final String DEFAULT_TYPE = "JsonWebKey2020";
   public static final String PUBLIC_KEY_JWK = "publicKeyJwk";
   public static final String JWK_KEK_TYPE = "kty";
-  public static final String JWk_CURVE = "crv";
+  public static final String JWK_CURVE = "crv";
   public static final String JWK_X = "x";
 
   public JWKVerificationMethod(Map<String, Object> json) {
@@ -55,7 +55,7 @@ public class JWKVerificationMethod extends VerificationMethod {
     var publicKeyJwk = (Map<String, String>) this.get(PUBLIC_KEY_JWK);
 
     return new PublicKeyJwk(
-        publicKeyJwk.get(JWK_KEK_TYPE), publicKeyJwk.get(JWk_CURVE), publicKeyJwk.get(JWK_X));
+        publicKeyJwk.get(JWK_KEK_TYPE), publicKeyJwk.get(JWK_CURVE), publicKeyJwk.get(JWK_X));
   }
 
   public static boolean isInstance(Map<String, Object> json) {
