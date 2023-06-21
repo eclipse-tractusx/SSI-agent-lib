@@ -120,7 +120,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistryImpl;
 
-public static DidDocument ResovleDocument(String didUrl) throws DidDocumentResolverNotRegisteredException {
+public static DidDocument resovleDocument(String didUrl) throws DidDocumentResolverNotRegisteredException {
         
     //DID Resolver Constracture params
     DidWebParser didParser = new DidWebParser();
