@@ -1,0 +1,43 @@
+@startuml
+
+class ManagedIdentityWallet {
+  +fromHostname(hostName): Did
+}
+
+class DidWebFactory {
+  +fromHostname(hostName): Did
+}
+
+class MultibaseFactory {
+  +create(publicKey): MultibaseString
+}
+
+class Ed25519VerificationKey2020Builder {
+  +id(uri): Ed25519VerificationKey2020Builder
+  +controller(uri): Ed25519VerificationKey2020Builder
+  +publicKeyMultiBase(publicKeyBase): Ed25519VerificationKey2020Builder
+  +build(): Ed25519VerificationKey2020
+}
+
+class Ed25519VerificationKey2020 {
+  +id: URI
+  +controller: URI
+  +publicKeyMultiBase: MultibaseString
+}
+
+class DidDocumentBuilder {
+  +id(uri): DidDocumentBuilder
+  +verificationMethods(methods): DidDocumentBuilder
+  +build(): DidDocument
+}
+
+ManagedIdentityWallet --> DidWebFactory: <<create>>
+ManagedIdentityWallet --> MultibaseFactory: <<create>>
+ManagedIdentityWallet --> Ed25519VerificationKey2020Builder: <<create>>
+ManagedIdentityWallet --> DidDocumentBuilder: <<create>>
+
+Ed25519VerificationKey2020Builder --> Ed25519VerificationKey2020: <<create>>
+
+DidDocumentBuilder --> DidDocument: <<create>>
+
+@enduml

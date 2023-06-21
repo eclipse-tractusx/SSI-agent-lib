@@ -22,9 +22,7 @@ package org.eclipse.tractusx.ssi.lib.serialization.jsonLd;
 import com.danubetech.verifiablecredentials.CredentialSubject;
 import info.weboftrust.ldsignatures.LdProof;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -124,8 +122,14 @@ public class DanubeTechMapper {
           "Only one credential subject is supported by the Danubetech library used.");
     }
 
-    final CredentialSubject subject =
-        CredentialSubject.builder().properties(credential.getCredentialSubject().get(0)).build();
+    final VerifiableCredentialSubject subject = credential.getCredentialSubject().get(0);
+    final HashMap<String, Object> properties = new HashMap<>(subject);
+    properties.remove("id");
+    final com.danubetech.verifiablecredentials.CredentialSubject dtSubject =
+        CredentialSubject.builder()
+            .id(credential.getCredentialSubject().get(0).getId())
+            .properties(properties)
+            .build();
 
     return com.danubetech.verifiablecredentials.VerifiableCredential.builder()
         .defaultContexts(true)
@@ -136,7 +140,7 @@ public class DanubeTechMapper {
         .issuer(credential.getIssuer())
         .issuanceDate(Date.from(credential.getIssuanceDate()))
         .expirationDate(Date.from(credential.getExpirationDate()))
-        .credentialSubject(subject)
+        .credentialSubject(dtSubject)
         .ldProof(map(credential.getProof()))
         .build();
     // .credentialStatus(credential.getStatus())
@@ -152,9 +156,7 @@ public class DanubeTechMapper {
   private static VerifiableCredentialSubject map(CredentialSubject dtSubject) {
     if (dtSubject == null) return null;
 
-    var subject = new VerifiableCredentialSubject();
-    subject.putAll(dtSubject.getClaims());
-    return subject;
+    return new VerifiableCredentialSubject(dtSubject.getClaims());
   }
 
   private static Proof map(LdProof dtProof) {
