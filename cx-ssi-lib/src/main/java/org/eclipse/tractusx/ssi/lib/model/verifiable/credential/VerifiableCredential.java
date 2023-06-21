@@ -27,8 +27,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.*;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
-import org.eclipse.tractusx.ssi.lib.model.Proof;
-import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
+import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
+import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 // @formatter:off
 /**
@@ -133,5 +133,19 @@ public class VerifiableCredential extends JsonLdObject {
     }
 
     return new Proof((Map<String, Object>) subject);
+  }
+
+  public VerifiableCredential removeProof() {
+
+    VerifiableCredentialBuilder builder = new VerifiableCredentialBuilder();
+    return builder
+        .id(this.getId())
+        .context(this.getContext())
+        .credentialSubject(this.getCredentialSubject())
+        .expirationDate(this.getExpirationDate())
+        .issuanceDate(this.getIssuanceDate())
+        .issuer(this.getIssuer())
+        .type(this.getTypes())
+        .build();
   }
 }

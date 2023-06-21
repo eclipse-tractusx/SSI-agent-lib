@@ -15,7 +15,7 @@ import org.eclipse.tractusx.ssi.agent.lib.jwt.JwtReader;
 import org.eclipse.tractusx.ssi.agent.lib.wallet.SsiMemoryStorageWallet;
 import org.eclipse.tractusx.ssi.agent.lib.wallet.VerifiableCredentialWallet;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
-import org.eclipse.tractusx.ssi.lib.base.MultibaseFactory;
+import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
 import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519KeySet;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebDocumentResolver;
@@ -28,7 +28,7 @@ import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.did.*;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
-import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistryImpl;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistryImpl;
 
 public class WebAgent {
 
@@ -78,8 +78,8 @@ public class WebAgent {
     final List<VerificationMethod> verificationMethods = new ArrayList<>();
     final byte[] publicKey = signingKeySet.getPublicKey();
     final MultibaseString publicKeyBase = MultibaseFactory.create(publicKey);
-    final Ed25519VerificationKey2020Builder builder = new Ed25519VerificationKey2020Builder();
-    final Ed25519VerificationKey2020 key =
+    final Ed25519VerificationMethodBuilder builder = new Ed25519VerificationMethodBuilder();
+    final Ed25519VerificationMethod key =
         builder
             .id(URI.create(did.toUri() + "#key-" + 1))
             .controller(did.toUri())

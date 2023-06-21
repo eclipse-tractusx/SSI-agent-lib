@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import lombok.ToString;
-import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
+import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 // spec https://www.w3.org/TR/did-core/#verification-methods
 @ToString

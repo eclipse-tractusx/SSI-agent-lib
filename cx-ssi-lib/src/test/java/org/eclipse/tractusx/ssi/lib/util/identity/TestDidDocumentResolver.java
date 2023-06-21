@@ -22,12 +22,12 @@ package org.eclipse.tractusx.ssi.lib.util.identity;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistryImpl;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
-import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolver;
-import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistry;
-import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistryImpl;
 
 public class TestDidDocumentResolver implements DidDocumentResolver {
   private final Map<Did, DidDocument> documents = new HashMap<>();

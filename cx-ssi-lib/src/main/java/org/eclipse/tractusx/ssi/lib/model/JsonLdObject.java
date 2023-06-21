@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
+import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 public abstract class JsonLdObject extends HashMap<String, Object> {
 

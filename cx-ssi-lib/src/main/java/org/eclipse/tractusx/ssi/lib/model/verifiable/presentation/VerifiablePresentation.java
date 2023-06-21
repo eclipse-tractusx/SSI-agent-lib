@@ -28,7 +28,7 @@ import lombok.NonNull;
 import lombok.ToString;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
+import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 @ToString
 public class VerifiablePresentation extends JsonLdObject {

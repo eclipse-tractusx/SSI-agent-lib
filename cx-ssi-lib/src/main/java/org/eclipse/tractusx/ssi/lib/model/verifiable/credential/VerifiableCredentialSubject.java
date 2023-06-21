@@ -22,7 +22,7 @@ package org.eclipse.tractusx.ssi.lib.model.verifiable.credential;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
-import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
+import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 public class VerifiableCredentialSubject extends HashMap<String, Object> {
 

@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.NoArgsConstructor;
-import org.eclipse.tractusx.ssi.lib.model.Proof;
+import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 
 @NoArgsConstructor
 public class VerifiableCredentialBuilder {
