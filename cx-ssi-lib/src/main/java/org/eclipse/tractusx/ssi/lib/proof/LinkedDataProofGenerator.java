@@ -23,6 +23,9 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
@@ -61,12 +64,13 @@ public class LinkedDataProofGenerator {
   private final ISigner signer;
 
   public Proof createProof(
-      VerifiableCredential verifiableCredential, URI verificationMethodId, byte[] signingKey) {
+      VerifiableCredential verifiableCredential, URI verificationMethodId, IPrivateKey privateKey)
+      throws SsiException, InvalidePrivateKeyFormat {
 
     final TransformedLinkedData transformedData = transformer.transform(verifiableCredential);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
     byte[] signature;
-    signature = signer.sign(new HashedLinkedData(hashedData.getValue()), signingKey);
+    signature = signer.sign(new HashedLinkedData(hashedData.getValue()), privateKey);
 
     if (type == SignatureType.ED21559) {
 

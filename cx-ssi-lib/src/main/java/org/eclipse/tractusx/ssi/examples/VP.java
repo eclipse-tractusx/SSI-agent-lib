@@ -22,9 +22,9 @@ package org.eclipse.tractusx.ssi.examples;
 import com.nimbusds.jwt.SignedJWT;
 import java.io.IOException;
 import java.util.List;
-import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
-import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519KeySet;
-import org.eclipse.tractusx.ssi.lib.did.resolver.OctetKeyPairFactory;
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
+import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
+import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -54,18 +54,18 @@ class VP {
       Did issuer,
       List<VerifiableCredential> credentials,
       String audience,
-      byte[] privateKey,
-      byte[] publicKey)
+      IPrivateKey privateKey,
+      IPublicKey publicKey)
       throws IOException {
 
     // Extracting keys
-    final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
-    final Ed25519Key signingKey = Ed25519Key.asPrivateKey(keySet.getPrivateKey());
+    // final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
+    // final Ed25519Key signingKey = Ed25519Key.asPrivateKey(keySet.getPrivateKey());
 
     final SerializedJwtPresentationFactory presentationFactory =
         new SerializedJwtPresentationFactoryImpl(
             new SignedJwtFactory(new OctetKeyPairFactory()), new JsonLdSerializerImpl(), issuer);
 
-    return presentationFactory.createPresentation(issuer, credentials, audience, signingKey);
+    return presentationFactory.createPresentation(issuer, credentials, audience, privateKey);
   }
 }

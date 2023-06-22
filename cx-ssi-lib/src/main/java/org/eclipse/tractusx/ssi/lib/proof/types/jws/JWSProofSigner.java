@@ -26,7 +26,11 @@ import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.Ed25519Signer;
-import org.eclipse.tractusx.ssi.lib.did.resolver.OctetKeyPairFactory;
+import com.nimbusds.jose.jwk.OctetKeyPair;
+import java.io.IOException;
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
+import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.proof.ISigner;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
@@ -34,11 +38,16 @@ import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 public class JWSProofSigner implements ISigner {
 
   @Override
-  public byte[] sign(HashedLinkedData hashedLinkedData, byte[] signingKey) {
-    // Ed25519PrivateKeyParameters secretKeyParameters = new Ed25519PrivateKeyParameters(signingKey,
-    // 0);
+  public byte[] sign(HashedLinkedData hashedLinkedData, IPrivateKey privateKey)
+      throws InvalidePrivateKeyFormat {
+
     OctetKeyPairFactory octetKeyPairFactory = new OctetKeyPairFactory();
-    var keyPair = octetKeyPairFactory.fromPrivateKey(signingKey);
+    OctetKeyPair keyPair;
+    try {
+      keyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
+    } catch (IOException e) {
+      throw new InvalidePrivateKeyFormat(e.getCause());
+    }
 
     JWSSigner signer;
     try {

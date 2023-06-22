@@ -19,9 +19,12 @@
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
 public interface ISigner {
-  public byte[] sign(HashedLinkedData hashedLinkedData, byte[] signingKey) throws SsiException;
+  public byte[] sign(HashedLinkedData hashedLinkedData, IPrivateKey privateKey)
+      throws SsiException, InvalidePrivateKeyFormat;
 }

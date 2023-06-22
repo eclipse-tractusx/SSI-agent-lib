@@ -1,14 +1,19 @@
 package org.eclipse.tractusx.ssi.lib.model.did;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.nimbusds.jose.jwk.Curve;
 import com.nimbusds.jose.jwk.KeyUse;
 import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.jwk.gen.OctetKeyPairGenerator;
 import lombok.SneakyThrows;
-import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
+import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
+import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PrivateKey;
+import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
 import org.junit.jupiter.api.Test;
 
@@ -22,11 +27,11 @@ class JsonWebKey2020BuilderTest {
     OctetKeyPair octetKeyPair =
         new OctetKeyPairGenerator(Curve.Ed25519).keyID(keyId).keyUse(KeyUse.SIGNATURE).generate();
 
-    Ed25519Key privateKey = Ed25519Key.asPrivateKey(octetKeyPair.getDecodedD());
-    Ed25519Key publicKey = Ed25519Key.asPrivateKey(octetKeyPair.getDecodedX());
+    IPrivateKey privateKey = new x21559PrivateKey(octetKeyPair.getDecodedD());
+    IPublicKey publicKey = new x21559PublicKey(octetKeyPair.getDecodedX());
 
     // JWK
-    JsonWebKey jwk = JsonWebKey.fromED25519(keyId, publicKey.getEncoded(), privateKey.getEncoded());
+    JsonWebKey jwk = new JsonWebKey(keyId, publicKey, privateKey);
 
     final JWKVerificationMethodBuilder builder = new JWKVerificationMethodBuilder();
     final JWKVerificationMethod jwk2020VerificationMethod = builder.did(did).jwk(jwk).build();

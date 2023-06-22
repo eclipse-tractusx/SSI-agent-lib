@@ -41,7 +41,7 @@ public class TestIdentityTest {
 
     // Sign
     AsymmetricKeyParameter privateKeyParameters =
-        new Ed25519PrivateKeyParameters(identity.getPrivateKey(), 0);
+        new Ed25519PrivateKeyParameters(identity.getPrivateKey().asByte());
     Signer signer = new Ed25519Signer();
     signer.init(true, privateKeyParameters);
     signer.update(message, 0, message.length);
@@ -49,7 +49,7 @@ public class TestIdentityTest {
 
     // Verify
     AsymmetricKeyParameter publicKeyParameters =
-        new Ed25519PublicKeyParameters(identity.getPublicKey(), 0);
+        new Ed25519PublicKeyParameters(identity.getPublicKey().asByte());
     Signer verifier = new Ed25519Signer();
     verifier.init(false, publicKeyParameters);
     verifier.update(message, 0, message.length);

@@ -23,6 +23,11 @@ import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 
 public class MultibaseFactory {
 
+  public static MultibaseString create(EncodeType encodeType, byte[] decoded) {
+    if (encodeType == EncodeType.Base58) return Base58Bitcoin.create(decoded);
+    else return Base64.create(decoded);
+  }
+
   public static MultibaseString create(byte[] decoded) {
     return Base58Bitcoin.create(decoded);
   }

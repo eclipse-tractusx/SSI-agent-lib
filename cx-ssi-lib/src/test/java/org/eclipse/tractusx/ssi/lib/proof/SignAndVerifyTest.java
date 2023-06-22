@@ -23,6 +23,9 @@ import com.nimbusds.jose.JOSEException;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.ED21559ProofSigner;
 import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.ED25519ProofVerifier;
@@ -36,10 +39,12 @@ import org.junit.jupiter.api.Test;
 public class SignAndVerifyTest {
 
   @Test
-  public void testSignAndVerify_ED201559() throws IOException {
+  public void testSignAndVerify_ED201559()
+      throws IOException, InvalidePrivateKeyFormat, InvalidePublicKeyFormat,
+          KeyGenerationException {
     final TestDidDocumentResolver didDocumentResolver = new TestDidDocumentResolver();
 
-    var testIdentity = TestIdentityFactory.newBPNIdentityWithED25519Keys(true);
+    var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys(false);
 
     didDocumentResolver.register(testIdentity);
 
@@ -56,12 +61,13 @@ public class SignAndVerifyTest {
   }
 
   @Test
-  public void testSignAndVerify_JWS() throws IOException, JOSEException, NoSuchAlgorithmException {
+  public void testSignAndVerify_JWS()
+      throws IOException, JOSEException, NoSuchAlgorithmException, InvalidePrivateKeyFormat,
+          InvalidePublicKeyFormat, KeyGenerationException {
     final TestDidDocumentResolver didDocumentResolver = new TestDidDocumentResolver();
-    var testIdentity = TestIdentityFactory.newBPNIdentityWithED25519Keys(false);
+    var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys(true);
 
     didDocumentResolver.register(testIdentity);
-
     var data = "Hello World".getBytes();
     MessageDigest digest = MessageDigest.getInstance("SHA-256");
     var value = digest.digest(data);

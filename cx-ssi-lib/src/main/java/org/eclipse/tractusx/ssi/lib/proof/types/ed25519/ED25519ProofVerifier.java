@@ -19,15 +19,19 @@
 
 package org.eclipse.tractusx.ssi.lib.proof.types.ed25519;
 
+import java.io.IOException;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.bouncycastle.crypto.Signer;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
+import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
+import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
@@ -46,7 +50,8 @@ public class ED25519ProofVerifier implements IVerifier {
   private final DidDocumentResolverRegistry didDocumentResolverRegistry;
 
   public boolean verify(HashedLinkedData hashedLinkedData, VerifiableCredential credential)
-      throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException {
+      throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException,
+          InvalidePublicKeyFormat {
 
     final URI issuer = credential.getIssuer();
     final Did issuerDid = DidParser.parse(issuer);
@@ -70,18 +75,26 @@ public class ED25519ProofVerifier implements IVerifier {
             .findFirst()
             .orElseThrow();
 
-    final MultibaseString publicKey = key.getPublicKeyBase58();
+    // final MultibaseString publicKey = key.getPublicKeyBase58();
+    IPublicKey publicKey;
+    try {
+      publicKey = (IPublicKey) new x21559PublicKey(key.getPublicKeyBase58().getEncoded(), false);
+    } catch (IOException e) {
+      throw new InvalidePublicKeyFormat(e.getCause());
+    }
+
     final MultibaseString signature = ed25519Signature2020.getProofValue();
-    return verify(hashedLinkedData, signature.getDecoded(), publicKey.getDecoded());
+    return verify(hashedLinkedData, signature.getDecoded(), publicKey);
   }
 
   @SneakyThrows
-  public boolean verify(HashedLinkedData hashedLinkedData, byte[] signature, byte[] publicKey) {
+  public boolean verify(HashedLinkedData hashedLinkedData, byte[] signature, IPublicKey publicKey) {
 
     final byte[] message = hashedLinkedData.getValue();
 
     Signer verifier = new Ed25519Signer();
-    Ed25519PublicKeyParameters publicKeyParameters = new Ed25519PublicKeyParameters(publicKey, 0);
+    Ed25519PublicKeyParameters publicKeyParameters =
+        new Ed25519PublicKeyParameters(publicKey.asByte());
 
     verifier.init(false, publicKeyParameters);
     verifier.update(message, 0, message.length);
