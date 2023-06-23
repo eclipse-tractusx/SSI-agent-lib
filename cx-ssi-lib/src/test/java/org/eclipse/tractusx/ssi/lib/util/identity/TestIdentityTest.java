@@ -37,7 +37,7 @@ public class TestIdentityTest {
     byte[] message = "Json String".getBytes(StandardCharsets.UTF_8);
 
     // Load public key
-    var identity = TestIdentityFactory.newIdentityWithED25519Keys(false);
+    var identity = TestIdentityFactory.newIdentityWithED25519Keys();
 
     // Sign
     AsymmetricKeyParameter privateKeyParameters =

@@ -28,10 +28,6 @@ import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.KeyPair;
 import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
 import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559Generator;
-import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PrivateKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
@@ -42,34 +38,18 @@ import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethodBuilder;
 import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethodBuilder;
-import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
 
 public class TestIdentityFactory {
 
-  public static TestIdentity newIdentityWithED25519Keys(boolean PEMformat)
-      throws IOException, KeyGenerationException, InvalidePublicKeyFormat,
-          InvalidePrivateKeyFormat {
+  public static TestIdentity newIdentityWithED25519Keys()
+      throws IOException, KeyGenerationException {
 
-    IPublicKey publicKey = null;
-    IPrivateKey privateKey = null;
     final Did did = TestDidFactory.createRandom();
 
-    if (PEMformat) {
-
-      // PKCS8 keys format
-      String publicKeyPEM = TestResourceUtil.getPublicKeyEd25519AsString();
-      String privateKeyPEM = TestResourceUtil.getPrivateKeyEd25519AsString();
-
-      // 32-byte Ed25519 format
-      publicKey = new x21559PublicKey(publicKeyPEM, true);
-      privateKey = new x21559PrivateKey(privateKeyPEM, true);
-    } else {
-
-      IKeyGenerator keyGenerator = new x21559Generator();
-      KeyPair keyPair = keyGenerator.generateKey();
-      publicKey = keyPair.getPublicKey();
-      privateKey = keyPair.getPrivateKey();
-    }
+    IKeyGenerator keyGenerator = new x21559Generator();
+    KeyPair keyPair = keyGenerator.generateKey();
+    IPublicKey publicKey = keyPair.getPublicKey();
+    IPrivateKey privateKey = keyPair.getPrivateKey();
 
     MultibaseString multibaseString = MultibaseFactory.create(publicKey.asByte());
     final Ed25519VerificationMethodBuilder ed25519VerificationKey2020Builder =

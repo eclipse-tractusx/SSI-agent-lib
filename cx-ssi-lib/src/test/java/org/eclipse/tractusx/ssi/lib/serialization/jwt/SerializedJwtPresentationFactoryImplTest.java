@@ -38,7 +38,7 @@ class SerializedJwtPresentationFactoryImplTest {
     SsiLibrary.initialize();
     this.didDocumentResolver = new TestDidDocumentResolver();
 
-    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys(false);
+    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
     didDocumentResolver.register(credentialIssuer);
     jwtVerifier = new SignedJwtVerifier(didDocumentResolver.withRegistry());
 

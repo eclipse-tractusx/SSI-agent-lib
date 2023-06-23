@@ -31,7 +31,6 @@ import java.util.Objects;
 import lombok.SneakyThrows;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
-import org.eclipse.tractusx.ssi.lib.util.identity.KeyResourceLoader;
 
 public class TestResourceUtil {
 
@@ -118,7 +117,7 @@ public class TestResourceUtil {
 
   private static InputStream readResource(String resource) {
     final InputStream inputStream =
-        KeyResourceLoader.class.getClassLoader().getResourceAsStream(resource);
+        TestResourceUtil.class.getClassLoader().getResourceAsStream(resource);
 
     return Objects.requireNonNull(inputStream, "Resource not found: " + resource);
   }

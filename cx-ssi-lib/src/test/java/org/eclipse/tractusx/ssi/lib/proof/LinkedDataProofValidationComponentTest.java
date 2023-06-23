@@ -56,7 +56,7 @@ public class LinkedDataProofValidationComponentTest {
     SsiLibrary.initialize();
     this.didDocumentResolver = new TestDidDocumentResolver();
 
-    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys(true);
+    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
     didDocumentResolver.register(credentialIssuer);
 
     // Generator
@@ -95,7 +95,7 @@ public class LinkedDataProofValidationComponentTest {
     SsiLibrary.initialize();
     this.didDocumentResolver = new TestDidDocumentResolver();
 
-    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys(false);
+    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
     didDocumentResolver.register(credentialIssuer);
 
     // Generator

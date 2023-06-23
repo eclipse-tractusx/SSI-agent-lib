@@ -44,7 +44,7 @@ public class SignAndVerifyTest {
           KeyGenerationException {
     final TestDidDocumentResolver didDocumentResolver = new TestDidDocumentResolver();
 
-    var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys(false);
+    var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys();
 
     didDocumentResolver.register(testIdentity);
 
@@ -65,7 +65,7 @@ public class SignAndVerifyTest {
       throws IOException, JOSEException, NoSuchAlgorithmException, InvalidePrivateKeyFormat,
           InvalidePublicKeyFormat, KeyGenerationException {
     final TestDidDocumentResolver didDocumentResolver = new TestDidDocumentResolver();
-    var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys(true);
+    var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys();
 
     didDocumentResolver.register(testIdentity);
     var data = "Hello World".getBytes();

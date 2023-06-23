@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
         <artifactId>connector-extensions</artifactId>
-        <version>0.0.6</version>
+        <version>0.0.8</version>
     </parent>
 
     <artifactId>ssi-policy</artifactId>
