@@ -32,7 +32,7 @@ import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 @ToString
 public class VerifiablePresentation extends JsonLdObject {
-  public static final String DEFAULT_CONTEXT = "https://www.w3.org/2018/credentials/v1";
+  public static final URI DEFAULT_CONTEXT = URI.create("https://www.w3.org/2018/credentials/v1");
 
   public static final String ID = "id";
   public static final String TYPE = "type";

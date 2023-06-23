@@ -32,7 +32,7 @@ import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 @NoArgsConstructor
 public class VerifiableCredentialBuilder {
 
-  private List<String> context = List.of(VerifiableCredential.DEFAULT_CONTEXT);
+  private List<URI> context = List.of(VerifiableCredential.DEFAULT_CONTEXT);
   private URI id;
   private List<String> types;
   private URI issuer;
@@ -41,7 +41,7 @@ public class VerifiableCredentialBuilder {
   private List<VerifiableCredentialSubject> credentialSubject;
   private Proof proof;
 
-  public VerifiableCredentialBuilder context(List<String> context) {
+  public VerifiableCredentialBuilder context(List<URI> context) {
     this.context = context;
     return this;
   }

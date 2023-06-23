@@ -20,6 +20,7 @@
 package org.eclipse.tractusx.ssi.lib.serialization.jsonLd;
 
 import com.danubetech.verifiablecredentials.CredentialSubject;
+import foundation.identity.jsonld.ConfigurableDocumentLoader;
 import info.weboftrust.ldsignatures.LdProof;
 import java.sql.Date;
 import java.util.*;
@@ -67,6 +68,7 @@ public class DanubeTechMapper {
         .forceContextsArray(true)
         .forceTypesArray(true)
         .id(presentation.getId())
+        .contexts(presentation.getContext())
         .types(types)
         // .holder(presentation.getHolder())
         .ldProof(null); // set to null, as presentation will be used within JWT
@@ -96,6 +98,7 @@ public class DanubeTechMapper {
     final VerifiablePresentationBuilder verifiablePresentationBuilder =
         new VerifiablePresentationBuilder();
     return verifiablePresentationBuilder
+        .context(dtPresentation.getContexts())
         .id(dtPresentation.getId())
         .type(dtPresentation.getTypes())
         .verifiableCredentials(credentials)
@@ -131,19 +134,34 @@ public class DanubeTechMapper {
             .properties(properties)
             .build();
 
-    return com.danubetech.verifiablecredentials.VerifiableCredential.builder()
-        .defaultContexts(true)
-        .forceContextsArray(true)
-        .forceTypesArray(true)
-        .id(credential.getId())
-        .types(types)
-        .issuer(credential.getIssuer())
-        .issuanceDate(Date.from(credential.getIssuanceDate()))
-        .expirationDate(Date.from(credential.getExpirationDate()))
-        .credentialSubject(dtSubject)
-        .ldProof(map(credential.getProof()))
-        .build();
-    // .credentialStatus(credential.getStatus())
+    var builder =
+        com.danubetech.verifiablecredentials.VerifiableCredential.builder()
+            .defaultContexts(true)
+            .forceContextsArray(true)
+            .forceTypesArray(true)
+            .id(credential.getId())
+            .contexts(credential.getContext())
+            .types(types)
+            .issuer(credential.getIssuer())
+            .issuanceDate(Date.from(credential.getIssuanceDate()))
+            .credentialSubject(dtSubject);
+
+    if (credential.getExpirationDate() != null) {
+      builder.expirationDate(Date.from(credential.getExpirationDate()));
+    }
+
+    if (credential.getProof() != null) {
+      builder.ldProof(map(credential.getProof()));
+    }
+
+    var dtVc = builder.build();
+
+    // enable loading remote contexts using HTTPS
+    ConfigurableDocumentLoader documentLoader =
+        ((ConfigurableDocumentLoader) dtVc.getDocumentLoader());
+    documentLoader.setEnableHttps(true);
+
+    return dtVc;
   }
 
   @NonNull

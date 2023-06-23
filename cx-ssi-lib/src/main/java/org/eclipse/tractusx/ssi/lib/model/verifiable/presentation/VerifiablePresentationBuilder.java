@@ -28,12 +28,12 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 
 @NoArgsConstructor
 public class VerifiablePresentationBuilder {
-  private List<String> context = List.of(VerifiablePresentation.DEFAULT_CONTEXT);
+  private List<URI> context = List.of(VerifiablePresentation.DEFAULT_CONTEXT);
   private URI id;
   private List<String> types;
   private List<VerifiableCredential> verifiableCredentials;
 
-  public VerifiablePresentationBuilder context(List<String> context) {
+  public VerifiablePresentationBuilder context(List<URI> context) {
     this.context = context;
     return this;
   }
