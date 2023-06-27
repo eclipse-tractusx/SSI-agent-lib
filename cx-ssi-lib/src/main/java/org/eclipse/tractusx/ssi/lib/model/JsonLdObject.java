@@ -21,8 +21,12 @@ package org.eclipse.tractusx.ssi.lib.model;
 
 import java.net.URI;
 import java.util.*;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public abstract class JsonLdObject extends HashMap<String, Object> {
 
   public static final String CONTEXT = "@context";
@@ -66,5 +70,9 @@ public abstract class JsonLdObject extends HashMap<String, Object> {
 
   public String toJson() {
     return SerializeUtil.toJson(this);
+  }
+
+  public String toPrettyJson() {
+    return SerializeUtil.toPrettyJson(this);
   }
 }

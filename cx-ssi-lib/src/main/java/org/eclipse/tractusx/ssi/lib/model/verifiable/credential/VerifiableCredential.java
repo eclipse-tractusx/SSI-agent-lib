@@ -46,7 +46,7 @@ import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
  * "zeEdUoM7m9cY8ZyTpey83yBKeBcmcvbyrEQzJ19rD2UXArU2U1jPGoEt rRvGYppdiK37GU4NBeoPakxpWhAvsVSt" } }
  */
 // @formatter:on
-@ToString
+@ToString(callSuper = true)
 public class VerifiableCredential extends JsonLdObject {
 
   public static final URI DEFAULT_CONTEXT = URI.create("https://www.w3.org/2018/credentials/v1");

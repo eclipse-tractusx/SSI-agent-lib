@@ -64,7 +64,7 @@ public class DanubeTechMapper {
         builder = com.danubetech.verifiablecredentials.VerifiablePresentation.builder();
 
     builder
-        .defaultContexts(true)
+        .defaultContexts(false)
         .forceContextsArray(true)
         .forceTypesArray(true)
         .id(presentation.getId())
@@ -136,7 +136,7 @@ public class DanubeTechMapper {
 
     var builder =
         com.danubetech.verifiablecredentials.VerifiableCredential.builder()
-            .defaultContexts(true)
+            .defaultContexts(false)
             .forceContextsArray(true)
             .forceTypesArray(true)
             .id(credential.getId())

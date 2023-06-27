@@ -31,6 +31,8 @@ import java.util.Objects;
 import lombok.SneakyThrows;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 
 public class TestResourceUtil {
 
@@ -50,16 +52,16 @@ public class TestResourceUtil {
         readJsonResource(DID_DOCUMENT_ED25519), readJsonResource(DID_DOCUMENT_ED25519_BPN));
   }
 
-  public static Map<String, Object> getAlumniVerifiableCredential() {
-    return readJsonResource(VERIFIABLE_CREDENTIAL_ALUMNI);
+  public static VerifiableCredential getAlumniVerifiableCredential() {
+    return new VerifiableCredential(readJsonResource(VERIFIABLE_CREDENTIAL_ALUMNI));
   }
 
-  public static Map<String, Object> getAlumniVerifiablePresentation() {
-    return readJsonResource(VERIFIABLE_PRESENTATION_ALUMNI);
+  public static VerifiablePresentation getAlumniVerifiablePresentation() {
+    return new VerifiablePresentation(readJsonResource(VERIFIABLE_PRESENTATION_ALUMNI));
   }
 
-  public static Map<String, Object> getBPNVerifiableCredential() {
-    return readJsonResource(VERIFIABLE_CREDENTIAL_BPN);
+  public static VerifiableCredential getBPNVerifiableCredential() {
+    return new VerifiableCredential(readJsonResource(VERIFIABLE_CREDENTIAL_BPN));
   }
 
   public static Map<String, Object> getDidDocument(String verificationKeyType) {

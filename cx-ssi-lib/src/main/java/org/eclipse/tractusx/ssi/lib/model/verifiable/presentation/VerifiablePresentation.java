@@ -30,7 +30,7 @@ import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
-@ToString
+@ToString(callSuper = true)
 public class VerifiablePresentation extends JsonLdObject {
   public static final URI DEFAULT_CONTEXT = URI.create("https://www.w3.org/2018/credentials/v1");
 

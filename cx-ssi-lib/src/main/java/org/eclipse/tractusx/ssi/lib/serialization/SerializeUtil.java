@@ -19,7 +19,9 @@
 
 package org.eclipse.tractusx.ssi.lib.serialization;
 
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +33,19 @@ public final class SerializeUtil {
 
   @SneakyThrows
   public static String toJson(Map<String, Object> map) {
-    return OBJECT_MAPPER.writeValueAsString(map);
+    return OBJECT_MAPPER
+        .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+        .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+        .writeValueAsString(map);
+  }
+
+  @SneakyThrows
+  public static String toPrettyJson(Map<String, Object> map) {
+    return OBJECT_MAPPER
+        .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+        .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+        .writerWithDefaultPrettyPrinter()
+        .writeValueAsString(map);
   }
 
   @SneakyThrows
