@@ -63,7 +63,6 @@ jobs:
         run: |
           git add $(find -name pom.xml) $(find charts -name Chart.yaml) $(find charts -name README.md)
           git commit --message "Prepare release ${{ env.RELEASE_VERSION }}"
-          git merge main --strategy-option ours
 
           echo "::set-output name=commit::$(git rev-parse HEAD)"
       -
