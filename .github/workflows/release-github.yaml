@@ -67,20 +67,3 @@ jobs:
           name: ${{ env.RELEASE_VERSION }}
           draft: false
           prerelease: false
-
-      # PR TO MERGE RELEASE BACK INTO DEVELOP
-      -
-        name: Create pull request
-        uses: thomaseizinger/create-pull-request@1.3.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          head: release/${{ env.RELEASE_VERSION }}
-          base: develop
-          title: Release version ${{ env.RELEASE_VERSION }} into develop
-          reviewers: ${{ github.actor }}
-          body: |-
-            This PR was created in response to a manual trigger of the [release workflow](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}).
-            The changelog was updated and versions have been bumped in [commit ${{ steps.make-commit.outputs.commit }}](${{ steps.make-commit.outputs.commit }}).
-
-            Merging this PR will create a GitHub release and upload any assets that are created as part of the release build.

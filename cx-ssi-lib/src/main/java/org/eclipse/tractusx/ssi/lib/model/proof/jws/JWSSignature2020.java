@@ -40,7 +40,7 @@ public class JWSSignature2020 extends Proof {
   public static final String PROOF_PURPOSE = "proofPurpose";
   public static final String JWS = "jws";
   public static final String CREATED = "created";
-  public static final String VERIFICATION_METHOD = "assertionMethod";
+  public static final String VERIFICATION_METHOD = "verificationMethod";
 
   public JWSSignature2020(Map<String, Object> json) {
     super(json);
