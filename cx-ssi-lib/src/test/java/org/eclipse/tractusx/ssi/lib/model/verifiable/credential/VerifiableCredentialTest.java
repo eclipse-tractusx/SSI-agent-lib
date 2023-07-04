@@ -40,4 +40,12 @@ public class VerifiableCredentialTest {
 
     Assertions.assertNotEquals(vc1, vc2);
   }
+
+  @Test
+  public void credentialIdMustBeValidURI() {
+    final VerifiableCredential vc = TestResourceUtil.getAlumniVerifiableCredential();
+    vc.put(VerifiableCredential.ID, "b9d94fd6-d7e8-4acf-a222-6e84fca87b68");
+
+    Assertions.assertThrows(IllegalArgumentException.class, () -> new VerifiableCredential(vc));
+  }
 }

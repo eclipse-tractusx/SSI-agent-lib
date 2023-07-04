@@ -21,10 +21,11 @@ package org.eclipse.tractusx.ssi.lib.proof;
 
 import java.io.IOException;
 import java.net.URI;
-import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
 import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
@@ -50,9 +51,54 @@ public class LinkedDataProofValidationComponentTest {
   public void setup() {}
 
   @Test
+  public void testProofFailureOnManipulatedCredential()
+      throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
+          KeyGenerationException {
+    SsiLibrary.initialize();
+    this.didDocumentResolver = new TestDidDocumentResolver();
+
+    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
+    didDocumentResolver.register(credentialIssuer);
+
+    // Generator
+    linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
+
+    // Verification
+    linkedDataProofValidation =
+        LinkedDataProofValidation.newInstance(
+            SignatureType.ED21559, didDocumentResolver.withRegistry());
+
+    // prepare key
+    // 0 == ED21559
+    // 1 == JWS
+    final URI verificationMethod =
+        credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
+
+    final VerifiableCredential credential =
+        TestCredentialFactory.createCredential(credentialIssuer, null);
+
+    final Proof proof =
+        linkedDataProofGenerator.createProof(
+            credential, verificationMethod, credentialIssuer.getPrivateKey());
+
+    final VerifiableCredential credentialWithProof =
+        TestCredentialFactory.attachProof(credential, proof);
+
+    DateTimeFormatter formatter =
+        DateTimeFormatter.ofPattern(VerifiableCredential.TIME_FORMAT).withZone(ZoneOffset.UTC);
+    credentialWithProof.put(
+        VerifiableCredential.EXPIRATION_DATE,
+        formatter.format(Instant.now().plusSeconds(60 * 60 * 24 * 365 * 10)));
+
+    var isOk = linkedDataProofValidation.verifiyProof(credentialWithProof);
+
+    Assertions.assertFalse(isOk);
+  }
+
+  @Test
   public void testEd21559ProofGenerationAndVerification()
       throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
-          KeyGenerationException, InvalidePublicKeyFormat {
+          KeyGenerationException {
     SsiLibrary.initialize();
     this.didDocumentResolver = new TestDidDocumentResolver();
 
@@ -90,8 +136,8 @@ public class LinkedDataProofValidationComponentTest {
 
   @Test
   public void testJWSproofGenerationAndVerification()
-      throws IOException, UnsupportedSignatureTypeException, NoSuchAlgorithmException,
-          InvalidePrivateKeyFormat, KeyGenerationException, InvalidePublicKeyFormat {
+      throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
+          KeyGenerationException {
     SsiLibrary.initialize();
     this.didDocumentResolver = new TestDidDocumentResolver();
 

@@ -26,6 +26,7 @@ import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestIdentityTest {
@@ -55,6 +56,6 @@ public class TestIdentityTest {
     verifier.update(message, 0, message.length);
     boolean verified = verifier.verifySignature(signature);
 
-    System.out.println("Verification: " + verified); // Verification: true
+    Assertions.assertTrue(verified);
   }
 }

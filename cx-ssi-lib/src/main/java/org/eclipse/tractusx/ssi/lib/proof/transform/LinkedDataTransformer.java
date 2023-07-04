@@ -19,22 +19,53 @@
 
 package org.eclipse.tractusx.ssi.lib.proof.transform;
 
+import com.apicatalog.rdf.RdfDataset;
+import com.apicatalog.rdf.io.nquad.NQuadsWriter;
+import foundation.identity.jsonld.ConfigurableDocumentLoader;
 import foundation.identity.jsonld.JsonLDException;
+import foundation.identity.jsonld.JsonLDObject;
+import io.setl.rdf.normalization.RdfNormalize;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.DanubeTechMapper;
 
 public class LinkedDataTransformer {
+  @SneakyThrows
   public TransformedLinkedData transform(VerifiableCredential credential) {
     // make a copy and remove proof from credential, as it is not part of the linked data
     VerifiableCredential copyCredential = new VerifiableCredential(credential);
     copyCredential.remove(VerifiableCredential.PROOF);
 
-    var dtCredential = DanubeTechMapper.map(copyCredential);
     try {
 
-      var normalized = dtCredential.normalize("urdna2015");
+      var properties = new HashMap<>(copyCredential);
+      properties.remove(VerifiableCredential.CONTEXT);
+      properties.remove(VerifiableCredential.TYPE);
+      properties.remove(VerifiableCredential.ID);
+      var jsonLdCredential =
+          JsonLDObject.builder()
+              .id(credential.getId())
+              .contexts(credential.getContext())
+              .types(credential.getTypes())
+              .properties(properties)
+              .build();
+
+      var documentLoader = new ConfigurableDocumentLoader();
+      documentLoader.setEnableHttps(true);
+      documentLoader.setEnableLocalCache(true);
+      documentLoader.setHttpsContexts(credential.getContext());
+      jsonLdCredential.setDocumentLoader(documentLoader);
+
+      RdfDataset rdfDataset = jsonLdCredential.toDataset();
+      rdfDataset = RdfNormalize.normalize(rdfDataset, "urdna2015");
+      StringWriter stringWriter = new StringWriter();
+      NQuadsWriter nQuadsWriter = new NQuadsWriter(stringWriter);
+      nQuadsWriter.write(rdfDataset);
+      var normalized = stringWriter.getBuffer().toString();
+
       return new TransformedLinkedData(normalized);
 
     } catch (JsonLDException e) {
