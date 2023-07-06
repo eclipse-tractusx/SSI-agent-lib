@@ -8,7 +8,7 @@
         <version>3.0.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <version>0.0.11</version>
+    <version>0.0.12</version>
     <groupId>org.eclipse.tractusx.ssi</groupId>
     <artifactId>cx-ssi-agent-app</artifactId>
     <name>cx-ssi-agent-app</name>
