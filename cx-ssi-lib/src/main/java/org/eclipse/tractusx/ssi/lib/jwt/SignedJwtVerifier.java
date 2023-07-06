@@ -35,7 +35,6 @@ import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.JwtException;
-import org.eclipse.tractusx.ssi.lib.exception.JwtSignatureCheckFailedException;
 import org.eclipse.tractusx.ssi.lib.model.did.*;
 
 /**
@@ -54,7 +53,8 @@ public class SignedJwtVerifier {
    * @return true if verified, false otherwise
    */
   @SneakyThrows({JOSEException.class})
-  public void verify(SignedJWT jwt) throws JwtException, DidDocumentResolverNotRegisteredException {
+  public boolean verify(SignedJWT jwt)
+      throws JwtException, DidDocumentResolverNotRegisteredException {
 
     JWTClaimsSet jwtClaimsSet;
     try {
@@ -86,11 +86,9 @@ public class SignedJwtVerifier {
           new OctetKeyPair.Builder(
                   Curve.Ed25519, Base64URL.encode(publicKeyParameters.getEncoded()))
               .build();
-      var isValid = jwt.verify(new Ed25519Verifier(keyPair));
-
-      if (!isValid) {
-        throw new JwtSignatureCheckFailedException(issuerDid, verificationMethod.getId());
-      }
+      return jwt.verify(new Ed25519Verifier(keyPair));
     }
+
+    return false;
   }
 }

@@ -332,7 +332,7 @@ import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistryImpl;
 
 import com.nimbusds.jwt.SignedJWT;
 
-public static void verifyJWT(SignedJWT jwt) {
+public static boolean verifyJWT(SignedJWT jwt) {
     // DID Resolver Constracture params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();
@@ -344,7 +344,7 @@ public static void verifyJWT(SignedJWT jwt) {
 
     SignedJwtVerifier jwtVerifier = new SignedJwtVerifier(didDocumentResolverRegistry);
     try {
-        jwtVerifier.verify(jwt);
+        return jwtVerifier.verify(jwt);
     } catch (JwtException | DidDocumentResolverNotRegisteredException e) {
         // An ecxeption will be thrown here in case JWT verification failed or DID
         // Document Resolver not able to resolver.
