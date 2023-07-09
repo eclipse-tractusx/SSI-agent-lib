@@ -35,11 +35,13 @@ import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.JwtException;
+import org.eclipse.tractusx.ssi.lib.exception.UnsupportedVerificationMethodException;
+import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.did.*;
 
 /**
- * Convenience/helper class to generate and verify Signed JSON Web Tokens (JWTs) for communicating
- * between connector instances.
+ * Convenience/helper class to verify Signed JSON Web Tokens (JWTs) for communicating between
+ * connector instances.
  */
 @RequiredArgsConstructor
 public class SignedJwtVerifier {
@@ -75,18 +77,31 @@ public class SignedJwtVerifier {
     // verify JWT signature
     // TODO Don't try out each key. Better -> use key authorization key
     for (VerificationMethod verificationMethod : verificationMethods) {
-      if (!Ed25519VerificationMethod.isInstance(verificationMethod)) continue;
+      if (JWKVerificationMethod.isInstance(verificationMethod)) {
+        final JWKVerificationMethod method = new JWKVerificationMethod(verificationMethod);
+        final String kty = method.getPublicKeyJwk().getKty();
+        final String crv = method.getPublicKeyJwk().getCrv();
+        final String x = method.getPublicKeyJwk().getX();
+        if (kty.equals("OKP") && crv.equals("Ed25519")) {
+          final OctetKeyPair keyPair =
+              new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.from(x)).build();
+          if (jwt.verify(new Ed25519Verifier(keyPair))) return true;
+        } else {
+          throw new UnsupportedVerificationMethodException(
+              method, "only kty:OKP with crv:Ed25519 is supported");
+        }
+      } else if (Ed25519VerificationMethod.isInstance(verificationMethod)) {
+        final Ed25519VerificationMethod method = new Ed25519VerificationMethod(verificationMethod);
+        final MultibaseString multibase = method.getPublicKeyBase58();
+        final Ed25519PublicKeyParameters publicKeyParameters =
+            new Ed25519PublicKeyParameters(multibase.getDecoded(), 0);
+        final OctetKeyPair keyPair =
+            new OctetKeyPair.Builder(
+                    Curve.Ed25519, Base64URL.encode(publicKeyParameters.getEncoded()))
+                .build();
 
-      var method = new Ed25519VerificationMethod(verificationMethod);
-      var multibase = method.getPublicKeyBase58();
-
-      Ed25519PublicKeyParameters publicKeyParameters =
-          new Ed25519PublicKeyParameters(multibase.getDecoded(), 0);
-      var keyPair =
-          new OctetKeyPair.Builder(
-                  Curve.Ed25519, Base64URL.encode(publicKeyParameters.getEncoded()))
-              .build();
-      return jwt.verify(new Ed25519Verifier(keyPair));
+        if (jwt.verify(new Ed25519Verifier(keyPair))) return true;
+      }
     }
 
     return false;
