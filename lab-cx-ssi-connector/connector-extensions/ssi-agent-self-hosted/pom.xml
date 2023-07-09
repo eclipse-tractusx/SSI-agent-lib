@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
         <artifactId>connector-extensions</artifactId>
-        <version>0.0.12</version>
+        <version>0.0.13</version>
     </parent>
 
     <artifactId>ssi-agent-self-hosted</artifactId>

@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.eclipse.tractusx.ssi.lab.connector</groupId>
         <artifactId>lab-cx-ssi-connector</artifactId>
-        <version>0.0.12</version>
+        <version>0.0.13</version>
     </parent>
 
     <artifactId>connector-app</artifactId>
