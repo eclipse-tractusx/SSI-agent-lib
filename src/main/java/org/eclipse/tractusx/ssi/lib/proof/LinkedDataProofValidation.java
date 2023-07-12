@@ -19,35 +19,42 @@
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.hash.LinkedDataHasher;
 import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
 import org.eclipse.tractusx.ssi.lib.proof.transform.TransformedLinkedData;
-import org.eclipse.tractusx.ssi.lib.proof.verify.LinkedDataVerifier;
-import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistry;
+import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.ED25519ProofVerifier;
+import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofVerifier;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class LinkedDataProofValidation {
 
   public static LinkedDataProofValidation newInstance(
-      DidDocumentResolverRegistry didDocumentResolverRegistry) {
+      SignatureType type, DidDocumentResolverRegistry didDocumentResolverRegistry) {
     return new LinkedDataProofValidation(
         new LinkedDataHasher(),
         new LinkedDataTransformer(),
-        new LinkedDataVerifier(didDocumentResolverRegistry));
+        type == SignatureType.ED21559
+            ? new ED25519ProofVerifier(didDocumentResolverRegistry)
+            : new JWSProofVerifier(didDocumentResolverRegistry));
   }
 
   private final LinkedDataHasher hasher;
   private final LinkedDataTransformer transformer;
-  private final LinkedDataVerifier verifier;
+  private final IVerifier verifier;
 
   @SneakyThrows
-  public boolean checkProof(VerifiableCredential verifiableCredential) {
-    final TransformedLinkedData transformedData = transformer.transform(verifiableCredential);
+  public boolean verifiyProof(VerifiableCredential verifiableCredential) {
+
+    final TransformedLinkedData transformedData =
+        transformer.transform(verifiableCredential.removeProof());
     final HashedLinkedData hashedData = hasher.hash(transformedData);
+
     return verifier.verify(hashedData, verifiableCredential);
   }
 }

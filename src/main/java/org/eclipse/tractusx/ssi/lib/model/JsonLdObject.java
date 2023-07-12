@@ -19,13 +19,15 @@
 
 package org.eclipse.tractusx.ssi.lib.model;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
+import java.net.URI;
+import java.util.*;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
-public class JsonLdObject extends HashMap<String, Object> {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public abstract class JsonLdObject extends HashMap<String, Object> {
 
   public static final String CONTEXT = "@context";
 
@@ -41,18 +43,36 @@ public class JsonLdObject extends HashMap<String, Object> {
     }
   }
 
-  public List<String> getContext() {
+  public List<URI> getContext() {
     final Object context = this.get(CONTEXT);
-    if (context instanceof String) {
-      return List.of((String) context);
-    }
-    if (context instanceof List) {
-      return (List<String>) context;
+    if (context instanceof String || context instanceof URI) {
+      return List.of(SerializeUtil.asURI(context));
+    } else if (context instanceof List) {
+      final List<URI> contexts = new ArrayList<>();
+      for (Object o : (List<?>) context) {
+        if (o instanceof String || o instanceof URI) {
+          contexts.add(SerializeUtil.asURI(o));
+        } else {
+          throw new IllegalArgumentException(
+              String.format(
+                  "Context must be of type string or URI. Context Type: %s",
+                  context.getClass().getName()));
+        }
+      }
+      return contexts;
     } else {
       throw new IllegalArgumentException(
           String.format(
               "Context must be of type string or list. Context Type: %s",
               context.getClass().getName()));
     }
+  }
+
+  public String toJson() {
+    return SerializeUtil.toJson(this);
+  }
+
+  public String toPrettyJson() {
+    return SerializeUtil.toPrettyJson(this);
   }
 }

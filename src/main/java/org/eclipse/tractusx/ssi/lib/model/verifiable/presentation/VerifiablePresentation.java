@@ -28,11 +28,11 @@ import lombok.NonNull;
 import lombok.ToString;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
+import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
-@ToString
+@ToString(callSuper = true)
 public class VerifiablePresentation extends JsonLdObject {
-  public static final String DEFAULT_CONTEXT = "https://www.w3.org/2018/credentials/v1";
+  public static final URI DEFAULT_CONTEXT = URI.create("https://www.w3.org/2018/credentials/v1");
 
   public static final String ID = "id";
   public static final String TYPE = "type";
@@ -43,9 +43,9 @@ public class VerifiablePresentation extends JsonLdObject {
 
     try {
       // validate getters
-      Objects.requireNonNull(this.getId());
-      Objects.requireNonNull(this.getTypes());
-      Objects.requireNonNull(this.getVerifiableCredentials());
+      Objects.requireNonNull(this.getId(), "id s null");
+      Objects.requireNonNull(this.getTypes(), "context is null");
+      Objects.requireNonNull(this.getVerifiableCredentials(), "VCs is null");
     } catch (Exception e) {
       throw new IllegalArgumentException(
           String.format("Invalid VerifiablePresentation: %s", SerializeUtil.toJson(json)), e);

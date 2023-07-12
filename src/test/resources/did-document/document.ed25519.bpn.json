@@ -1,0 +1,12 @@
+{
+    "id": "did:test:localhost:BPNL000000000000",
+    "verificationMethod": [
+      {
+        "publicKeyMultibase": "zEHDkzHqUZipBCTJ7ysJ57zk2hKwuYjD47RhuM7qYNvQA",
+        "controller": "did:test:localhost:BPNL000000000000",
+        "id": "did:test:localhost:BPNL000000000000",
+        "type": "Ed25519VerificationKey2020"
+      }
+    ],
+    "@context": "https://www.w3.org/ns/did/v1"
+  }

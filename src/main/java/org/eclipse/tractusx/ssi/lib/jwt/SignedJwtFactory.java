@@ -20,6 +20,7 @@
 package org.eclipse.tractusx.ssi.lib.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSSigner;
@@ -30,9 +31,9 @@ import com.nimbusds.jwt.SignedJWT;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
-import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
+import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.resolver.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresentation;
 
 /**
@@ -60,7 +61,7 @@ public class SignedJwtFactory {
       Did didIssuer,
       String audience,
       SerializedVerifiablePresentation serializedPresentation,
-      Ed25519Key signingKey) {
+      IPrivateKey privateKey) {
 
     final String issuer = didIssuer.toString();
     final String subject = didIssuer.toString();
@@ -68,6 +69,7 @@ public class SignedJwtFactory {
     // make on object out of it so that it can get serialized again
     Map<String, Object> vp =
         new ObjectMapper().readValue(serializedPresentation.getJson(), HashMap.class);
+
     var claimsSet =
         new JWTClaimsSet.Builder()
             .issuer(issuer)
@@ -78,11 +80,12 @@ public class SignedJwtFactory {
             .jwtID(UUID.randomUUID().toString())
             .build();
 
-    final OctetKeyPair octetKeyPair = octetKeyPairFactory.get(signingKey);
-    return createSignedES256Jwt(octetKeyPair, claimsSet);
+    final OctetKeyPair octetKeyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
+    return createSignedES256Jwt(octetKeyPair, claimsSet, issuer);
   }
 
-  private static SignedJWT createSignedES256Jwt(OctetKeyPair privateKey, JWTClaimsSet claimsSet) {
+  private static SignedJWT createSignedES256Jwt(
+      OctetKeyPair privateKey, JWTClaimsSet claimsSet, String issuer) {
     JWSSigner signer;
     try {
 
@@ -95,8 +98,13 @@ public class SignedJwtFactory {
                     .map(JWSAlgorithm::getName)
                     .collect(Collectors.joining(", "))));
       }
+
       var algorithm = JWSAlgorithm.EdDSA;
-      var header = new JWSHeader(algorithm);
+      var type = JOSEObjectType.JWT;
+      var header =
+          new JWSHeader(
+              algorithm, type, null, null, null, null, null, null, null, null, issuer, true, null,
+              null);
       var vc = new SignedJWT(header, claimsSet);
 
       vc.sign(signer);

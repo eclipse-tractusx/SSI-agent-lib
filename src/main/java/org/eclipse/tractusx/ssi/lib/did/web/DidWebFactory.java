@@ -27,14 +27,31 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidMethodIdentifier;
 public class DidWebFactory {
 
   public static Did fromHostname(String hostName) {
-    Objects.requireNonNull(hostName, "Hostname must not be null");
+    return fromHostnameAndPath(hostName, "");
+  }
 
-    if (hostName.contains("http"))
+  public static Did fromHostnameAndPath(String hostName, String path) {
+    Objects.requireNonNull(hostName, "Hostname must not be null");
+    Objects.requireNonNull(path, "Path must not be null");
+
+    if (hostName.startsWith("http"))
+      throw new IllegalArgumentException("Hostname should not contain http(s)://");
+
+    String cleanedPath = path;
+    if (!cleanedPath.startsWith("/")) {
+      cleanedPath = "/" + cleanedPath;
+    }
+    if (cleanedPath.endsWith("/")) {
+      cleanedPath = cleanedPath.substring(0, cleanedPath.length() - 1);
+    }
+
+    if (hostName.startsWith("http"))
       throw new IllegalArgumentException("Hostname should not contain http(s)://");
 
     final DidMethod didMethod = new DidMethod("web");
     final DidMethodIdentifier methodIdentifier =
-        new DidMethodIdentifier(hostName.replace(":", "%3A").replace("/", ":"));
+        new DidMethodIdentifier(
+            hostName.concat(cleanedPath).replaceAll(":", "%3A").replaceAll("/", ":"));
 
     return new Did(didMethod, methodIdentifier);
   }

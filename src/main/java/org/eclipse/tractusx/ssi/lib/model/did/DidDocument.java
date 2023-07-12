@@ -23,7 +23,7 @@ import java.net.URI;
 import java.util.*;
 import lombok.ToString;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
-import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
+import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 // spec https://www.w3.org/TR/did-core/
 @ToString
@@ -65,5 +65,10 @@ public class DidDocument extends JsonLdObject {
     }
 
     return result;
+  }
+
+  public static DidDocument fromJson(String json) {
+    var map = SerializeUtil.fromJson(json);
+    return new DidDocument(map);
   }
 }

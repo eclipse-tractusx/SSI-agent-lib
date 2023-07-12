@@ -19,44 +19,62 @@
 
 package org.eclipse.tractusx.ssi.lib.util.identity;
 
+import java.io.IOException;
 import java.net.URI;
-import java.security.KeyPairGenerator;
-import java.security.Security;
 import java.util.List;
-
-import lombok.SneakyThrows;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.eclipse.tractusx.ssi.lib.base.MultibaseFactory;
+import org.eclipse.tractusx.ssi.lib.crypt.IKeyGenerator;
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
+import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
+import org.eclipse.tractusx.ssi.lib.crypt.KeyPair;
+import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
+import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559Generator;
+import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
-import org.eclipse.tractusx.ssi.lib.model.did.*;
-import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
+import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
+import org.eclipse.tractusx.ssi.lib.model.did.Did;
+import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
+import org.eclipse.tractusx.ssi.lib.model.did.DidDocumentBuilder;
+import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
+import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethodBuilder;
+import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethod;
+import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethodBuilder;
 
 public class TestIdentityFactory {
 
-    @SneakyThrows
-    public static TestIdentity newIdentity() {
+  public static TestIdentity newIdentityWithED25519Keys()
+      throws IOException, KeyGenerationException {
 
-        final Did did = TestDidFactory.createRandom();
+    final Did did = TestDidFactory.createRandom();
 
-        Security.addProvider(new BouncyCastleProvider());
-        var keyPair = KeyPairGenerator.getInstance("Ed25519").generateKeyPair();
+    IKeyGenerator keyGenerator = new x21559Generator();
+    KeyPair keyPair = keyGenerator.generateKey();
+    IPublicKey publicKey = keyPair.getPublicKey();
+    IPrivateKey privateKey = keyPair.getPrivateKey();
 
-        final byte[] publicKey = keyPair.getPublic().getEncoded();
-        final byte[] privateKey = keyPair.getPrivate().getEncoded();
-        final MultibaseString publicKeyMultiBase = MultibaseFactory.create(publicKey);
-        final Ed25519VerificationKey2020Builder ed25519VerificationKey2020Builder =
-                new Ed25519VerificationKey2020Builder();
-        final Ed25519VerificationKey2020 verificationMethod =
-                ed25519VerificationKey2020Builder
-                        .id(URI.create(did + "#key-1"))
-                        .controller(URI.create(did + "#controller"))
-                        .publicKeyMultiBase(publicKeyMultiBase)
-                        .build();
+    MultibaseString multibaseString = MultibaseFactory.create(publicKey.asByte());
+    final Ed25519VerificationMethodBuilder ed25519VerificationKey2020Builder =
+        new Ed25519VerificationMethodBuilder();
 
-        final DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();
-        final DidDocument didDocument =
-                didDocumentBuilder.id(did.toUri()).verificationMethods(List.of(verificationMethod)).build();
+    final Ed25519VerificationMethod ed25519VerificationMethod =
+        ed25519VerificationKey2020Builder
+            .id(URI.create(did + "#key-1"))
+            .controller(URI.create(did + "#controller"))
+            .publicKeyMultiBase(multibaseString)
+            .build();
 
-        return new TestIdentity(did, didDocument, publicKey, privateKey);
-    }
+    // JWK
+    JsonWebKey jwk = new JsonWebKey("key-2", publicKey, privateKey);
+
+    final JWKVerificationMethod jwkVerificationMethod =
+        new JWKVerificationMethodBuilder().did(did).jwk(jwk).build();
+
+    final DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();
+    final DidDocument didDocument =
+        didDocumentBuilder
+            .id(did.toUri())
+            .verificationMethods(List.of(ed25519VerificationMethod, jwkVerificationMethod))
+            .build();
+
+    return new TestIdentity(did, didDocument, publicKey, privateKey);
+  }
 }

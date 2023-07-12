@@ -5,7 +5,7 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+[![APACHE-2.0 License][license-shield]][license-url]
 
 
 
@@ -22,12 +22,12 @@
   <p align="center">
     This open source project has emerged with a goal to foster collaborative development and innovation in the area of Self-Sovereign Identity.
     <br />
-        <a href="https://github.com/eclipse-tractusx/SSI-agent-lib/tree/main/cx-ssi-lib/docs"><strong>Explore the docs »</strong></a>
+        <a href="https://github.com/catenax-ng/product-lab-ssi/tree/main/cx-ssi-lib/docs"><strong>Explore the docs »</strong></a>
         <br />
     <br />
-    <a href="https://github.com/eclipse-tractusx/SSI-agent-lib/issues">Report Bug</a>
+    <a href="https://github.com/catenax-ng/product-lab-ssi/issues">Report Bug</a>
     ·
-    <a href="https://github.com/eclipse-tractusx/SSI-agent-lib/issues">Request Feature</a>
+    <a href="https://github.com/catenax-ng/product-lab-ssi/issues">Request Feature</a>
   </p>
 </div>
 
@@ -107,9 +107,9 @@ To install and use this lib , you have two options: building from source or usin
 
 To build the project from source, follow these steps:
 
-1. Clone the repository: 
+1. Clone the repository:
    ```
-   git clone https://github.com/eclipse-tractusx/SSI-agent-lib.git 
+   git clone https://github.com/catenax-ng/product-lab-ssi.git 
    ```
 
 2. Navigate to the project directory:
@@ -199,8 +199,8 @@ You can freely use, modify, and distribute this project under the terms of the A
 
 If you have any questions, suggestions, or feedback regarding this project, please feel free to reach out to us. You can contact our team at:
 
-- Email: TBD! 
-- Issue Tracker:TBD! 
+- Email: TBD!
+- Issue Tracker:TBD!
 
 We value your input and appreciate your interest in contributing to the project. Don't hesitate to contact us if you need any assistance or want to get involved.
 
@@ -208,12 +208,12 @@ We value your input and appreciate your interest in contributing to the project.
 
 
 [contributors-shield]: https://img.shields.io/github/contributors/catenax-ng/product-lab-ssi.svg?style=for-the-badge
-[contributors-url]: https://github.com/eclipse-tractusx/SSI-agent-lib/graphs/contributors
+[contributors-url]: https://github.com/catenax-ng/product-lab-ssi/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/catenax-ng/product-lab-ssi.svg?style=for-the-badge
-[forks-url]: https://github.com/eclipse-tractusx/SSI-agent-lib/network/members
+[forks-url]: https://github.com/catenax-ng/product-lab-ssi/network/members
 [stars-shield]: https://img.shields.io/github/stars/catenax-ng/product-lab-ssi.svg?style=for-the-badge
-[stars-url]: https://github.com/eclipse-tractusx/SSI-agent-lib/stargazers
+[stars-url]: https://github.com/catenax-ng/product-lab-ssi/stargazers
 [issues-shield]: https://img.shields.io/github/issues/catenax-ng/product-lab-ssi.svg?style=for-the-badge
-[issues-url]: https://github.com/eclipse-tractusx/SSI-agent-lib/issues
+[issues-url]: https://github.com/catenax-ng/product-lab-ssi/issues
 [license-shield]: https://img.shields.io/github/license/catenax-ng/product-lab-ssi.svg?style=for-the-badge
-[license-url]: https://github.com/eclipse-tractusx/SSI-agent-lib/blob/master/LICENSE.txt
+[license-url]: https://github.com/catenax-ng/product-lab-ssi/blob/master/LICENSE.txt
