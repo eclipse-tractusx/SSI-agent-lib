@@ -1,0 +1,69 @@
+---
+name: Release - GitHub
+
+on:
+  pull_request:
+    types: [closed ]
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      # see https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+      contents: write
+      pull-requests: write
+
+    steps:
+
+      - uses: actions/checkout@v2
+
+      # RELEASE VERSION
+      -
+        name: Extract version from branch name (for release branches)
+        if: startsWith(github.event.pull_request.head.ref, 'release/')
+        run: |
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          VERSION=${BRANCH_NAME#release/}
+
+          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+      -
+        name: Extract version from branch name (for hotfix branches)
+        if: startsWith(github.event.pull_request.head.ref, 'hotfix/')
+        run: |
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          VERSION=${BRANCH_NAME#hotfix/}
+
+          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+      -
+        name: Output release version
+        run: |
+          echo "::set-output name=RELEASE_VERSION::${{ env.RELEASE_VERSION }}"
+
+      # GIT TAG
+      - name: Create Release Tag
+        run: |
+          # Prepare git env
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+          # informative
+          git branch -a
+          git tag
+
+          # Create & push tag
+          git tag --force ${{ env.RELEASE_VERSION }}
+          git push --force origin ${{ env.RELEASE_VERSION }}
+
+      # GITHUB RELEASE
+      - name: Create Release Tag
+        uses: thomaseizinger/create-release@1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          target_commitish: ${{ github.event.pull_request.merge_commit_sha }}
+          tag_name: ${{ env.RELEASE_VERSION }}
+          name: ${{ env.RELEASE_VERSION }}
+          draft: false
+          prerelease: false

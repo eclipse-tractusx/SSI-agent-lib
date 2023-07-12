@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+cx-ssi-lib/.DS_Store
+cx-ssi-lib/src/.DS_Store
+cx-ssi-lib/src/main/java/org/eclipse/tractusx/ssi/lib/.DS_Store
+cx-ssi-lib/src/test/.DS_Store
+cx-ssi-lib/src/test/resources/.DS_Store
+cx-ssi-lib/src/test/resources/keys/.DS_Store
+.DS_Store

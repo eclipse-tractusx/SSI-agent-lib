@@ -19,10 +19,12 @@
 
 package org.eclipse.tractusx.ssi.lib.proof.transform;
 
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Value;
 
 @Value
+@EqualsAndHashCode(of = "value")
 public class TransformedLinkedData {
 
   @NonNull String value;
