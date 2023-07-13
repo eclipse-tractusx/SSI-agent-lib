@@ -25,9 +25,23 @@ import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresen
 
 public interface JsonLdSerializer {
 
+  /**
+   * Serlizer a presentation to a Json string
+   *
+   * @param verifiablePresentation
+   * @return {@link SerializedVerifiablePresentation}
+   */
   SerializedVerifiablePresentation serializePresentation(
       VerifiablePresentation verifiablePresentation);
 
+  /**
+   * Deserialize a presentation with options to validate JSON-LD or not.
+   *
+   * @param serializedPresentation
+   * @param validateJsonLd
+   * @return VerifiablePresentation
+   * @throws InvalidJsonLdException
+   */
   VerifiablePresentation deserializePresentation(
       SerializedVerifiablePresentation serializedPresentation, boolean validateJsonLd)
       throws InvalidJsonLdException;
@@ -36,7 +50,7 @@ public interface JsonLdSerializer {
    * Deserialize a presentation and validates the JSON-LD.
    *
    * @param serializedPresentation
-   * @return
+   * @return VerifiablePresentation
    * @throws InvalidJsonLdException
    */
   VerifiablePresentation deserializePresentation(

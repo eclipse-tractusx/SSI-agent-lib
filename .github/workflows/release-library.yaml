@@ -1,0 +1,58 @@
+---
+name: Release - Library
+
+on:
+  pull_request:
+    types: [ closed ]
+    branches: [ main ]
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      # see https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Docker Build
+        uses: docker/setup-buildx-action@v2
+
+      # RELEASE VERSION
+      - name: Extract version from branch name (for release branches)
+        if: startsWith(github.event.pull_request.head.ref, 'release/')
+        run: |
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          VERSION=${BRANCH_NAME#release/}
+
+          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+      - name: Extract version from branch name (for hotfix branches)
+        if: startsWith(github.event.pull_request.head.ref, 'hotfix/')
+        run: |
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          VERSION=${BRANCH_NAME#hotfix/}
+
+          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+      - name: Output release version
+        run: |
+          echo "::set-output name=RELEASE_VERSION::${{ env.RELEASE_VERSION }}"
+
+      # PUBLISH LIBRARIES
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+      #            -Pdelombok -pl 'cx-ssi-lib,cx-ssi-agent-lib' \
+      - name: Publish Libraries to GitHub Packages
+        run: |-
+          ./mvnw -s settings.xml -Pdelombok --file ./cx-ssi-lib/pom.xml -DaltReleaseDeploymentRepository=github::https://maven.pkg.github.com/${{ github.repository }} -Dmaven.test.skip=true -B package deploy:deploy
+        env:
+          GITHUB_PACKAGE_USERNAME: ${{ github.actor }}
+          GITHUB_PACKAGE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}

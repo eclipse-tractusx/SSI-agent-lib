@@ -42,7 +42,6 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePres
 @PackagePrivate
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DanubTechMapper {
-
   @NonNull
   public static com.danubetech.verifiablecredentials.VerifiablePresentation map(
       VerifiablePresentation presentation) {
