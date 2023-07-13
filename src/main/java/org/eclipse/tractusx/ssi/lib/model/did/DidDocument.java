@@ -66,4 +66,9 @@ public class DidDocument extends JsonLdObject {
 
     return result;
   }
+
+  public static DidDocument fromJson(String json) {
+    var map = SerializeUtil.fromJson(json);
+    return new DidDocument(map);
+  }
 }
