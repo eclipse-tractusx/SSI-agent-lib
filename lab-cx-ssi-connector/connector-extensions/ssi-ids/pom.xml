@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
+        <artifactId>connector-extensions</artifactId>
+        <version>0.0.4</version>
+    </parent>
+
+    <artifactId>ssi-ids</artifactId>
+
+    <properties>
+    </properties>
+
+    <dependencies>
+
+        <!-- Project -->
+        <dependency>
+            <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
+            <artifactId>ssi-spi</artifactId>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Eclipse Data Space Components -->
+        <dependency>
+            <groupId>org.eclipse.edc</groupId>
+            <artifactId>core-spi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.edc</groupId>
+            <artifactId>transform-spi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.edc</groupId>
+            <artifactId>ids-spi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.edc</groupId>
+            <artifactId>catalog-spi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.edc</groupId>
+            <artifactId>ids-api-multipart-dispatcher-v1</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.edc</groupId>
+            <artifactId>ids-api-multipart-endpoint-v1</artifactId>
+        </dependency>
+
+    </dependencies>
+</project>

@@ -1,151 +1,579 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
-
-See the NOTICE file(s) distributed with this work for additional
-information regarding copyright ownership.
-
-This program and the accompanying materials are made available under the
-terms of the Apache License, Version 2.0 which is available at
-https://www.apache.org/licenses/LICENSE-2.0.
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-License for the specific language governing permissions and limitations
-under the License.
-
-SPDX-License-Identifier: Apache-2.0
- -->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.eclipse.tractusx.ssi</groupId>
-        <artifactId>cx-ssi</artifactId>
-        <version>0.0.3</version>
-    </parent>
-    <packaging>jar</packaging>
-
-    <artifactId>cx-ssi-lib</artifactId>
-
+    <groupId>org.eclipse.tractusx.ssi</groupId>
+    <artifactId>cx-ssi</artifactId>
+    <version>0.0.4</version>
+    <packaging>pom</packaging>
+    <name>cx-ssi</name>
+    <description>cx-ssi</description>
+    <modules>
+        <module>cx-ssi-agent-app</module>
+        <module>cx-ssi-agent-lib</module>
+        <module>cx-ssi-agent-interface</module>
+        <module>cx-ssi-agent-client-apache</module>
+        <module>cx-ssi-agent-client-okhttp3</module>
+        <module>lab-cx-ssi-connector</module>
+        <module>lab-cx-ssi-system-test</module>
+    </modules>
     <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <delombokSourceDirectory>${project.build.directory}/delombok</delombokSourceDirectory>
+        <lombok.version>1.18.26</lombok.version>
+        <com.diffplug.spotless.maven.plugin.version>2.28.0</com.diffplug.spotless.maven.plugin.version>
+        <spring-boot.version>2.5.5</spring-boot.version>
+        <spring-boot-devtools.version>3.0.4</spring-boot-devtools.version>
+        <spring-boot-starter.version>3.0.4</spring-boot-starter.version>
+        <spring-boot-starter-test.version>3.0.4</spring-boot-starter-test.version>
+        <spring-security-core.version>6.0.2</spring-security-core.version>
+        <org-sl4j.version>2.0.7</org-sl4j.version>
+        <org.eclipse.txdc.version>0.3.0</org.eclipse.txdc.version>
+        <org.eclipse.edc.version>0.0.1-20230220-SNAPSHOT</org.eclipse.edc.version>
+        <com.nimbusds.version>9.31</com.nimbusds.version>
+        <com.fasterxml.jackson.version>2.14.0-rc2</com.fasterxml.jackson.version>
+        <jakarta.ws.rs.version>3.1.0</jakarta.ws.rs.version>
+        <org.junit.version>5.9.2</org.junit.version>
+        <org.mockito.version>4.10.0</org.mockito.version>
+        <org.apache.httpcomponents.httpclient.version>5.2.1</org.apache.httpcomponents.httpclient.version>
+        <org.awaitility.version>4.2.0</org.awaitility.version>
+        <org.openapitools.jackson-databind-nullable.version>0.2.6</org.openapitools.jackson-databind-nullable.version>
+        <com.google.code.gson.version>2.10.1</com.google.code.gson.version>
+        <com.google.code.tink.version>1.7.0</com.google.code.tink.version>
+        <net.i2p.crypto.eddsa.version>0.3.0</net.i2p.crypto.eddsa.version>
+        <com.jayway.jsonpath.version>2.8.0</com.jayway.jsonpath.version>
+        <org.eclipse.dash.license.tool.plugin.version>0.0.1-SNAPSHOT</org.eclipse.dash.license.tool.plugin.version>
     </properties>
 
-    <dependencies>
+    <dependencyManagement>
+        <dependencies>
 
-        <!-- Project -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
+            <!-- Project -->
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi</groupId>
+                <artifactId>cx-ssi-agent-interface</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi</groupId>
+                <artifactId>cx-ssi-agent-client-apache</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi</groupId>
+                <artifactId>cx-ssi-agent-client-okhttp3</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi</groupId>
+                <artifactId>cx-ssi-lib</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi</groupId>
+                <artifactId>cx-ssi-agent-lib</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
+                <artifactId>ssi-spi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
+                <artifactId>ssi-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
+                <artifactId>ssi-iam</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
+                <artifactId>ssi-ids</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
+                <artifactId>ssi-policy</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.ssi.lab.connector.extensions</groupId>
+                <artifactId>ssi-agent-self-hosted</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <!-- Multibase -->
-        <dependency>
-            <groupId>com.github.multiformats</groupId>
-            <artifactId>java-multibase</artifactId>
-            <version>v1.1.0</version>
-        </dependency>
+            <!-- Spring -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-rest</artifactId>
+                <version>${spring-boot-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-devtools</artifactId>
+                <version>${spring-boot-devtools.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-core</artifactId>
+                <version>${spring-security-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring-boot-starter.version}</version>
+            </dependency>
 
-        <!-- Bouncy Castle -->
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.70</version>
-        </dependency>
+            <!-- Lombok -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <optional>true</optional>
+            </dependency>
 
-        <!-- DanubeTech -->
-        <dependency>
-            <groupId>com.danubetech</groupId>
-            <artifactId>verifiable-credentials-java</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+            <!-- Open API Tools -->
+            <dependency>
+                <groupId>org.openapitools</groupId>
+                <artifactId>jackson-databind-nullable</artifactId>
+                <version>${org.openapitools.jackson-databind-nullable.version}</version>
+            </dependency>
 
-        <!-- Google Tink -->
-        <!-- Note: that for EdDSA you need to include the optional Tink dependency in your project. For Nimbus JOSE+JWT 6.0 that would be -->
-        <dependency>
-            <groupId>com.google.crypto.tink</groupId>
-            <artifactId>tink</artifactId>
-            <version>1.7.0</version>
-        </dependency>
-        <!-- Net Crypto EDDSA -->
-        <!-- Required for the EDSA Security Provider -->
-        <dependency>
-            <groupId>net.i2p.crypto</groupId>
-            <artifactId>eddsa</artifactId>
-            <version>0.3.0</version>
-        </dependency>
+            <!-- sl4j -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${org-sl4j.version}</version>
+            </dependency>
 
-        <!-- JUnit -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.9.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.9.2</version>
-            <scope>test</scope>
-        </dependency>
+            <!-- Apache Http Client -->
+            <dependency>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>${org.apache.httpcomponents.httpclient.version}</version>
+            </dependency>
 
-        <!-- Mockito -->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>5.2.0</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+            <!-- Google Gson -->
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${com.google.code.gson.version}</version>
+            </dependency>
+
+            <!-- Google Tink -->
+            <!-- Note that for EdDSA you need to include the optional Tink dependency in your project. For Nimbus JOSE+JWT 6.0 that would be -->
+            <dependency>
+                <groupId>com.google.crypto.tink</groupId>
+                <artifactId>tink</artifactId>
+                <version>${com.google.code.tink.version}</version>
+            </dependency>
+
+            <!-- Net Crypto EDDSA -->
+            <!-- Required for the EDSA Security Provider -->
+            <dependency>
+                <groupId>net.i2p.crypto</groupId>
+                <artifactId>eddsa</artifactId>
+                <version>${net.i2p.crypto.eddsa.version}</version>
+            </dependency>
+
+            <!-- Jakarta -->
+            <dependency>
+                <groupId>jakarta.ws.rs</groupId>
+                <artifactId>jakarta.ws.rs-api</artifactId>
+                <version>${jakarta.ws.rs.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <!-- Jayway Jsonpath -->
+            <dependency>
+                <groupId>com.jayway.jsonpath</groupId>
+                <artifactId>json-path</artifactId>
+                <version>${com.jayway.jsonpath.version}</version>
+            </dependency>
+
+            <!-- Jackson -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${com.fasterxml.jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${com.fasterxml.jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${com.fasterxml.jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.jaxrs</groupId>
+                <artifactId>jackson-jaxrs-json-provider</artifactId>
+                <version>${com.fasterxml.jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>${com.fasterxml.jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-yaml</artifactId>
+                <version>${com.fasterxml.jackson.version}</version>
+            </dependency>
+
+
+            <!-- Nimbus JWT -->
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${com.nimbusds.version}</version>
+            </dependency>
+            <!-- Tractus-X Eclipse Data Space Connector -->
+            <dependency>
+                <groupId>org.eclipse.tractusx.edc.extensions</groupId>
+                <artifactId>business-partner-validation</artifactId>
+                <version>${org.eclipse.txdc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.edc.extensions</groupId>
+                <artifactId>dataplane-selector-configuration</artifactId>
+                <version>${org.eclipse.txdc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.edc.extensions</groupId>
+                <artifactId>data-encryption</artifactId>
+                <version>${org.eclipse.txdc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.edc.extensions</groupId>
+                <artifactId>custom-jsonld</artifactId>
+                <version>${org.eclipse.txdc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.edc.extensions</groupId>
+                <artifactId>hashicorp-vault</artifactId>
+                <version>${org.eclipse.txdc.version}</version>
+            </dependency>
+
+            <!-- Eclipse Data Space Components -->
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>core-spi</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>policy-spi</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>transform-spi</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>policy-engine-spi</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>control-plane-core</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>catalog-spi</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>configuration-filesystem</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>management-api</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>api-observability</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>ids-api-configuration</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>ids-api-multipart-dispatcher-v1</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>ids-api-multipart-endpoint-v1</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>ids-transform-v1</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>ids-core</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>ids-spi</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>jwt-spi</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>provision-oauth2</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <!--            <dependency>-->
+            <!--                <groupId>org.eclipse.edc</groupId>-->
+            <!--                <artifactId>data-plane-transfer-sync</artifactId>-->
+            <!--                <version>${org.eclipse.edc.version}</version>-->
+            <!--            </dependency>-->
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>data-plane-selector-core</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>data-plane-selector-client</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>data-plane-selector-spi</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <!--            <dependency>-->
+            <!--                <groupId>org.eclipse.edc</groupId>-->
+            <!--                <artifactId>data-plane-transfer-client</artifactId>-->
+            <!--                <version>${org.eclipse.edc.version}</version>-->
+            <!--            </dependency>-->
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>micrometer-core</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>jersey-micrometer</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>jetty-micrometer</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>monitor-jdk-logger</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>http</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>transfer-pull-http-dynamic-receiver</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.edc</groupId>
+                <artifactId>edc-controlplane-base</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+
+            <!-- Awaitility -->
+            <dependency>
+                <groupId>org.awaitility</groupId>
+                <artifactId>awaitility</artifactId>
+                <version>${org.awaitility.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- JUnit -->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${org.junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${org.junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+
+            <!-- Mockito -->
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${org.mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-inline</artifactId>
+                <version>${org.mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.eclipse.dash</groupId>
                 <artifactId>license-tool-plugin</artifactId>
-                <configuration>
-                    <summary>DEPENDENCIES</summary>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok-maven-plugin</artifactId>
-                <version>1.18.20.0</version>
+                <version>${org.eclipse.dash.license.tool.plugin.version}</version>
                 <executions>
                     <execution>
-                        <phase>generate-sources</phase>
+                        <id>license-check</id>
                         <goals>
-                            <goal>delombok</goal>
+                            <goal>license-check</goal>
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <sourceDirectory>${originalSourceDirectory}</sourceDirectory>
-                    <outputDirectory>${delombokSourceDirectory}</outputDirectory>
-                    <addOutputDirectory>false</addOutputDirectory>
-                    <encoding>UTF-8</encoding>
-                    <formatPreferences>
-                        <javaLangAsFQN>skip</javaLangAsFQN>
-                    </formatPreferences>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${com.diffplug.spotless.maven.plugin.version}</version>
+                <configuration>
+                    <java>
+                        <googleJavaFormat>
+                            <version>1.15.0</version>
+                            <style>GOOGLE</style>
+                        </googleJavaFormat>
+                    </java>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>spotless-check</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>delombok</id>
-            <properties>
-                <sourceDir>${delombokSourceDirectory}</sourceDir>
-            </properties>
-        </profile>
-    </profiles>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>https://repo1.maven.org/maven2</url>
+        </repository>
+        <!-- VC & VP -->
+        <repository>
+            <id>danubetech-maven-public</id>
+            <url>https://repo.danubetech.com/repository/maven-public/</url>
+        </repository>
+        <!-- Java Multibase -->
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <!-- Eclipse DataSpace Components "Releases" -->
+        <repository>
+            <id>sonatype-snapshots</id>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+        <!-- IDS Information Model. Dependency of Eclipse DataSpace Components -->
+        <repository>
+            <id>fraunhofer-iais-eis</id>
+            <name>Fraunhofer IAIS</name>
+            <url>https://maven.iais.fraunhofer.de/artifactory/eis-ids-public</url>
+        </repository>
+        <!-- Product EDC Libraries -->
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/catenax-ng/product-edc</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>https://repo1.maven.org/maven2</url>
+        </pluginRepository>
+        <!-- Eclipse Dash Tool to generate DEPENDENCIES file -->
+        <pluginRepository>
+            <id>dash-licenses-snapshots</id>
+            <url>https://repo.eclipse.org/content/repositories/dash-licenses-snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <distributionManagement>
+        <!-- Library Publish Repository -->
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/catenax-ng/product-lab-ssi</url>
+        </repository>
+    </distributionManagement>
 
 </project>
