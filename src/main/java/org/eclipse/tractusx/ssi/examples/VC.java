@@ -1,3 +1,22 @@
+/********************************************************************************
+ * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ *
+ * See the NOTICE file(s) distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0.
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
+
 package org.eclipse.tractusx.ssi.examples;
 
 import java.net.URI;
@@ -16,23 +35,21 @@ public class VC {
   public static VerifiableCredential createVCWithoutProof() {
 
     // VC Bulider
-    final VerifiableCredentialBuilder verifiableCredentialBuilder =
-        new VerifiableCredentialBuilder();
+    final VerifiableCredentialBuilder verifiableCredentialBuilder = new VerifiableCredentialBuilder();
 
     // VC Subject
-    final VerifiableCredentialSubject verifiableCredentialSubject =
-        new VerifiableCredentialSubject(Map.of("test", "test"));
+    final VerifiableCredentialSubject verifiableCredentialSubject = new VerifiableCredentialSubject(
+        Map.of("test", "test"));
 
     // Using Builder
-    final VerifiableCredential credentialWithoutProof =
-        verifiableCredentialBuilder
-            .id(URI.create("did:test:id"))
-            .type(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
-            .issuer(URI.create("did:test:isser"))
-            .expirationDate(Instant.now().plusSeconds(3600))
-            .issuanceDate(Instant.now())
-            .credentialSubject(verifiableCredentialSubject)
-            .build();
+    final VerifiableCredential credentialWithoutProof = verifiableCredentialBuilder
+        .id(URI.create("did:test:id"))
+        .type(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
+        .issuer(URI.create("did:test:isser"))
+        .expirationDate(Instant.now().plusSeconds(3600))
+        .issuanceDate(Instant.now())
+        .credentialSubject(verifiableCredentialSubject)
+        .build();
 
     return credentialWithoutProof;
   }
@@ -41,21 +58,19 @@ public class VC {
       VerifiableCredential credential, byte[] privateKey, Did issuer) {
 
     // VC Builder
-    final VerifiableCredentialBuilder builder =
-        new VerifiableCredentialBuilder()
-            .context(credential.getContext())
-            .id(credential.getId())
-            .issuer(issuer.toUri())
-            .issuanceDate(Instant.now())
-            .credentialSubject(credential.getCredentialSubject())
-            .expirationDate(credential.getExpirationDate())
-            .type(credential.getTypes());
+    final VerifiableCredentialBuilder builder = new VerifiableCredentialBuilder()
+        .context(credential.getContext())
+        .id(credential.getId())
+        .issuer(issuer.toUri())
+        .issuanceDate(Instant.now())
+        .credentialSubject(credential.getCredentialSubject())
+        .expirationDate(credential.getExpirationDate())
+        .type(credential.getTypes());
 
     // Ed25519 Proof Builder
     final LinkedDataProofGenerator generator = LinkedDataProofGenerator.create();
-    final Ed25519Signature2020 proof =
-        generator.createEd25519Signature2020(
-            builder.build(), URI.create(issuer + "#key-1"), privateKey);
+    final Ed25519Signature2020 proof = generator.createEd25519Signature2020(
+        builder.build(), URI.create(issuer + "#key-1"), privateKey);
 
     // Adding Proof to VC
     builder.proof(proof);
