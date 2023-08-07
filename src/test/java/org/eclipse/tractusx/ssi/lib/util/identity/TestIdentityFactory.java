@@ -19,44 +19,68 @@
 
 package org.eclipse.tractusx.ssi.lib.util.identity;
 
+import java.io.IOException;
 import java.net.URI;
-import java.security.KeyPairGenerator;
-import java.security.Security;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.util.List;
-
-import lombok.SneakyThrows;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.bouncycastle.crypto.util.PrivateKeyFactory;
+import org.bouncycastle.crypto.util.PublicKeyFactory;
+import org.bouncycastle.jcajce.provider.asymmetric.edec.KeyPairGeneratorSpi;
 import org.eclipse.tractusx.ssi.lib.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
-import org.eclipse.tractusx.ssi.lib.model.did.*;
+import org.eclipse.tractusx.ssi.lib.model.did.Did;
+import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
+import org.eclipse.tractusx.ssi.lib.model.did.DidDocumentBuilder;
+import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020;
+import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020Builder;
 import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
 
 public class TestIdentityFactory {
 
-    @SneakyThrows
-    public static TestIdentity newIdentity() {
+  public static TestIdentity newIdentityWithED25519Keys(boolean PKCS8Format) throws IOException {
 
-        final Did did = TestDidFactory.createRandom();
+    byte[] publicKey = null;
+    byte[] privateKey = null;
+    final Did did = TestDidFactory.createRandom();
 
-        Security.addProvider(new BouncyCastleProvider());
-        var keyPair = KeyPairGenerator.getInstance("Ed25519").generateKeyPair();
+    if (PKCS8Format) {
+      publicKey = TestResourceUtil.getPublicKeyEd25519();
+      privateKey = TestResourceUtil.getPrivateKeyEd25519();
+    } else {
+      KeyPairGeneratorSpi.Ed25519 ed25519 = new KeyPairGeneratorSpi.Ed25519();
+      ed25519.initialize(256, new SecureRandom());
+      KeyPair keyPair = ed25519.generateKeyPair();
+      PublicKey PubKey = keyPair.getPublic();
+      PrivateKey PivKey = keyPair.getPrivate();
+      Ed25519PrivateKeyParameters ed25519PrivateKeyParameters =
+          (Ed25519PrivateKeyParameters) PrivateKeyFactory.createKey(PivKey.getEncoded());
+      Ed25519PublicKeyParameters publicKeyParameters =
+          (Ed25519PublicKeyParameters) PublicKeyFactory.createKey(PubKey.getEncoded());
 
-        final byte[] publicKey = keyPair.getPublic().getEncoded();
-        final byte[] privateKey = keyPair.getPrivate().getEncoded();
-        final MultibaseString publicKeyMultiBase = MultibaseFactory.create(publicKey);
-        final Ed25519VerificationKey2020Builder ed25519VerificationKey2020Builder =
-                new Ed25519VerificationKey2020Builder();
-        final Ed25519VerificationKey2020 verificationMethod =
-                ed25519VerificationKey2020Builder
-                        .id(URI.create(did + "#key-1"))
-                        .controller(URI.create(did + "#controller"))
-                        .publicKeyMultiBase(publicKeyMultiBase)
-                        .build();
+      publicKey = publicKeyParameters.getEncoded();
 
-        final DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();
-        final DidDocument didDocument =
-                didDocumentBuilder.id(did.toUri()).verificationMethods(List.of(verificationMethod)).build();
-
-        return new TestIdentity(did, didDocument, publicKey, privateKey);
+      privateKey = ed25519PrivateKeyParameters.getEncoded();
     }
+
+    final MultibaseString publicKeyMultiBase = MultibaseFactory.create(publicKey);
+    final Ed25519VerificationKey2020Builder ed25519VerificationKey2020Builder =
+        new Ed25519VerificationKey2020Builder();
+    final Ed25519VerificationKey2020 verificationMethod =
+        ed25519VerificationKey2020Builder
+            .id(URI.create(did + "#key-1"))
+            .controller(URI.create(did + "#controller"))
+            .publicKeyMultiBase(publicKeyMultiBase)
+            .build();
+
+    final DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();
+    final DidDocument didDocument =
+        didDocumentBuilder.id(did.toUri()).verificationMethods(List.of(verificationMethod)).build();
+
+    return new TestIdentity(did, didDocument, publicKey, privateKey);
+  }
 }
