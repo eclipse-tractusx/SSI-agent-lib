@@ -1,0 +1,20 @@
+@startuml SystemScope
+
+package "System Under Design" {
+    artifact "SSI-Lib" as LIB
+}
+
+artifact "Eclipse\nDataspace\nConnector" as EDC
+artifact "Managed\nIdentity\nWallet" as MIW
+artifact "Self\nHosted\nWallet" as SHW
+
+file "DID +\nDID-Document" as DID
+
+
+LIB .>  DID : resolve (via Lib)
+LIB <-- EDC : use
+LIB <-- MIW : use
+LIB <-- SHW : use
+SHW -up-> DID : resolve (external Resolver)
+
+@enduml

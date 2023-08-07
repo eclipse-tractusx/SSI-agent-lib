@@ -19,11 +19,9 @@
 
 package org.eclipse.tractusx.ssi.lib.proof.verify;
 
-import java.security.KeyFactory;
-import java.security.PrivateKey;
-import java.security.Signature;
-import java.security.spec.PKCS8EncodedKeySpec;
 import lombok.SneakyThrows;
+import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
+import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
 public class LinkedDataSigner {
@@ -33,13 +31,12 @@ public class LinkedDataSigner {
 
     final byte[] message = hashedLinkedData.getValue();
 
-    final KeyFactory kf = KeyFactory.getInstance("Ed25519");
-    final PrivateKey privateKey = kf.generatePrivate(new PKCS8EncodedKeySpec(signingKey));
+    Ed25519PrivateKeyParameters secretKeyParameters =
+        new Ed25519PrivateKeyParameters(signingKey, 0);
+    final Ed25519Signer signer = new Ed25519Signer();
+    signer.init(true, secretKeyParameters);
+    signer.update(message, 0, message.length);
 
-    final Signature sig = Signature.getInstance("Ed25519");
-    sig.initSign(privateKey);
-    sig.update(message);
-
-    return sig.sign();
+    return signer.generateSignature();
   }
 }
