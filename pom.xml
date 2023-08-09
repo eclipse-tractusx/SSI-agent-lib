@@ -145,11 +145,27 @@ SPDX-License-Identifier: Apache-2.0
                 <artifactId>spotless-maven-plugin</artifactId>
                 <version>${com.diffplug.spotless.maven.plugin.version}</version>
                 <configuration>
+                    <formats>
+                        <format>
+                            <includes>
+                                <include>.gitignore</include>
+                            </includes>
+                            <trimTrailingWhitespace/>
+                            <endWithNewline/>
+                            <indent>
+                                <tabs>true</tabs>
+                                <spacesPerTab>4</spacesPerTab>
+                            </indent>
+                        </format>
+                    </formats>
                     <java>
                         <googleJavaFormat>
                             <version>1.15.0</version>
                             <style>GOOGLE</style>
                         </googleJavaFormat>
+                        <licenseHeader>
+                            <file>${project.basedir}/docs/development/license-header.txt</file>
+                        </licenseHeader>
                     </java>
                 </configuration>
                 <executions>
