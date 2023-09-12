@@ -24,14 +24,14 @@ import com.apicatalog.jsonld.JsonLdOptions;
 import com.apicatalog.jsonld.document.JsonDocument;
 import com.apicatalog.jsonld.http.media.MediaType;
 import com.apicatalog.jsonld.processor.ExpansionProcessor;
-import foundation.identity.jsonld.ConfigurableDocumentLoader;
-import foundation.identity.jsonld.JsonLDObject;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 import java.util.Map;
 import org.eclipse.tractusx.ssi.lib.exception.InvalidJsonLdException;
+import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
+import org.eclipse.tractusx.ssi.lib.model.RemoteDocumentLoader;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 
@@ -48,17 +48,15 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
 
   @Override
   public void validate(VerifiableCredential verifiableCredential) throws InvalidJsonLdException {
-    final JsonLDObject jsonLdObject =
-        JsonLDObject.builder().properties(verifiableCredential).build();
-    final ConfigurableDocumentLoader loader = new ConfigurableDocumentLoader();
-    loader.setEnableHttps(true);
-    jsonLdObject.setDocumentLoader(loader);
-
-    validateJsonLd(jsonLdObject);
+    validateJsonLd(verifiableCredential);
   }
 
-  private void validateJsonLd(JsonLDObject jsonLdObject) throws InvalidJsonLdException {
+  private void validateJsonLd(JsonLdObject jsonLdObject) throws InvalidJsonLdException {
     try {
+
+      var documentLoader = new RemoteDocumentLoader();
+      documentLoader.setEnableHttps(true);
+      documentLoader.setHttpsContexts(jsonLdObject.getContext());
 
       final JsonObject expandContext =
           Json.createObjectBuilder().add("@vocab", Json.createValue(UNDEFINED_TERM_URI)).build();
@@ -67,7 +65,7 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
           JsonDocument.of(MediaType.JSON_LD, jsonLdObject.toJsonObject());
 
       final JsonLdOptions jsonLdOptions = new JsonLdOptions();
-      jsonLdOptions.setDocumentLoader(jsonLdObject.getDocumentLoader());
+      jsonLdOptions.setDocumentLoader(documentLoader);
       jsonLdOptions.setExpandContext(expandContext);
 
       final JsonArray jsonArray = ExpansionProcessor.expand(jsonDocument, jsonLdOptions, false);
@@ -84,7 +82,9 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
 
   private static void findUndefinedTerms(JsonArray jsonArray) {
     for (JsonValue entry : jsonArray) {
-      if (entry instanceof JsonObject) findUndefinedTerms((JsonObject) entry);
+      if (entry instanceof JsonObject) {
+        findUndefinedTerms((JsonObject) entry);
+      }
     }
   }
 
@@ -96,8 +96,12 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
             "Undefined JSON-LD term: " + entry.getKey().substring(UNDEFINED_TERM_URI.length()));
       }
 
-      if (entry.getValue() instanceof JsonArray) findUndefinedTerms((JsonArray) entry.getValue());
-      if (entry.getValue() instanceof JsonObject) findUndefinedTerms((JsonObject) entry.getValue());
+      if (entry.getValue() instanceof JsonArray) {
+        findUndefinedTerms((JsonArray) entry.getValue());
+      }
+      if (entry.getValue() instanceof JsonObject) {
+        findUndefinedTerms((JsonObject) entry.getValue());
+      }
     }
   }
 }

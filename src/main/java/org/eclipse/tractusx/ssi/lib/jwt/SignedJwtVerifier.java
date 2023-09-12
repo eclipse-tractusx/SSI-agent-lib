@@ -26,30 +26,32 @@ import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.JwtException;
-import org.eclipse.tractusx.ssi.lib.exception.JwtSignatureCheckFailedException;
-import org.eclipse.tractusx.ssi.lib.model.did.*;
-import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolver;
-import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistry;
+import org.eclipse.tractusx.ssi.lib.exception.UnsupportedVerificationMethodException;
+import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
+import org.eclipse.tractusx.ssi.lib.model.did.Did;
+import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
+import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
+import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
+import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethod;
+import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 
 /**
- * Convenience/helper class to generate and verify Signed JSON Web Tokens (JWTs) for communicating
- * between connector instances.
+ * Convenience/helper class to verify Signed JSON Web Tokens (JWTs) for communicating between
+ * connector instances.
  */
 @RequiredArgsConstructor
 public class SignedJwtVerifier {
 
-  private final DidDocumentResolverRegistry didDocumentResolverRegistry;
+  private final DidResolver didResolver;
 
   /**
    * Verifies a VerifiableCredential using the issuer's public key
@@ -57,12 +59,9 @@ public class SignedJwtVerifier {
    * @param jwt a {@link SignedJWT} that was sent by the claiming party.
    * @return true if verified, false otherwise
    */
-  @SneakyThrows({
-    NoSuchAlgorithmException.class,
-    InvalidKeySpecException.class,
-    JOSEException.class
-  })
-  public void verify(SignedJWT jwt) throws JwtException, DidDocumentResolverNotRegisteredException {
+  @SneakyThrows({JOSEException.class, DidResolverException.class})
+  public boolean verify(SignedJWT jwt)
+      throws JwtException, DidDocumentResolverNotRegisteredException {
 
     JWTClaimsSet jwtClaimsSet;
     try {
@@ -74,32 +73,43 @@ public class SignedJwtVerifier {
     final String issuer = jwtClaimsSet.getIssuer();
     final Did issuerDid = DidParser.parse(issuer);
 
-    final DidDocumentResolver didDocumentResolver;
-    didDocumentResolver = didDocumentResolverRegistry.get(issuerDid.getMethod());
-
-    final DidDocument issuerDidDocument = didDocumentResolver.resolve(issuerDid);
+    final DidDocument issuerDidDocument = didResolver.resolve(issuerDid);
     final List<VerificationMethod> verificationMethods = issuerDidDocument.getVerificationMethods();
 
     // verify JWT signature
     // TODO Don't try out each key. Better -> use key authorization key
     for (VerificationMethod verificationMethod : verificationMethods) {
-      if (!Ed25519VerificationKey2020.isInstance(verificationMethod)) continue;
+      if (JWKVerificationMethod.isInstance(verificationMethod)) {
+        final JWKVerificationMethod method = new JWKVerificationMethod(verificationMethod);
+        final String kty = method.getPublicKeyJwk().getKty();
+        final String crv = method.getPublicKeyJwk().getCrv();
+        final String x = method.getPublicKeyJwk().getX();
+        if (kty.equals("OKP") && crv.equals("Ed25519")) {
+          final OctetKeyPair keyPair =
+              new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.from(x)).build();
+          if (jwt.verify(new Ed25519Verifier(keyPair))) {
+            return true;
+          }
+        } else {
+          throw new UnsupportedVerificationMethodException(
+              method, "only kty:OKP with crv:Ed25519 is supported");
+        }
+      } else if (Ed25519VerificationMethod.isInstance(verificationMethod)) {
+        final Ed25519VerificationMethod method = new Ed25519VerificationMethod(verificationMethod);
+        final MultibaseString multibase = method.getPublicKeyBase58();
+        final Ed25519PublicKeyParameters publicKeyParameters =
+            new Ed25519PublicKeyParameters(multibase.getDecoded(), 0);
+        final OctetKeyPair keyPair =
+            new OctetKeyPair.Builder(
+                    Curve.Ed25519, Base64URL.encode(publicKeyParameters.getEncoded()))
+                .build();
 
-      // var keyId = verificationMethod.getId();
-
-      var method = new Ed25519VerificationKey2020(verificationMethod);
-      var multibase = method.getPublicKeyBase58();
-      final X509EncodedKeySpec spec = new X509EncodedKeySpec(multibase.getDecoded());
-      final KeyFactory kf = KeyFactory.getInstance("Ed25519");
-      var publicKey = kf.generatePublic(spec);
-      var length = publicKey.getEncoded().length;
-      byte[] b1 = Arrays.copyOfRange(publicKey.getEncoded(), length - 32, length);
-      var keyPair = new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(b1)).build();
-
-      var isValid = jwt.verify(new Ed25519Verifier(keyPair));
-      if (!isValid) {
-        throw new JwtSignatureCheckFailedException(issuerDid, verificationMethod.getId());
+        if (jwt.verify(new Ed25519Verifier(keyPair))) {
+          return true;
+        }
       }
     }
+
+    return false;
   }
 }

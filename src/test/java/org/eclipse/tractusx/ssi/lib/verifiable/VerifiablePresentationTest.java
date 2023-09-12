@@ -42,4 +42,15 @@ public class VerifiablePresentationTest {
         mapFromJson.get(VerifiablePresentation.VERIFIABLE_CREDENTIAL),
         vp.get(VerifiablePresentation.VERIFIABLE_CREDENTIAL));
   }
+
+  @Test
+  @SneakyThrows
+  public void canSerializeVPwithCredentialNotAsList() {
+    final Map<String, Object> vpFromMap = TestResourceUtil.getAlumniVerifiablePresentation();
+    var vp = new VerifiablePresentation(vpFromMap);
+    vp.put("verifiableCredential", vp.getVerifiableCredentials().get(0));
+    var json = vp.toJson();
+    var mapFromJson = MAPPER.readValue(json, Map.class);
+    Assertions.assertDoesNotThrow(() -> new VerifiablePresentation(mapFromJson));
+  }
 }

@@ -48,8 +48,11 @@ public class DidDocumentBuilder {
   public DidDocument build() {
     return new DidDocument(
         Map.of(
-            DidDocument.CONTEXT, DidDocument.DEFAULT_CONTEXT,
-            DidDocument.ID, id,
-            DidDocument.VERIFICATION_METHOD, verificationMethods));
+            DidDocument.CONTEXT,
+            DidDocument.DEFAULT_CONTEXT,
+            DidDocument.ID,
+            id.toString(),
+            DidDocument.VERIFICATION_METHOD,
+            verificationMethods));
   }
 }

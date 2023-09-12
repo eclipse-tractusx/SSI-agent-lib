@@ -21,11 +21,11 @@ package org.eclipse.tractusx.ssi.lib.serialization.jwt;
 
 import com.nimbusds.jwt.SignedJWT;
 import java.util.List;
-import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 
 public interface SerializedJwtPresentationFactory {
   SignedJWT createPresentation(
-      Did issuer, List<VerifiableCredential> credentials, String audience, Ed25519Key signingKey);
+      Did issuer, List<VerifiableCredential> credentials, String audience, IPrivateKey privateKey);
 }

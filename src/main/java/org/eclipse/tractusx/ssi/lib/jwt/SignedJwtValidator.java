@@ -29,14 +29,16 @@ import org.eclipse.tractusx.ssi.lib.exception.JwtExpiredException;
 public class SignedJwtValidator {
 
   @SneakyThrows
-  public void validate(SignedJWT jwt, String expectedAudience) {
-
+  public void validateDate(SignedJWT jwt) {
     Date expiryDate = jwt.getJWTClaimsSet().getExpirationTime();
     boolean isExpired = expiryDate.before(new Date()); // Todo add Timezone
     if (isExpired) {
       throw new JwtExpiredException(expiryDate);
     }
+  }
 
+  @SneakyThrows
+  public void validateAudiences(SignedJWT jwt, String expectedAudience) {
     List<String> audiences = jwt.getJWTClaimsSet().getAudience();
     boolean isValidAudience = audiences.stream().anyMatch(x -> x.equals(expectedAudience));
     if (!isValidAudience) {
