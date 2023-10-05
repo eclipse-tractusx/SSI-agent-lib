@@ -109,20 +109,25 @@ To build the project from source, follow these steps:
 
 1. Clone the repository: 
    ```
-   git clone https://github.com/eclipse-tractusx/SSI-agent-lib.git 
+   git clone https://github.com/Cofinity-X/SSI-agent-lib.git 
    ```
 
 2. Navigate to the project directory:
    ```
-   cd cx-ssi-lib 
+   cd SSI-agent-lib 
+   ```
+   
+3. Change the pom.xml file to the artifactID for local build. i.e.:
+   ```
+   <artifactId>cofx-ssi-lib-local</artifactId>
    ```
 
-3. Build the project using Maven:
+4. Build the project using Maven:
    ```
    mvn clean install
    ```
 
-4. After a successful build, you can include the generated JAR file in your project's dependencies.
+5. After a successful build, you can include the generated JAR file in your project's dependencies.
 
 ### Use Maven Dependency
 
@@ -131,8 +136,8 @@ Alternatively, you can use the pre-built package available on Maven Central Repo
 ```xml
 <dependency>
   <groupId>org.eclipse.tractusx.ssi</groupId>
-  <artifactId>cx-ssi-agent-lib</artifactId>
-  <version>0.0.3</version>
+  <artifactId>cofx-ssi-agent-lib</artifactId>
+  <version>0.0.16</version>
 </dependency>
 ```
 
