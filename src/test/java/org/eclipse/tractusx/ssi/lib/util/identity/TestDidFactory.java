@@ -28,6 +28,6 @@ public class TestDidFactory {
   public static final DidMethod DID_METHOD = new DidMethod("test");
 
   public static Did createRandom() {
-    return new Did(DID_METHOD, new DidMethodIdentifier(UUID.randomUUID().toString()));
+    return new Did(DID_METHOD, new DidMethodIdentifier(UUID.randomUUID().toString()), null);
   }
 }

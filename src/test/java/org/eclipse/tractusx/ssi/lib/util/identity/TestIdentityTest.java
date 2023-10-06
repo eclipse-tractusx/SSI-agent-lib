@@ -26,6 +26,7 @@ import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestIdentityTest {
@@ -37,11 +38,11 @@ public class TestIdentityTest {
     byte[] message = "Json String".getBytes(StandardCharsets.UTF_8);
 
     // Load public key
-    var identity = TestIdentityFactory.newIdentity();
+    var identity = TestIdentityFactory.newIdentityWithED25519Keys();
 
     // Sign
     AsymmetricKeyParameter privateKeyParameters =
-        new Ed25519PrivateKeyParameters(identity.getPrivateKey(), 0);
+        new Ed25519PrivateKeyParameters(identity.getPrivateKey().asByte());
     Signer signer = new Ed25519Signer();
     signer.init(true, privateKeyParameters);
     signer.update(message, 0, message.length);
@@ -49,12 +50,12 @@ public class TestIdentityTest {
 
     // Verify
     AsymmetricKeyParameter publicKeyParameters =
-        new Ed25519PublicKeyParameters(identity.getPublicKey(), 0);
+        new Ed25519PublicKeyParameters(identity.getPublicKey().asByte());
     Signer verifier = new Ed25519Signer();
     verifier.init(false, publicKeyParameters);
     verifier.update(message, 0, message.length);
     boolean verified = verifier.verifySignature(signature);
 
-    System.out.println("Verification: " + verified); // Verification: true
+    Assertions.assertTrue(verified);
   }
 }

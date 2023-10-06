@@ -27,12 +27,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.NoArgsConstructor;
-import org.eclipse.tractusx.ssi.lib.model.Proof;
+import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 
 @NoArgsConstructor
 public class VerifiableCredentialBuilder {
 
-  private List<String> context = List.of(VerifiableCredential.DEFAULT_CONTEXT);
+  private List<URI> context = List.of(VerifiableCredential.DEFAULT_CONTEXT);
   private URI id;
   private List<String> types;
   private URI issuer;
@@ -40,8 +40,9 @@ public class VerifiableCredentialBuilder {
   private Instant expirationDate;
   private List<VerifiableCredentialSubject> credentialSubject;
   private Proof proof;
+  private VerifiableCredentialStatus credentialStatus;
 
-  public VerifiableCredentialBuilder context(List<String> context) {
+  public VerifiableCredentialBuilder context(List<URI> context) {
     this.context = context;
     return this;
   }
@@ -88,6 +89,12 @@ public class VerifiableCredentialBuilder {
     return this;
   }
 
+  public VerifiableCredentialBuilder verifiableCredentialStatus(
+      VerifiableCredentialStatus credentialStatus) {
+    this.credentialStatus = credentialStatus;
+    return this;
+  }
+
   public VerifiableCredential build() {
     DateTimeFormatter formatter =
         DateTimeFormatter.ofPattern(VerifiableCredential.TIME_FORMAT).withZone(ZoneOffset.UTC);
@@ -101,7 +108,12 @@ public class VerifiableCredentialBuilder {
     map.put(VerifiableCredential.ISSUANCE_DATE, formatter.format(issuanceDate));
     map.put(VerifiableCredential.EXPIRATION_DATE, formatter.format(expirationDate));
     map.put(VerifiableCredential.CREDENTIAL_SUBJECT, credentialSubject);
-    if (proof != null) map.put(VerifiableCredential.PROOF, proof);
+    // if (!Objects.isNull(credentialStatus)) {
+    //   map.put(VerifiableCredential.CREDENTIAL_STATUS, credentialStatus);
+    // }
+    if (proof != null) {
+      map.put(VerifiableCredential.PROOF, proof);
+    }
 
     return new VerifiableCredential(map);
   }
