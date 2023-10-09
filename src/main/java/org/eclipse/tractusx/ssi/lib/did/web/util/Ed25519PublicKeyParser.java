@@ -29,8 +29,7 @@ public class Ed25519PublicKeyParser {
 
   /**
    * Parses public key in format -----BEGIN PUBLIC KEY-----
-   * MCowBQYDK2VwAyEABqAmUe/amV/nAVUt01XyrLpmQLOyLqF6LnAkH4QdyqI= -----END PUBLIC
-   * KEY-----
+   * MCowBQYDK2VwAyEABqAmUe/amV/nAVUt01XyrLpmQLOyLqF6LnAkH4QdyqI= -----END PUBLIC KEY-----
    *
    * @return public key as multibase string
    */
