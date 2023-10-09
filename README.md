@@ -119,7 +119,7 @@ To build the project from source, follow these steps:
    
 3. Change the pom.xml file to the artifactID for local build. i.e.:
    ```
-   <artifactId>cofx-ssi-lib-local</artifactId>
+   <artifactId>cfx-ssi-lib-local</artifactId>
    ```
 
 4. Build the project using Maven:
@@ -136,7 +136,7 @@ Alternatively, you can use the pre-built package available on Maven Central Repo
 ```xml
 <dependency>
   <groupId>org.eclipse.tractusx.ssi</groupId>
-  <artifactId>cofx-ssi-agent-lib</artifactId>
+  <artifactId>cfx-ssi-agent-lib</artifactId>
   <version>0.0.16</version>
 </dependency>
 ```

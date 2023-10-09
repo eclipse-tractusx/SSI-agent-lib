@@ -27,7 +27,7 @@ SPDX-License-Identifier: Apache-2.0
     <packaging>jar</packaging>
 
 
-    <artifactId>cx-ssi-lib</artifactId>
+    <artifactId>cfx-ssi-lib</artifactId>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
