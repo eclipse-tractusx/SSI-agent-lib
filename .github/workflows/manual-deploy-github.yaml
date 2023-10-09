@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     permissions:
@@ -22,11 +22,17 @@ jobs:
         with:
           java-version: 17
 
-      - name: Deploy Lib with Maven
-        run: ./mvnw -s settings.xml  -B deploy --file ./pom.xml
+      - name: Build Lib with Maven
+        run: ./mvnw -s settings.xml  -B build --file ./pom.xml
         env:
           GITHUB_PACKAGE_USERNAME: ${{ github.actor }}
           GITHUB_PACKAGE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run tests
         run: ./mvnw -B test --file ./pom.xml
+
+      - name: Build Lib with Maven
+        run: ./mvnw -s settings.xml  -B deploy --file ./pom.xml
+        env:
+          GITHUB_PACKAGE_USERNAME: ${{ github.actor }}
+          GITHUB_PACKAGE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
