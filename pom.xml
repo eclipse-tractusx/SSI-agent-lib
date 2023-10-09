@@ -223,7 +223,7 @@ SPDX-License-Identifier: Apache-2.0
         <repository>
             <id>github</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/catenax-ng/product-lab-ssi</url>
+            <url>https://maven.pkg.github.com/Cofinity-X/SSI-agent-lib</url>
         </repository>
     </distributionManagement>
 
