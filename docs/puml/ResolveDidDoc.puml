@@ -1,0 +1,25 @@
+@startuml ResolveDidDoc
+interface DidResolver {
+    DidDocument : resolve(Did did)
+    boolean: isResolvable(Did did)
+}
+class CompositeDidResolver {
+   +CompositeDidResolver(DidResolver[] resolvers)
+    -DidResolver nextResolver
+    +DidDocument : resolve(Did did)
+    +boolean : isResolvable(Did did)
+}
+class DidWebResolver {
+    +DidDocument : doResolve(Did did)   
+    +boolean: isResolvable(Did did)
+}
+class DidUniResolverAdapter {
+    +DidDocument : doResolve(Did did)   
+    +boolean: isResolvable(Did did)
+}
+class DidResolverException
+DidResolver --> DidResolverException : throws
+DidResolver <|-- CompositeDidResolver
+DidResolver <|-- DidWebResolver
+DidResolver <|-- DidUniResolverAdapter
+@enduml

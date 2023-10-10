@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.model.did;
 
@@ -31,19 +33,29 @@ public class DidParser {
   public static Did parse(URI uri) {
     Objects.requireNonNull(uri);
 
-    if (!uri.getScheme().equals("did"))
+    if (!uri.getScheme().equals("did")) {
       throw new DidParseException("URI is not a DID. URI: '" + uri + "'");
+    }
+    var parts = uri.toString().split("#");
+    var beforeFragment = parts[0];
+    var fragment = "";
 
-    var parts = uri.toString().split(":");
-    if (parts.length < 3) {
-      throw new DidParseException(
-          "DID does not contain at least three parts split by ':'. URI: '" + uri + "'");
+    if (parts.length > 1) {
+      fragment = parts[1];
     }
 
-    List<String> methodIdentifierParts = Arrays.stream(parts).skip(2).collect(Collectors.toList());
+    var did = beforeFragment.split(":");
+    if (did.length < 3) {
+      throw new DidParseException(
+          "DID does not contain at least three parts split by ':'. URI: '" + did + "'");
+    }
+
+    List<String> methodIdentifierParts = Arrays.stream(did).skip(2).collect(Collectors.toList());
 
     return new Did(
-        new DidMethod(parts[1]), new DidMethodIdentifier(String.join(":", methodIdentifierParts)));
+        new DidMethod(did[1]),
+        new DidMethodIdentifier(String.join(":", methodIdentifierParts)),
+        fragment);
   }
 
   public static Did parse(String did) {

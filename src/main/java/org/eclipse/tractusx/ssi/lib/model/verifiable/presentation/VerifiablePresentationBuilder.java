@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.model.verifiable.presentation;
 
@@ -24,16 +26,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.NoArgsConstructor;
+import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 
 @NoArgsConstructor
 public class VerifiablePresentationBuilder {
-  private List<String> context = List.of(VerifiablePresentation.DEFAULT_CONTEXT);
+  private List<URI> context = List.of(VerifiablePresentation.DEFAULT_CONTEXT);
   private URI id;
   private List<String> types;
   private List<VerifiableCredential> verifiableCredentials;
+  private Proof proof;
 
-  public VerifiablePresentationBuilder context(List<String> context) {
+  public VerifiablePresentationBuilder context(List<URI> context) {
     this.context = context;
     return this;
   }
@@ -54,13 +58,18 @@ public class VerifiablePresentationBuilder {
     return this;
   }
 
+  public VerifiablePresentationBuilder proof(Proof proof) {
+    this.proof = proof;
+    return this;
+  }
+
   public VerifiablePresentation build() {
     Map<String, Object> map = new HashMap<>();
     map.put(VerifiablePresentation.CONTEXT, context);
     map.put(VerifiablePresentation.ID, id.toString());
     map.put(VerifiablePresentation.TYPE, types);
     map.put(VerifiablePresentation.VERIFIABLE_CREDENTIAL, verifiableCredentials);
-
+    map.put(VerifiablePresentation.PROOF, proof);
     return new VerifiablePresentation(map);
   }
 }

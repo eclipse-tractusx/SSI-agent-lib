@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.serialization.jwt;
 
@@ -24,7 +26,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -42,7 +44,7 @@ public class SerializedJwtPresentationFactoryImpl implements SerializedJwtPresen
 
   @Override
   public SignedJWT createPresentation(
-      Did issuer, List<VerifiableCredential> credentials, String audience, Ed25519Key signingKey) {
+      Did issuer, List<VerifiableCredential> credentials, String audience, IPrivateKey privateKey) {
     final VerifiablePresentationBuilder verifiablePresentationBuilder =
         new VerifiablePresentationBuilder();
     final VerifiablePresentation verifiablePresentation =
@@ -58,7 +60,6 @@ public class SerializedJwtPresentationFactoryImpl implements SerializedJwtPresen
 
     final SerializedVerifiablePresentation serializedVerifiablePresentation =
         jsonLdSerializer.serializePresentation(verifiablePresentation);
-
-    return signedJwtFactory.create(issuer, audience, serializedVerifiablePresentation, signingKey);
+    return signedJwtFactory.create(issuer, audience, serializedVerifiablePresentation, privateKey);
   }
 }

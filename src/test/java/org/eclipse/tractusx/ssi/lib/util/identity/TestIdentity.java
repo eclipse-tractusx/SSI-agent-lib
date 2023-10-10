@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,11 +16,14 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.util.identity;
 
 import lombok.Value;
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
+import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 
@@ -27,6 +31,6 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 public class TestIdentity {
   Did did;
   DidDocument didDocument;
-  byte[] publicKey;
-  byte[] privateKey;
+  IPublicKey publicKey;
+  IPrivateKey privateKey;
 }

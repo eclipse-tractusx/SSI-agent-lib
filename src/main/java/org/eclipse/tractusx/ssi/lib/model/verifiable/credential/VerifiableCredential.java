@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,20 +16,22 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.model.verifiable.credential;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import java.net.URI;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import lombok.*;
-import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
-import org.eclipse.tractusx.ssi.lib.model.Proof;
-import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
+import lombok.NonNull;
+import lombok.ToString;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
+import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 // @formatter:off
 /**
@@ -46,72 +49,84 @@ import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
  * "zeEdUoM7m9cY8ZyTpey83yBKeBcmcvbyrEQzJ19rD2UXArU2U1jPGoEt rRvGYppdiK37GU4NBeoPakxpWhAvsVSt" } }
  */
 // @formatter:on
-@ToString
-public class VerifiableCredential extends JsonLdObject {
+@ToString(callSuper = true)
+public class VerifiableCredential extends Verifiable {
 
-  public static final String DEFAULT_CONTEXT = "https://www.w3.org/2018/credentials/v1";
+  public static final URI DEFAULT_CONTEXT = URI.create("https://www.w3.org/2018/credentials/v1");
   public static final String TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-  public static final String ID = "id";
-  public static final String TYPE = "type";
   public static final String ISSUER = "issuer";
   public static final String ISSUANCE_DATE = "issuanceDate";
   public static final String EXPIRATION_DATE = "expirationDate";
   public static final String CREDENTIAL_SUBJECT = "credentialSubject";
-  public static final String PROOF = "proof";
+  public static final String CREDENTIAL_STATUS = "credentialStatus";
 
+  public static final String CREDENTIAL_SCHEMA = "credentialSchema";
+
+  public static final String REFERENCE_NUMBER = "referenceNumber";
+
+  public static final String EVIDENCE = "evidence";
+
+  public static final String TERMS_OF_USE = "termsOfUse";
+
+  public static final String REFRESH_SERVICE = "refreshService";
+
+  @JsonCreator
   public VerifiableCredential(Map<String, Object> json) {
-    super(json);
+    super(json, VerifiableType.VC);
 
     try {
       // validate getters
-      Objects.requireNonNull(this.getId());
-      Objects.requireNonNull(this.getTypes());
       Objects.requireNonNull(this.getIssuer());
       Objects.requireNonNull(this.getIssuanceDate());
       Objects.requireNonNull(this.getCredentialSubject());
       this.getExpirationDate();
       this.getProof();
+
     } catch (Exception e) {
       throw new IllegalArgumentException(
           String.format("Invalid VerifiableCredential: %s", SerializeUtil.toJson(json)), e);
     }
 
-    if (this.getCredentialSubject().isEmpty())
+    if (getCredentialSubject().isEmpty()) {
       throw new IllegalArgumentException(
           String.format(
               "Invalid VerifiableCredential. CredentialSubject must not be empty: %s",
               SerializeUtil.toJson(json)));
+    }
+
+    // validate status list if provided
   }
 
   @NonNull
   public URI getId() {
-    return SerializeUtil.asURI(this.get(ID));
+    return SerializeUtil.asURI(get(ID));
   }
 
   @NonNull
   public List<String> getTypes() {
-    return (List<String>) this.get(TYPE);
+    return SerializeUtil.asStringList(get(TYPE));
   }
 
   @NonNull
   public URI getIssuer() {
-    return SerializeUtil.asURI(this.get(ISSUER));
+    return SerializeUtil.asURI(get(ISSUER));
   }
 
   @NonNull
   public Instant getIssuanceDate() {
-    return Instant.parse((String) this.get(ISSUANCE_DATE));
+    return Instant.parse((String) get(ISSUANCE_DATE));
   }
 
   public Instant getExpirationDate() {
-    if (!this.containsKey(EXPIRATION_DATE)) return null;
-
-    return Instant.parse((String) this.get(EXPIRATION_DATE));
+    if (!containsKey(EXPIRATION_DATE)) {
+      return null;
+    }
+    return Instant.parse((String) get(EXPIRATION_DATE));
   }
 
   @NonNull
   public List<VerifiableCredentialSubject> getCredentialSubject() {
-    final Object subject = this.get(CREDENTIAL_SUBJECT);
+    Object subject = get(CREDENTIAL_SUBJECT);
 
     if (subject instanceof List) {
       return ((List<Map<String, Object>>) subject)
@@ -126,12 +141,29 @@ public class VerifiableCredential extends JsonLdObject {
     }
   }
 
-  public Proof getProof() {
-    final Object subject = this.get(PROOF);
-    if (subject == null) {
+  public VerifiableCredentialStatus getVerifiableCredentialStatus() {
+    Object data = get(CREDENTIAL_STATUS);
+    if (data == null) {
       return null;
     }
-
-    return new Proof((Map<String, Object>) subject);
+    Object type = ((Map<String, Object>) data).get(TYPE);
+    if (Objects.isNull(type)) {
+      throw new IllegalArgumentException("Status type not found");
+    }
+    if (type.toString().equals(VerifiableCredentialStatusList2021Entry.STATUS_LIST_2021_ENTRY)) {
+      return new VerifiableCredentialStatusList2021Entry((Map<String, Object>) data);
+    } else {
+      Map<String, Object> map = (Map<String, Object>) data;
+      return new VerifiableCredentialStatus(map) {
+        @Override
+        public String getType() {
+          if (map.containsKey(TYPE)) {
+            return map.get(TYPE).toString();
+          } else {
+            throw new IllegalArgumentException("Status type not found");
+          }
+        }
+      };
+    }
   }
 }

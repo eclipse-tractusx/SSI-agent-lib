@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,21 +16,38 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.model.did;
 
 import java.net.URI;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
-import lombok.Value;
+import lombok.Setter;
 
-@Value
 @EqualsAndHashCode
 public class Did {
 
-  @EqualsAndHashCode.Include @NonNull DidMethod method;
-  @EqualsAndHashCode.Include @NonNull DidMethodIdentifier methodIdentifier;
+  @EqualsAndHashCode.Include @Setter @Getter @NonNull DidMethod method;
+  @EqualsAndHashCode.Include @Setter @Getter @NonNull DidMethodIdentifier methodIdentifier;
+  @EqualsAndHashCode.Include @Setter @Getter String fragment;
+
+  public Did(DidMethod method, DidMethodIdentifier didMethodIdentifier, String fragment) {
+    this.method = method;
+    this.methodIdentifier = didMethodIdentifier;
+    this.fragment = fragment;
+  }
+
+  public Did(DidMethod method, DidMethodIdentifier didMethodIdentifier) {
+    new Did(method, didMethodIdentifier, null);
+  }
+
+  public Did excludeFragment() {
+    Did newDid = new Did(method, methodIdentifier, null);
+    return newDid;
+  }
 
   public URI toUri() {
     return URI.create(toString());
@@ -37,6 +55,10 @@ public class Did {
 
   @Override
   public String toString() {
-    return String.format("did:%s:%s", method, methodIdentifier);
+    StringBuilder uri = new StringBuilder(String.format("did:%s:%s", method, methodIdentifier));
+    if (fragment != null && !fragment.isBlank()) {
+      uri.append(String.format("#%s", fragment));
+    }
+    return uri.toString();
   }
 }

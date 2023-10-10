@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,51 +16,80 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import lombok.SneakyThrows;
 import org.bouncycastle.util.io.pem.PemReader;
-import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020;
-import org.eclipse.tractusx.ssi.lib.util.identity.KeyResourceLoader;
+import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 
 public class TestResourceUtil {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
   private static final String DID_DOCUMENT_ED25519 = "did-document/document.ed25519.json";
+  private static final String DID_DOCUMENT_ED25519_BPN = "did-document/document.ed25519.bpn.json";
+  private static final String DID_DOCUMENT_PUBLISHED = "nginx-testcontainers/.well-known/did.json";
   private static final String PUBLIC_KEY_ED25519 = "keys/ed25519/public.pem";
   private static final String PRIVATE_KEY_ED25519 = "keys/ed25519/private.pem";
   private static String VERIFIABLE_CREDENTIAL_ALUMNI =
       "verifiable-credential/alumni-credential.json";
   private static String VERIFIABLE_PRESENTATION_ALUMNI =
       "verifiable-presentation/alumni-presentation.json";
+  private static String VERIFIABLE_CREDENTIAL_BPN = "verifiable-credential/bpn-credential.json";
 
   public static List<Map<String, Object>> getAllDidDocuments() {
-    return Arrays.asList(readJsonResource(DID_DOCUMENT_ED25519));
+    return Arrays.asList(
+        readJsonResource(DID_DOCUMENT_ED25519), readJsonResource(DID_DOCUMENT_ED25519_BPN));
   }
 
-  public static Map<String, Object> getAlumniVerifiableCredential() {
-    return readJsonResource(VERIFIABLE_CREDENTIAL_ALUMNI);
+  public static VerifiableCredential getAlumniVerifiableCredential() {
+    return new VerifiableCredential(readJsonResource(VERIFIABLE_CREDENTIAL_ALUMNI));
   }
 
-  public static Map<String, Object> getAlumniVerifiablePresentation() {
-    return readJsonResource(VERIFIABLE_PRESENTATION_ALUMNI);
+  public static VerifiablePresentation getAlumniVerifiablePresentation() {
+    return new VerifiablePresentation(readJsonResource(VERIFIABLE_PRESENTATION_ALUMNI));
+  }
+
+  public static VerifiableCredential getBPNVerifiableCredential() {
+    return new VerifiableCredential(readJsonResource(VERIFIABLE_CREDENTIAL_BPN));
   }
 
   public static Map<String, Object> getDidDocument(String verificationKeyType) {
-    if (Ed25519VerificationKey2020.DEFAULT_TYPE.equals(verificationKeyType)) {
+    if (Ed25519VerificationMethod.DEFAULT_TYPE.equals(verificationKeyType)) {
       return readJsonResource(DID_DOCUMENT_ED25519);
     }
 
     throw new IllegalArgumentException("Unsupported verification key type: " + verificationKeyType);
+  }
+
+  public static Map<String, Object> getBPNDidDocument() {
+    return readJsonResource(DID_DOCUMENT_ED25519_BPN);
+  }
+
+  public static Map<String, Object> getPublishedDidDocument() {
+    return readJsonResource(DID_DOCUMENT_PUBLISHED);
+  }
+
+  public static String getPublishedDidDocumentAsString() {
+    try {
+      return new String(
+          readResource(DID_DOCUMENT_PUBLISHED).readAllBytes(), StandardCharsets.UTF_8);
+    } catch (IOException e) {
+      throw new RuntimeException(e.getCause());
+    }
   }
 
   public static byte[] getPublicKeyEd25519() {
@@ -68,6 +98,24 @@ public class TestResourceUtil {
 
   public static byte[] getPrivateKeyEd25519() {
     return readPemResource(PRIVATE_KEY_ED25519);
+  }
+
+  public static String getPublicKeyEd25519AsString() {
+    try {
+      return new String(
+          readResource(PUBLIC_KEY_ED25519).readAllBytes(), StandardCharsets.ISO_8859_1);
+    } catch (IOException e) {
+      throw new RuntimeException(e.getCause());
+    }
+  }
+
+  public static String getPrivateKeyEd25519AsString() {
+    try {
+      return new String(
+          readResource(PRIVATE_KEY_ED25519).readAllBytes(), StandardCharsets.ISO_8859_1);
+    } catch (IOException e) {
+      throw new RuntimeException(e.getCause());
+    }
   }
 
   @SneakyThrows
@@ -87,7 +135,7 @@ public class TestResourceUtil {
 
   private static InputStream readResource(String resource) {
     final InputStream inputStream =
-        KeyResourceLoader.class.getClassLoader().getResourceAsStream(resource);
+        TestResourceUtil.class.getClassLoader().getResourceAsStream(resource);
 
     return Objects.requireNonNull(inputStream, "Resource not found: " + resource);
   }

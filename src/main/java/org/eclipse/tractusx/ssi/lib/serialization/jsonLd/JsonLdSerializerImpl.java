@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.serialization.jsonLd;
 
@@ -31,9 +33,7 @@ public class JsonLdSerializerImpl implements JsonLdSerializer {
   public SerializedVerifiablePresentation serializePresentation(
       VerifiablePresentation verifiablePresentation) {
 
-    final com.danubetech.verifiablecredentials.VerifiablePresentation dtPresentation =
-        DanubTechMapper.map(verifiablePresentation);
-    final String dtPresentationJson = dtPresentation.toJson();
+    final String dtPresentationJson = verifiablePresentation.toJson();
 
     return new SerializedVerifiablePresentation(dtPresentationJson);
   }
@@ -50,11 +50,9 @@ public class JsonLdSerializerImpl implements JsonLdSerializer {
       throws InvalidJsonLdException {
 
     final String serializedPresentationJson = serializedPresentation.getJson();
-    final com.danubetech.verifiablecredentials.VerifiablePresentation dtPresentation =
-        com.danubetech.verifiablecredentials.VerifiablePresentation.fromJson(
-            serializedPresentationJson);
 
-    final VerifiablePresentation presentation = DanubTechMapper.map(dtPresentation);
+    final VerifiablePresentation presentation =
+        VerifiablePresentation.fromJson(serializedPresentationJson);
 
     if (validateJsonLd) {
       JsonLdValidator jsonLdValidator = new JsonLdValidatorImpl();

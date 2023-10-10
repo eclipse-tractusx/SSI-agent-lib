@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,20 +16,34 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.model.verifiable.credential;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 public class VerifiableCredentialSubject extends HashMap<String, Object> {
 
-  public VerifiableCredentialSubject() {
-    super();
-  }
+  public static final String ID = "id";
 
   public VerifiableCredentialSubject(Map<String, Object> json) {
     super(json);
+
+    try {
+      // validate getters
+      this.getId();
+    } catch (Exception e) {
+      throw new IllegalArgumentException(
+          String.format("Invalid VerifiableCredential: %s", SerializeUtil.toJson(json)), e);
+    }
+  }
+
+  public URI getId() {
+    Object id = this.get(ID);
+    return id == null ? null : SerializeUtil.asURI(id);
   }
 }

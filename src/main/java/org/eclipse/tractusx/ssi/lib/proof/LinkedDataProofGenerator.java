@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,48 +16,80 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.tractusx.ssi.lib.base.MultibaseFactory;
-import org.eclipse.tractusx.ssi.lib.model.Ed25519Signature2020;
-import org.eclipse.tractusx.ssi.lib.model.Ed25519Signature2020Builder;
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.SsiException;
+import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
+import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
+import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
+import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020Builder;
+import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
+import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020Builder;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.hash.LinkedDataHasher;
 import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
 import org.eclipse.tractusx.ssi.lib.proof.transform.TransformedLinkedData;
-import org.eclipse.tractusx.ssi.lib.proof.verify.LinkedDataSigner;
+import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed25519ProofSigner;
+import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofSigner;
 
 @RequiredArgsConstructor
 public class LinkedDataProofGenerator {
 
-  public static LinkedDataProofGenerator create() {
-    return new LinkedDataProofGenerator(
-        new LinkedDataHasher(), new LinkedDataTransformer(), new LinkedDataSigner());
+  public static LinkedDataProofGenerator newInstance(SignatureType type)
+      throws UnsupportedSignatureTypeException {
+    if (type == SignatureType.ED21559) {
+      return new LinkedDataProofGenerator(
+          type, new LinkedDataHasher(), new LinkedDataTransformer(), new Ed25519ProofSigner());
+    } else if (type == SignatureType.JWS) {
+      return new LinkedDataProofGenerator(
+          type, new LinkedDataHasher(), new LinkedDataTransformer(), new JWSProofSigner());
+    } else {
+      throw new UnsupportedSignatureTypeException("Invalide signautre type");
+    }
   }
 
+  private final SignatureType type;
   private final LinkedDataHasher hasher;
   private final LinkedDataTransformer transformer;
-  private final LinkedDataSigner signer;
+  private final ISigner signer;
 
-  public Ed25519Signature2020 createEd25519Signature2020(
-      VerifiableCredential verifiableCredential, URI verificationMethodId, byte[] signingKey) {
-    final TransformedLinkedData transformedData = transformer.transform(verifiableCredential);
+  public Proof createProof(Verifiable document, URI verificationMethodId, IPrivateKey privateKey)
+      throws SsiException, InvalidePrivateKeyFormat {
+
+    final TransformedLinkedData transformedData = transformer.transform(document);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
-    final byte[] signature = signer.sign(hashedData, signingKey);
-    final MultibaseString multibaseString = MultibaseFactory.create(signature);
+    byte[] signature;
+    signature = signer.sign(new HashedLinkedData(hashedData.getValue()), privateKey);
 
-    return new Ed25519Signature2020Builder()
-        .proofPurpose(Ed25519Signature2020.PROOF_PURPOSE)
-        .proofValue(multibaseString.getEncoded())
-        .verificationMethod(verificationMethodId)
-        .created(Instant.now())
-        .build();
+    if (type == SignatureType.ED21559) {
+
+      final MultibaseString multibaseString = MultibaseFactory.create(signature);
+      return new Ed25519Signature2020Builder()
+          .proofPurpose(Ed25519Signature2020.ASSERTION_METHOD)
+          .proofValue(multibaseString.getEncoded())
+          .verificationMethod(verificationMethodId)
+          .created(Instant.now())
+          .build();
+    } else {
+
+      return new JWSSignature2020Builder()
+          .proofPurpose(JWSSignature2020.ASSERTION_METHOD)
+          .proofValue(new String(signature, StandardCharsets.UTF_8))
+          .verificationMethod(verificationMethodId)
+          .created(Instant.now())
+          .build();
+    }
   }
 }

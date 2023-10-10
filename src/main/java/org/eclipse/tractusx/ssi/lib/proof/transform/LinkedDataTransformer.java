@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,34 +16,75 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.proof.transform;
 
-import foundation.identity.jsonld.JsonLDException;
+import com.apicatalog.jsonld.JsonLd;
+import com.apicatalog.jsonld.JsonLdError;
+import com.apicatalog.jsonld.JsonLdOptions;
+import com.apicatalog.jsonld.api.ToRdfApi;
+import com.apicatalog.jsonld.document.JsonDocument;
+import com.apicatalog.jsonld.http.media.MediaType;
+import com.apicatalog.rdf.RdfDataset;
+import com.apicatalog.rdf.io.nquad.NQuadsWriter;
+import io.setl.rdf.normalization.RdfNormalize;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.security.NoSuchAlgorithmException;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.DanubTechMapper;
+import lombok.SneakyThrows;
+import org.apache.commons.lang3.SerializationUtils;
+import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
+import org.eclipse.tractusx.ssi.lib.model.RemoteDocumentLoader;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 
 public class LinkedDataTransformer {
-  public TransformedLinkedData transform(VerifiableCredential credential) {
-    // make a copy and remove proof from credential, as it is not part of the linked data
-    VerifiableCredential copyCredential = new VerifiableCredential(credential);
-    copyCredential.remove(VerifiableCredential.PROOF);
 
-    var dtCredential = DanubTechMapper.map(copyCredential);
+  @SneakyThrows
+  public TransformedLinkedData transform(Verifiable document) {
+    // Make a copy and remove proof, as it is not part of the linked data
+    var copy = (JsonLdObject) SerializationUtils.clone(document);
+    copy.remove(Verifiable.PROOF);
+    return this.canocliztion(copy);
+  }
+
+  private TransformedLinkedData canocliztion(JsonLdObject document) {
     try {
 
-      var normalized = dtCredential.normalize("urdna2015");
+      RdfDataset rdfDataset = toDataset(document);
+      rdfDataset = RdfNormalize.normalize(rdfDataset, "urdna2015");
+      StringWriter stringWriter = new StringWriter();
+      NQuadsWriter nQuadsWriter = new NQuadsWriter(stringWriter);
+      nQuadsWriter.write(rdfDataset);
+      var normalized = stringWriter.getBuffer().toString();
+
       return new TransformedLinkedData(normalized);
 
-    } catch (JsonLDException e) {
-      throw new RuntimeException(e); // TODO
     } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException(e); // TODO
+      throw new RuntimeException(e);
     } catch (IOException e) {
-      throw new RuntimeException(e); // TODO
+      throw new RuntimeException(e);
+    }
+  }
+
+  private RdfDataset toDataset(JsonLdObject jsonLdObject) throws RuntimeException {
+
+    var documentLoader = new RemoteDocumentLoader();
+    documentLoader.setEnableHttps(true);
+    documentLoader.setHttpsContexts(jsonLdObject.getContext());
+
+    JsonLdOptions options = new JsonLdOptions();
+    options.setDocumentLoader(documentLoader);
+    options.setOrdered(true);
+
+    JsonDocument jsonDocument = JsonDocument.of(MediaType.JSON_LD, jsonLdObject.toJsonObject());
+    ToRdfApi toRdfApi = JsonLd.toRdf(jsonDocument);
+    toRdfApi.options(options);
+    try {
+      return toRdfApi.get();
+    } catch (JsonLdError ex) {
+      throw new RuntimeException(ex);
     }
   }
 }

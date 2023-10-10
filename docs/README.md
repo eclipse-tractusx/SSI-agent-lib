@@ -122,7 +122,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistryImpl;
 
-public static DidDocument ResovleDocument(String didUrl) throws DidDocumentResolverNotRegisteredException {
+public static DidDocument resovleDocument(String didUrl) throws DidDocumentResolverNotRegisteredException {
         
     //DID Resolver Constracture params
     DidWebParser didParser = new DidWebParser();
@@ -184,7 +184,7 @@ public static VerifiableCredential createVCWithoutProof() {
 
 ```
 
-5. To Generate VerifiableCredential with proof:
+5. To Generate VerifiableCredential with ED21559/JWS proof:
 
 
 ```java
@@ -202,27 +202,56 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofGenerator;
 
 
-public static VerifiableCredential createVCWithProof(VerifiableCredential credential, byte[] privateKey, Did issuer){
+ public static VerifiableCredential createVCWithED21559Proof(
+      VerifiableCredential credential, byte[] privateKey, Did issuer) {
 
-    //VC Builder
+    // VC Builder
     final VerifiableCredentialBuilder builder =
-    new VerifiableCredentialBuilder()
-        .context(credential.getContext())
-        .id(credential.getId())
-        .issuer(issuer.toUri())
-        .issuanceDate(Instant.now())
-        .credentialSubject(credential.getCredentialSubject())
-        .expirationDate(credential.getExpirationDate())
-        .type(credential.getTypes());
+        new VerifiableCredentialBuilder()
+            .context(credential.getContext())
+            .id(credential.getId())
+            .issuer(issuer.toUri())
+            .issuanceDate(Instant.now())
+            .credentialSubject(credential.getCredentialSubject())
+            .expirationDate(credential.getExpirationDate())
+            .type(credential.getTypes());
 
-         //Ed25519 Proof Builder
-        final LinkedDataProofGenerator generator = LinkedDataProofGenerator.create();
-        final Ed25519Signature2020 proof =  generator.createEd25519Signature2020(builder.build(), URI.create(issuer + "#key-1"), privateKey);
-    
-        //Adding Proof to VC
-        builder.proof(proof);
+    // Ed25519 Proof Builder
+    final LinkedDataProofGenerator generator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
+    final Ed25519Signature2020 proof =
+        (Ed25519Signature2020) generator.createProof(
+        builder.build(), URI.create(issuer + "#key-1"), privateKey);
 
-        return builder.build();
+    // Adding Proof to VC
+    builder.proof(proof);
+
+    return builder.build();
+  }
+
+  public static VerifiableCredential createVCWithJWSProof(
+    VerifiableCredential credential, byte[] privateKey, Did issuer) {
+
+  // VC Builder
+  final VerifiableCredentialBuilder builder =
+      new VerifiableCredentialBuilder()
+          .context(credential.getContext())
+          .id(credential.getId())
+          .issuer(issuer.toUri())
+          .issuanceDate(Instant.now())
+          .credentialSubject(credential.getCredentialSubject())
+          .expirationDate(credential.getExpirationDate())
+          .type(credential.getTypes());
+
+  // JWS Proof Builder
+  final LinkedDataProofGenerator generator = LinkedDataProofGenerator.newInstance(SignatureType.JWS);
+  final JWSSignature2020 proof =
+      (JWSSignature2020) generator.createProof(
+      builder.build(), URI.create(issuer + "#key-1"), privateKey);
+
+  // Adding Proof to VC
+  builder.proof(proof);
+
+  return builder.build();
 }
 
 
@@ -305,29 +334,95 @@ import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistryImpl;
 
 import com.nimbusds.jwt.SignedJWT;
 
-public class Verification {
+public static boolean verifyJWT(SignedJWT jwt) {
+    // DID Resolver Constracture params
+    DidWebParser didParser = new DidWebParser();
+    var httpClient = HttpClient.newHttpClient();
+    var enforceHttps = false;
 
-    public static void verifyJWT(SignedJWT jwt) {
-        // DID Resolver Constracture params
-        DidWebParser didParser = new DidWebParser();
-        var httpClient = HttpClient.newHttpClient();
-        var enforceHttps = false;
+    var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
+    didDocumentResolverRegistry.register(
+            new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
 
-        var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
-        didDocumentResolverRegistry.register(
-                new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
+    SignedJwtVerifier jwtVerifier = new SignedJwtVerifier(didDocumentResolverRegistry);
+    try {
+        return jwtVerifier.verify(jwt);
+    } catch (JwtException | DidDocumentResolverNotRegisteredException e) {
+        // An ecxeption will be thrown here in case JWT verification failed or DID
+        // Document Resolver not able to resolver.
+        e.printStackTrace();
+    }
 
-        SignedJwtVerifier jwtVerifier = new SignedJwtVerifier(didDocumentResolverRegistry);
-        try {
-            jwtVerifier.verify(jwt);
-        } catch (JwtException | DidDocumentResolverNotRegisteredException e) {
-            // An ecxeption will be thrown here in case JWT verification failed or DID
-            // Document Resolver not able to resolver.
-            e.printStackTrace();
-        }
+}
 
+```
+
+9. To verify Json-LD:
+
+```java
+
+import com.nimbusds.jwt.SignedJWT;
+import java.net.http.HttpClient;
+import org.eclipse.tractusx.ssi.lib.did.web.DidWebDocumentResolver;
+import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
+import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistryImpl;
+import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
+
+ public static boolean verifyED21559LD(VerifiableCredential verifiableCredential) {
+    // DID Resolver Constracture params
+    DidWebParser didParser = new DidWebParser();
+    var httpClient = HttpClient.newHttpClient();
+    var enforceHttps = false;
+
+    var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
+    didDocumentResolverRegistry.register(
+        new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
+
+    LinkedDataProofValidation proofValidation =
+        LinkedDataProofValidation.newInstance(SignatureType.ED21559,didDocumentResolverRegistry);
+    return proofValidation.verifiyProof(verifiableCredential);
+  }
+
+  public static boolean verifyJWSLD(VerifiableCredential verifiableCredential) {
+    // DID Resolver Constracture params
+    DidWebParser didParser = new DidWebParser();
+    var httpClient = HttpClient.newHttpClient();
+    var enforceHttps = false;
+
+    var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
+    didDocumentResolverRegistry.register(
+        new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
+
+    LinkedDataProofValidation proofValidation =
+        LinkedDataProofValidation.newInstance(SignatureType.JWS,didDocumentResolverRegistry);
+    return proofValidation.verifiyProof(verifiableCredential);
+  }
+```
+
+10. To Validate JWT expiry date and audience:
+```java
+import com.nimbusds.jwt.SignedJWT;
+import org.eclipse.tractusx.ssi.lib.exception.JwtAudienceCheckFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.JwtExpiredException;
+import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtValidator;
+
+public class Validation {
+    public static void validateJWTDate(SignedJWT signedJWT, String audience)
+            throws JwtAudienceCheckFailedException, JwtExpiredException {
+        SignedJwtValidator jwtValidator = new SignedJwtValidator();
+        jwtValidator.validateDate(signedJWT);
+    }
+
+    public static void validateJWTAudiences(SignedJWT signedJWT, String audience)
+            throws JwtAudienceCheckFailedException, JwtExpiredException {
+        SignedJwtValidator jwtValidator = new SignedJwtValidator();
+        jwtValidator.validateAudiences(signedJWT, audience);
     }
 }
 ```
+
+
 
 

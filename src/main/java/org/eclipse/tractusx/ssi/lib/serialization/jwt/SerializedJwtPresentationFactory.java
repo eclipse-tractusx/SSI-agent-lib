@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,17 +16,18 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.serialization.jwt;
 
 import com.nimbusds.jwt.SignedJWT;
 import java.util.List;
-import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 
 public interface SerializedJwtPresentationFactory {
   SignedJWT createPresentation(
-      Did issuer, List<VerifiableCredential> credentials, String audience, Ed25519Key signingKey);
+      Did issuer, List<VerifiableCredential> credentials, String audience, IPrivateKey privateKey);
 }

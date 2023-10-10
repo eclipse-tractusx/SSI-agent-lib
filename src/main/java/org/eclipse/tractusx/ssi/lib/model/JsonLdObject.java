@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,19 +16,31 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.model;
 
+import com.apicatalog.jsonld.loader.DocumentLoader;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public abstract class JsonLdObject extends HashMap<String, Object> {
 
   public static final String CONTEXT = "@context";
+  @ToString.Exclude @Getter private DocumentLoader documentLoader;
 
   public JsonLdObject(Map<String, Object> json) {
     super(json);
@@ -35,19 +48,38 @@ public abstract class JsonLdObject extends HashMap<String, Object> {
     try {
       // validate getters
       Objects.requireNonNull(this.getContext());
+
+      // We need to convert context from URI to String.
+      // Because we can't serilize URI.
+      final List<String> contexts = new ArrayList<>();
+      for (URI o : this.getContext()) {
+        contexts.add(o.toString());
+      }
+      this.put(CONTEXT, contexts);
+
     } catch (Exception e) {
       throw new IllegalArgumentException(
           String.format("Invalid JsonLdObject: %s", SerializeUtil.toJson(json)), e);
     }
   }
 
-  public List<String> getContext() {
+  public List<URI> getContext() {
     final Object context = this.get(CONTEXT);
-    if (context instanceof String) {
-      return List.of((String) context);
-    }
-    if (context instanceof List) {
-      return (List<String>) context;
+    if (context instanceof String || context instanceof URI) {
+      return List.of(SerializeUtil.asURI(context));
+    } else if (context instanceof List) {
+      final List<URI> contexts = new ArrayList<>();
+      for (Object o : (List<?>) context) {
+        if (o instanceof String || o instanceof URI) {
+          contexts.add(SerializeUtil.asURI(o));
+        } else {
+          throw new IllegalArgumentException(
+              String.format(
+                  "Context must be of type string or URI. Context Type: %s",
+                  context.getClass().getName()));
+        }
+      }
+      return contexts;
     } else {
       throw new IllegalArgumentException(
           String.format(
@@ -58,5 +90,13 @@ public abstract class JsonLdObject extends HashMap<String, Object> {
 
   public String toJson() {
     return SerializeUtil.toJson(this);
+  }
+
+  public String toPrettyJson() {
+    return SerializeUtil.toPrettyJson(this);
+  }
+
+  public synchronized JsonObject toJsonObject() {
+    return Json.createObjectBuilder(this).build();
   }
 }

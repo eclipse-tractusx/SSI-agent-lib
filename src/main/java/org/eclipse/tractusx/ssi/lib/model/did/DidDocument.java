@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,15 +16,19 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.model.did;
 
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import lombok.ToString;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
-import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
+import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 // spec https://www.w3.org/TR/did-core/
 @ToString
@@ -33,14 +38,16 @@ public class DidDocument extends JsonLdObject {
   public static final String ID = "id";
   public static final String VERIFICATION_METHOD = "verificationMethod";
 
+  public static final String AUTHENTICATION = "authentication";
+
   public DidDocument(Map<String, Object> json) {
     super(json);
 
     try {
       // validate getters
-      Objects.requireNonNull(this.getContext(), "context is null");
-      Objects.requireNonNull(this.getId(), "id is null");
-      Objects.requireNonNull(this.getVerificationMethods(), "verificationMethod is null");
+      Objects.requireNonNull(getContext(), "context is null");
+      Objects.requireNonNull(getId(), "id is null");
+      Objects.requireNonNull(getVerificationMethods(), "verificationMethod is null");
     } catch (Exception e) {
       throw new IllegalArgumentException(
           String.format("Invalid DidDocument: %s", SerializeUtil.toJson(json)), e);
@@ -48,14 +55,14 @@ public class DidDocument extends JsonLdObject {
   }
 
   public URI getId() {
-    return SerializeUtil.asURI(this.get(ID));
+    return SerializeUtil.asURI(get(ID));
   }
 
   public List<VerificationMethod> getVerificationMethods() {
 
-    final List<VerificationMethod> result = new ArrayList<>();
+    List<VerificationMethod> result = new ArrayList<>();
 
-    final Object verificationMethod = this.get(VERIFICATION_METHOD);
+    Object verificationMethod = get(VERIFICATION_METHOD);
     if (verificationMethod instanceof Map) {
       result.add(new VerificationMethod((Map<String, Object>) verificationMethod));
     }
