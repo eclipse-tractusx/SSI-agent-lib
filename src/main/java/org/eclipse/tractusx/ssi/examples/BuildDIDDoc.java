@@ -44,11 +44,12 @@ public class BuildDIDDoc {
     // Building Verification Methods:
     final List<VerificationMethod> verificationMethods = new ArrayList<>();
     final Ed25519VerificationKey2020Builder builder = new Ed25519VerificationKey2020Builder();
-    final Ed25519VerificationKey2020 key = builder
-        .id(URI.create(did.toUri() + "#key-" + 1))
-        .controller(did.toUri())
-        .publicKeyMultiBase(publicKeyBase)
-        .build();
+    final Ed25519VerificationKey2020 key =
+        builder
+            .id(URI.create(did.toUri() + "#key-" + 1))
+            .controller(did.toUri())
+            .publicKeyMultiBase(publicKeyBase)
+            .build();
     verificationMethods.add(key);
 
     final DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();

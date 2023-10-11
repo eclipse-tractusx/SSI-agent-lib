@@ -38,12 +38,14 @@ class VP {
 
   public static VerifiablePresentation createVP(
       Did issuer, List<VerifiableCredential> credentials) {
-    final VerifiablePresentationBuilder verifiablePresentationBuilder = new VerifiablePresentationBuilder();
-    final VerifiablePresentation verifiablePresentation = verifiablePresentationBuilder
-        .id(issuer.toUri()) // NOTE: Provide unique ID number to each VP you create!!
-        .type(List.of(VerifiablePresentationType.VERIFIABLE_PRESENTATION))
-        .verifiableCredentials(credentials)
-        .build();
+    final VerifiablePresentationBuilder verifiablePresentationBuilder =
+        new VerifiablePresentationBuilder();
+    final VerifiablePresentation verifiablePresentation =
+        verifiablePresentationBuilder
+            .id(issuer.toUri()) // NOTE: Provide unique ID number to each VP you create!!
+            .type(List.of(VerifiablePresentationType.VERIFIABLE_PRESENTATION))
+            .verifiableCredentials(credentials)
+            .build();
     return verifiablePresentation;
   }
 
@@ -58,8 +60,9 @@ class VP {
     final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
     final Ed25519Key signingKey = new Ed25519Key(keySet.getPrivateKey());
 
-    final SerializedJwtPresentationFactory presentationFactory = new SerializedJwtPresentationFactoryImpl(
-        new SignedJwtFactory(new OctetKeyPairFactory()), new JsonLdSerializerImpl(), issuer);
+    final SerializedJwtPresentationFactory presentationFactory =
+        new SerializedJwtPresentationFactoryImpl(
+            new SignedJwtFactory(new OctetKeyPairFactory()), new JsonLdSerializerImpl(), issuer);
 
     return presentationFactory.createPresentation(issuer, credentials, audience, signingKey);
   }
