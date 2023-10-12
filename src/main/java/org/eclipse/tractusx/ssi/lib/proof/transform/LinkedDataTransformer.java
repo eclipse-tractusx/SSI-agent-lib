@@ -70,7 +70,7 @@ public class LinkedDataTransformer {
 
   private RdfDataset toDataset(JsonLdObject jsonLdObject) throws RuntimeException {
 
-    var documentLoader = new RemoteDocumentLoader();
+    var documentLoader = RemoteDocumentLoader.getInstance();
     documentLoader.setEnableHttps(true);
     documentLoader.setHttpsContexts(jsonLdObject.getContext());
 

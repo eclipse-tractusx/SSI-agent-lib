@@ -56,7 +56,7 @@ public class RemoteDocumentLoader implements DocumentLoader {
   @Getter @Setter private List<URI> httpsContexts = new ArrayList<URI>();
   @Getter @Setter private List<URI> fileContexts = new ArrayList<URI>();
 
-  public static final DocumentLoader DOCUMENT_LOADER;
+  public static final RemoteDocumentLoader DOCUMENT_LOADER;
 
   static {
     DOCUMENT_LOADER = new RemoteDocumentLoader();
@@ -84,13 +84,10 @@ public class RemoteDocumentLoader implements DocumentLoader {
     DEFAULT_FILE_LOADER = defaultFileLoader;
   }
 
-  public RemoteDocumentLoader() {}
+  private RemoteDocumentLoader() {}
 
-  public RemoteDocumentLoader(Map<URI, JsonDocument> localCache) {
-    if (localCache == null) {
-      throw new NullPointerException();
-    }
-    this.localCache = localCache;
+  public static synchronized RemoteDocumentLoader getInstance() {
+    return DOCUMENT_LOADER;
   }
 
   @Override
