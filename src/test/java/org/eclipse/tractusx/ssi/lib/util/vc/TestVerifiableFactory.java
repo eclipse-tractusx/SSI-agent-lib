@@ -37,6 +37,13 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePres
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
 
 public class TestVerifiableFactory {
+  static List<URI> contextList =
+      List.of(
+          URI.create("https://www.w3.org/2018/credentials/v1"),
+          // TODO: update this schema as soon as a tractus-x version is available
+          URI.create("https://catenax-ng.github.io/product-core-schemas/businessPartnerData.json"),
+          URI.create("https://w3id.org/security/suites/jws-2020/v1"),
+          URI.create("https://w3id.org/security/suites/ed25519-2020/v1"));
 
   @SneakyThrows
   public static VerifiableCredential createVerifiableCredential(TestIdentity issuer, Proof proof) {
@@ -49,6 +56,7 @@ public class TestVerifiableFactory {
 
     return verifiableCredentialBuilder
         .id(URI.create("did:test:id"))
+        .context(contextList)
         .type(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
         .issuer(issuer.getDid().toUri())
         .expirationDate(Instant.parse("2025-02-15T17:21:42Z").plusSeconds(3600))
@@ -67,6 +75,7 @@ public class TestVerifiableFactory {
 
     return verifiableCredentialBuilder
         .id(URI.create("did:test:id"))
+        .context(contextList)
         .type(List.of(VerifiablePresentationType.VERIFIABLE_PRESENTATION))
         .verifiableCredentials(vcs)
         .proof(proof)
@@ -79,6 +88,7 @@ public class TestVerifiableFactory {
 
     return verifiableCredentialBuilder
         .id(verifiableCredential.getId())
+        .context(verifiableCredential.getContext())
         .type(verifiableCredential.getTypes())
         .issuer(verifiableCredential.getIssuer())
         .expirationDate(verifiableCredential.getExpirationDate())
@@ -97,6 +107,7 @@ public class TestVerifiableFactory {
 
     return verifiablePresentationBuilder
         .id(URI.create("did:test:id"))
+        .context(verifiablePresentation.getContext())
         .type(List.of(VerifiablePresentationType.VERIFIABLE_PRESENTATION))
         .verifiableCredentials(verifiablePresentation.getVerifiableCredentials())
         .proof(proof)
