@@ -30,7 +30,9 @@ import com.apicatalog.jsonld.loader.DocumentLoaderOptions;
 import com.apicatalog.jsonld.loader.FileLoader;
 import com.apicatalog.jsonld.loader.HttpLoader;
 import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import java.net.URI;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +53,11 @@ public class RemoteDocumentLoader implements DocumentLoader {
   @Getter @Setter private boolean enableHttps = false;
   @Getter @Setter private boolean enableFile = false;
   @Getter @Setter private Map<URI, JsonDocument> localCache = new HashMap<URI, JsonDocument>();
-  @Getter @Setter private Cache<URI, Document> remoteCache = null;
+
+  @Getter @Setter
+  private Cache<URI, Document> remoteCache =
+      Caffeine.newBuilder().expireAfterWrite(Duration.ofDays(1)).build();
+
   @Getter @Setter private List<URI> httpContexts = new ArrayList<URI>();
   @Getter @Setter private List<URI> httpsContexts = new ArrayList<URI>();
   @Getter @Setter private List<URI> fileContexts = new ArrayList<URI>();
