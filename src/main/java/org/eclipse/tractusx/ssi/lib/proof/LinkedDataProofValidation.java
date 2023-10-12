@@ -35,6 +35,8 @@ import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
 import org.eclipse.tractusx.ssi.lib.proof.transform.TransformedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed25519ProofVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofVerifier;
+import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidator;
+import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidatorImpl;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class LinkedDataProofValidation {
@@ -46,12 +48,16 @@ public class LinkedDataProofValidation {
     }
 
     return new LinkedDataProofValidation(
-        new LinkedDataHasher(), new LinkedDataTransformer(), didResolver);
+        new LinkedDataHasher(),
+        new LinkedDataTransformer(),
+        didResolver,
+        new JsonLdValidatorImpl());
   }
 
   private final LinkedDataHasher hasher;
   private final LinkedDataTransformer transformer;
   private final DidResolver didResolver;
+  private final JsonLdValidator jsonLdValidator;
 
   /**
    * To verify {@link VerifiableCredential} or {@link VerifiablePresentation}. In this method we are
@@ -71,7 +77,7 @@ public class LinkedDataProofValidation {
         verifier = new JWSProofVerifier(this.didResolver);
       } else {
         throw new UnsupportedSignatureTypeException(
-            String.format("%s is not suppourted type", type));
+            String.format("%s is not supported type", type));
       }
     } else {
       throw new UnsupportedSignatureTypeException("Proof type can't be empty");
@@ -80,6 +86,6 @@ public class LinkedDataProofValidation {
     final TransformedLinkedData transformedData = transformer.transform(verifiable);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
 
-    return verifier.verify(hashedData, verifiable);
+    return jsonLdValidator.validate(verifiable) && verifier.verify(hashedData, verifiable);
   }
 }
