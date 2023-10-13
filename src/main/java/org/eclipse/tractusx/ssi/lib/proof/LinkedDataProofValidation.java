@@ -54,12 +54,12 @@ public class LinkedDataProofValidation {
   private final DidResolver didResolver;
 
   /**
-   * To verifiy {@link VerifiableCredential} or {@link VerifiablePresentation} In this method we are
+   * To verify {@link VerifiableCredential} or {@link VerifiablePresentation}. In this method we are
    * depending on Verification Method to resolve the DID Document and fetching the required Public
    * Key
    */
   @SneakyThrows
-  public boolean verifiy(Verifiable verifiable) {
+  public boolean verify(Verifiable verifiable) {
 
     var type = verifiable.getProof().getType();
     IVerifier verifier = null;
