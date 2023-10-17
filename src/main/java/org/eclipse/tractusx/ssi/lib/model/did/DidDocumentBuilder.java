@@ -36,7 +36,7 @@ public class DidDocumentBuilder {
   /**
    * Id did document builder.
    *
-   * @param id the id
+   * @param id the document id
    * @return the did document builder
    */
   public DidDocumentBuilder id(URI id) {

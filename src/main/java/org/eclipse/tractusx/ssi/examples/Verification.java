@@ -32,8 +32,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
 
 /**
- * This is example class to demonstrate how verify @{@link SignedJWT} and {@link
- * VerifiableCredential}
+ * This is example class to demonstrate how to verify @{@link SignedJWT} and {@link VerifiableCredential}
  */
 public class Verification {
 
@@ -60,7 +59,7 @@ public class Verification {
   }
 
   /**
-   * Verify ed 21559 ld boolean.
+   * Verify ed21559 signed ld.
    *
    * @param verifiableCredential the verifiable credential
    * @return the boolean
@@ -77,7 +76,7 @@ public class Verification {
   }
 
   /**
-   * Verify jwsld boolean.
+   * Verify jws signed ld.
    *
    * @param verifiableCredential the verifiable credential
    * @return the boolean

@@ -33,9 +33,9 @@ import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 public class Base64WithPadding implements MultibaseString {
 
   /**
-   * Can decode boolean.
+   * Check if a string can be decoded.
    *
-   * @param encoded the encoded
+   * @param encoded the encoded string
    * @return the boolean
    */
   public static boolean canDecode(String encoded) {

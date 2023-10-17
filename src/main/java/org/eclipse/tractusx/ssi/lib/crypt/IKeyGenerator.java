@@ -27,7 +27,7 @@ import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
 public interface IKeyGenerator {
 
   /**
-   * Generate key key pair.
+   * Generate key pair.
    *
    * @return the key pair
    * @throws KeyGenerationException the key generation exception

@@ -77,7 +77,7 @@ public class JWKVerificationMethod extends VerificationMethod {
   }
 
   /**
-   * Is instance boolean.
+   * Check if is instance.
    *
    * @param json the json
    * @return the boolean

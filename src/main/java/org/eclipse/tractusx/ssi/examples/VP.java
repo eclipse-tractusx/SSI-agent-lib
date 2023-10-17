@@ -38,12 +38,12 @@ import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationF
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationFactoryImpl;
 
 /**
- * This is example class to demonstrate how create Verifiable Presentation in JSON-LD and KWT format
+ * his is an example class to demonstrate how to create a Verifiable Presentation in JSON-LD and KWT format
  */
 class VP {
 
   /**
-   * Create vp verifiable presentation.
+   * Create verifiable presentation.
    *
    * @param issuer the issuer
    * @param credentials the credentials
@@ -63,7 +63,7 @@ class VP {
   }
 
   /**
-   * Create vp as jwt signed jwt.
+   * Create vp as a signed jwt.
    *
    * @param issuer the issuer
    * @param credentials the credentials

@@ -38,7 +38,7 @@ public class Ed25519VerificationMethod extends VerificationMethod {
   public static final String PUBLIC_KEY_BASE_58 = "publicKeyMultibase";
 
   /**
-   * Is instance boolean.
+   * Check if Is instance.
    *
    * @param json the json
    * @return the boolean

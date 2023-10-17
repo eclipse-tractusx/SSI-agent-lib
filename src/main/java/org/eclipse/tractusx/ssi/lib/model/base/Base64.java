@@ -33,7 +33,7 @@ import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 public class Base64 implements MultibaseString {
 
   /**
-   * Can decode boolean.
+   * Check if it can decode a string.
    *
    * @param encoded the encoded
    * @return the boolean

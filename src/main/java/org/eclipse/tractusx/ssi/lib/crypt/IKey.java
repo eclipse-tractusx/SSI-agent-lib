@@ -34,7 +34,7 @@ public interface IKey {
   int getKeyLength();
 
   /**
-   * As string for storing string.
+   * Convert the key to a string for storing
    *
    * @return the string
    * @throws IOException the io exception
@@ -42,7 +42,7 @@ public interface IKey {
   String asStringForStoring() throws IOException;
 
   /**
-   * As string for exchange string.
+   * Convert the key to a string for exchange.
    *
    * @param encodeType the encode type
    * @return the string
@@ -51,7 +51,7 @@ public interface IKey {
   String asStringForExchange(EncodeType encodeType) throws IOException;
 
   /**
-   * As byte byte [ ].
+   * Convert the key to a byte array.
    *
    * @return the byte [ ]
    */

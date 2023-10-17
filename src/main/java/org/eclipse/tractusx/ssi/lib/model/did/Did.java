@@ -72,7 +72,7 @@ public class Did {
   }
 
   /**
-   * To uri uri.
+   * To uri.
    *
    * @return the uri
    */

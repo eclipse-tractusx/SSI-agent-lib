@@ -39,7 +39,7 @@ public class DidResolverException extends Exception {
   }
 
   /**
-   * Instantiates a new Did resolver exception.
+   * Instantiates a new Did resolver exception from another exception with a message.
    *
    * @param message the message
    * @param cause the cause
@@ -49,7 +49,7 @@ public class DidResolverException extends Exception {
   }
 
   /**
-   * Instantiates a new Did resolver exception.
+   * Instantiates a new Did resolver exception from another exception.
    *
    * @param cause the cause
    */
@@ -58,7 +58,7 @@ public class DidResolverException extends Exception {
   }
 
   /**
-   * Instantiates a new Did resolver exception.
+   * Instantiates a new Did resolver exception with a message from another exception, allowing for disabling and printing the stack trace.
    *
    * @param message the message
    * @param cause the cause

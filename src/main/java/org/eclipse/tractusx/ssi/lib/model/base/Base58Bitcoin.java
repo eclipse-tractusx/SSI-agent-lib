@@ -34,9 +34,9 @@ import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 public class Base58Bitcoin implements MultibaseString {
 
   /**
-   * Can decode boolean.
+   * Checks if a string can be decoded.
    *
-   * @param encoded the encoded
+   * @param encoded the encoded string
    * @return the boolean
    */
   public static boolean canDecode(String encoded) {

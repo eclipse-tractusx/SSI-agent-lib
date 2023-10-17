@@ -47,9 +47,9 @@ public class JsonWebKey {
   }
 
   /**
-   * Gets curv.
+   * Gets curve.
    *
-   * @return the curv
+   * @return the curve
    */
   public String getCurv() {
     return keyPair.getCurve().getName();
