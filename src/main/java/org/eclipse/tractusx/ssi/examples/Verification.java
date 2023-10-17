@@ -32,7 +32,8 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
 
 /**
- * This is example class to demonstrate how to verify @{@link SignedJWT} and {@link VerifiableCredential}
+ * This is example class to demonstrate how to verify @{@link SignedJWT} and {@link
+ * VerifiableCredential}
  */
 public class Verification {
 

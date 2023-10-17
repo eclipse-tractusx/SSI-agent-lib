@@ -58,7 +58,8 @@ public class DidResolverException extends Exception {
   }
 
   /**
-   * Instantiates a new Did resolver exception with a message from another exception, allowing for disabling and printing the stack trace.
+   * Instantiates a new Did resolver exception with a message from another exception, allowing for
+   * disabling and printing the stack trace.
    *
    * @param message the message
    * @param cause the cause

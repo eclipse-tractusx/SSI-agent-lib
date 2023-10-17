@@ -26,14 +26,14 @@ import lombok.NonNull;
 /** The interface Multibase string. */
 public interface MultibaseString {
   /**
-   *  Get as byte array.
+   * Get as byte array.
    *
    * @return the byte [ ]
    */
   byte[] getDecoded();
 
   /**
-   *  Gets as string.
+   * Gets as string.
    *
    * @return the encoded
    */

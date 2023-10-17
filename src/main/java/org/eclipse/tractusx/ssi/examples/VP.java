@@ -38,7 +38,8 @@ import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationF
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationFactoryImpl;
 
 /**
- * his is an example class to demonstrate how to create a Verifiable Presentation in JSON-LD and KWT format
+ * his is an example class to demonstrate how to create a Verifiable Presentation in JSON-LD and KWT
+ * format
  */
 class VP {
 
