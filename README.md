@@ -123,7 +123,7 @@ collaborative environment. Some notable impacts and benefits of the project incl
 ## Installation
 
 To install and use this lib , you have two options: building from source or using the pre-built
-package from Maven Central Repository.
+package from Maven Central Repository (not implemented yet).
 
 ### Build from Source
 
@@ -136,7 +136,7 @@ To build the project from source, follow these steps:
 
 2. Navigate to the project directory:
    ```
-   cd cx-ssi-lib 
+   cd SSI-agent-lib/
    ```
 
 3. Build the project using Maven:
@@ -146,7 +146,7 @@ To build the project from source, follow these steps:
 
 4. After a successful build, you can include the generated JAR file in your project's dependencies.
 
-### Use Maven Dependency
+### Use Maven Dependency (not implemented yet)
 
 Alternatively, you can use the pre-built package available on Maven Central Repository by adding the
 following Maven dependency to your project's `pom.xml` file:
@@ -154,8 +154,8 @@ following Maven dependency to your project's `pom.xml` file:
 ```xml
 <dependency>
   <groupId>org.eclipse.tractusx.ssi</groupId>
-  <artifactId>cx-ssi-agent-lib</artifactId>
-  <version>0.0.3</version>
+  <artifactId>cx-ssi-lib</artifactId>
+  <version>0.0.16</version>
 </dependency>
 ```
 
