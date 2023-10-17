@@ -42,7 +42,7 @@ import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 /** This is example class to demonstrate how create Verifiable Credentials */
 public class VC {
   /**
-   * Create vc without proof verifiable credential.
+   * Create verifiable credential without proof
    *
    * @return the verifiable credential
    */
@@ -71,7 +71,7 @@ public class VC {
   }
 
   /**
-   * Create vc with ed 21559 proof verifiable credential.
+   * Create verifiable credential. with ed 21559 proof
    *
    * @param credential the credential
    * @param privateKey the private key

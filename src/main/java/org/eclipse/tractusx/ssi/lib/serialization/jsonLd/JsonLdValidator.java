@@ -27,7 +27,7 @@ import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 public interface JsonLdValidator {
 
   /**
-   * Validate boolean.
+   * Validate json ld object..
    *
    * @param jsonLdObject the json ld object
    * @return the boolean

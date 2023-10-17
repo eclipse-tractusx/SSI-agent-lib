@@ -34,7 +34,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 /** This is example class to demonstrate did document resolve from given did web url */
 public class ResolveDIDDoc {
   /**
-   * Resovle document did document.
+   * Resolve  did document.
    *
    * @param didUrl the did url
    * @return the did document

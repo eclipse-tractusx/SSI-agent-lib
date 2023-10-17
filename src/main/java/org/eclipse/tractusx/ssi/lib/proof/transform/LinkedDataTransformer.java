@@ -43,7 +43,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 public class LinkedDataTransformer {
 
   /**
-   * Transform transformed linked data.
+   * Transform linked data.
    *
    * @param document the document
    * @return the transformed linked data
