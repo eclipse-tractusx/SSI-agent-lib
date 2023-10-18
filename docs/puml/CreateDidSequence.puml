@@ -1,0 +1,34 @@
+@startuml
+
+participant "ManagedIdentityWallet" as MIW
+participant "DidWebFactory" as DWF
+participant "MultibaseFactory" as MF
+participant "Ed25519VerificationKey2020Builder" as EKB
+participant "Ed25519VerificationKey2020" as EK
+participant "DidDocumentBuilder" as DDB
+
+MIW -> DWF: fromHostname(hostName)
+activate DWF
+
+MIW -> MF: create(keySet.getPublicKey())
+activate MF
+
+MIW -> EKB: new()
+activate EKB
+EKB -> EK: id(URI.create(did.toUri() + "#key-" + 1))
+EKB -> EK: controller(did.toUri())
+EKB -> EK: publicKeyMultiBase(publicKeyBase)
+EKB -> EK: build()
+deactivate EKB
+
+MIW -> DDB: new()
+activate DDB
+DDB -> DDB: id(did.toUri())
+DDB -> DDB: verificationMethods(verificationMethods)
+DDB -> DDB: build()
+deactivate DDB
+
+MIW <-- DDB: return
+deactivate DDB
+
+@enduml

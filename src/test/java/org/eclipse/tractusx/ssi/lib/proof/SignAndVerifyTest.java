@@ -19,8 +19,9 @@
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
-import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.jwk.Curve;
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
@@ -32,6 +33,7 @@ import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed25519ProofVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofSigner;
 import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofVerifier;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestDidResolver;
+import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -60,24 +62,58 @@ public class SignAndVerifyTest {
   }
 
   @Test
-  public void testSignAndVerify_JWS()
-      throws IOException, JOSEException, NoSuchAlgorithmException, InvalidePrivateKeyFormat,
-          InvalidePublicKeyFormat, KeyGenerationException {
-
-    final TestDidResolver didResolver = new TestDidResolver();
+  public void testSignAndVerify_JWS_ED()
+      throws IOException, NoSuchAlgorithmException, InvalidePrivateKeyFormat,
+          KeyGenerationException {
     var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys();
+    verifyJws(testIdentity, SignatureType.JWS);
+  }
 
+  @Test
+  public void testSignAndVerify_JWS_RSA()
+      throws NoSuchAlgorithmException, InvalidePrivateKeyFormat {
+    var testIdentity = TestIdentityFactory.newIdentityWithRSAKeys();
+    verifyJws(testIdentity, SignatureType.JWS_RSA);
+  }
+
+  @Test
+  public void testSignAndVerify_JWS_EC_P256()
+      throws NoSuchAlgorithmException, InvalidePrivateKeyFormat,
+          InvalidAlgorithmParameterException {
+    var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp256r1", Curve.P_256);
+    verifyJws(testIdentity, SignatureType.JWS_P256);
+  }
+
+  @Test
+  public void testSignAndVerify_JWS_EC_P384()
+      throws NoSuchAlgorithmException, InvalidePrivateKeyFormat,
+          InvalidAlgorithmParameterException {
+    var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp384r1", Curve.P_384);
+    verifyJws(testIdentity, SignatureType.JWS_P384);
+  }
+
+  @Test
+  public void testSignAndVerify_JWS_EC_256K1()
+      throws NoSuchAlgorithmException, InvalidePrivateKeyFormat,
+          InvalidAlgorithmParameterException {
+    var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp256k1", Curve.SECP256K1);
+    verifyJws(testIdentity, SignatureType.JWS_SEC_P_256K1);
+  }
+
+  void verifyJws(TestIdentity testIdentity, SignatureType type)
+      throws NoSuchAlgorithmException, InvalidePrivateKeyFormat {
+    final TestDidResolver didResolver = new TestDidResolver();
     didResolver.register(testIdentity);
     var data = "Hello World".getBytes();
     MessageDigest digest = MessageDigest.getInstance("SHA-256");
     var value = digest.digest(data);
 
-    var signer = new JWSProofSigner();
+    var signer = new JWSProofSigner(type);
     var verifier = new JWSProofVerifier(didResolver);
 
     var signature = signer.sign(new HashedLinkedData(value), testIdentity.getPrivateKey());
     var isSigned =
-        verifier.verify(new HashedLinkedData(value), signature, testIdentity.getPublicKey());
+        verifier.verify(new HashedLinkedData(value), signature, testIdentity.getPublicKey(), type);
 
     Assertions.assertTrue(isSigned);
   }

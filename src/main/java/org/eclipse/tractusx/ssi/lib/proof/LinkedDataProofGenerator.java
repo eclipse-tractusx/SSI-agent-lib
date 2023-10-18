@@ -50,11 +50,9 @@ public class LinkedDataProofGenerator {
     if (type == SignatureType.ED21559) {
       return new LinkedDataProofGenerator(
           type, new LinkedDataHasher(), new LinkedDataTransformer(), new Ed25519ProofSigner());
-    } else if (type == SignatureType.JWS) {
-      return new LinkedDataProofGenerator(
-          type, new LinkedDataHasher(), new LinkedDataTransformer(), new JWSProofSigner());
     } else {
-      throw new UnsupportedSignatureTypeException("Invalide signautre type");
+      return new LinkedDataProofGenerator(
+          type, new LinkedDataHasher(), new LinkedDataTransformer(), new JWSProofSigner(type));
     }
   }
 

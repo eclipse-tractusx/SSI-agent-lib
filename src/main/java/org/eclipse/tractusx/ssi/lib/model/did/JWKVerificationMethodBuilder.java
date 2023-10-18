@@ -19,39 +19,42 @@
 
 package org.eclipse.tractusx.ssi.lib.model.did;
 
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.util.JSONObjectUtils;
 import java.net.URI;
+import java.text.ParseException;
 import java.util.Map;
 import lombok.NoArgsConstructor;
-import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
 
 @NoArgsConstructor
 public class JWKVerificationMethodBuilder {
   private Did did;
-  private JsonWebKey jwk;
+  private JWK jwk;
 
   public JWKVerificationMethodBuilder did(Did did) {
     this.did = did;
     return this;
   }
 
-  public JWKVerificationMethodBuilder jwk(JsonWebKey jwk) {
+  public JWKVerificationMethodBuilder jwk(JWK jwk) {
     this.jwk = jwk;
     return this;
   }
 
   public JWKVerificationMethod build() {
-    return new JWKVerificationMethod(
-        Map.of(
-            JWKVerificationMethod.ID,
-            URI.create(did.toUri() + "#" + jwk.getKeyID()),
-            JWKVerificationMethod.TYPE,
-            JWKVerificationMethod.DEFAULT_TYPE,
-            JWKVerificationMethod.CONTROLLER,
-            this.did.toUri(),
-            JWKVerificationMethod.PUBLIC_KEY_JWK,
-            Map.of(
-                JWKVerificationMethod.JWK_KEK_TYPE, jwk.getKeyType(),
-                JWKVerificationMethod.JWK_CURVE, jwk.getCurv(),
-                JWKVerificationMethod.JWK_X, jwk.getX())));
+    try {
+      return new JWKVerificationMethod(
+          Map.of(
+              JWKVerificationMethod.ID,
+              URI.create(did.toUri() + "#" + jwk.getKeyID()),
+              JWKVerificationMethod.TYPE,
+              JWKVerificationMethod.DEFAULT_TYPE,
+              JWKVerificationMethod.CONTROLLER,
+              this.did.toUri(),
+              JWKVerificationMethod.PUBLIC_KEY_JWK,
+              JSONObjectUtils.parse(jwk.toJSONString())));
+    } catch (ParseException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

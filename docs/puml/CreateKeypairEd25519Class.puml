@@ -1,0 +1,58 @@
+@startuml
+
+class User {
+}
+
+class KeyPairGeneratorSpi.Ed25519 {
+    +initialize(int, SecureRandom)
+    +generateKeyPair(): KeyPair
+}
+
+class SecureRandom {
+    // Methods and attributes of SecureRandom
+}
+
+class KeyPair {
+    +getPublic(): PublicKey
+    +getPrivate(): PrivateKey
+}
+
+class PrivateKeyFactory {
+    +createKey(byte[]): PrivateKey
+}
+
+class PublicKeyFactory {
+    +createKey(byte[]): PublicKey
+}
+
+class PublicKey {
+    // Methods and attributes of PublicKey
+}
+
+class PrivateKey {
+    // Methods and attributes of PrivateKey
+}
+
+class Ed25519PrivateKeyParameters {
+    // Methods and attributes of Ed25519PrivateKeyParameters
+}
+
+class Ed25519PublicKeyParameters {
+    // Methods and attributes of Ed25519PublicKeyParameters
+}
+
+User --> KeyPairGeneratorSpi.Ed25519
+User --> SecureRandom
+User --> KeyPair
+User --> PrivateKeyFactory
+User --> PublicKeyFactory
+KeyPairGeneratorSpi.Ed25519 --> SecureRandom
+KeyPairGeneratorSpi.Ed25519 --> KeyPair
+KeyPair --> PublicKey
+KeyPair --> PrivateKey
+PrivateKeyFactory --> PrivateKey
+PublicKeyFactory --> PublicKey
+PrivateKey --> Ed25519PrivateKeyParameters
+PublicKey --> Ed25519PublicKeyParameters
+
+@enduml

@@ -20,9 +20,17 @@
 package org.eclipse.tractusx.ssi.lib.jwt;
 
 import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSHeader;
+import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.Ed25519Verifier;
+import com.nimbusds.jose.crypto.factories.DefaultJWSVerifierFactory;
+import com.nimbusds.jose.crypto.impl.ECDSAProvider;
+import com.nimbusds.jose.crypto.impl.EdDSAProvider;
+import com.nimbusds.jose.crypto.impl.RSASSAProvider;
 import com.nimbusds.jose.jwk.Curve;
+import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.OctetKeyPair;
+import com.nimbusds.jose.proc.JWSVerifierFactory;
 import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
@@ -35,7 +43,6 @@ import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.JwtException;
-import org.eclipse.tractusx.ssi.lib.exception.UnsupportedVerificationMethodException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
@@ -81,17 +88,8 @@ public class SignedJwtVerifier {
     for (VerificationMethod verificationMethod : verificationMethods) {
       if (JWKVerificationMethod.isInstance(verificationMethod)) {
         final JWKVerificationMethod method = new JWKVerificationMethod(verificationMethod);
-        final String kty = method.getPublicKeyJwk().getKty();
-        final String crv = method.getPublicKeyJwk().getCrv();
-        final String x = method.getPublicKeyJwk().getX();
-        if (kty.equals("OKP") && crv.equals("Ed25519")) {
-          final OctetKeyPair keyPair =
-              new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.from(x)).build();
-          if (jwt.verify(new Ed25519Verifier(keyPair))) return true;
-        } else {
-          throw new UnsupportedVerificationMethodException(
-              method, "only kty:OKP with crv:Ed25519 is supported");
-        }
+        JWSVerifier verifier = getVerifier(jwt.getHeader(), method.getJwk());
+        return jwt.verify(verifier);
       } else if (Ed25519VerificationMethod.isInstance(verificationMethod)) {
         final Ed25519VerificationMethod method = new Ed25519VerificationMethod(verificationMethod);
         final MultibaseString multibase = method.getPublicKeyBase58();
@@ -107,5 +105,19 @@ public class SignedJwtVerifier {
     }
 
     return false;
+  }
+
+  private JWSVerifier getVerifier(JWSHeader header, JWK key) throws JOSEException {
+    if (EdDSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm())) {
+      return new Ed25519Verifier((OctetKeyPair) key);
+    } else {
+      JWSVerifierFactory verifierFactory = new DefaultJWSVerifierFactory();
+      if (RSASSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm()))
+        return verifierFactory.createJWSVerifier(header, key.toRSAKey().toRSAPublicKey());
+      if (ECDSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm()))
+        return verifierFactory.createJWSVerifier(header, key.toECKey().toPublicKey());
+    }
+    throw new IllegalArgumentException(
+        String.format("algorithm %s is not supported", header.getAlgorithm().getName()));
   }
 }

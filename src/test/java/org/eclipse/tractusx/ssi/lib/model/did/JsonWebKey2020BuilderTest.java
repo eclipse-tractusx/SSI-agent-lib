@@ -1,7 +1,6 @@
 package org.eclipse.tractusx.ssi.lib.model.did;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.nimbusds.jose.jwk.Curve;
@@ -34,15 +33,18 @@ class JsonWebKey2020BuilderTest {
     JsonWebKey jwk = new JsonWebKey(keyId, publicKey, privateKey);
 
     final JWKVerificationMethodBuilder builder = new JWKVerificationMethodBuilder();
-    final JWKVerificationMethod jwk2020VerificationMethod = builder.did(did).jwk(jwk).build();
+    final JWKVerificationMethod jwk2020VerificationMethod =
+        builder.did(did).jwk(octetKeyPair).build();
 
     assertNotNull(jwk2020VerificationMethod);
     assertEquals(jwk2020VerificationMethod.getType(), "JsonWebKey2020");
     assertEquals(jwk2020VerificationMethod.getId().toString(), "did:web:localhost#" + keyId);
     assertEquals(jwk2020VerificationMethod.getController().toString(), "did:web:localhost");
 
-    assertEquals(jwk2020VerificationMethod.getPublicKeyJwk().getKty(), "OKP");
-    assertEquals(jwk2020VerificationMethod.getPublicKeyJwk().getCrv(), "Ed25519");
-    assertFalse(jwk2020VerificationMethod.getPublicKeyJwk().getX().isEmpty());
+    assertEquals(
+        ((OctetKeyPair) jwk2020VerificationMethod.getJwk()).getKeyType().getValue(), "OKP");
+    assertEquals(
+        ((OctetKeyPair) jwk2020VerificationMethod.getJwk()).getCurve().getName(), "Ed25519");
+    assertNotNull(((OctetKeyPair) jwk2020VerificationMethod.getJwk()).getX());
   }
 }

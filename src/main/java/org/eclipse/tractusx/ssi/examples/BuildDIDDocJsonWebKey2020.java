@@ -25,13 +25,13 @@ import com.nimbusds.jose.jwk.gen.OctetKeyPairGenerator;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.SneakyThrows;
-import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
-import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PrivateKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
-import org.eclipse.tractusx.ssi.lib.model.did.*;
+import org.eclipse.tractusx.ssi.lib.model.did.Did;
+import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
+import org.eclipse.tractusx.ssi.lib.model.did.DidDocumentBuilder;
+import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethod;
+import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethodBuilder;
+import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 
 public class BuildDIDDocJsonWebKey2020 {
   @SneakyThrows
@@ -40,16 +40,10 @@ public class BuildDIDDocJsonWebKey2020 {
     final Did did = DidWebFactory.fromHostname(hostName);
     OctetKeyPair octetKeyPair = new OctetKeyPairGenerator(Curve.Ed25519).keyID("1").generate();
 
-    IPrivateKey privateKey = new x21559PrivateKey(octetKeyPair.getDecodedD());
-    IPublicKey publicKey = new x21559PublicKey(octetKeyPair.getDecodedX());
-
-    // JWK
-    JsonWebKey jwk = new JsonWebKey(octetKeyPair.getKeyID(), publicKey, privateKey);
-
     // Building Verification Methods:
     final List<VerificationMethod> verificationMethods = new ArrayList<>();
     final JWKVerificationMethodBuilder builder = new JWKVerificationMethodBuilder();
-    final JWKVerificationMethod key = builder.did(did).jwk(jwk).build();
+    final JWKVerificationMethod key = builder.did(did).jwk(octetKeyPair).build();
     verificationMethods.add(key);
 
     final DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();
