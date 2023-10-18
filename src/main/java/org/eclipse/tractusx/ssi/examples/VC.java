@@ -71,7 +71,7 @@ public class VC {
   }
 
   /**
-   * Create verifiable credential. with ed 21559 proof
+   * Create verifiable credential. with ED21559 proof
    *
    * @param credential the credential
    * @param privateKey the private key
