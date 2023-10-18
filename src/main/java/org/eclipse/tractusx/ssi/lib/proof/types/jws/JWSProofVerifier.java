@@ -40,6 +40,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.proc.JWSVerifierFactory;
 import com.nimbusds.jose.util.Base64URL;
 import java.net.URI;
+import java.security.interfaces.ECPublicKey;
 import java.text.ParseException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -186,13 +187,9 @@ public class JWSProofVerifier implements IVerifier {
         jwk = getOctet(publicKey.asByte());
         break;
       case JWS_P256:
-        jwk = getECPublicKey(publicKey.asByte(), Curve.P_256);
-        break;
       case JWS_P384:
-        jwk = getECPublicKey(publicKey.asByte(), Curve.P_384);
-        break;
       case JWS_SEC_P_256K1:
-        jwk = getECPublicKey(publicKey.asByte(), Curve.SECP256K1);
+        jwk = getECPublicKey(publicKey.asByte());
         break;
       case JWS_RSA:
         jwk = getRSAPublicKey(publicKey.asByte());
@@ -215,8 +212,9 @@ public class JWSProofVerifier implements IVerifier {
     return jws.verify(verifier);
   }
 
-  private ECKey getECPublicKey(byte[] keyBytes, Curve crv) {
-    return new ECKey.Builder(crv, new ECPubKey(keyBytes, crv.getStdName()).getPublicKey()).build();
+  private ECKey getECPublicKey(byte[] keyBytes) {
+    ECPublicKey publicKey = new ECPubKey(keyBytes).getPublicKey();
+    return new ECKey.Builder(Curve.forECParameterSpec(publicKey.getParams()), publicKey).build();
   }
 
   // input must be that of privateKey.getEncoded()

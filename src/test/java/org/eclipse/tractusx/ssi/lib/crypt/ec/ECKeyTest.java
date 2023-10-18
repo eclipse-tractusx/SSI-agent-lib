@@ -28,7 +28,7 @@ public class ECKeyTest {
     String string = assertDoesNotThrow(ECpKey::asStringForStoring);
     assertTrue(string.startsWith("-----BEGIN EC PRIVATE KEY-----"));
 
-    ECPubKey pubKey = new ECPubKey(keyPair.getPublic().getEncoded(), "secp256r1");
+    ECPubKey pubKey = new ECPubKey(keyPair.getPublic().getEncoded());
     string = assertDoesNotThrow(pubKey::asStringForStoring);
     assertTrue(string.startsWith("-----BEGIN PUBLIC KEY-----"));
     assertEquals(65, pubKey.getKeyLength());

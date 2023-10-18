@@ -20,13 +20,10 @@ import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 public class ECPubKey implements IPublicKey {
   private final ECPublicKey publicKey;
 
-  private final String curve;
-
   /**
    * @param encoded DER encoded bytes
    */
-  public ECPubKey(byte[] encoded, String curve) {
-    this.curve = curve;
+  public ECPubKey(byte[] encoded) {
     try {
       KeyFactory kf = KeyFactory.getInstance("EC");
       publicKey = (ECPublicKey) kf.generatePublic(new X509EncodedKeySpec(encoded));
@@ -58,7 +55,9 @@ public class ECPubKey implements IPublicKey {
 
   @Override
   public String asStringForExchange(final EncodeType encodeType) {
-    return new ECKey.Builder(Curve.forStdName(curve), publicKey).build().toJSONString();
+    return new ECKey.Builder(Curve.forECParameterSpec(publicKey.getParams()), publicKey)
+        .build()
+        .toJSONString();
   }
 
   @Override

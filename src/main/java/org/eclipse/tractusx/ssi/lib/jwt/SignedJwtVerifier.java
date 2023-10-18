@@ -27,23 +27,19 @@ import com.nimbusds.jose.crypto.factories.DefaultJWSVerifierFactory;
 import com.nimbusds.jose.crypto.impl.ECDSAProvider;
 import com.nimbusds.jose.crypto.impl.EdDSAProvider;
 import com.nimbusds.jose.crypto.impl.RSASSAProvider;
-import com.nimbusds.jose.jwk.Curve;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.proc.JWSVerifierFactory;
-import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import java.text.ParseException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.JwtException;
-import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
@@ -92,15 +88,7 @@ public class SignedJwtVerifier {
         return jwt.verify(verifier);
       } else if (Ed25519VerificationMethod.isInstance(verificationMethod)) {
         final Ed25519VerificationMethod method = new Ed25519VerificationMethod(verificationMethod);
-        final MultibaseString multibase = method.getPublicKeyBase58();
-        final Ed25519PublicKeyParameters publicKeyParameters =
-            new Ed25519PublicKeyParameters(multibase.getDecoded(), 0);
-        final OctetKeyPair keyPair =
-            new OctetKeyPair.Builder(
-                    Curve.Ed25519, Base64URL.encode(publicKeyParameters.getEncoded()))
-                .build();
-
-        if (jwt.verify(new Ed25519Verifier(keyPair))) return true;
+        if (jwt.verify(new Ed25519Verifier(method.getOctetKeyPair()))) return true;
       }
     }
 

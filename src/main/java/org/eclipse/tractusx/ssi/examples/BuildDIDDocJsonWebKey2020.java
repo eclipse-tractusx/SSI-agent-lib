@@ -26,10 +26,9 @@ import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.gen.ECKeyGenerator;
 import com.nimbusds.jose.jwk.gen.OctetKeyPairGenerator;
+import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;

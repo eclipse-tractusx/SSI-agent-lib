@@ -18,6 +18,12 @@ public class JWKVerificationMethod extends VerificationMethod {
 
   public JWKVerificationMethod(final Map<String, Object> json) {
     super(json);
+
+    if (!DEFAULT_TYPE.equals(this.getType())) {
+      throw new IllegalArgumentException(
+          String.format("Invalid type %s. Expected %s", this.getType(), DEFAULT_TYPE));
+    }
+
     Object object = this.get(PUBLIC_KEY_JWK);
     try {
       jwk = JWK.parse(convertToMap(object));
