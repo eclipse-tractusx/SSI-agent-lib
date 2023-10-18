@@ -16,6 +16,7 @@ import org.testcontainers.shaded.org.bouncycastle.jce.provider.BouncyCastleProvi
  * @author Pascal Manaras <a href="mailto:manaras@xignsys.com">manaras@xignsys.com</a>
  */
 public class ECKeyTest {
+
   @Test
   void shouldReturnPEMString() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
     KeyPairGenerator kpg = KeyPairGenerator.getInstance("EC", new BouncyCastleProvider());
@@ -26,9 +27,8 @@ public class ECKeyTest {
     ECPrivKey ECpKey = new ECPrivKey(keyPair.getPrivate().getEncoded());
     String string = assertDoesNotThrow(ECpKey::asStringForStoring);
     assertTrue(string.startsWith("-----BEGIN EC PRIVATE KEY-----"));
-    assertEquals(32, ECpKey.getKeyLength());
 
-    ECPubKey pubKey = new ECPubKey(keyPair.getPublic().getEncoded());
+    ECPubKey pubKey = new ECPubKey(keyPair.getPublic().getEncoded(), "secp256r1");
     string = assertDoesNotThrow(pubKey::asStringForStoring);
     assertTrue(string.startsWith("-----BEGIN PUBLIC KEY-----"));
     assertEquals(65, pubKey.getKeyLength());

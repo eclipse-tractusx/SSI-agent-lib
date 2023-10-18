@@ -1,5 +1,6 @@
 package org.eclipse.tractusx.ssi.lib.crypt.rsa;
 
+import com.nimbusds.jose.jwk.RSAKey;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.KeyFactory;
@@ -10,7 +11,6 @@ import java.security.spec.X509EncodedKeySpec;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
-import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
 /**
  * @author Pascal Manaras <a href="mailto:manaras@xignsys.com">manaras@xignsys.com</a>
@@ -51,7 +51,7 @@ public class RSAPubKey implements IPublicKey {
 
   @Override
   public String asStringForExchange(final EncodeType encodeType) {
-    return MultibaseFactory.create(encodeType, publicKey.getEncoded()).getEncoded();
+    return new RSAKey.Builder(publicKey).build().toJSONString();
   }
 
   @Override

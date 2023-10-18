@@ -216,7 +216,7 @@ public class JWSProofVerifier implements IVerifier {
   }
 
   private ECKey getECPublicKey(byte[] keyBytes, Curve crv) {
-    return new ECKey.Builder(crv, new ECPubKey(keyBytes).getPublicKey()).build();
+    return new ECKey.Builder(crv, new ECPubKey(keyBytes, crv.getStdName()).getPublicKey()).build();
   }
 
   // input must be that of privateKey.getEncoded()

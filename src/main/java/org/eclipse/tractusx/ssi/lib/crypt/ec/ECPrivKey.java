@@ -10,7 +10,6 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
-import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
 /**
  * @author Pascal Manaras <a href="mailto:manaras@xignsys.com">manaras@xignsys.com</a>
@@ -51,7 +50,7 @@ public class ECPrivKey implements IPrivateKey {
 
   @Override
   public String asStringForExchange(final EncodeType encodeType) {
-    return MultibaseFactory.create(encodeType, privateKey.getEncoded()).getEncoded();
+    return null;
   }
 
   @Override

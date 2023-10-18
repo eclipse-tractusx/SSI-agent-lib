@@ -1,5 +1,7 @@
 package org.eclipse.tractusx.ssi.lib.crypt.ec;
 
+import com.nimbusds.jose.jwk.Curve;
+import com.nimbusds.jose.jwk.ECKey;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.KeyFactory;
@@ -11,7 +13,6 @@ import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
-import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
 /**
  * @author Pascal Manaras <a href="mailto:manaras@xignsys.com">manaras@xignsys.com</a>
@@ -19,10 +20,13 @@ import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 public class ECPubKey implements IPublicKey {
   private final ECPublicKey publicKey;
 
+  private final String curve;
+
   /**
    * @param encoded DER encoded bytes
    */
-  public ECPubKey(byte[] encoded) {
+  public ECPubKey(byte[] encoded, String curve) {
+    this.curve = curve;
     try {
       KeyFactory kf = KeyFactory.getInstance("EC");
       publicKey = (ECPublicKey) kf.generatePublic(new X509EncodedKeySpec(encoded));
@@ -54,7 +58,7 @@ public class ECPubKey implements IPublicKey {
 
   @Override
   public String asStringForExchange(final EncodeType encodeType) {
-    return MultibaseFactory.create(encodeType, publicKey.getEncoded()).getEncoded();
+    return new ECKey.Builder(Curve.forStdName(curve), publicKey).build().toJSONString();
   }
 
   @Override

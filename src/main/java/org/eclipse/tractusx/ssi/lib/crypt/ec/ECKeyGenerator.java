@@ -30,13 +30,13 @@ public class ECKeyGenerator implements IKeyGenerator {
       ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec(curve);
       kpg.initialize(ecGenParameterSpec, new SecureRandom());
     } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
-      throw new IllegalStateException(e);
+      throw new KeyGenerationException(e);
     }
 
     java.security.KeyPair keyPair = kpg.generateKeyPair();
 
     return new KeyPair(
-        new ECPubKey(keyPair.getPublic().getEncoded()),
+        new ECPubKey(keyPair.getPublic().getEncoded(), curve),
         new ECPrivKey(keyPair.getPrivate().getEncoded()));
   }
 }
