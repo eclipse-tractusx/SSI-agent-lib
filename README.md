@@ -123,7 +123,8 @@ collaborative environment. Some notable impacts and benefits of the project incl
 ## Installation
 
 To install and use this lib , you have two options: building from source or using the pre-built
-package from Maven Central Repository (not implemented yet).
+package from GitHub Maven Repository. Instructions for the current GitHub Maven Repository install
+are included in the [INSTALL.md](./INSTALL.md) covering both Maven and Gradle projects.
 
 ### Build from Source
 
@@ -145,24 +146,6 @@ To build the project from source, follow these steps:
    ```
 
 4. After a successful build, you can include the generated JAR file in your project's dependencies.
-
-### Use Maven Dependency (not implemented yet)
-
-Alternatively, you can use the pre-built package available on Maven Central Repository by adding the
-following Maven dependency to your project's `pom.xml` file:
-
-```xml
-<dependency>
-  <groupId>org.eclipse.tractusx.ssi</groupId>
-  <artifactId>cx-ssi-lib</artifactId>
-  <version>0.0.16</version>
-</dependency>
-```
-
-Make sure to update the version number if a newer version is available.
-
-Once you've added the dependency, your build tool (e.g., Maven or Gradle) will automatically
-download the library and include it in your project.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
