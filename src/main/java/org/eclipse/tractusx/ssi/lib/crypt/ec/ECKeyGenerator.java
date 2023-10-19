@@ -36,7 +36,7 @@ public class ECKeyGenerator implements IKeyGenerator {
     java.security.KeyPair keyPair = kpg.generateKeyPair();
 
     return new KeyPair(
-        new ECPubKey(keyPair.getPublic().getEncoded()),
-        new ECPrivKey(keyPair.getPrivate().getEncoded()));
+        new ECPublicKeyWrapper(keyPair.getPublic().getEncoded()),
+        new ECPrivateKeyWrapper(keyPair.getPrivate().getEncoded()));
   }
 }

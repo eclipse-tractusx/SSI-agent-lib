@@ -1,15 +1,13 @@
-package org.eclipse.tractusx.ssi.lib.crypt.ec;
+package org.eclipse.tractusx.ssi.lib.crypt.rsa;
 
-import com.nimbusds.jose.jwk.Curve;
-import com.nimbusds.jose.jwk.ECKey;
+import com.nimbusds.jose.jwk.RSAKey;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
-import java.security.interfaces.ECPublicKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
@@ -17,16 +15,17 @@ import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 /**
  * @author Pascal Manaras <a href="mailto:manaras@xignsys.com">manaras@xignsys.com</a>
  */
-public class ECPubKey implements IPublicKey {
-  private final ECPublicKey publicKey;
+public class RSAPublicKeyWrapper implements IPublicKey {
+
+  private final RSAPublicKey publicKey;
 
   /**
    * @param encoded DER encoded bytes
    */
-  public ECPubKey(byte[] encoded) {
+  public RSAPublicKeyWrapper(byte[] encoded) {
     try {
-      KeyFactory kf = KeyFactory.getInstance("EC");
-      publicKey = (ECPublicKey) kf.generatePublic(new X509EncodedKeySpec(encoded));
+      KeyFactory kf = KeyFactory.getInstance("RSA");
+      publicKey = (RSAPublicKey) kf.generatePublic(new X509EncodedKeySpec(encoded));
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new IllegalStateException(e);
     }
@@ -34,10 +33,7 @@ public class ECPubKey implements IPublicKey {
 
   @Override
   public int getKeyLength() {
-    return SubjectPublicKeyInfo.getInstance(publicKey.getEncoded())
-        .getPublicKeyData()
-        .getOctets()
-        .length;
+    return publicKey.getModulus().bitLength();
   }
 
   @Override
@@ -55,9 +51,7 @@ public class ECPubKey implements IPublicKey {
 
   @Override
   public String asStringForExchange(final EncodeType encodeType) {
-    return new ECKey.Builder(Curve.forECParameterSpec(publicKey.getParams()), publicKey)
-        .build()
-        .toJSONString();
+    return new RSAKey.Builder(publicKey).build().toJSONString();
   }
 
   @Override
@@ -65,7 +59,12 @@ public class ECPubKey implements IPublicKey {
     return publicKey.getEncoded();
   }
 
-  public ECPublicKey getPublicKey() {
+  @Override
+  public RSAKey toJwk() {
+    return new RSAKey.Builder(publicKey).build();
+  }
+
+  public RSAPublicKey getPublicKey() {
     return publicKey;
   }
 }

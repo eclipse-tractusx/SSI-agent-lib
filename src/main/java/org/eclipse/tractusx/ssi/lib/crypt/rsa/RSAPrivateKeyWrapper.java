@@ -10,19 +10,18 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
-import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
 /**
  * @author Pascal Manaras <a href="mailto:manaras@xignsys.com">manaras@xignsys.com</a>
  */
-public class RSAPrivKey implements IPrivateKey {
+public class RSAPrivateKeyWrapper implements IPrivateKey {
 
   private final RSAPrivateKey privateKey;
 
   /**
    * @param encoded DER encoded bytes
    */
-  public RSAPrivKey(final byte[] encoded) {
+  public RSAPrivateKeyWrapper(final byte[] encoded) {
     try {
       KeyFactory kf = KeyFactory.getInstance("RSA");
       privateKey = (RSAPrivateKey) kf.generatePrivate(new PKCS8EncodedKeySpec(encoded));
@@ -51,7 +50,7 @@ public class RSAPrivKey implements IPrivateKey {
 
   @Override
   public String asStringForExchange(final EncodeType encodeType) {
-    return MultibaseFactory.create(encodeType, privateKey.getEncoded()).getEncoded();
+    return null;
   }
 
   @Override

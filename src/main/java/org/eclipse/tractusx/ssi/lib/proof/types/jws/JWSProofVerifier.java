@@ -40,13 +40,13 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.proc.JWSVerifierFactory;
 import com.nimbusds.jose.util.Base64URL;
 import java.net.URI;
-import java.security.interfaces.ECPublicKey;
 import java.text.ParseException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
-import org.eclipse.tractusx.ssi.lib.crypt.ec.ECPubKey;
-import org.eclipse.tractusx.ssi.lib.crypt.rsa.RSAPubKey;
+import org.eclipse.tractusx.ssi.lib.crypt.ec.ECPublicKeyWrapper;
+import org.eclipse.tractusx.ssi.lib.crypt.rsa.RSAPublicKeyWrapper;
+import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
@@ -184,15 +184,15 @@ public class JWSProofVerifier implements IVerifier {
     JWK jwk = null;
     switch (type) {
       case JWS:
-        jwk = getOctet(publicKey.asByte());
+        jwk = ((x21559PublicKey) publicKey).toJwk();
         break;
       case JWS_P256:
       case JWS_P384:
       case JWS_SEC_P_256K1:
-        jwk = getECPublicKey(publicKey.asByte());
+        jwk = ((ECPublicKeyWrapper) publicKey).toJwk();
         break;
       case JWS_RSA:
-        jwk = getRSAPublicKey(publicKey.asByte());
+        jwk = ((RSAPublicKeyWrapper) publicKey).toJwk();
         break;
       default:
         throw new IllegalArgumentException(
@@ -210,16 +210,6 @@ public class JWSProofVerifier implements IVerifier {
       throw new SsiException(e.getMessage());
     }
     return jws.verify(verifier);
-  }
-
-  private ECKey getECPublicKey(byte[] keyBytes) {
-    ECPublicKey publicKey = new ECPubKey(keyBytes).getPublicKey();
-    return new ECKey.Builder(Curve.forECParameterSpec(publicKey.getParams()), publicKey).build();
-  }
-
-  // input must be that of privateKey.getEncoded()
-  private RSAKey getRSAPublicKey(byte[] keyBytes) {
-    return new RSAKey.Builder(new RSAPubKey(keyBytes).getPublicKey()).build();
   }
 
   private OctetKeyPair getOctet(byte[] keyBytes) {

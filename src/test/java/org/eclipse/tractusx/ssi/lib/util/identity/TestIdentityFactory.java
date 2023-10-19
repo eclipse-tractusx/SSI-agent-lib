@@ -42,10 +42,13 @@ import org.eclipse.tractusx.ssi.lib.crypt.IKeyGenerator;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.KeyPair;
+import org.eclipse.tractusx.ssi.lib.crypt.ec.ECPrivateKeyWrapper;
+import org.eclipse.tractusx.ssi.lib.crypt.ec.ECPublicKeyWrapper;
+import org.eclipse.tractusx.ssi.lib.crypt.rsa.RSAPrivateKeyWrapper;
+import org.eclipse.tractusx.ssi.lib.crypt.rsa.RSAPublicKeyWrapper;
 import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559Generator;
 import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
-import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
@@ -107,7 +110,10 @@ public class TestIdentityFactory {
     PrivateKey privateKey = keyPair.getPrivate();
 
     RSAKey jwk =
-        new RSAKey.Builder((RSAPublicKey) publicKey).privateKey((RSAPrivateKey) privateKey).build();
+        new RSAKey.Builder((RSAPublicKey) publicKey)
+            .privateKey((RSAPrivateKey) privateKey)
+            .keyID("1")
+            .build();
 
     final JWKVerificationMethod jwkVerificationMethod =
         new JWKVerificationMethodBuilder().did(did).jwk(jwk.toPublicJWK()).build();
@@ -122,48 +128,8 @@ public class TestIdentityFactory {
     return new TestIdentity(
         did,
         didDocument,
-        new IPublicKey() {
-          @Override
-          public int getKeyLength() {
-            return 0;
-          }
-
-          @Override
-          public String asStringForStoring() throws IOException {
-            return null;
-          }
-
-          @Override
-          public String asStringForExchange(final EncodeType encodeType) throws IOException {
-            return null;
-          }
-
-          @Override
-          public byte[] asByte() {
-            return publicKey.getEncoded();
-          }
-        },
-        new IPrivateKey() {
-          @Override
-          public int getKeyLength() {
-            return 0;
-          }
-
-          @Override
-          public String asStringForStoring() throws IOException {
-            return null;
-          }
-
-          @Override
-          public String asStringForExchange(final EncodeType encodeType) throws IOException {
-            return null;
-          }
-
-          @Override
-          public byte[] asByte() {
-            return privateKey.getEncoded();
-          }
-        });
+        new RSAPublicKeyWrapper(publicKey.getEncoded()),
+        new RSAPrivateKeyWrapper(privateKey.getEncoded()));
   }
 
   public static TestIdentity newIdentityWithECKeys(String alg, Curve crv)
@@ -196,47 +162,7 @@ public class TestIdentityFactory {
     return new TestIdentity(
         did,
         didDocument,
-        new IPublicKey() {
-          @Override
-          public int getKeyLength() {
-            return publicKey.getEncoded().length;
-          }
-
-          @Override
-          public String asStringForStoring() throws IOException {
-            return null;
-          }
-
-          @Override
-          public String asStringForExchange(final EncodeType encodeType) throws IOException {
-            return null;
-          }
-
-          @Override
-          public byte[] asByte() {
-            return publicKey.getEncoded();
-          }
-        },
-        new IPrivateKey() {
-          @Override
-          public int getKeyLength() {
-            return privateKey.getEncoded().length;
-          }
-
-          @Override
-          public String asStringForStoring() throws IOException {
-            return null;
-          }
-
-          @Override
-          public String asStringForExchange(final EncodeType encodeType) throws IOException {
-            return null;
-          }
-
-          @Override
-          public byte[] asByte() {
-            return privateKey.getEncoded();
-          }
-        });
+        new ECPublicKeyWrapper(publicKey.getEncoded()),
+        new ECPrivateKeyWrapper(privateKey.getEncoded()));
   }
 }

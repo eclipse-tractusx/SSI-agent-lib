@@ -45,16 +45,16 @@ public class JWKVerificationMethodBuilder {
     try {
       return new JWKVerificationMethod(
           Map.of(
-              JWKVerificationMethod.ID,
+              VerificationMethod.ID,
               URI.create(did.toUri() + "#" + jwk.getKeyID()),
-              JWKVerificationMethod.TYPE,
+              VerificationMethod.TYPE,
               JWKVerificationMethod.DEFAULT_TYPE,
-              JWKVerificationMethod.CONTROLLER,
+              VerificationMethod.CONTROLLER,
               this.did.toUri(),
               JWKVerificationMethod.PUBLIC_KEY_JWK,
               JSONObjectUtils.parse(jwk.toJSONString())));
     } catch (ParseException e) {
-      throw new RuntimeException(e);
+      throw new IllegalArgumentException(e);
     }
   }
 }

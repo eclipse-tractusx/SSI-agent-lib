@@ -1,31 +1,30 @@
-package org.eclipse.tractusx.ssi.lib.crypt.rsa;
+package org.eclipse.tractusx.ssi.lib.crypt.ec;
 
-import com.nimbusds.jose.jwk.RSAKey;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
-import java.security.interfaces.RSAPublicKey;
+import java.security.interfaces.ECPrivateKey;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
+import java.security.spec.PKCS8EncodedKeySpec;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
-import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 
 /**
  * @author Pascal Manaras <a href="mailto:manaras@xignsys.com">manaras@xignsys.com</a>
  */
-public class RSAPubKey implements IPublicKey {
+public class ECPrivateKeyWrapper implements IPrivateKey {
 
-  private final RSAPublicKey publicKey;
+  private final ECPrivateKey privateKey;
 
   /**
    * @param encoded DER encoded bytes
    */
-  public RSAPubKey(byte[] encoded) {
+  public ECPrivateKeyWrapper(final byte[] encoded) {
     try {
-      KeyFactory kf = KeyFactory.getInstance("RSA");
-      publicKey = (RSAPublicKey) kf.generatePublic(new X509EncodedKeySpec(encoded));
+      KeyFactory kf = KeyFactory.getInstance("EC");
+      privateKey = (ECPrivateKey) kf.generatePrivate(new PKCS8EncodedKeySpec(encoded));
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new IllegalStateException(e);
     }
@@ -33,7 +32,7 @@ public class RSAPubKey implements IPublicKey {
 
   @Override
   public int getKeyLength() {
-    return publicKey.getModulus().bitLength();
+    return privateKey.getS().toByteArray().length;
   }
 
   @Override
@@ -41,7 +40,7 @@ public class RSAPubKey implements IPublicKey {
     try {
       StringWriter stringWriter = new StringWriter();
       JcaPEMWriter pemWriter = new JcaPEMWriter(stringWriter);
-      pemWriter.writeObject(publicKey);
+      pemWriter.writeObject(privateKey);
       pemWriter.close();
       return stringWriter.toString();
     } catch (IOException e) {
@@ -51,15 +50,15 @@ public class RSAPubKey implements IPublicKey {
 
   @Override
   public String asStringForExchange(final EncodeType encodeType) {
-    return new RSAKey.Builder(publicKey).build().toJSONString();
+    return null;
   }
 
   @Override
   public byte[] asByte() {
-    return new byte[0];
+    return privateKey.getEncoded();
   }
 
-  public RSAPublicKey getPublicKey() {
-    return publicKey;
+  public ECPrivateKey getPrivateKey() {
+    return privateKey;
   }
 }

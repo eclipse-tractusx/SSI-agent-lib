@@ -1,5 +1,6 @@
 package org.eclipse.tractusx.ssi.lib.crypt.rsa;
 
+import java.security.InvalidParameterException;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import org.eclipse.tractusx.ssi.lib.crypt.IKeyGenerator;
@@ -21,14 +22,15 @@ public class RSAKeyGenerator implements IKeyGenerator {
     KeyPairGenerator kpg = null;
     try {
       kpg = KeyPairGenerator.getInstance("RSA");
-    } catch (NoSuchAlgorithmException e) {
+      kpg.initialize(keySize);
+    } catch (NoSuchAlgorithmException | InvalidParameterException e) {
       throw new KeyGenerationException(e);
     }
-    kpg.initialize(keySize);
+
     java.security.KeyPair keyPair = kpg.generateKeyPair();
 
     return new KeyPair(
-        new RSAPubKey(keyPair.getPublic().getEncoded()),
-        new RSAPrivKey(keyPair.getPrivate().getEncoded()));
+        new RSAPublicKeyWrapper(keyPair.getPublic().getEncoded()),
+        new RSAPrivateKeyWrapper(keyPair.getPrivate().getEncoded()));
   }
 }

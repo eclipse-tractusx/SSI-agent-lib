@@ -38,15 +38,6 @@ public enum SignatureType {
     this.algorithm = algorithm;
   }
 
-  public static SignatureType byAlgorithm(String algorithm) {
-    for (SignatureType e : values()) {
-      if (e.algorithm.equals(algorithm)) {
-        return e;
-      }
-    }
-    return null;
-  }
-
   private static class Constants {
 
     public static final String JSON_WEB_SIGNATURE_2020 = "JsonWebSignature2020";
