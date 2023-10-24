@@ -382,7 +382,7 @@ import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 
     LinkedDataProofValidation proofValidation =
         LinkedDataProofValidation.newInstance(SignatureType.ED21559,didDocumentResolverRegistry);
-    return proofValidation.verifiyProof(verifiableCredential);
+    return proofValidation.verify(verifiableCredential);
   }
 
   public static boolean verifyJWSLD(VerifiableCredential verifiableCredential) {
@@ -397,7 +397,7 @@ import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 
     LinkedDataProofValidation proofValidation =
         LinkedDataProofValidation.newInstance(SignatureType.JWS,didDocumentResolverRegistry);
-    return proofValidation.verifiyProof(verifiableCredential);
+    return proofValidation.verify(verifiableCredential);
   }
 ```
 

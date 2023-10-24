@@ -30,7 +30,9 @@ import com.apicatalog.jsonld.loader.DocumentLoaderOptions;
 import com.apicatalog.jsonld.loader.FileLoader;
 import com.apicatalog.jsonld.loader.HttpLoader;
 import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import java.net.URI;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,12 +53,16 @@ public class RemoteDocumentLoader implements DocumentLoader {
   @Getter @Setter private boolean enableHttps = false;
   @Getter @Setter private boolean enableFile = false;
   @Getter @Setter private Map<URI, JsonDocument> localCache = new HashMap<URI, JsonDocument>();
-  @Getter @Setter private Cache<URI, Document> remoteCache = null;
+
+  @Getter @Setter
+  private Cache<URI, Document> remoteCache =
+      Caffeine.newBuilder().expireAfterWrite(Duration.ofDays(1)).build();
+
   @Getter @Setter private List<URI> httpContexts = new ArrayList<URI>();
   @Getter @Setter private List<URI> httpsContexts = new ArrayList<URI>();
   @Getter @Setter private List<URI> fileContexts = new ArrayList<URI>();
 
-  public static final DocumentLoader DOCUMENT_LOADER;
+  public static final RemoteDocumentLoader DOCUMENT_LOADER;
 
   static {
     DOCUMENT_LOADER = new RemoteDocumentLoader();
@@ -84,13 +90,10 @@ public class RemoteDocumentLoader implements DocumentLoader {
     DEFAULT_FILE_LOADER = defaultFileLoader;
   }
 
-  public RemoteDocumentLoader() {}
+  private RemoteDocumentLoader() {}
 
-  public RemoteDocumentLoader(Map<URI, JsonDocument> localCache) {
-    if (localCache == null) {
-      throw new NullPointerException();
-    }
-    this.localCache = localCache;
+  public static synchronized RemoteDocumentLoader getInstance() {
+    return DOCUMENT_LOADER;
   }
 
   @Override

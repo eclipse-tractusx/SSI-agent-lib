@@ -56,7 +56,7 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
   private void validateJsonLd(JsonLdObject jsonLdObject) throws InvalidJsonLdException {
     try {
 
-      var documentLoader = new RemoteDocumentLoader();
+      var documentLoader = RemoteDocumentLoader.getInstance();
       documentLoader.setEnableHttps(true);
       documentLoader.setHttpsContexts(jsonLdObject.getContext());
 
