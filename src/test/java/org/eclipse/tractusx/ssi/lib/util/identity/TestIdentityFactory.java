@@ -38,6 +38,7 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.ECGenParameterSpec;
 import java.util.List;
+import java.util.UUID;
 import org.eclipse.tractusx.ssi.lib.crypt.IKeyGenerator;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
@@ -72,7 +73,7 @@ public class TestIdentityFactory {
     IPrivateKey privateKey = keyPair.getPrivateKey();
 
     OctetKeyPair.Builder builder =
-        (new OctetKeyPair.Builder(Curve.X25519, Base64URL.encode(publicKey.asByte())))
+        (new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey.asByte())))
             .d(Base64URL.encode(privateKey.asByte()))
             .keyID("key-2");
 
@@ -82,7 +83,7 @@ public class TestIdentityFactory {
 
     final Ed25519VerificationMethod ed25519VerificationMethod =
         ed25519VerificationKey2020Builder
-            .id(URI.create(did + "#key-1"))
+            .id(URI.create(did + "#key-2"))
             .controller(URI.create(did + "#controller"))
             .publicKeyMultiBase(multibaseString)
             .build();
@@ -147,6 +148,7 @@ public class TestIdentityFactory {
     ECKey jwk =
         new ECKey.Builder(crv, (ECPublicKey) publicKey)
             .privateKey((ECPrivateKey) privateKey)
+            .keyID(UUID.randomUUID().toString())
             .build();
 
     final JWKVerificationMethod jwkVerificationMethod =

@@ -22,7 +22,6 @@ import org.eclipse.tractusx.ssi.lib.crypt.ec.ECPrivateKeyWrapper;
 import org.eclipse.tractusx.ssi.lib.crypt.ec.ECPublicKeyWrapper;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.JwtException;
-import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestDidResolver;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityFactory;
@@ -45,21 +44,24 @@ class SignedJwtVerifierTest {
             .getId()
             .toString()
             .split("#")[1];
-    JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-        .claim("hallo", "world")
-        .issuer(testIdentity.getDid().toString())
-        .build();
+    JWTClaimsSet claimsSet =
+        new JWTClaimsSet.Builder()
+            .claim("hallo", "world")
+            .issuer(testIdentity.getDid().toString())
+            .build();
 
     JWSObject jwsObject =
         new JWSObject(
-            new JWSHeader.Builder(JWSAlgorithm.ES256).keyID(keyId).build(),
+            new JWSHeader.Builder(JWSAlgorithm.ES256)
+                .keyID(testIdentity.getDid().toUri().toString() + "#" + keyId)
+                .build(),
             new Payload(claimsSet.toJSONObject()));
 
     ECKey ecKey =
         new ECKey.Builder(
                 Curve.P_256, ((ECPublicKeyWrapper) testIdentity.getPublicKey()).getPublicKey())
             .privateKey(((ECPrivateKeyWrapper) testIdentity.getPrivateKey()).getPrivateKey())
-            .keyID(keyId)
+            .keyID(testIdentity.getDid().toUri().toString() + "#" + keyId)
             .build();
 
     final TestDidResolver didResolver = new TestDidResolver();

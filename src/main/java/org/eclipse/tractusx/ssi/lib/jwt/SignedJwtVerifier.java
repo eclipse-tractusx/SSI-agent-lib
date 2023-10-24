@@ -33,7 +33,9 @@ import com.nimbusds.jose.proc.JWSVerifierFactory;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
@@ -80,24 +82,65 @@ public class SignedJwtVerifier {
     final List<VerificationMethod> verificationMethods = issuerDidDocument.getVerificationMethods();
 
     // verify JWT signature
-    // TODO Don't try out each key. Better -> use key authorization key
-    for (VerificationMethod verificationMethod : verificationMethods) {
-      if (JWKVerificationMethod.isInstance(verificationMethod)) {
-        final JWKVerificationMethod method = new JWKVerificationMethod(verificationMethod);
-        JWSVerifier verifier = getVerifier(jwt.getHeader(), method.getJwk());
-        return jwt.verify(verifier);
-      } else if (Ed25519VerificationMethod.isInstance(verificationMethod)) {
-        final Ed25519VerificationMethod method = new Ed25519VerificationMethod(verificationMethod);
-        if (jwt.verify(new Ed25519Verifier(method.getOctetKeyPair()))) return true;
-      }
+    Map<String, VerificationMethod> verificationMethodMap = toMap(verificationMethods);
+
+    String keyID = jwt.getHeader().getKeyID();
+    VerificationMethod verificationMethod = verificationMethodMap.get(keyID);
+    if (verificationMethod == null) {
+      throw new IllegalArgumentException(
+          String.format("no verification method for keyID %s found", keyID));
+    }
+
+    if (JWKVerificationMethod.isInstance(verificationMethod)) {
+      final JWKVerificationMethod method = new JWKVerificationMethod(verificationMethod);
+      JWSVerifier verifier = getVerifier(jwt.getHeader(), method.getJwk());
+      return jwt.verify(verifier);
+    } else if (Ed25519VerificationMethod.isInstance(verificationMethod)) {
+      final Ed25519VerificationMethod method = new Ed25519VerificationMethod(verificationMethod);
+      return jwt.verify(new Ed25519Verifier(method.getOctetKeyPair()));
     }
 
     return false;
   }
 
+  private Map<String, VerificationMethod> toMap(List<VerificationMethod> l) {
+    Map<String, VerificationMethod> result = new HashMap<>();
+    l.forEach(v -> result.put(v.getId().toString(), v));
+    return result;
+  }
+
+  //  // FIXME this will break SignedJwtVerifierTest.verifyEcSignature(), as now a concrete
+  //  private List<VerifiableCredential> fromClaimSet(JWTClaimsSet jwtClaimsSet) {
+  //    Object verifiableCredentialObject = jwtClaimsSet.getClaim("vp");
+  //    if (verifiableCredentialObject instanceof Map) {
+  //      Map<String, Object> m = convertToMap(verifiableCredentialObject);
+  //      Object object = m.get("verifiableCredential");
+  //      if (object instanceof List) {
+  //        List<?> rawList = (List<?>) object;
+  //
+  //        return rawList.stream()
+  //            .map(this::convertToMap)
+  //            .map(VerifiableCredential::new)
+  //            .collect(Collectors.toList());
+  //      }
+  //      throw new IllegalArgumentException("verifiableCredential is not a list");
+  //    }
+  //    throw new IllegalArgumentException("vp is not a json object");
+  //  }
+
+  private Map<String, Object> convertToMap(Object o) {
+    if (o instanceof Map) {
+      Map<String, Object> result = new HashMap<>();
+      Map<?, ?> rawMap = (Map<?, ?>) o;
+      rawMap.forEach((k, v) -> result.put((String) k, v));
+      return result;
+    }
+    throw new IllegalArgumentException("object is not a map");
+  }
+
   private JWSVerifier getVerifier(JWSHeader header, JWK key) throws JOSEException {
     if (EdDSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm())) {
-      return new Ed25519Verifier((OctetKeyPair) key);
+      return new Ed25519Verifier(((OctetKeyPair) key).toPublicJWK());
     } else {
       JWSVerifierFactory verifierFactory = new DefaultJWSVerifierFactory();
       if (RSASSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm()))

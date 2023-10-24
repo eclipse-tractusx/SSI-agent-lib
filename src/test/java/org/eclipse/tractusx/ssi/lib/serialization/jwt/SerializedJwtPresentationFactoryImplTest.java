@@ -75,7 +75,8 @@ class SerializedJwtPresentationFactoryImplTest {
             credentialIssuer.getDid(),
             List.of(credentialWithProof),
             "test-audience",
-            credentialIssuer.getPrivateKey());
+            credentialIssuer.getPrivateKey(),
+            "key-2");
 
     Assertions.assertNotNull(presentation);
     Assertions.assertDoesNotThrow(() -> jwtVerifier.verify(presentation));

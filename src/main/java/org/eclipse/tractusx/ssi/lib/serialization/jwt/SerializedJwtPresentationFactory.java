@@ -27,5 +27,9 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 
 public interface SerializedJwtPresentationFactory {
   SignedJWT createPresentation(
-      Did issuer, List<VerifiableCredential> credentials, String audience, IPrivateKey privateKey);
+      Did issuer,
+      List<VerifiableCredential> credentials,
+      String audience,
+      IPrivateKey privateKey,
+      String keyId);
 }
