@@ -8,8 +8,8 @@ Add the following settings to your `~/.m2/settings.xml` file:
 
 ```xml
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
                       http://maven.apache.org/xsd/settings-1.0.0.xsd">
 
   <activeProfiles>
@@ -63,19 +63,18 @@ Then add the dependency to your `pom.xml` file as usual:
 
 Add a custom maven repository to your `build.gradle`
 
-
 ```groovy
 repositories {
-    maven {
-        url = uri("https://maven.pkg.github.com/eclipse-tractusx/SSI-agent-lib")
-        credentials {
-            // how you retrieve the githubUserName, githubToken is up to you
-            // you can use a gradle plugin to load a .env file or
-            // you can use a gradle.properties file etc.
-            username = "${githubUserName}"
-            password = "${githubToken}"
-        }
+  maven {
+    url = uri("https://maven.pkg.github.com/eclipse-tractusx/SSI-agent-lib")
+    credentials {
+      // how you retrieve the githubUserName, githubToken is up to you
+      // you can use a gradle plugin to load a .env file or
+      // you can use a gradle.properties file etc.
+      username = "${githubUserName}"
+      password = "${githubToken}"
     }
+  }
 }
 dependencies {
   implementation 'org.eclipse.tractusx.ssi:cx-ssi-lib:0.0.17'
