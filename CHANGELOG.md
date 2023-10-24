@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - JSON-LD validation is now performed during linked data validation.
 - Caching for remote resources has been implemented, with fixed duration of 1 day.
+- Add INSTALL.md instructions including Maven and Gradle setup.
 
 ### Changed
 
