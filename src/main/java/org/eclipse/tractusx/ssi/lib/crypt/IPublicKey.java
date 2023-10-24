@@ -19,4 +19,8 @@
 
 package org.eclipse.tractusx.ssi.lib.crypt;
 
-public interface IPublicKey extends IKey {}
+import com.nimbusds.jose.jwk.JWK;
+
+public interface IPublicKey extends IKey {
+  JWK toJwk();
+}

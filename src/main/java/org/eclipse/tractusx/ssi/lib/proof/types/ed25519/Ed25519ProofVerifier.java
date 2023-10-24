@@ -70,8 +70,7 @@ public class Ed25519ProofVerifier implements IVerifier {
   }
 
   private IPublicKey discoverPublicKey(Ed25519Signature2020 signature)
-      throws DidDocumentResolverNotRegisteredException, UnsupportedSignatureTypeException,
-          InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion, DidResolverException {
+      throws InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion, DidResolverException {
 
     final Did issuer = DidParser.parse(signature.getVerificationMethod());
 
@@ -91,7 +90,7 @@ public class Ed25519ProofVerifier implements IVerifier {
 
     IPublicKey publicKey;
     try {
-      publicKey = (IPublicKey) new x21559PublicKey(key.getPublicKeyBase58().getEncoded(), false);
+      publicKey = new x21559PublicKey(key.getPublicKeyBase58().getEncoded(), false);
     } catch (IOException e) {
       throw new InvalidePublicKeyFormat(e.getCause());
     }

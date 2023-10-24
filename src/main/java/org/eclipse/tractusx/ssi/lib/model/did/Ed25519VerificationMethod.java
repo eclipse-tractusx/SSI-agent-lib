@@ -19,15 +19,20 @@
 
 package org.eclipse.tractusx.ssi.lib.model.did;
 
+import com.nimbusds.jose.jwk.Curve;
+import com.nimbusds.jose.jwk.OctetKeyPair;
+import com.nimbusds.jose.util.Base64URL;
 import java.util.Map;
 import java.util.Objects;
 import lombok.ToString;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 @ToString
 public class Ed25519VerificationMethod extends VerificationMethod {
+
   public static final String DEFAULT_TYPE = "Ed25519VerificationKey2020";
 
   public static final String PUBLIC_KEY_BASE_58 = "publicKeyMultibase";
@@ -51,6 +56,16 @@ public class Ed25519VerificationMethod extends VerificationMethod {
       throw new IllegalArgumentException(
           String.format("Invalid Ed25519VerificationKey2020: %s", SerializeUtil.toJson(json)), e);
     }
+  }
+
+  public OctetKeyPair getOctetKeyPair() {
+    final MultibaseString multiBase = getPublicKeyBase58();
+    final Ed25519PublicKeyParameters publicKeyParameters =
+        new Ed25519PublicKeyParameters(multiBase.getDecoded(), 0);
+
+    return new OctetKeyPair.Builder(
+            Curve.Ed25519, Base64URL.encode(publicKeyParameters.getEncoded()))
+        .build();
   }
 
   public MultibaseString getPublicKeyBase58() {

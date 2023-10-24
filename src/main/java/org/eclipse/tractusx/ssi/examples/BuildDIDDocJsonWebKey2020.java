@@ -20,31 +20,48 @@
 package org.eclipse.tractusx.ssi.examples;
 
 import com.nimbusds.jose.jwk.Curve;
+import com.nimbusds.jose.jwk.ECKey;
+import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.OctetKeyPair;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.gen.ECKeyGenerator;
 import com.nimbusds.jose.jwk.gen.OctetKeyPairGenerator;
+import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.SneakyThrows;
-import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
-import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PrivateKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
-import org.eclipse.tractusx.ssi.lib.model.did.*;
+import org.eclipse.tractusx.ssi.lib.model.did.Did;
+import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
+import org.eclipse.tractusx.ssi.lib.model.did.DidDocumentBuilder;
+import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethod;
+import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethodBuilder;
+import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 
 public class BuildDIDDocJsonWebKey2020 {
+
   @SneakyThrows
-  public static DidDocument buildDidDocument(String hostName) {
-    // Building DID and Key
-    final Did did = DidWebFactory.fromHostname(hostName);
+  public static DidDocument buildDidDocumentWithEDJWKVerificationMethod(String hostName) {
     OctetKeyPair octetKeyPair = new OctetKeyPairGenerator(Curve.Ed25519).keyID("1").generate();
+    return buildDocumentWithJWKVerificationMethod(octetKeyPair, "localhost2");
+  }
 
-    IPrivateKey privateKey = new x21559PrivateKey(octetKeyPair.getDecodedD());
-    IPublicKey publicKey = new x21559PublicKey(octetKeyPair.getDecodedX());
+  @SneakyThrows
+  public static DidDocument buildDidDocumentWithECVerificationMethod(String hostName) {
+    ECKeyGenerator keyGen = new ECKeyGenerator(Curve.P_256);
+    ECKey generated = keyGen.keyID("1").generate();
+    return buildDocumentWithJWKVerificationMethod(generated, "localhost1");
+  }
 
-    // JWK
-    JsonWebKey jwk = new JsonWebKey(octetKeyPair.getKeyID(), publicKey, privateKey);
+  @SneakyThrows
+  public static DidDocument buildDidDocumentWithRSAVerificationMethod(String hostName) {
+    RSAKeyGenerator keyGen = new RSAKeyGenerator(4096);
+    RSAKey generated = keyGen.keyID("1").generate();
+    return buildDocumentWithJWKVerificationMethod(generated, "localhost3");
+  }
+
+  private static DidDocument buildDocumentWithJWKVerificationMethod(JWK jwk, String hostName) {
+    final Did did = DidWebFactory.fromHostname(hostName);
 
     // Building Verification Methods:
     final List<VerificationMethod> verificationMethods = new ArrayList<>();

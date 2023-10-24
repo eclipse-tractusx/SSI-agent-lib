@@ -88,7 +88,7 @@ public class LinkedDataProofValidationComponentTest {
         VerifiableCredential.EXPIRATION_DATE,
         formatter.format(Instant.now().plusSeconds(60 * 60 * 24 * 365 * 10)));
 
-    var isOk = linkedDataProofValidation.verifiy(credentialWithProof);
+    var isOk = linkedDataProofValidation.verify(credentialWithProof);
 
     Assertions.assertFalse(isOk);
   }
@@ -120,7 +120,7 @@ public class LinkedDataProofValidationComponentTest {
     final VerifiableCredential credentialWithProof =
         TestVerifiableFactory.attachProof(credential, proof);
 
-    var isOk = linkedDataProofValidation.verifiy(credentialWithProof);
+    var isOk = linkedDataProofValidation.verify(credentialWithProof);
 
     Assertions.assertTrue(isOk);
   }
@@ -153,7 +153,7 @@ public class LinkedDataProofValidationComponentTest {
     final VerifiableCredential credentialWithProof =
         TestVerifiableFactory.attachProof(credential, proof);
 
-    var isOk = linkedDataProofValidation.verifiy(credentialWithProof);
+    var isOk = linkedDataProofValidation.verify(credentialWithProof);
 
     Assertions.assertTrue(isOk);
   }
@@ -194,7 +194,7 @@ public class LinkedDataProofValidationComponentTest {
 
     final VerifiablePresentation vpWithProof = TestVerifiableFactory.attachProof(vp, vpProof);
 
-    var isOk = linkedDataProofValidation.verifiy(vpWithProof);
+    var isOk = linkedDataProofValidation.verify(vpWithProof);
 
     Assertions.assertTrue(isOk);
   }
@@ -237,7 +237,7 @@ public class LinkedDataProofValidationComponentTest {
 
     final VerifiablePresentation vpWithProof = TestVerifiableFactory.attachProof(vp, vpProof);
 
-    var isOk = linkedDataProofValidation.verifiy(vpWithProof);
+    var isOk = linkedDataProofValidation.verify(vpWithProof);
 
     Assertions.assertTrue(isOk);
   }

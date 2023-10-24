@@ -23,7 +23,7 @@ SPDX-License-Identifier: Apache-2.0
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.eclipse.tractusx.ssi</groupId>
-    <version>0.0.17</version>
+    <version>0.0.18</version>
     <packaging>jar</packaging>
 
 
@@ -61,10 +61,15 @@ SPDX-License-Identifier: Apache-2.0
             <artifactId>bcprov-jdk15on</artifactId>
             <version>1.70</version>
         </dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcpkix-jdk15on</artifactId>
+			<version>1.70</version>
+		</dependency>
         <dependency>
             <groupId>com.nimbusds</groupId>
              <artifactId>nimbus-jose-jwt</artifactId>
-             <version>9.31</version>
+             <version>9.37</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.apicatalog/titanium-json-ld -->
@@ -269,6 +274,25 @@ SPDX-License-Identifier: Apache-2.0
 						<goals>
 							<goal>integration-test</goal>
 							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.10</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
 						</goals>
 					</execution>
 				</executions>

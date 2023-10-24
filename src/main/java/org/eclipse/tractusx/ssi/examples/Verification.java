@@ -44,7 +44,7 @@ public class Verification {
     } catch (JwtException | DidDocumentResolverNotRegisteredException e) {
       // An exception will be thrown here in case JWT verification failed or DID
       // Document Resolver not able to resolve.
-      e.printStackTrace();
+      throw new IllegalStateException(e);
     }
   }
 
@@ -56,7 +56,7 @@ public class Verification {
     var didResolver = new DidWebResolver(httpClient, didParser, enforceHttps);
 
     LinkedDataProofValidation proofValidation = LinkedDataProofValidation.newInstance(didResolver);
-    return proofValidation.verifiy(verifiableCredential);
+    return proofValidation.verify(verifiableCredential);
   }
 
   public static boolean verifyJWSLD(VerifiableCredential verifiableCredential) {
@@ -67,6 +67,6 @@ public class Verification {
     var didResolver = new DidWebResolver(httpClient, didParser, enforceHttps);
 
     LinkedDataProofValidation proofValidation = LinkedDataProofValidation.newInstance(didResolver);
-    return proofValidation.verifiy(verifiableCredential);
+    return proofValidation.verify(verifiableCredential);
   }
 }

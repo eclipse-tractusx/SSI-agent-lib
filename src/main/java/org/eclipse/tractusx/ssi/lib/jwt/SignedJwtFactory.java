@@ -54,6 +54,8 @@ public class SignedJwtFactory {
    * Curve key ({@code P-256}) is advisable.
    *
    * @param audience the value of the token audience claim, e.g. the IDS Webhook address.
+   * @param keyId the id of the key, the kid of the jws-header will be constructed via
+   *     <issuer>+"#"+<keyId>
    * @return a {@code SignedJWT} that is signed with the private key and contains all claims listed.
    */
   @SneakyThrows
@@ -61,7 +63,8 @@ public class SignedJwtFactory {
       Did didIssuer,
       String audience,
       SerializedVerifiablePresentation serializedPresentation,
-      IPrivateKey privateKey) {
+      IPrivateKey privateKey,
+      String keyId) {
 
     final String issuer = didIssuer.toString();
     final String subject = didIssuer.toString();
@@ -81,11 +84,11 @@ public class SignedJwtFactory {
             .build();
 
     final OctetKeyPair octetKeyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
-    return createSignedES256Jwt(octetKeyPair, claimsSet, issuer);
+    return createSignedES256Jwt(octetKeyPair, claimsSet, issuer, keyId);
   }
 
   private static SignedJWT createSignedES256Jwt(
-      OctetKeyPair privateKey, JWTClaimsSet claimsSet, String issuer) {
+      OctetKeyPair privateKey, JWTClaimsSet claimsSet, String issuer, String keyId) {
     JWSSigner signer;
     try {
 
@@ -102,8 +105,21 @@ public class SignedJwtFactory {
       var algorithm = JWSAlgorithm.EdDSA;
       var type = JOSEObjectType.JWT;
       var header =
+          // FIXME issuer must be actual keyId and not only DID
           new JWSHeader(
-              algorithm, type, null, null, null, null, null, null, null, null, issuer, true, null,
+              algorithm,
+              type,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              issuer + "#" + keyId,
+              true,
+              null,
               null);
       var vc = new SignedJWT(header, claimsSet);
 

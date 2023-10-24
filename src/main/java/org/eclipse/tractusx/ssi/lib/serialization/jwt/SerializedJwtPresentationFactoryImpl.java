@@ -42,7 +42,11 @@ public class SerializedJwtPresentationFactoryImpl implements SerializedJwtPresen
 
   @Override
   public SignedJWT createPresentation(
-      Did issuer, List<VerifiableCredential> credentials, String audience, IPrivateKey privateKey) {
+      Did issuer,
+      List<VerifiableCredential> credentials,
+      String audience,
+      IPrivateKey privateKey,
+      String keyId) {
     final VerifiablePresentationBuilder verifiablePresentationBuilder =
         new VerifiablePresentationBuilder();
     final VerifiablePresentation verifiablePresentation =
@@ -58,6 +62,7 @@ public class SerializedJwtPresentationFactoryImpl implements SerializedJwtPresen
 
     final SerializedVerifiablePresentation serializedVerifiablePresentation =
         jsonLdSerializer.serializePresentation(verifiablePresentation);
-    return signedJwtFactory.create(issuer, audience, serializedVerifiablePresentation, privateKey);
+    return signedJwtFactory.create(
+        issuer, audience, serializedVerifiablePresentation, privateKey, keyId);
   }
 }

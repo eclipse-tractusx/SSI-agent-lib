@@ -66,6 +66,7 @@ class VP {
         new SerializedJwtPresentationFactoryImpl(
             new SignedJwtFactory(new OctetKeyPairFactory()), new JsonLdSerializerImpl(), issuer);
 
-    return presentationFactory.createPresentation(issuer, credentials, audience, privateKey);
+    return presentationFactory.createPresentation(
+        issuer, credentials, audience, privateKey, "keyId");
   }
 }

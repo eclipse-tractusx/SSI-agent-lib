@@ -1,0 +1,63 @@
+```plantuml
+actor Client
+
+participant cr [
+    = DID Resolver
+    ----
+    Composite
+]
+
+participant wr [
+    =DID Resolver
+    ----
+    DID:WEB
+]
+
+participant ur [
+    =DID Resolver
+    ----
+    Universal
+]
+
+participant web [
+    =Web Site
+    ----
+    DID:WEB
+]
+
+participant vdr [
+    =Verifiable Data Registry 
+    ----
+    Other DID Method
+]
+
+== Setup ==
+Client -> cr: <Create>
+cr -> wr: <Initialze>
+cr -> ur: <Initialze>
+== Use: DID:WEB ==
+autonumber
+Client -> cr: resolve("did:web:123.example.com")
+cr -> wr: isResolvable("did:web:123.example.com")
+cr <-- wr: true 
+cr -> wr: resolve("did:web:123.example.com")
+wr -> web: GET https://123.example.com/.well-known/did.json
+wr <-- web: JSON
+wr -> wr: parse(JSON)
+cr <-- wr: DidDocument
+Client <-- cr: DidDocument
+== Use: Other DID Method ==
+autonumber
+Client -> cr: resolve("did:sov:example123")
+cr -> wr: isResolvable("did:sov:example123")
+cr <-- wr: false 
+cr -> wr: isResolvable("did:sov:example123")
+cr <-- ur: true 
+cr -> ur: resolve("did:sov:example123")
+ur -> vdr: <Retrieve DID document>
+ur <-- vdr: JSON
+ur -> ur: parse(JSON)
+cr <-- ur: DidDocument
+Client <-- cr: DidDocument
+
+```

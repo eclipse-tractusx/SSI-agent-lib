@@ -19,6 +19,9 @@
 
 package org.eclipse.tractusx.ssi.lib.crypt.x21559;
 
+import com.nimbusds.jose.jwk.Curve;
+import com.nimbusds.jose.jwk.OctetKeyPair;
+import com.nimbusds.jose.util.Base64URL;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -85,5 +88,14 @@ public class x21559PublicKey implements IPublicKey {
   @Override
   public int getKeyLength() {
     return 32;
+  }
+
+  public OctetKeyPair toJwk() {
+    final Ed25519PublicKeyParameters publicKeyParameters =
+        new Ed25519PublicKeyParameters(originalKey, 0);
+
+    return new OctetKeyPair.Builder(
+            Curve.Ed25519, Base64URL.encode(publicKeyParameters.getEncoded()))
+        .build();
   }
 }

@@ -62,20 +62,20 @@ public class LinkedDataProofValidation {
    * Key
    */
   @SneakyThrows
-  public boolean verifiy(Verifiable verifiable) {
+  public boolean verify(Verifiable verifiable) {
     boolean isVerified = false;
     IVerifier verifier = null;
 
     var type = verifiable.getProof().getType();
 
     if (type != null && !type.isBlank()) {
-      if (type.equals(SignatureType.ED21559.toString()))
+      if (type.equals(SignatureType.ED21559.type))
         verifier = new Ed25519ProofVerifier(this.didResolver);
-      else if (type.equals(SignatureType.JWS.toString()))
+      else if (type.equals(SignatureType.JWS.type))
         verifier = new JWSProofVerifier(this.didResolver);
       else
         throw new UnsupportedSignatureTypeException(
-            String.format("%s is not suppourted type", type));
+            String.format("%s is not supported type", type));
     } else {
       throw new UnsupportedSignatureTypeException("Proof type can't be empty");
     }
@@ -83,8 +83,7 @@ public class LinkedDataProofValidation {
     final TransformedLinkedData transformedData = transformer.transform(verifiable);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
 
-    isVerified = jsonLdValidator.validate(verifiable);
-    isVerified = verifier.verify(hashedData, verifiable);
+    isVerified = jsonLdValidator.validate(verifiable) && verifier.verify(hashedData, verifiable);
 
     return isVerified;
   }
