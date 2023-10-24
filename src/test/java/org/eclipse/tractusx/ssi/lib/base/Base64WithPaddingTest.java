@@ -20,6 +20,7 @@
 package org.eclipse.tractusx.ssi.lib.base;
 
 import java.nio.charset.StandardCharsets;
+import org.eclipse.tractusx.ssi.lib.model.base.Base64WithPadding;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

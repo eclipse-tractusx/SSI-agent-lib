@@ -6,7 +6,6 @@
     "VerifiablePresentation"
   ],
   "id": "http://example.edu/presentation/1872",
-  "holder": "did:web:vc.transmute.world",
   "verifiableCredential": [
     {
       "@context": [

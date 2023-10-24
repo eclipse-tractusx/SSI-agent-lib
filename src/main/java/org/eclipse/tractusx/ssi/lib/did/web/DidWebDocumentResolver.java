@@ -28,6 +28,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
 import org.eclipse.tractusx.ssi.lib.did.web.util.Constants;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
 import org.eclipse.tractusx.ssi.lib.exception.DidWebException;
@@ -35,9 +36,12 @@ import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
-import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolver;
 
 @RequiredArgsConstructor
+@Deprecated
+/**
+ * @deprecated replaced by {@link DidWebResolver}
+ */
 public class DidWebDocumentResolver implements DidDocumentResolver {
 
   private final HttpClient client;

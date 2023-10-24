@@ -5,7 +5,7 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+[![APACHE-2.0 License][license-shield]][license-url]
 
 
 
@@ -22,12 +22,12 @@
   <p align="center">
     This open source project has emerged with a goal to foster collaborative development and innovation in the area of Self-Sovereign Identity.
     <br />
-        <a href="https://github.com/eclipse-tractusx/SSI-agent-lib/tree/main/cx-ssi-lib/docs"><strong>Explore the docs »</strong></a>
+        <a href="https://github.com/catenax-ng/product-lab-ssi/tree/main/cx-ssi-lib/docs"><strong>Explore the docs »</strong></a>
         <br />
     <br />
-    <a href="https://github.com/eclipse-tractusx/SSI-agent-lib/issues">Report Bug</a>
+    <a href="https://github.com/catenax-ng/product-lab-ssi/issues">Report Bug</a>
     ·
-    <a href="https://github.com/eclipse-tractusx/SSI-agent-lib/issues">Request Feature</a>
+    <a href="https://github.com/catenax-ng/product-lab-ssi/issues">Request Feature</a>
   </p>
 </div>
 
@@ -109,25 +109,20 @@ To build the project from source, follow these steps:
 
 1. Clone the repository: 
    ```
-   git clone https://github.com/Cofinity-X/SSI-agent-lib.git 
+   git clone https://github.com/catenax-ng/product-lab-ssi.git 
    ```
 
 2. Navigate to the project directory:
    ```
-   cd SSI-agent-lib 
-   ```
-   
-3. Change the pom.xml file to the artifactID for local build. i.e.:
-   ```
-   <artifactId>cfx-ssi-lib-local</artifactId>
+   cd cx-ssi-lib 
    ```
 
-4. Build the project using Maven:
+3. Build the project using Maven:
    ```
    mvn clean install
    ```
 
-5. After a successful build, you can include the generated JAR file in your project's dependencies.
+4. After a successful build, you can include the generated JAR file in your project's dependencies.
 
 ### Use Maven Dependency
 
@@ -136,8 +131,8 @@ Alternatively, you can use the pre-built package available on Maven Central Repo
 ```xml
 <dependency>
   <groupId>org.eclipse.tractusx.ssi</groupId>
-  <artifactId>cfx-ssi-agent-lib</artifactId>
-  <version>0.0.16</version>
+  <artifactId>cx-ssi-agent-lib</artifactId>
+  <version>0.0.3</version>
 </dependency>
 ```
 
@@ -213,12 +208,12 @@ We value your input and appreciate your interest in contributing to the project.
 
 
 [contributors-shield]: https://img.shields.io/github/contributors/catenax-ng/product-lab-ssi.svg?style=for-the-badge
-[contributors-url]: https://github.com/eclipse-tractusx/SSI-agent-lib/graphs/contributors
+[contributors-url]: https://github.com/catenax-ng/product-lab-ssi/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/catenax-ng/product-lab-ssi.svg?style=for-the-badge
-[forks-url]: https://github.com/eclipse-tractusx/SSI-agent-lib/network/members
+[forks-url]: https://github.com/catenax-ng/product-lab-ssi/network/members
 [stars-shield]: https://img.shields.io/github/stars/catenax-ng/product-lab-ssi.svg?style=for-the-badge
-[stars-url]: https://github.com/eclipse-tractusx/SSI-agent-lib/stargazers
+[stars-url]: https://github.com/catenax-ng/product-lab-ssi/stargazers
 [issues-shield]: https://img.shields.io/github/issues/catenax-ng/product-lab-ssi.svg?style=for-the-badge
-[issues-url]: https://github.com/eclipse-tractusx/SSI-agent-lib/issues
+[issues-url]: https://github.com/catenax-ng/product-lab-ssi/issues
 [license-shield]: https://img.shields.io/github/license/catenax-ng/product-lab-ssi.svg?style=for-the-badge
-[license-url]: https://github.com/eclipse-tractusx/SSI-agent-lib/blob/master/LICENSE.txt
+[license-url]: https://github.com/catenax-ng/product-lab-ssi/blob/master/LICENSE.txt
