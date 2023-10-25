@@ -23,4 +23,5 @@ package org.eclipse.tractusx.ssi.lib.model.verifiable.credential;
 
 import java.util.ArrayList;
 
+/** The type Verifiable credentials. */
 public class VerifiableCredentials extends ArrayList<VerifiableCredential> {}

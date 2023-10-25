@@ -21,24 +21,50 @@
 
 package org.eclipse.tractusx.ssi.lib.did.resolver;
 
+/** The type Did resolver exception. */
 public class DidResolverException extends Exception {
 
   private static final long serialVersionUID = 1L;
 
+  /** Instantiates a new Did resolver exception. */
   public DidResolverException() {}
 
+  /**
+   * Instantiates a new Did resolver exception.
+   *
+   * @param message the message
+   */
   public DidResolverException(String message) {
     super(message);
   }
 
+  /**
+   * Instantiates a new Did resolver exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   */
   public DidResolverException(String message, Throwable cause) {
     super(message, cause);
   }
 
+  /**
+   * Instantiates a new Did resolver exception.
+   *
+   * @param cause the cause
+   */
   public DidResolverException(Throwable cause) {
     super(cause);
   }
 
+  /**
+   * Instantiates a new Did resolver exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   * @param enableSuppression the enable suppression
+   * @param writableStackTrace the writable stack trace
+   */
   public DidResolverException(
       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);

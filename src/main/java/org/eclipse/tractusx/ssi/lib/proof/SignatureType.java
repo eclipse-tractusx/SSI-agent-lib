@@ -21,12 +21,15 @@
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
+/** The enum Signature type. */
 public enum SignatureType {
+  /** The Ed 21559. */
   ED21559 {
     public String toString() {
       return "Ed25519Signature2020";
     }
   },
+  /** The Jws. */
   JWS {
     public String toString() {
       return "JsonWebSignature2020";

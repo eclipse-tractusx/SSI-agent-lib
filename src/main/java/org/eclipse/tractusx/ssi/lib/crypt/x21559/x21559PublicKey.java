@@ -35,10 +35,17 @@ import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
+/** The type X 21559 public key. */
 public class x21559PublicKey implements IPublicKey {
 
   private final @NonNull byte[] originalKey;
 
+  /**
+   * Instantiates a new X 21559 public key.
+   *
+   * @param publicKey the public key
+   * @throws InvalidePublicKeyFormat the invalide public key format
+   */
   public x21559PublicKey(byte[] publicKey) throws InvalidePublicKeyFormat {
     if (this.getKeyLength() != publicKey.length) {
       throw new InvalidePublicKeyFormat(getKeyLength(), publicKey.length);
@@ -46,10 +53,18 @@ public class x21559PublicKey implements IPublicKey {
     this.originalKey = publicKey;
   }
 
-  public x21559PublicKey(String publicKey, boolean PEMformat)
+  /**
+   * Instantiates a new X 21559 public key.
+   *
+   * @param publicKey the public key
+   * @param pemFormat the pe mformat
+   * @throws InvalidePublicKeyFormat the invalide public key format
+   * @throws IOException the io exception
+   */
+  public x21559PublicKey(String publicKey, boolean pemFormat)
       throws InvalidePublicKeyFormat, IOException {
 
-    if (PEMformat) {
+    if (pemFormat) {
       StringReader sr = new StringReader(publicKey);
       PemReader reader = new PemReader(sr);
       PemObject pemObject = reader.readPemObject();

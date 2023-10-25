@@ -40,7 +40,14 @@ import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethodBuilder;
 import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 
+/** This is example class to demonstrate how to create @{@link DidDocument} using Json web key */
 public class BuildDIDDocJsonWebKey2020 {
+  /**
+   * Build did document did document.
+   *
+   * @param hostName the host name
+   * @return the did document
+   */
   @SneakyThrows
   public static DidDocument buildDidDocument(String hostName) {
     // Building DID and Key

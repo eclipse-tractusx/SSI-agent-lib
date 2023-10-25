@@ -35,10 +35,12 @@ import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/** The type Linked data transformer test. */
 public class LinkedDataTransformerTest {
 
   private final LinkedDataTransformer linkedDataTransformer = new LinkedDataTransformer();
 
+  /** Test linked data transformer. */
   @Test
   @SneakyThrows
   public void testLinkedDataTransformer() {

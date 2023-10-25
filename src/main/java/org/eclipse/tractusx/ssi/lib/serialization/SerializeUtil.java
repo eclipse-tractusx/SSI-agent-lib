@@ -82,16 +82,34 @@ public final class SerializeUtil {
               VerifiablePresentation.VERIFIABLE_CREDENTIAL,
               VerifiableCredential.PROOF));
 
+  /**
+   * To json string.
+   *
+   * @param map the map
+   * @return the string
+   */
   @SneakyThrows
   public static String toJson(Map<String, Object> map) {
     return OBJECT_MAPPER.writeValueAsString(getLinkedHashMap(map));
   }
 
+  /**
+   * To pretty json string.
+   *
+   * @param map the map
+   * @return the string
+   */
   @SneakyThrows
   public static String toPrettyJson(Map<String, Object> map) {
     return OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(getLinkedHashMap(map));
   }
 
+  /**
+   * From json map.
+   *
+   * @param json the json
+   * @return the map
+   */
   @SneakyThrows
   public static Map<String, Object> fromJson(String json) {
     return OBJECT_MAPPER.readValue(json, Map.class);
@@ -99,10 +117,10 @@ public final class SerializeUtil {
 
   /**
    * Sometimes SSI uri is serialized as string, sometimes as URI. If it starts with 'http://' it is
-   * handled as URI, if it starts with 'did:<method>' it is handled as string.
+   * handled as URI, if it starts with 'did:method' it is handled as string.
    *
    * @param object string or URI
-   * @return URI
+   * @return URI uri
    */
   public static URI asURI(Object object) {
     if (object instanceof URI) {
@@ -114,6 +132,12 @@ public final class SerializeUtil {
     throw new IllegalArgumentException("Unsupported type: " + object.getClass());
   }
 
+  /**
+   * As string list list.
+   *
+   * @param object the object
+   * @return the list
+   */
   public static List<String> asStringList(Object object) {
     if (object instanceof List) {
       return (List<String>) object;
@@ -124,6 +148,12 @@ public final class SerializeUtil {
     throw new IllegalArgumentException("Unsupported type: " + object.getClass());
   }
 
+  /**
+   * As list list.
+   *
+   * @param object the object
+   * @return the list
+   */
   public static List asList(Object object) {
     if (object instanceof List) {
       return (List) object;

@@ -23,7 +23,14 @@ package org.eclipse.tractusx.ssi.lib.exception;
 
 import java.util.List;
 
+/** The type Jwt audience check failed exception. */
 public class JwtAudienceCheckFailedException extends JwtException {
+  /**
+   * Instantiates a new Jwt audience check failed exception.
+   *
+   * @param expectedAudience the expected audience
+   * @param actualAudience the actual audience
+   */
   public JwtAudienceCheckFailedException(String expectedAudience, List<String> actualAudience) {
     super(
         "JWT audience check failed. Expected audience: "

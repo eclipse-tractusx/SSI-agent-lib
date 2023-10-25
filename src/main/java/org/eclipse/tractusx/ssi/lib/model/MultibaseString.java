@@ -23,9 +23,20 @@ package org.eclipse.tractusx.ssi.lib.model;
 
 import lombok.NonNull;
 
+/** The interface Multibase string. */
 public interface MultibaseString {
+  /**
+   * Get decoded byte [ ].
+   *
+   * @return the byte [ ]
+   */
   byte[] getDecoded();
 
+  /**
+   * Gets encoded.
+   *
+   * @return the encoded
+   */
   @NonNull
   String getEncoded();
 }

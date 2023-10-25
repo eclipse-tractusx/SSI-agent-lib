@@ -41,8 +41,16 @@ import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethodBuilder;
 import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethodBuilder;
 
+/** The type Test identity factory. */
 public class TestIdentityFactory {
 
+  /**
+   * New identity with ed 25519 keys test identity.
+   *
+   * @return the test identity
+   * @throws IOException the io exception
+   * @throws KeyGenerationException the key generation exception
+   */
   public static TestIdentity newIdentityWithED25519Keys()
       throws IOException, KeyGenerationException {
 

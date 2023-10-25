@@ -40,11 +40,13 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.MountableFile;
 
+/** The type Did web resolver it. */
 @Testcontainers
 public class DidWebResolverIT {
   private DidWebResolver resolver;
   private DidWebResolver httpsResolver;
 
+  /** The constant nginx. */
   @Container
   public static NginxContainer<?> nginx =
       new NginxContainer<>("nginx")
@@ -53,12 +55,18 @@ public class DidWebResolverIT {
               "/usr/share/nginx/html")
           .waitingFor(new HttpWaitStrategy());
 
+  /** Init each. */
   @BeforeEach
   public void initEach() {
     resolver = new DidWebResolver(HttpClient.newHttpClient(), new DidWebParser(), false);
     httpsResolver = new DidWebResolver(HttpClient.newHttpClient(), new DidWebParser(), true);
   }
 
+  /**
+   * Should resolve valid web did.
+   *
+   * @throws DidResolverException the did resolver exception
+   */
   @Test
   public void shouldResolveValidWebDid() throws DidResolverException {
     Did validDidWeb =
@@ -71,6 +79,11 @@ public class DidWebResolverIT {
     assertEquals(new DidDocument(TestResourceUtil.getPublishedDidDocument()), actualDidDoc);
   }
 
+  /**
+   * Should resolve valid external web did.
+   *
+   * @throws DidResolverException the did resolver exception
+   */
   @Test
   public void shouldResolveValidExternalWebDid() throws DidResolverException {
     final String didIdentifier = "did.actor:alice";

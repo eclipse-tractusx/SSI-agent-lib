@@ -25,11 +25,17 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Value;
 
+/** The type Did method identifier. */
 @Value
 @EqualsAndHashCode
 public class DidMethodIdentifier {
   @NonNull @EqualsAndHashCode.Include String value;
 
+  /**
+   * Instantiates a new Did method identifier.
+   *
+   * @param val the val
+   */
   public DidMethodIdentifier(String val) {
     if (val.isEmpty()) {
       throw new IllegalArgumentException("Empty value not allowed");

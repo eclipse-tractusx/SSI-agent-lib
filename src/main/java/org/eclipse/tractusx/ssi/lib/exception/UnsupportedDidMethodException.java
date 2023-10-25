@@ -23,7 +23,14 @@ package org.eclipse.tractusx.ssi.lib.exception;
 
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 
+/** The type Unsupported did method exception. */
 public class UnsupportedDidMethodException extends Exception {
+  /**
+   * Instantiates a new Unsupported did method exception.
+   *
+   * @param did the did
+   * @param contextMessage the context message
+   */
   public UnsupportedDidMethodException(Did did, String contextMessage) {
     super(
         String.format(

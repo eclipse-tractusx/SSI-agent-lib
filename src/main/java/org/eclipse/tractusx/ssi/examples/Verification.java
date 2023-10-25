@@ -31,8 +31,17 @@ import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtVerifier;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
 
+/**
+ * This is example class to demonstrate how verify @{@link SignedJWT} and {@link
+ * VerifiableCredential}
+ */
 public class Verification {
 
+  /**
+   * Verify jwt.
+   *
+   * @param jwt the jwt
+   */
   public static void verifyJWT(SignedJWT jwt) {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
@@ -50,6 +59,12 @@ public class Verification {
     }
   }
 
+  /**
+   * Verify ed 21559 ld boolean.
+   *
+   * @param verifiableCredential the verifiable credential
+   * @return the boolean
+   */
   public static boolean verifyED21559LD(VerifiableCredential verifiableCredential) {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
@@ -61,6 +76,12 @@ public class Verification {
     return proofValidation.verify(verifiableCredential);
   }
 
+  /**
+   * Verify jwsld boolean.
+   *
+   * @param verifiableCredential the verifiable credential
+   * @return the boolean
+   */
   public static boolean verifyJWSLD(VerifiableCredential verifiableCredential) {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();

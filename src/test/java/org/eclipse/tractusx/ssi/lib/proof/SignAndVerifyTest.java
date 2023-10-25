@@ -38,8 +38,17 @@ import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/** The type Sign and verify test. */
 public class SignAndVerifyTest {
 
+  /**
+   * Test sign and verify ed 201559.
+   *
+   * @throws IOException the io exception
+   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws InvalidePublicKeyFormat the invalide public key format
+   * @throws KeyGenerationException the key generation exception
+   */
   @Test
   public void testSignAndVerify_ED201559()
       throws IOException, InvalidePrivateKeyFormat, InvalidePublicKeyFormat,
@@ -61,6 +70,16 @@ public class SignAndVerifyTest {
     Assertions.assertTrue(isSigned);
   }
 
+  /**
+   * Test sign and verify jws.
+   *
+   * @throws IOException the io exception
+   * @throws JOSEException the jose exception
+   * @throws NoSuchAlgorithmException the no such algorithm exception
+   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws InvalidePublicKeyFormat the invalide public key format
+   * @throws KeyGenerationException the key generation exception
+   */
   @Test
   public void testSignAndVerify_JWS()
       throws IOException, JOSEException, NoSuchAlgorithmException, InvalidePrivateKeyFormat,

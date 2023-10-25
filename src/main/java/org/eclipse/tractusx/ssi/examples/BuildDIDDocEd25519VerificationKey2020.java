@@ -39,7 +39,16 @@ import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethodBuilder;
 import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 
+/** This is example class to demonstrate how to create @{@link DidDocument} using Ed25519 key */
 public class BuildDIDDocEd25519VerificationKey2020 {
+
+  /**
+   * Build did document did document.
+   *
+   * @param hostName the host name
+   * @return the did document
+   * @throws KeyGenerationException the key generation exception
+   */
   public static DidDocument buildDidDocument(String hostName) throws KeyGenerationException {
     final Did did = DidWebFactory.fromHostname(hostName);
 

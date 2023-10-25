@@ -39,8 +39,15 @@ import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.RemoteDocumentLoader;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 
+/** The type Linked data transformer. */
 public class LinkedDataTransformer {
 
+  /**
+   * Transform transformed linked data.
+   *
+   * @param document the document
+   * @return the transformed linked data
+   */
   @SneakyThrows
   public TransformedLinkedData transform(Verifiable document) {
     // Make a copy and remove proof, as it is not part of the linked data

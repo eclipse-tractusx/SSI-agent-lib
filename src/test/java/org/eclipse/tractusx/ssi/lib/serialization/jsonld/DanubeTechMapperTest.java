@@ -21,6 +21,7 @@
 
 package org.eclipse.tractusx.ssi.lib.serialization.jsonld;
 
+/** The type Danube tech mapper test. */
 public class DanubeTechMapperTest {
 
   // @SneakyThrows

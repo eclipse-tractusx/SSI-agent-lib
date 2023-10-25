@@ -25,8 +25,15 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import org.eclipse.tractusx.ssi.lib.proof.transform.TransformedLinkedData;
 
+/** The type Linked data hasher. */
 public class LinkedDataHasher {
 
+  /**
+   * Hash hashed linked data.
+   *
+   * @param transformedLinkedData the transformed linked data
+   * @return the hashed linked data
+   */
   public HashedLinkedData hash(TransformedLinkedData transformedLinkedData) {
     try {
       MessageDigest digest = MessageDigest.getInstance("SHA-256");

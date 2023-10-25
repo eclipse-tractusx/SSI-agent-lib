@@ -39,7 +39,13 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofGenerator;
 import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 
+/** This is example class to demonstrate how create Verifiable Credentials */
 public class VC {
+  /**
+   * Create vc without proof verifiable credential.
+   *
+   * @return the verifiable credential
+   */
   public static VerifiableCredential createVCWithoutProof() {
 
     // VC Bulider
@@ -64,6 +70,17 @@ public class VC {
     return credentialWithoutProof;
   }
 
+  /**
+   * Create vc with ed 21559 proof verifiable credential.
+   *
+   * @param credential the credential
+   * @param privateKey the private key
+   * @param issuer the issuer
+   * @return the verifiable credential
+   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
+   * @throws SsiException the ssi exception
+   * @throws InvalidePrivateKeyFormat the invalide private key format
+   */
   public static VerifiableCredential createVCWithED21559Proof(
       VerifiableCredential credential, IPrivateKey privateKey, Did issuer)
       throws UnsupportedSignatureTypeException, SsiException, InvalidePrivateKeyFormat {
@@ -92,6 +109,17 @@ public class VC {
     return builder.build();
   }
 
+  /**
+   * Create vc with jws proof verifiable credential.
+   *
+   * @param credential the credential
+   * @param privateKey the private key
+   * @param issuer the issuer
+   * @return the verifiable credential
+   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
+   * @throws SsiException the ssi exception
+   * @throws InvalidePrivateKeyFormat the invalide private key format
+   */
   public static VerifiableCredential createVCWithJWSProof(
       VerifiableCredential credential, IPrivateKey privateKey, Did issuer)
       throws UnsupportedSignatureTypeException, SsiException, InvalidePrivateKeyFormat {

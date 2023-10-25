@@ -24,7 +24,9 @@ package org.eclipse.tractusx.ssi.lib.model.did;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/** The type Did test. */
 public class DidTest {
+  /** Test did equals. */
   @Test
   public void testDidEquals() {
 

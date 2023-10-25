@@ -60,6 +60,9 @@ public class SignedJwtVerifier {
    *
    * @param jwt a {@link SignedJWT} that was sent by the claiming party.
    * @return true if verified, false otherwise
+   * @throws JwtException the jwt exception
+   * @throws DidDocumentResolverNotRegisteredException the did document resolver not registered
+   *     exception
    */
   @SneakyThrows({JOSEException.class, DidResolverException.class})
   public boolean verify(SignedJWT jwt)

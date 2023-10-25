@@ -38,9 +38,16 @@ import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofVerifier;
 import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidator;
 import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidatorImpl;
 
+/** The type Linked data proof validation. */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class LinkedDataProofValidation {
 
+  /**
+   * New instance linked data proof validation.
+   *
+   * @param didResolver the did resolver
+   * @return the linked data proof validation
+   */
   public static LinkedDataProofValidation newInstance(DidResolver didResolver) {
 
     if (didResolver == null) {
@@ -63,6 +70,9 @@ public class LinkedDataProofValidation {
    * To verify {@link VerifiableCredential} or {@link VerifiablePresentation}. In this method we are
    * depending on Verification Method to resolve the DID Document and fetching the required Public
    * Key
+   *
+   * @param verifiable the verifiable
+   * @return the boolean
    */
   @SneakyThrows
   public boolean verify(Verifiable verifiable) {

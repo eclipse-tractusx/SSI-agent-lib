@@ -31,7 +31,16 @@ import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
+/** This is example class to demonstrate did document resolve from given did web url */
 public class ResolveDIDDoc {
+  /**
+   * Resovle document did document.
+   *
+   * @param didUrl the did url
+   * @return the did document
+   * @throws DidDocumentResolverNotRegisteredException the did document resolver not registered
+   *     exception
+   */
   public static DidDocument ResovleDocument(String didUrl)
       throws DidDocumentResolverNotRegisteredException {
 

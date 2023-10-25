@@ -35,7 +35,9 @@ import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 // @formatter:off
 /**
- * Verifiable Credential e.g. from
+ * The type of VerifiableCredential Spec: <a href="https://www.w3.org/TR/vc-data-model/">...</a>
+ *
+ * <p>Verifiable Credential e.g. from
  * https://www.w3.org/TR/vc-data-model/#example-usage-of-the-credentialsubject-property {
  * "@context": [ "https://www.w3.org/2018/credentials/v1",
  * "https://www.w3.org/2018/credentials/examples/v1", "https://w3id.org/secu
@@ -52,24 +54,41 @@ import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 @ToString(callSuper = true)
 public class VerifiableCredential extends Verifiable {
 
+  /** The constant DEFAULT_CONTEXT. */
   public static final URI DEFAULT_CONTEXT = URI.create("https://www.w3.org/2018/credentials/v1");
+  /** The constant TIME_FORMAT. */
   public static final String TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+  /** The constant ISSUER. */
   public static final String ISSUER = "issuer";
+  /** The constant ISSUANCE_DATE. */
   public static final String ISSUANCE_DATE = "issuanceDate";
+  /** The constant EXPIRATION_DATE. */
   public static final String EXPIRATION_DATE = "expirationDate";
+  /** The constant CREDENTIAL_SUBJECT. */
   public static final String CREDENTIAL_SUBJECT = "credentialSubject";
+  /** The constant CREDENTIAL_STATUS. */
   public static final String CREDENTIAL_STATUS = "credentialStatus";
 
+  /** The constant CREDENTIAL_SCHEMA. */
   public static final String CREDENTIAL_SCHEMA = "credentialSchema";
 
+  /** The constant REFERENCE_NUMBER. */
   public static final String REFERENCE_NUMBER = "referenceNumber";
 
+  /** The constant EVIDENCE. */
   public static final String EVIDENCE = "evidence";
 
+  /** The constant TERMS_OF_USE. */
   public static final String TERMS_OF_USE = "termsOfUse";
 
+  /** The constant REFRESH_SERVICE. */
   public static final String REFRESH_SERVICE = "refreshService";
 
+  /**
+   * Instantiates a new Verifiable credential.
+   *
+   * @param json the json
+   */
   @JsonCreator
   public VerifiableCredential(Map<String, Object> json) {
     super(json, VerifiableType.VC);
@@ -107,16 +126,31 @@ public class VerifiableCredential extends Verifiable {
     return SerializeUtil.asStringList(get(TYPE));
   }
 
+  /**
+   * Gets issuer.
+   *
+   * @return the issuer
+   */
   @NonNull
   public URI getIssuer() {
     return SerializeUtil.asURI(get(ISSUER));
   }
 
+  /**
+   * Gets issuance date.
+   *
+   * @return the issuance date
+   */
   @NonNull
   public Instant getIssuanceDate() {
     return Instant.parse((String) get(ISSUANCE_DATE));
   }
 
+  /**
+   * Gets expiration date.
+   *
+   * @return the expiration date
+   */
   public Instant getExpirationDate() {
     if (!containsKey(EXPIRATION_DATE)) {
       return null;
@@ -124,6 +158,11 @@ public class VerifiableCredential extends Verifiable {
     return Instant.parse((String) get(EXPIRATION_DATE));
   }
 
+  /**
+   * Gets credential subject.
+   *
+   * @return the credential subject
+   */
   @NonNull
   public List<VerifiableCredentialSubject> getCredentialSubject() {
     Object subject = get(CREDENTIAL_SUBJECT);
@@ -141,6 +180,11 @@ public class VerifiableCredential extends Verifiable {
     }
   }
 
+  /**
+   * Gets verifiable credential status.
+   *
+   * @return the verifiable credential status
+   */
   public VerifiableCredentialStatus getVerifiableCredentialStatus() {
     Object data = get(CREDENTIAL_STATUS);
     if (data == null) {

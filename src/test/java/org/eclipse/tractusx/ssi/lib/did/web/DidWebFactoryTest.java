@@ -26,8 +26,15 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+/** The type Did web factory test. */
 public class DidWebFactoryTest {
 
+  /**
+   * Test create did from hostname.
+   *
+   * @param hostname the hostname
+   * @param expectedDid the expected did
+   */
   @ParameterizedTest
   @CsvSource({
     "localhost, did:web:localhost",
@@ -40,6 +47,13 @@ public class DidWebFactoryTest {
     Assertions.assertEquals(expectedDid, did.toString());
   }
 
+  /**
+   * Test create did from hostname and path.
+   *
+   * @param hostname the hostname
+   * @param path the path
+   * @param expectedDid the expected did
+   */
   @ParameterizedTest
   @CsvSource({
     "some-host, path, did:web:some-host:path",

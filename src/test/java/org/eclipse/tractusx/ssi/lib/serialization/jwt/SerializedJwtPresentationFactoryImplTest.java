@@ -44,6 +44,7 @@ import org.eclipse.tractusx.ssi.lib.util.vc.TestVerifiableFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/** The type Serialized jwt presentation factory impl test. */
 class SerializedJwtPresentationFactoryImplTest {
 
   private LinkedDataProofGenerator linkedDataProofGenerator;
@@ -53,6 +54,7 @@ class SerializedJwtPresentationFactoryImplTest {
 
   private SignedJwtVerifier jwtVerifier;
 
+  /** Test jwt serialization. */
   @SneakyThrows
   @Test
   public void testJwtSerialization() {

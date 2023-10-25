@@ -28,16 +28,29 @@ import lombok.NonNull;
 import lombok.Value;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 
+/** The type Base 58 bitcoin. */
 @Value
 @EqualsAndHashCode
 public class Base58Bitcoin implements MultibaseString {
 
+  /**
+   * Can decode boolean.
+   *
+   * @param encoded the encoded
+   * @return the boolean
+   */
   public static boolean canDecode(String encoded) {
     Objects.requireNonNull(encoded, "encoded must not be null");
 
     return Multibase.encoding(encoded).equals(Multibase.Base.Base58BTC);
   }
 
+  /**
+   * Create base 58 bitcoin.
+   *
+   * @param decoded the decoded
+   * @return the base 58 bitcoin
+   */
   public static Base58Bitcoin create(byte[] decoded) {
 
     final String encoded = Multibase.encode(Multibase.Base.Base58BTC, decoded);
@@ -45,6 +58,12 @@ public class Base58Bitcoin implements MultibaseString {
     return new Base58Bitcoin(decoded, encoded);
   }
 
+  /**
+   * Create base 58 bitcoin.
+   *
+   * @param encoded the encoded
+   * @return the base 58 bitcoin
+   */
   public static Base58Bitcoin create(String encoded) {
 
     if (!canDecode(encoded)) {

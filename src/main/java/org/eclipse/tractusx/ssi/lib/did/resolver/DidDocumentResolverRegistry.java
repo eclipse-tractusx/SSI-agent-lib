@@ -25,12 +25,32 @@ import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredEx
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
 /**
+ * The interface Did document resolver registry.
+ *
  * @deprecated replaced by {@link DidResolver}
  */
 public interface DidDocumentResolverRegistry {
+  /**
+   * Get did document resolver.
+   *
+   * @param did the did
+   * @return the did document resolver
+   * @throws DidDocumentResolverNotRegisteredException the did document resolver not registered
+   *     exception
+   */
   DidDocumentResolver get(DidMethod did) throws DidDocumentResolverNotRegisteredException;
 
+  /**
+   * Register.
+   *
+   * @param resolver the resolver
+   */
   void register(DidDocumentResolver resolver);
 
+  /**
+   * Unregister.
+   *
+   * @param resolver the resolver
+   */
   void unregister(DidDocumentResolver resolver);
 }
