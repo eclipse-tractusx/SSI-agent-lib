@@ -1,0 +1,6 @@
+product: "SSI-agent-lib"
+leadingRepository: "https://github.com/eclipse-tractusx/SSI-agent-lib"
+repositories:
+  - name: "SSI-agent-lib"
+    usage: "Implementation of Self-Sovereign Identity solution"
+    url: "https://github.com/eclipse-tractusx/SSI-agent-lib" 

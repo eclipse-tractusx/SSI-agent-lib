@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.proof.types.ed25519;
 
@@ -70,7 +72,8 @@ public class Ed25519ProofVerifier implements IVerifier {
   }
 
   private IPublicKey discoverPublicKey(Ed25519Signature2020 signature)
-      throws InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion, DidResolverException {
+      throws DidDocumentResolverNotRegisteredException, UnsupportedSignatureTypeException,
+          InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion, DidResolverException {
 
     final Did issuer = DidParser.parse(signature.getVerificationMethod());
 
@@ -90,7 +93,7 @@ public class Ed25519ProofVerifier implements IVerifier {
 
     IPublicKey publicKey;
     try {
-      publicKey = new x21559PublicKey(key.getPublicKeyBase58().getEncoded(), false);
+      publicKey = (IPublicKey) new x21559PublicKey(key.getPublicKeyBase58().getEncoded(), false);
     } catch (IOException e) {
       throw new InvalidePublicKeyFormat(e.getCause());
     }

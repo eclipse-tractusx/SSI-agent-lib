@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.did.web;
 
@@ -34,8 +36,9 @@ public class DidWebFactory {
     Objects.requireNonNull(hostName, "Hostname must not be null");
     Objects.requireNonNull(path, "Path must not be null");
 
-    if (hostName.startsWith("http"))
+    if (hostName.startsWith("http")) {
       throw new IllegalArgumentException("Hostname should not contain http(s)://");
+    }
 
     String cleanedPath = path;
     if (!cleanedPath.startsWith("/")) {
@@ -45,8 +48,9 @@ public class DidWebFactory {
       cleanedPath = cleanedPath.substring(0, cleanedPath.length() - 1);
     }
 
-    if (hostName.startsWith("http"))
+    if (hostName.startsWith("http")) {
       throw new IllegalArgumentException("Hostname should not contain http(s)://");
+    }
 
     final DidMethod didMethod = new DidMethod("web");
     final DidMethodIdentifier methodIdentifier =

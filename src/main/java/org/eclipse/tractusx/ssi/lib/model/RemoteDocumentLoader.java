@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.model;
 
@@ -60,20 +62,23 @@ public class RemoteDocumentLoader implements DocumentLoader {
   @Getter @Setter private List<URI> httpsContexts = new ArrayList<URI>();
   @Getter @Setter private List<URI> fileContexts = new ArrayList<URI>();
 
-  private static final RemoteDocumentLoader DOCUMENT_LOADER;
+  public static final RemoteDocumentLoader DOCUMENT_LOADER;
 
   static {
     DOCUMENT_LOADER = new RemoteDocumentLoader();
   }
 
   public static DocumentLoader getDefaultHttpLoader() {
-    if (DEFAULT_HTTP_LOADER == null)
+    if (DEFAULT_HTTP_LOADER == null) {
       DEFAULT_HTTP_LOADER = new HttpLoader(DefaultHttpClient.defaultInstance());
+    }
     return DEFAULT_HTTP_LOADER;
   }
 
   public static DocumentLoader getDefaultFileLoader() {
-    if (DEFAULT_FILE_LOADER == null) DEFAULT_FILE_LOADER = new FileLoader();
+    if (DEFAULT_FILE_LOADER == null) {
+      DEFAULT_FILE_LOADER = new FileLoader();
+    }
     return DEFAULT_FILE_LOADER;
   }
 
@@ -97,42 +102,51 @@ public class RemoteDocumentLoader implements DocumentLoader {
     if (this.isEnableLocalCache() && this.getLocalCache().containsKey(url)) {
       return this.getLocalCache().get(url);
     }
-
     if (this.isEnableHttp() && "http".equalsIgnoreCase(url.getScheme())) {
 
       DocumentLoader httpLoader = this.getHttpLoader();
-      if (httpLoader == null) httpLoader = getDefaultHttpLoader();
+      if (httpLoader == null) {
+        httpLoader = getDefaultHttpLoader();
+      }
       Document document =
           this.getRemoteCache() == null ? null : this.getRemoteCache().getIfPresent(url);
       if (document == null) {
         document = httpLoader.loadDocument(url, options);
-        if (this.getRemoteCache() != null) this.getRemoteCache().put(url, document);
+        if (this.getRemoteCache() != null) {
+          this.getRemoteCache().put(url, document);
+        }
       }
       return document;
     }
     if (this.isEnableHttps() && "https".equalsIgnoreCase(url.getScheme())) {
 
       DocumentLoader httpLoader = this.getHttpLoader();
-      if (httpLoader == null) httpLoader = getDefaultHttpLoader();
+      if (httpLoader == null) {
+        httpLoader = getDefaultHttpLoader();
+      }
       Document document =
           this.getRemoteCache() == null ? null : this.getRemoteCache().getIfPresent(url);
       if (document == null) {
         document = httpLoader.loadDocument(url, options);
-        if (this.getRemoteCache() != null) this.getRemoteCache().put(url, document);
+        if (this.getRemoteCache() != null) {
+          this.getRemoteCache().put(url, document);
+        }
       }
-
       return document;
     }
-
     if (this.isEnableFile() && "file".equalsIgnoreCase(url.getScheme())) {
 
       DocumentLoader fileLoader = this.getFileLoader();
-      if (fileLoader == null) fileLoader = getDefaultFileLoader();
+      if (fileLoader == null) {
+        fileLoader = getDefaultFileLoader();
+      }
       Document document =
           this.getRemoteCache() == null ? null : this.getRemoteCache().getIfPresent(url);
       if (document == null) {
         document = fileLoader.loadDocument(url, options);
-        if (this.getRemoteCache() != null) this.getRemoteCache().put(url, document);
+        if (this.getRemoteCache() != null) {
+          this.getRemoteCache().put(url, document);
+        }
       }
       return document;
     }

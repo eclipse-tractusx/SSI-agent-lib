@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.validation;
 
@@ -82,7 +84,9 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
 
   private static void findUndefinedTerms(JsonArray jsonArray) {
     for (JsonValue entry : jsonArray) {
-      if (entry instanceof JsonObject) findUndefinedTerms((JsonObject) entry);
+      if (entry instanceof JsonObject) {
+        findUndefinedTerms((JsonObject) entry);
+      }
     }
   }
 
@@ -94,8 +98,12 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
             "Undefined JSON-LD term: " + entry.getKey().substring(UNDEFINED_TERM_URI.length()));
       }
 
-      if (entry.getValue() instanceof JsonArray) findUndefinedTerms((JsonArray) entry.getValue());
-      if (entry.getValue() instanceof JsonObject) findUndefinedTerms((JsonObject) entry.getValue());
+      if (entry.getValue() instanceof JsonArray) {
+        findUndefinedTerms((JsonArray) entry.getValue());
+      }
+      if (entry.getValue() instanceof JsonObject) {
+        findUndefinedTerms((JsonObject) entry.getValue());
+      }
     }
   }
 }

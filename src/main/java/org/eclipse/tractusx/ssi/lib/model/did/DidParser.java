@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.model.did;
 
@@ -31,13 +33,16 @@ public class DidParser {
   public static Did parse(URI uri) {
     Objects.requireNonNull(uri);
 
-    if (!uri.getScheme().equals("did"))
+    if (!uri.getScheme().equals("did")) {
       throw new DidParseException("URI is not a DID. URI: '" + uri + "'");
+    }
     var parts = uri.toString().split("#");
     var beforeFragment = parts[0];
     var fragment = "";
 
-    if (parts.length > 1) fragment = parts[1];
+    if (parts.length > 1) {
+      fragment = parts[1];
+    }
 
     var did = beforeFragment.split(":");
     if (did.length < 3) {
