@@ -31,7 +31,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
-/** This is example class to demonstrate did document resolve from given did web url */
+/** This is an example class to demonstrate did document resolve from given did web url */
 public class ResolveDIDDoc {
   /**
    * Resolve did document.

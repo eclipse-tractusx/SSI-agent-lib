@@ -27,7 +27,7 @@ import lombok.NonNull;
 import lombok.Value;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 
-/** The type Base 64. */
+/** The type Base64. */
 @Value
 @EqualsAndHashCode
 public class Base64 implements MultibaseString {
@@ -35,7 +35,7 @@ public class Base64 implements MultibaseString {
   /**
    * Check if it can decode a string.
    *
-   * @param encoded the encoded
+   * @param encoded the encoded string
    * @return the boolean
    */
   public static boolean canDecode(String encoded) {
@@ -43,10 +43,10 @@ public class Base64 implements MultibaseString {
   }
 
   /**
-   * Create base 64.
+   * Create Base64.
    *
    * @param decoded the decoded
-   * @return the base 64
+   * @return the Base64
    */
   public static Base64 create(byte[] decoded) {
     final String encoded = Multibase.encode(Multibase.Base.Base64, decoded);
@@ -54,10 +54,10 @@ public class Base64 implements MultibaseString {
   }
 
   /**
-   * Create base 64.
+   * Create Base64.
    *
    * @param encoded the encoded
-   * @return the base 64
+   * @return the Base64
    */
   public static Base64 create(String encoded) {
 

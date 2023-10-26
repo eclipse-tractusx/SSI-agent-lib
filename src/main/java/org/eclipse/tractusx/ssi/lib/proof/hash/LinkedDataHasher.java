@@ -29,7 +29,7 @@ import org.eclipse.tractusx.ssi.lib.proof.transform.TransformedLinkedData;
 public class LinkedDataHasher {
 
   /**
-   * Hash hashed linked data.
+   * Hash linked data.
    *
    * @param transformedLinkedData the transformed linked data
    * @return the hashed linked data

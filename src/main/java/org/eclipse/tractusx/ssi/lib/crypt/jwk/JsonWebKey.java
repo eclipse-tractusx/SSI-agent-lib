@@ -28,13 +28,13 @@ import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 
-/** The type Json web key. */
+/** The type JsonWebKey. */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonWebKey {
   private final OctetKeyPair keyPair;
 
   /**
-   * Instantiates a new Json web key.
+   * Instantiates a new JsonWebKey.
    *
    * @param id the id
    * @param publicKey the public key

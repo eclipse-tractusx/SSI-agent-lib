@@ -43,7 +43,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 /** This is example class to demonstrate how to create @{@link DidDocument} using Json web key */
 public class BuildDIDDocJsonWebKey2020 {
   /**
-   * Build did document did document.
+   * Build did document.
    *
    * @param hostName the host name
    * @return the did document

@@ -41,9 +41,7 @@ import java.util.logging.Logger;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * The type Remote document loader.
- */
+/** The type Remote document loader. */
 public class RemoteDocumentLoader implements DocumentLoader {
 
   private static DocumentLoader DEFAULT_HTTP_LOADER;
@@ -65,9 +63,7 @@ public class RemoteDocumentLoader implements DocumentLoader {
   @Getter @Setter private List<URI> httpsContexts = new ArrayList<URI>();
   @Getter @Setter private List<URI> fileContexts = new ArrayList<URI>();
 
-  /**
-   * The constant DOCUMENT_LOADER.
-   */
+  /** The constant DOCUMENT_LOADER. */
   public static final RemoteDocumentLoader DOCUMENT_LOADER;
 
   static {

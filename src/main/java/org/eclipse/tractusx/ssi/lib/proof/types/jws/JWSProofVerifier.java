@@ -124,7 +124,7 @@ public class JWSProofVerifier implements IVerifier {
   }
 
   /**
-   * Verify boolean.
+   * Verify hashedLinkedData.
    *
    * @param hashedLinkedData the hashed linked data
    * @param signature the signature

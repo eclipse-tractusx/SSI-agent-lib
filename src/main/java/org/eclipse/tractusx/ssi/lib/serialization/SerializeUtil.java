@@ -149,7 +149,7 @@ public final class SerializeUtil {
   }
 
   /**
-   * As list list.
+   * As list.
    *
    * @param object the object
    * @return the list
