@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Getter;
 import lombok.Setter;
@@ -111,7 +112,13 @@ public class RemoteDocumentLoader implements DocumentLoader {
       Document document =
           this.getRemoteCache() == null ? null : this.getRemoteCache().getIfPresent(url);
       if (document == null) {
-        document = httpLoader.loadDocument(url, options);
+        try {
+          document = httpLoader.loadDocument(url, options);
+        } catch (JsonLdError e) {
+          Logger.getLogger(this.getClass().getName())
+              .log(Level.SEVERE, String.format("Cannot load context: %s", url));
+          throw e;
+        }
         if (this.getRemoteCache() != null) {
           this.getRemoteCache().put(url, document);
         }
@@ -127,7 +134,13 @@ public class RemoteDocumentLoader implements DocumentLoader {
       Document document =
           this.getRemoteCache() == null ? null : this.getRemoteCache().getIfPresent(url);
       if (document == null) {
-        document = httpLoader.loadDocument(url, options);
+        try {
+          document = httpLoader.loadDocument(url, options);
+        } catch (JsonLdError e) {
+          Logger.getLogger(this.getClass().getName())
+              .log(Level.SEVERE, String.format("Cannot load context: %s", url));
+          throw e;
+        }
         if (this.getRemoteCache() != null) {
           this.getRemoteCache().put(url, document);
         }
