@@ -41,6 +41,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 17
+          distribution: temurin
 
       - name: Build Lib with Maven
         run: ./mvnw -s settings.xml  -B package --file ./pom.xml

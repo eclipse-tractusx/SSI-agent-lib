@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.serialization;
 
@@ -125,7 +127,9 @@ public final class SerializeUtil {
   public static List asList(Object object) {
     if (object instanceof List) {
       return (List) object;
-    } else return List.of(object);
+    } else {
+      return List.of(object);
+    }
   }
 
   private static Map<String, Object> getLinkedHashMap(Map<String, Object> map) {

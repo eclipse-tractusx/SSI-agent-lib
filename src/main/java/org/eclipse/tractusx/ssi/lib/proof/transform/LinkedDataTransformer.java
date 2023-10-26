@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -14,10 +15,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *
- *
- *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.proof.transform;
 
@@ -71,7 +71,6 @@ public class LinkedDataTransformer {
   private RdfDataset toDataset(JsonLdObject jsonLdObject) throws RuntimeException {
 
     var documentLoader = RemoteDocumentLoader.getInstance();
-
     documentLoader.setEnableHttps(true);
     documentLoader.setHttpsContexts(jsonLdObject.getContext());
 
@@ -82,7 +81,6 @@ public class LinkedDataTransformer {
     JsonDocument jsonDocument = JsonDocument.of(MediaType.JSON_LD, jsonLdObject.toJsonObject());
     ToRdfApi toRdfApi = JsonLd.toRdf(jsonDocument);
     toRdfApi.options(options);
-
     try {
       return toRdfApi.get();
     } catch (JsonLdError ex) {

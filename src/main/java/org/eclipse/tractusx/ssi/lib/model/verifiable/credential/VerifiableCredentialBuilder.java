@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.model.verifiable.credential;
 
@@ -108,9 +110,6 @@ public class VerifiableCredentialBuilder {
     map.put(VerifiableCredential.ISSUANCE_DATE, formatter.format(issuanceDate));
     map.put(VerifiableCredential.EXPIRATION_DATE, formatter.format(expirationDate));
     map.put(VerifiableCredential.CREDENTIAL_SUBJECT, credentialSubject);
-    // if (!Objects.isNull(credentialStatus)) {
-    //   map.put(VerifiableCredential.CREDENTIAL_STATUS, credentialStatus);
-    // }
     if (proof != null) {
       map.put(VerifiableCredential.PROOF, proof);
     }

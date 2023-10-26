@@ -1,13 +1,32 @@
+/*
+ * ******************************************************************************
+ * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ *
+ * See the NOTICE file(s) distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0.
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * *******************************************************************************
+ */
+
 package org.eclipse.tractusx.ssi.lib.util.vc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.*;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
@@ -21,6 +40,7 @@ public class TestVerifiableFactory {
   static List<URI> contextList =
       List.of(
           URI.create("https://www.w3.org/2018/credentials/v1"),
+          // TODO: update this schema as soon as a tractus-x version is available
           URI.create("https://catenax-ng.github.io/product-core-schemas/businessPartnerData.json"),
           URI.create("https://w3id.org/security/suites/jws-2020/v1"),
           URI.create("https://w3id.org/security/suites/ed25519-2020/v1"));
@@ -33,22 +53,6 @@ public class TestVerifiableFactory {
     VerifiableCredentialSubject verifiableCredentialSubject =
         new VerifiableCredentialSubject(
             Map.of("MembershipCredential", Map.of("holderIdentifier", "BPNSWVKGWCP7PDQR")));
-
-    // add VC status
-    String validStatus =
-        "{\n"
-            + "    \"id\": \"https://example.com/credentials/status/3#94567\",\n"
-            + "    \"type\": \"StatusList2021Entry\",\n"
-            + "    \"statusPurpose\": \"revocation\",\n"
-            + "    \"statusListIndex\": \"94567\",\n"
-            + "    \"statusListCredential\": \"https://example.com/credentials/status/3\"\n"
-            + "  }";
-
-    ObjectMapper objectMapper = new ObjectMapper();
-    Map<String, Object> statusMap = objectMapper.readValue(validStatus, Map.class);
-
-    // VerifiableCredentialStatusList2021Entry verifiableCredentialStatusList2021Entry =
-    //     new VerifiableCredentialStatusList2021Entry(null);
 
     return verifiableCredentialBuilder
         .id(URI.create("did:test:id"))

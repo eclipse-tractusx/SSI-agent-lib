@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.did.web;
 
@@ -49,11 +51,12 @@ public class DidWebResolver implements DidResolver {
   @SuppressWarnings("unchecked")
   @Override
   public DidDocument resolve(Did did) throws DidResolverException {
-    if (!did.getMethod().equals(Constants.DID_WEB_METHOD))
+    if (!did.getMethod().equals(Constants.DID_WEB_METHOD)) {
       throw new DidResolverException(
           String.format(
               "%s can only handle the following methods: %s",
               this.getClass().getSimpleName(), Constants.DID_WEB_METHOD));
+    }
 
     final URI uri = parser.parse(did, enforceHttps);
 

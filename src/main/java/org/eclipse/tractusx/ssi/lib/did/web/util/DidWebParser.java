@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.did.web.util;
 
@@ -47,11 +49,17 @@ public class DidWebParser {
 
     String didUrl = did.getMethodIdentifier().getValue().replace(":", "/").replace("%3A", ":");
 
-    if (enforceHttps) didUrl = "https://" + didUrl;
-    else didUrl = "http://" + didUrl;
+    if (enforceHttps) {
+      didUrl = "https://" + didUrl;
+    } else {
+      didUrl = "http://" + didUrl;
+    }
 
-    if (containsPath) didUrl = didUrl + PATH_DID_JSON;
-    else didUrl = didUrl + WELL_KNOWN_DID_JSON;
+    if (containsPath) {
+      didUrl = didUrl + PATH_DID_JSON;
+    } else {
+      didUrl = didUrl + WELL_KNOWN_DID_JSON;
+    }
 
     return new URI(didUrl);
   }

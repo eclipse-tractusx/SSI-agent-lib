@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.examples;
 
@@ -44,7 +46,7 @@ public class Verification {
     } catch (JwtException | DidDocumentResolverNotRegisteredException e) {
       // An exception will be thrown here in case JWT verification failed or DID
       // Document Resolver not able to resolve.
-      throw new IllegalStateException(e);
+      e.printStackTrace();
     }
   }
 

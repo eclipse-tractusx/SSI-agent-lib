@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.did.resolver;
 
@@ -36,26 +38,29 @@ public class DidDocumentResolverRegistryImpl implements DidDocumentResolverRegis
   public DidDocumentResolver get(DidMethod didMethod)
       throws DidDocumentResolverNotRegisteredException {
 
-    if (!resolvers.containsKey(didMethod))
+    if (!resolvers.containsKey(didMethod)) {
       throw new DidDocumentResolverNotRegisteredException(didMethod);
+    }
 
     return resolvers.get(didMethod);
   }
 
   @Override
   public void register(DidDocumentResolver resolver) {
-    if (resolvers.containsKey(resolver.getSupportedMethod()))
+    if (resolvers.containsKey(resolver.getSupportedMethod())) {
       throw new SsiException(
           String.format(
               "Resolver for method '%s' is already registered", resolver.getSupportedMethod()));
+    }
     resolvers.put(resolver.getSupportedMethod(), resolver);
   }
 
   @Override
   public void unregister(DidDocumentResolver resolver) {
-    if (!resolvers.containsKey(resolver.getSupportedMethod()))
+    if (!resolvers.containsKey(resolver.getSupportedMethod())) {
       throw new SsiException(
           String.format("Resolver for method '%s' not registered", resolver.getSupportedMethod()));
+    }
     resolvers.remove(resolver.getSupportedMethod());
   }
 }

@@ -1,4 +1,5 @@
-/********************************************************************************
+/*
+ * ******************************************************************************
  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -15,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.crypt.x21559;
 
@@ -38,8 +40,9 @@ public class x21559PrivateKey implements IPrivateKey {
   private final @NonNull byte[] key;
 
   public x21559PrivateKey(byte[] privateKey) throws InvalidePrivateKeyFormat {
-    if (this.getKeyLength() != privateKey.length)
+    if (this.getKeyLength() != privateKey.length) {
       throw new InvalidePrivateKeyFormat(getKeyLength(), privateKey.length);
+    }
     this.key = privateKey;
   }
 
@@ -57,8 +60,9 @@ public class x21559PrivateKey implements IPrivateKey {
       this.key = MultibaseFactory.create(privateKey).getDecoded();
     }
 
-    if (this.getKeyLength() != key.length)
+    if (this.getKeyLength() != key.length) {
       throw new InvalidePrivateKeyFormat(getKeyLength(), privateKey.length());
+    }
   }
 
   @Override
