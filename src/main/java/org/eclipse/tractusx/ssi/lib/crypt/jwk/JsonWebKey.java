@@ -47,7 +47,7 @@ public class JsonWebKey {
   }
 
   /**
-   * Gets curve.
+   * Gets the curve name of the key pair.
    *
    * @return the curve
    */
@@ -74,7 +74,7 @@ public class JsonWebKey {
   }
 
   /**
-   * Gets x.
+   * Gets the x member contains the x coordinate for the elliptic curve point.
    *
    * @return the x
    */

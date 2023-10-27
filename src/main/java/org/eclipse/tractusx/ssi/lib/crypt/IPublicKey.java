@@ -21,5 +21,5 @@
 
 package org.eclipse.tractusx.ssi.lib.crypt;
 
-/** The interface Public key. */
+/** The interface public key. */
 public interface IPublicKey extends IKey {}

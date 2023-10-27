@@ -41,14 +41,14 @@ public interface DidDocumentResolverRegistry {
   DidDocumentResolver get(DidMethod did) throws DidDocumentResolverNotRegisteredException;
 
   /**
-   * Register.
+   * Register a new did document resolver
    *
    * @param resolver the resolver
    */
   void register(DidDocumentResolver resolver);
 
   /**
-   * Unregister.
+   * Unregister a did document resolver
    *
    * @param resolver the resolver
    */

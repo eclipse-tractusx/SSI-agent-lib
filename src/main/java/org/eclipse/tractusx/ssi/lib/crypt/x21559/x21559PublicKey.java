@@ -54,7 +54,7 @@ public class x21559PublicKey implements IPublicKey {
   }
 
   /**
-   * Instantiates a new X 21559 public key.
+   * Instantiates a new X21559 public key.
    *
    * @param publicKey the public key
    * @param pemFormat the pe mformat

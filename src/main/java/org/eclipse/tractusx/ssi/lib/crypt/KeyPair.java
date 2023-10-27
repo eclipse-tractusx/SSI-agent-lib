@@ -24,7 +24,7 @@ package org.eclipse.tractusx.ssi.lib.crypt;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-/** The type Key pair. */
+/** The type key pair. */
 @RequiredArgsConstructor
 @Data
 public class KeyPair {
