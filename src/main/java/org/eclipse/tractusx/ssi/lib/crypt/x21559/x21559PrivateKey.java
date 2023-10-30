@@ -31,7 +31,7 @@ import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.util.io.pem.PemWriter;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidPrivateKeyFormat;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
@@ -39,15 +39,15 @@ public class x21559PrivateKey implements IPrivateKey {
 
   private final @NonNull byte[] key;
 
-  public x21559PrivateKey(byte[] privateKey) throws InvalidePrivateKeyFormat {
+  public x21559PrivateKey(byte[] privateKey) throws InvalidPrivateKeyFormat {
     if (this.getKeyLength() != privateKey.length) {
-      throw new InvalidePrivateKeyFormat(getKeyLength(), privateKey.length);
+      throw new InvalidPrivateKeyFormat(getKeyLength(), privateKey.length);
     }
     this.key = privateKey;
   }
 
   public x21559PrivateKey(String privateKey, boolean PEMFormat)
-      throws InvalidePrivateKeyFormat, IOException {
+      throws InvalidPrivateKeyFormat, IOException {
     if (PEMFormat) {
       StringReader sr = new StringReader(privateKey);
       PemReader reader = new PemReader(sr);
@@ -61,7 +61,7 @@ public class x21559PrivateKey implements IPrivateKey {
     }
 
     if (this.getKeyLength() != key.length) {
-      throw new InvalidePrivateKeyFormat(getKeyLength(), privateKey.length());
+      throw new InvalidPrivateKeyFormat(getKeyLength(), privateKey.length());
     }
   }
 

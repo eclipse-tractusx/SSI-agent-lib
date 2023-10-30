@@ -26,7 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidPrivateKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
@@ -56,7 +56,7 @@ public class LinkedDataProofGenerator {
       return new LinkedDataProofGenerator(
           type, new LinkedDataHasher(), new LinkedDataTransformer(), new JWSProofSigner());
     } else {
-      throw new UnsupportedSignatureTypeException("Invalide signautre type");
+      throw new UnsupportedSignatureTypeException("Invalid signautre type");
     }
   }
 
@@ -66,7 +66,7 @@ public class LinkedDataProofGenerator {
   private final ISigner signer;
 
   public Proof createProof(Verifiable document, URI verificationMethodId, IPrivateKey privateKey)
-      throws SsiException, InvalidePrivateKeyFormat {
+      throws SsiException, InvalidPrivateKeyFormat {
 
     final TransformedLinkedData transformedData = transformer.transform(document);
     final HashedLinkedData hashedData = hasher.hash(transformedData);

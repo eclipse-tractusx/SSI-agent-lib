@@ -33,7 +33,7 @@ import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidPublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.NoVerificationKeyFoundExcpetion;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
@@ -55,7 +55,7 @@ public class Ed25519ProofVerifier implements IVerifier {
   @SneakyThrows({DidResolverException.class})
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable verifiable)
       throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException,
-          InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion {
+          InvalidPublicKeyFormat, NoVerificationKeyFoundExcpetion {
 
     final Proof proof = verifiable.getProof();
     final Ed25519Signature2020 ed25519Signature2020 = new Ed25519Signature2020(proof);
@@ -73,7 +73,7 @@ public class Ed25519ProofVerifier implements IVerifier {
 
   private IPublicKey discoverPublicKey(Ed25519Signature2020 signature)
       throws DidDocumentResolverNotRegisteredException, UnsupportedSignatureTypeException,
-          InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion, DidResolverException {
+          InvalidPublicKeyFormat, NoVerificationKeyFoundExcpetion, DidResolverException {
 
     final Did issuer = DidParser.parse(signature.getVerificationMethod());
 
@@ -95,7 +95,7 @@ public class Ed25519ProofVerifier implements IVerifier {
     try {
       publicKey = (IPublicKey) new x21559PublicKey(key.getPublicKeyBase58().getEncoded(), false);
     } catch (IOException e) {
-      throw new InvalidePublicKeyFormat(e.getCause());
+      throw new InvalidPublicKeyFormat(e.getCause());
     }
 
     return publicKey;

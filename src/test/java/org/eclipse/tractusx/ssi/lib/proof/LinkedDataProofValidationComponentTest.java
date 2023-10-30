@@ -28,7 +28,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidPrivateKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
@@ -59,7 +59,7 @@ public class LinkedDataProofValidationComponentTest {
 
   @Test
   public void testVCProofFailureOnManipulatedCredential()
-      throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
+      throws IOException, UnsupportedSignatureTypeException, InvalidPrivateKeyFormat,
           KeyGenerationException {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
@@ -97,7 +97,7 @@ public class LinkedDataProofValidationComponentTest {
 
   @Test
   public void testVCEd21559ProofGenerationAndVerification()
-      throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
+      throws IOException, UnsupportedSignatureTypeException, InvalidPrivateKeyFormat,
           KeyGenerationException {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
@@ -129,7 +129,7 @@ public class LinkedDataProofValidationComponentTest {
 
   @Test
   public void testVCJWSProofGenerationAndVerification()
-      throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
+      throws IOException, UnsupportedSignatureTypeException, InvalidPrivateKeyFormat,
           KeyGenerationException {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
@@ -162,7 +162,7 @@ public class LinkedDataProofValidationComponentTest {
 
   @Test
   public void testVPEd21559ProofGenerationAndVerification()
-      throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
+      throws IOException, UnsupportedSignatureTypeException, InvalidPrivateKeyFormat,
           KeyGenerationException {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
@@ -203,7 +203,7 @@ public class LinkedDataProofValidationComponentTest {
 
   @Test
   public void testVPJWSProofGenerationAndVerification()
-      throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
+      throws IOException, UnsupportedSignatureTypeException, InvalidPrivateKeyFormat,
           KeyGenerationException {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();

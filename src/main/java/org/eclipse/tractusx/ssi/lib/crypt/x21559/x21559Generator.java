@@ -29,8 +29,8 @@ import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.eclipse.tractusx.ssi.lib.crypt.IKeyGenerator;
 import org.eclipse.tractusx.ssi.lib.crypt.KeyPair;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidPrivateKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidPublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
 
 public class x21559Generator implements IKeyGenerator {
@@ -50,13 +50,13 @@ public class x21559Generator implements IKeyGenerator {
     x21559PrivateKey x21559PrivateKey;
     try {
       x21559PrivateKey = new x21559PrivateKey(privateKey.getEncoded());
-    } catch (InvalidePrivateKeyFormat e) {
+    } catch (InvalidPrivateKeyFormat e) {
       throw new KeyGenerationException(e.getCause());
     }
     x21559PublicKey x21559PublicKey;
     try {
       x21559PublicKey = new x21559PublicKey(publicKey.getEncoded());
-    } catch (InvalidePublicKeyFormat e) {
+    } catch (InvalidPublicKeyFormat e) {
       throw new KeyGenerationException(e.getCause());
     }
 

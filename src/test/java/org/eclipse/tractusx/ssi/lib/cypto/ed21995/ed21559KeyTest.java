@@ -31,8 +31,8 @@ import org.eclipse.tractusx.ssi.lib.crypt.KeyPair;
 import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559Generator;
 import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidPrivateKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidPublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.junit.jupiter.api.Test;
@@ -63,8 +63,7 @@ public class ed21559KeyTest {
 
   @Test
   public void testED21559KeyDeserliztion()
-      throws KeyGenerationException, IOException, InvalidePrivateKeyFormat,
-          InvalidePublicKeyFormat {
+      throws KeyGenerationException, IOException, InvalidPrivateKeyFormat, InvalidPublicKeyFormat {
     IKeyGenerator keyGenerator = new x21559Generator();
     KeyPair keyPair = keyGenerator.generateKey();
 

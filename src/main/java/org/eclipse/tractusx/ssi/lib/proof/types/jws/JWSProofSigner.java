@@ -32,7 +32,7 @@ import com.nimbusds.jose.jwk.OctetKeyPair;
 import java.io.IOException;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidPrivateKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.proof.ISigner;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
@@ -41,14 +41,14 @@ public class JWSProofSigner implements ISigner {
 
   @Override
   public byte[] sign(HashedLinkedData hashedLinkedData, IPrivateKey privateKey)
-      throws InvalidePrivateKeyFormat {
+      throws InvalidPrivateKeyFormat {
 
     OctetKeyPairFactory octetKeyPairFactory = new OctetKeyPairFactory();
     OctetKeyPair keyPair;
     try {
       keyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
     } catch (IOException e) {
-      throw new InvalidePrivateKeyFormat(e.getCause());
+      throw new InvalidPrivateKeyFormat(e.getCause());
     }
 
     JWSSigner signer;

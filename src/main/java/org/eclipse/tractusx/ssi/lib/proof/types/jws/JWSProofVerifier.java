@@ -37,7 +37,7 @@ import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidPublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.NoVerificationKeyFoundExcpetion;
 import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
@@ -59,7 +59,7 @@ public class JWSProofVerifier implements IVerifier {
   @SneakyThrows({DidResolverException.class})
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable document)
       throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException,
-          NoVerificationKeyFoundExcpetion, InvalidePublicKeyFormat {
+          NoVerificationKeyFoundExcpetion, InvalidPublicKeyFormat {
 
     final Proof proof = document.getProof();
     if (!proof.getType().equals(JWSSignature2020.JWS_VERIFICATION_KEY_2020)) {
@@ -96,7 +96,7 @@ public class JWSProofVerifier implements IVerifier {
 
   private OctetKeyPair discoverOctectKey(JWSSignature2020 signature)
       throws DidDocumentResolverNotRegisteredException, UnsupportedSignatureTypeException,
-          InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion, DidResolverException {
+          InvalidPublicKeyFormat, NoVerificationKeyFoundExcpetion, DidResolverException {
 
     final Did issuer = DidParser.parse(signature.getVerificationMethod());
 

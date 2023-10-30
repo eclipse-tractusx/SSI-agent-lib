@@ -31,7 +31,7 @@ import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.util.io.pem.PemWriter;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidPublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
@@ -39,15 +39,15 @@ public class x21559PublicKey implements IPublicKey {
 
   private final @NonNull byte[] originalKey;
 
-  public x21559PublicKey(byte[] publicKey) throws InvalidePublicKeyFormat {
+  public x21559PublicKey(byte[] publicKey) throws InvalidPublicKeyFormat {
     if (this.getKeyLength() != publicKey.length) {
-      throw new InvalidePublicKeyFormat(getKeyLength(), publicKey.length);
+      throw new InvalidPublicKeyFormat(getKeyLength(), publicKey.length);
     }
     this.originalKey = publicKey;
   }
 
   public x21559PublicKey(String publicKey, boolean PEMformat)
-      throws InvalidePublicKeyFormat, IOException {
+      throws InvalidPublicKeyFormat, IOException {
 
     if (PEMformat) {
       StringReader sr = new StringReader(publicKey);
@@ -62,7 +62,7 @@ public class x21559PublicKey implements IPublicKey {
     }
 
     if (this.getKeyLength() != originalKey.length) {
-      throw new InvalidePublicKeyFormat(getKeyLength(), originalKey.length);
+      throw new InvalidPublicKeyFormat(getKeyLength(), originalKey.length);
     }
   }
 

@@ -25,8 +25,8 @@ import com.nimbusds.jose.JOSEException;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidPrivateKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidPublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed25519ProofSigner;
@@ -42,8 +42,7 @@ public class SignAndVerifyTest {
 
   @Test
   public void testSignAndVerify_ED201559()
-      throws IOException, InvalidePrivateKeyFormat, InvalidePublicKeyFormat,
-          KeyGenerationException {
+      throws IOException, InvalidPrivateKeyFormat, InvalidPublicKeyFormat, KeyGenerationException {
     final TestDidResolver didResolver = new TestDidResolver();
 
     var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys();
@@ -63,8 +62,8 @@ public class SignAndVerifyTest {
 
   @Test
   public void testSignAndVerify_JWS()
-      throws IOException, JOSEException, NoSuchAlgorithmException, InvalidePrivateKeyFormat,
-          InvalidePublicKeyFormat, KeyGenerationException {
+      throws IOException, JOSEException, NoSuchAlgorithmException, InvalidPrivateKeyFormat,
+          InvalidPublicKeyFormat, KeyGenerationException {
 
     final TestDidResolver didResolver = new TestDidResolver();
     var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys();
