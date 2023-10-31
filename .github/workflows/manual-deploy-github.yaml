@@ -24,8 +24,8 @@ jobs:
         with:
           java-version: 17
 
-      - name: Build Lib with Maven
-        run: ./mvnw -s settings.xml  -B build --file ./pom.xml
+      - name: Package Lib with Maven
+        run: ./mvnw -s settings.xml  -B package --file ./pom.xml
         env:
           GITHUB_PACKAGE_USERNAME: ${{ github.actor }}
           GITHUB_PACKAGE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
