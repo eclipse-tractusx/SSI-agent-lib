@@ -96,6 +96,63 @@ public class LinkedDataProofValidationComponentTest {
   }
 
   @Test
+  public void testVCProofFailureOnManipulatedProofOptions()
+      throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
+          KeyGenerationException {
+
+    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
+    didResolver.register(credentialIssuer);
+
+    // Generator
+    linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
+
+    // Verification
+    linkedDataProofValidation = LinkedDataProofValidation.newInstance(this.didResolver);
+
+    final URI verificationMethod =
+        credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
+
+    final VerifiableCredential credential =
+        TestVerifiableFactory.createVerifiableCredential(credentialIssuer, null);
+
+    final Proof proof =
+        linkedDataProofGenerator.createProof(
+            credential, verificationMethod, credentialIssuer.getPrivateKey());
+
+    final VerifiableCredential credentialWithProof =
+        TestVerifiableFactory.attachProof(credential, proof);
+
+    credentialWithProof.put(
+        VerifiableCredential.PROOF,
+        proof);
+
+    var isOk = linkedDataProofValidation.verify(credentialWithProof);
+
+    Assertions.assertTrue(isOk);
+
+    // now with updated Proof Options
+    proof.put("proofPurpose", "something");
+    credentialWithProof.put(
+        VerifiableCredential.PROOF,
+        proof);
+
+
+    // creating a proof with the same input values, create one with an upddated 'created' timestamp
+    // final Proof proofUpdated =
+    //     linkedDataProofGenerator.createProof(
+    //         credential, verificationMethod, credentialIssuer.getPrivateKey());
+
+    // credentialWithProof.put(
+    //     VerifiableCredential.PROOF,
+    //     proofUpdated);
+
+    var isOkUpdatedProof = linkedDataProofValidation.verify(credentialWithProof);
+
+    Assertions.assertFalse(isOkUpdatedProof);
+
+  }
+
+  @Test
   public void testVCEd21559ProofGenerationAndVerification()
       throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
           KeyGenerationException {
