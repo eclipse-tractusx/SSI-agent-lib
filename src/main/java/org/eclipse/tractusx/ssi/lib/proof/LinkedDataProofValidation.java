@@ -24,14 +24,9 @@ package org.eclipse.tractusx.ssi.lib.proof;
 import java.util.logging.Logger;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
-import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.json.InvalidJsonLdException;
-import org.eclipse.tractusx.ssi.lib.exception.json.TransformJsonLdException;
-import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable.VerifiableType;
@@ -82,20 +77,12 @@ public class LinkedDataProofValidation {
    *
    * @param verifiable the verifiable
    * @return the boolean
-   * @throws UnsupportedSignatureTypeException
-   * @throws DidDocumentResolverNotRegisteredException
-   * @throws NoVerificationKeyFoundException
-   * @throws SignatureVerificationException
-   * @throws InvalidPublicKeyFormatException
-   * @throws DidParseException
-   * @throws SignatureParseException
-   * @throws TransformJsonLdException
    */
-  public boolean verify(Verifiable verifiable)
-      throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
-          InvalidPublicKeyFormatException, SignatureVerificationException,
-          NoVerificationKeyFoundException, TransformJsonLdException {
-
+  @SneakyThrows
+  public boolean verify(Verifiable verifiable) {
+    if (verifiable.getProof() == null) {
+      throw new UnsupportedSignatureTypeException("Proof can't be empty");
+    }
     var type = verifiable.getProof().getType();
     IVerifier verifier = null;
 
@@ -132,8 +119,8 @@ public class LinkedDataProofValidation {
    * @return
    * @throws UnsupportedSignatureTypeException
    */
-  private Boolean validateVerificationMethodOfVC(Verifiable verifiable)
-      throws UnsupportedSignatureTypeException {
+  @SneakyThrows
+  private Boolean validateVerificationMethodOfVC(Verifiable verifiable) {
     // Verifiable Presentation doesn't have an Issuer
     if (verifiable.getType() == VerifiableType.VP) {
       return true;
@@ -152,8 +139,8 @@ public class LinkedDataProofValidation {
    * @return
    * @throws UnsupportedSignatureTypeException
    */
-  private String getVerificationMethod(Verifiable verifiable)
-      throws UnsupportedSignatureTypeException {
+  @SneakyThrows
+  private String getVerificationMethod(Verifiable verifiable) {
     try {
       return (String) verifiable.getProof().get("verificationMethod");
     } catch (Exception e) {
