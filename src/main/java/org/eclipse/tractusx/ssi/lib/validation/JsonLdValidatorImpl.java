@@ -41,8 +41,8 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePres
 
 /** The type Json ld validator. */
 public class JsonLdValidatorImpl implements JsonLdValidator {
-  static final Logger LOG = Logger.getLogger(JsonLdValidatorImpl.class.getName());
   private static final String UNDEFINED_TERM_URI = "urn:UNDEFINEDTERM";
+  static final Logger LOG = Logger.getLogger(JsonLdValidatorImpl.class.getName());
 
   public void validate(Verifiable verifiable) throws InvalidJsonLdException {
     if (verifiable instanceof VerifiableCredential) {
@@ -57,32 +57,6 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
       LOG.warning("Unsupported Verifiable type: " + verifiable.getClass().getName());
       throw new InvalidJsonLdException(
           String.format("Unsupported Verifiable type: %s", verifiable.getClass().getName()));
-    }
-  }
-
-  private void validateJsonLd(JsonLdObject jsonLdObject) throws InvalidJsonLdException {
-    try {
-
-      var documentLoader = RemoteDocumentLoader.getInstance();
-      documentLoader.setEnableHttps(true);
-      documentLoader.setHttpsContexts(jsonLdObject.getContext());
-
-      final JsonObject expandContext =
-          Json.createObjectBuilder().add("@vocab", Json.createValue(UNDEFINED_TERM_URI)).build();
-
-      final JsonDocument jsonDocument =
-          JsonDocument.of(MediaType.JSON_LD, jsonLdObject.toJsonObject());
-
-      final JsonLdOptions jsonLdOptions = new JsonLdOptions();
-      jsonLdOptions.setDocumentLoader(documentLoader);
-      jsonLdOptions.setExpandContext(expandContext);
-
-      final JsonArray jsonArray = ExpansionProcessor.expand(jsonDocument, jsonLdOptions, false);
-      JsonObject jsonObject = jsonArray.getJsonObject(0);
-
-      findUndefinedTerms(jsonObject);
-    } catch (JsonLdError ex) {
-      throw new InvalidJsonLdException(ex.getCode().toMessage());
     }
   }
 
@@ -108,6 +82,36 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
       if (entry.getValue() instanceof JsonObject) {
         findUndefinedTerms((JsonObject) entry.getValue());
       }
+    }
+  }
+
+  private void validateJsonLd(JsonLdObject jsonLdObject) throws InvalidJsonLdException {
+    try {
+
+      var documentLoader = RemoteDocumentLoader.getInstance();
+      documentLoader.setEnableHttps(true);
+      documentLoader.setHttpsContexts(jsonLdObject.getContext());
+      documentLoader.setEnableFile(true);
+
+      final JsonObject expandContext =
+          Json.createObjectBuilder().add("@vocab", Json.createValue(UNDEFINED_TERM_URI)).build();
+
+      final JsonDocument jsonDocument =
+          JsonDocument.of(MediaType.JSON_LD, jsonLdObject.toJsonObject());
+
+      final JsonLdOptions jsonLdOptions = new JsonLdOptions();
+      jsonLdOptions.setDocumentLoader(documentLoader);
+      jsonLdOptions.setExpandContext(expandContext);
+
+      final JsonArray jsonArray = ExpansionProcessor.expand(jsonDocument, jsonLdOptions, false);
+      JsonObject jsonObject = jsonArray.getJsonObject(0);
+
+      findUndefinedTerms(jsonObject);
+    } catch (JsonLdError ex) {
+      throw new InvalidJsonLdException(
+          String.format(
+              "Json LD validation failed for json: %s", jsonLdObject.toJsonObject().toString()),
+          ex);
     }
   }
 }
