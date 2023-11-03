@@ -31,56 +31,17 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 import java.util.Map;
+import java.util.logging.Logger;
 import org.eclipse.tractusx.ssi.lib.exception.InvalidJsonLdException;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.RemoteDocumentLoader;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 
 public class JsonLdValidatorImpl implements JsonLdValidator {
   private static final String UNDEFINED_TERM_URI = "urn:UNDEFINEDTERM";
-
-  public void validate(VerifiablePresentation verifiablePresentation)
-      throws InvalidJsonLdException {
-    for (VerifiableCredential verifiableCredential :
-        verifiablePresentation.getVerifiableCredentials()) {
-      validate(verifiableCredential);
-    }
-  }
-
-  @Override
-  public void validate(VerifiableCredential verifiableCredential) throws InvalidJsonLdException {
-    validateJsonLd(verifiableCredential);
-  }
-
-  private void validateJsonLd(JsonLdObject jsonLdObject) throws InvalidJsonLdException {
-    try {
-
-      var documentLoader = RemoteDocumentLoader.getInstance();
-      documentLoader.setEnableHttps(true);
-      documentLoader.setHttpsContexts(jsonLdObject.getContext());
-
-      final JsonObject expandContext =
-          Json.createObjectBuilder().add("@vocab", Json.createValue(UNDEFINED_TERM_URI)).build();
-
-      final JsonDocument jsonDocument =
-          JsonDocument.of(MediaType.JSON_LD, jsonLdObject.toJsonObject());
-
-      final JsonLdOptions jsonLdOptions = new JsonLdOptions();
-      jsonLdOptions.setDocumentLoader(documentLoader);
-      jsonLdOptions.setExpandContext(expandContext);
-
-      final JsonArray jsonArray = ExpansionProcessor.expand(jsonDocument, jsonLdOptions, false);
-      JsonObject jsonObject = jsonArray.getJsonObject(0);
-
-      findUndefinedTerms(jsonObject);
-    } catch (JsonLdError ex) {
-      throw new InvalidJsonLdException(
-          String.format(
-              "Json LD validation failed for json: %s", jsonLdObject.toJsonObject().toString()),
-          ex);
-    }
-  }
+  static final Logger LOG = Logger.getLogger(JsonLdValidatorImpl.class.getName());
 
   private static void findUndefinedTerms(JsonArray jsonArray) {
     for (JsonValue entry : jsonArray) {
@@ -104,6 +65,50 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
       if (entry.getValue() instanceof JsonObject) {
         findUndefinedTerms((JsonObject) entry.getValue());
       }
+    }
+  }
+
+  private void validateJsonLd(JsonLdObject jsonLdObject) throws InvalidJsonLdException {
+    try {
+
+      var documentLoader = RemoteDocumentLoader.getInstance();
+      documentLoader.setEnableHttps(true);
+      documentLoader.setHttpsContexts(jsonLdObject.getContext());
+      documentLoader.setEnableFile(true);
+
+      final JsonObject expandContext =
+          Json.createObjectBuilder().add("@vocab", Json.createValue(UNDEFINED_TERM_URI)).build();
+
+      final JsonDocument jsonDocument =
+          JsonDocument.of(MediaType.JSON_LD, jsonLdObject.toJsonObject());
+
+      final JsonLdOptions jsonLdOptions = new JsonLdOptions();
+      jsonLdOptions.setDocumentLoader(documentLoader);
+      jsonLdOptions.setExpandContext(expandContext);
+
+      final JsonArray jsonArray = ExpansionProcessor.expand(jsonDocument, jsonLdOptions, false);
+      JsonObject jsonObject = jsonArray.getJsonObject(0);
+
+      findUndefinedTerms(jsonObject);
+    } catch (JsonLdError ex) {
+      throw new InvalidJsonLdException(
+          String.format(
+              "Json LD validation failed for json: %s", jsonLdObject.toJsonObject().toString()),
+          ex);
+    }
+  }
+
+  public void validate(Verifiable verifiable) throws InvalidJsonLdException {
+    if (verifiable instanceof VerifiableCredential) {
+      validateJsonLd(verifiable);
+    } else if (verifiable instanceof VerifiablePresentation) {
+      VerifiablePresentation verifiablePresentation = (VerifiablePresentation) verifiable;
+      for (VerifiableCredential verifiableCredential :
+          verifiablePresentation.getVerifiableCredentials()) {
+        validate(verifiableCredential);
+      }
+    } else {
+      LOG.warning("Unsupported Verifiable type: " + verifiable.getClass().getName());
     }
   }
 }

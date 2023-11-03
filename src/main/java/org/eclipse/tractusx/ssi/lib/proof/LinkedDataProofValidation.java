@@ -21,10 +21,12 @@
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
+import java.util.logging.Logger;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidJsonLdException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -35,11 +37,12 @@ import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
 import org.eclipse.tractusx.ssi.lib.proof.transform.TransformedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed25519ProofVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofVerifier;
-import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidator;
-import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidatorImpl;
+import org.eclipse.tractusx.ssi.lib.validation.JsonLdValidator;
+import org.eclipse.tractusx.ssi.lib.validation.JsonLdValidatorImpl;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class LinkedDataProofValidation {
+  static final Logger LOG = Logger.getLogger(LinkedDataProofValidation.class.getName());
 
   public static LinkedDataProofValidation newInstance(DidResolver didResolver) {
 
@@ -85,7 +88,13 @@ public class LinkedDataProofValidation {
 
     final TransformedLinkedData transformedData = transformer.transform(verifiable);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
-
-    return jsonLdValidator.validate(verifiable) && verifier.verify(hashedData, verifiable);
+    try {
+      jsonLdValidator.validate(verifiable);
+      return verifier.verify(hashedData, verifiable);
+    } catch (InvalidJsonLdException e) {
+      LOG.severe("Could not valiate " + verifiable.getId());
+      LOG.throwing(this.getClass().getName(), "verify", e);
+      return false;
+    }
   }
 }
