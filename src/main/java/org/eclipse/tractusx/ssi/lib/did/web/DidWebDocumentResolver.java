@@ -26,6 +26,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.ssi.lib.did.web.util.Constants;
@@ -40,9 +41,20 @@ import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolver;
 @RequiredArgsConstructor
 public class DidWebDocumentResolver implements DidDocumentResolver {
 
+  private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(30);
+
   private final HttpClient client;
   private final DidWebParser parser;
   private final boolean enforceHttps;
+  private final Duration timeout;
+
+  public DidWebDocumentResolver(HttpClient client, DidWebParser parser) {
+    this(client, parser, true, DEFAULT_TIMEOUT);
+  }
+
+  public DidWebDocumentResolver(HttpClient client, DidWebParser parser, boolean enforceHttps) {
+    this(client, parser, enforceHttps, DEFAULT_TIMEOUT);
+  }
 
   @Override
   public DidMethod getSupportedMethod() {
@@ -57,7 +69,7 @@ public class DidWebDocumentResolver implements DidDocumentResolver {
 
     final URI uri = parser.parse(did, enforceHttps);
 
-    final HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
+    final HttpRequest request = HttpRequest.newBuilder().uri(uri).timeout(timeout).GET().build();
 
     try {
       final HttpResponse<String> response =
