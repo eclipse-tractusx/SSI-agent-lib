@@ -31,13 +31,15 @@ import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.util.io.pem.PemWriter;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.exception.key.KeyTransformationException;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
 /** The type X21559 private key. */
 public class x21559PrivateKey implements IPrivateKey {
 
+  private final int KEY_LENGTH = 32;
   private final @NonNull byte[] key;
 
   /**
@@ -46,9 +48,9 @@ public class x21559PrivateKey implements IPrivateKey {
    * @param privateKey the private key
    * @throws InvalidePrivateKeyFormat the invalide private key format
    */
-  public x21559PrivateKey(byte[] privateKey) throws InvalidePrivateKeyFormat {
+  public x21559PrivateKey(byte[] privateKey) throws InvalidPrivateKeyFormatException {
     if (this.getKeyLength() != privateKey.length) {
-      throw new InvalidePrivateKeyFormat(getKeyLength(), privateKey.length);
+      throw new InvalidPrivateKeyFormatException(getKeyLength(), privateKey.length);
     }
     this.key = privateKey;
   }
@@ -61,12 +63,17 @@ public class x21559PrivateKey implements IPrivateKey {
    * @throws InvalidePrivateKeyFormat the invalide private key format
    * @throws IOException the io exception
    */
-  public x21559PrivateKey(String privateKey, boolean pemFormat)
-      throws InvalidePrivateKeyFormat, IOException {
-    if (pemFormat) {
+  public x21559PrivateKey(String privateKey, boolean PEMFormat)
+      throws InvalidPrivateKeyFormatException {
+    if (PEMFormat) {
       StringReader sr = new StringReader(privateKey);
       PemReader reader = new PemReader(sr);
-      PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(reader.readPemObject().getContent());
+      PKCS8EncodedKeySpec keySpec;
+      try {
+        keySpec = new PKCS8EncodedKeySpec(reader.readPemObject().getContent());
+      } catch (IOException e) {
+        throw new InvalidPrivateKeyFormatException(e.getMessage());
+      }
       Ed25519PrivateKeyParameters ed25519PrivateKeyParameters =
           new Ed25519PrivateKeyParameters(keySpec.getEncoded());
       this.key = ed25519PrivateKeyParameters.getEncoded();
@@ -76,18 +83,23 @@ public class x21559PrivateKey implements IPrivateKey {
     }
 
     if (this.getKeyLength() != key.length) {
-      throw new InvalidePrivateKeyFormat(getKeyLength(), privateKey.length());
+      throw new InvalidPrivateKeyFormatException(getKeyLength(), privateKey.length());
     }
   }
 
   @Override
-  public String asStringForStoring() throws IOException {
+  public String asStringForStoring() throws KeyTransformationException {
 
     PemObject pemObject = new PemObject("ED21559 Private Key", this.key);
     StringWriter sw = new StringWriter();
     PemWriter writer = new PemWriter(sw);
-    writer.writeObject(pemObject);
-    writer.close();
+    try {
+      writer.writeObject(pemObject);
+      writer.close();
+    } catch (IOException e) {
+      throw new KeyTransformationException(e.getMessage());
+    }
+
     return sw.toString();
   }
 
@@ -104,6 +116,6 @@ public class x21559PrivateKey implements IPrivateKey {
 
   @Override
   public int getKeyLength() {
-    return 32;
+    return KEY_LENGTH;
   }
 }

@@ -21,7 +21,7 @@
 
 package org.eclipse.tractusx.ssi.lib.crypt;
 
-import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
+import org.eclipse.tractusx.ssi.lib.exception.key.KeyGenerationException;
 
 /** The interface KeyGenerator. */
 public interface IKeyGenerator {

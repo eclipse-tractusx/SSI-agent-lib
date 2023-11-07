@@ -19,36 +19,51 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.exception;
+package org.eclipse.tractusx.ssi.lib.exception.proof;
 
-/** The type Jwt exception. */
-public class JwtException extends Exception {
+import org.eclipse.tractusx.ssi.lib.exception.SSIException;
+
+/** The type signature check failed exception. */
+public class SignatureGenerateFailedException extends SSIException {
 
   /**
-   * Instantiates a new Jwt exception.
+   * Instantiates a new signature generate failed exception.
    *
    * @param message the message
    */
-  public JwtException(String message) {
+  public SignatureGenerateFailedException(String message) {
     super(message);
   }
 
   /**
-   * Instantiates a new Jwt exception.
+   * Instantiates a new signature generate failed exception.
    *
    * @param message the message
    * @param cause the cause
    */
-  public JwtException(String message, Throwable cause) {
+  public SignatureGenerateFailedException(String message, Throwable cause) {
     super(message, cause);
   }
 
   /**
-   * Instantiates a new Jwt exception.
+   * Instantiates a new signature generate failed exception.
    *
    * @param cause the cause
    */
-  public JwtException(Throwable cause) {
+  public SignatureGenerateFailedException(Throwable cause) {
     super(cause);
+  }
+
+  /**
+   * Instantiates a new signature generate failed exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   * @param enableSuppression the enable suppression
+   * @param writableStackTrace the writable stack trace
+   */
+  public SignatureGenerateFailedException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
   }
 }

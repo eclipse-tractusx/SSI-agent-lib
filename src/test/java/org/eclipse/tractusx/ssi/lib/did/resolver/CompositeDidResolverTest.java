@@ -33,6 +33,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
@@ -68,7 +69,8 @@ public class CompositeDidResolverTest {
    * @throws DidResolverException the did resolver exception
    */
   @Test
-  public void shouldResolveWithOneResolver() throws DidResolverException {
+  @SneakyThrows
+  public void shouldResolveWithOneResolver() {
     when(resolver1.isResolvable(any())).thenReturn(true);
     when(resolver1.resolve(any())).thenReturn(RESOLVED_DID_DOC);
     CompositeDidResolver resolver = new CompositeDidResolver(resolver1);
@@ -82,7 +84,8 @@ public class CompositeDidResolverTest {
    * @throws DidResolverException the did resolver exception
    */
   @Test
-  public void shouldResolveWithFirstResolver() throws DidResolverException {
+  @SneakyThrows
+  public void shouldResolveWithFirstResolver() {
     when(resolver1.isResolvable(any())).thenReturn(true);
     when(resolver1.resolve(any())).thenReturn(RESOLVED_DID_DOC);
 
@@ -99,7 +102,8 @@ public class CompositeDidResolverTest {
    * @throws DidResolverException the did resolver exception
    */
   @Test
-  public void shouldResolveWithSecondResolver() throws DidResolverException {
+  @SneakyThrows
+  public void shouldResolveWithSecondResolver() {
     when(resolver1.isResolvable(any())).thenReturn(false);
     when(resolver2.isResolvable(any())).thenReturn(true);
     when(resolver2.resolve(any())).thenReturn(RESOLVED_DID_DOC);
@@ -116,7 +120,8 @@ public class CompositeDidResolverTest {
    * @throws DidResolverException the did resolver exception
    */
   @Test
-  public void mustNotResolveOnFalse() throws DidResolverException {
+  @SneakyThrows
+  public void mustNotResolveOnFalse() {
     when(resolver1.isResolvable(any())).thenReturn(false);
     when(resolver2.isResolvable(any())).thenReturn(false);
 
@@ -133,7 +138,8 @@ public class CompositeDidResolverTest {
    * @throws DidResolverException the did resolver exception
    */
   @Test
-  public void mustNotResolveOnException() throws DidResolverException {
+  @SneakyThrows
+  public void mustNotResolveOnException() {
     when(resolver1.isResolvable(any())).thenReturn(true);
     when(resolver1.resolve(any())).thenThrow(DidResolverException.class);
     when(resolver1.isResolvable(any())).thenReturn(true);
@@ -154,7 +160,8 @@ public class CompositeDidResolverTest {
    * @throws DidResolverException the did resolver exception
    */
   @Test
-  public void shouldConstructCompositeResolverUsingStaticMethod() throws DidResolverException {
+  @SneakyThrows
+  public void shouldConstructCompositeResolverUsingStaticMethod() {
     when(resolver1.isResolvable(any())).thenReturn(true);
     when(resolver1.resolve(any())).thenReturn(RESOLVED_DID_DOC);
 

@@ -19,12 +19,13 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.exception;
+package org.eclipse.tractusx.ssi.lib.exception.proof;
 
 import java.util.Date;
+import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
 /** The type Jwt expired exception. */
-public class JwtExpiredException extends JwtException {
+public class JwtExpiredException extends SSIException {
 
   /**
    * Instantiates a new Jwt expired exception.
@@ -33,5 +34,46 @@ public class JwtExpiredException extends JwtException {
    */
   public JwtExpiredException(Date expiryDate) {
     super("JWT expired at " + expiryDate);
+  }
+
+  /**
+   * Instantiates a new jwt expired exception.
+   *
+   * @param message the message
+   */
+  public JwtExpiredException(String message) {
+    super(message);
+  }
+
+  /**
+   * Instantiates a new jwt expired exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   */
+  public JwtExpiredException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  /**
+   * Instantiates a new jwt expired exception.
+   *
+   * @param cause the cause
+   */
+  public JwtExpiredException(Throwable cause) {
+    super(cause);
+  }
+
+  /**
+   * Instantiates a new jwt expired exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   * @param enableSuppression the enable suppression
+   * @param writableStackTrace the writable stack trace
+   */
+  public JwtExpiredException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
   }
 }

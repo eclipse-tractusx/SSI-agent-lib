@@ -22,38 +22,37 @@
 package org.eclipse.tractusx.ssi.lib.jwt;
 
 import com.nimbusds.jwt.SignedJWT;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-import lombok.SneakyThrows;
-import org.eclipse.tractusx.ssi.lib.exception.JwtAudienceCheckFailedException;
-import org.eclipse.tractusx.ssi.lib.exception.JwtExpiredException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.JwtAudienceCheckFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.JwtExpiredException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
 
 /** The type Signed jwt validator. */
 public class SignedJwtValidator {
 
-  /**
-   * Validate date.
-   *
-   * @param jwt the jwt
-   */
-  @SneakyThrows
-  public void validateDate(SignedJWT jwt) {
-    Date expiryDate = jwt.getJWTClaimsSet().getExpirationTime();
+  public void validateDate(SignedJWT jwt) throws JwtExpiredException, SignatureParseException {
+    Date expiryDate;
+    try {
+      expiryDate = jwt.getJWTClaimsSet().getExpirationTime();
+    } catch (ParseException e) {
+      throw new SignatureParseException(e.getMessage());
+    }
     boolean isExpired = expiryDate.before(new Date()); // Todo add Timezone
     if (isExpired) {
       throw new JwtExpiredException(expiryDate);
     }
   }
 
-  /**
-   * Validate audiences.
-   *
-   * @param jwt the jwt
-   * @param expectedAudience the expected audience
-   */
-  @SneakyThrows
-  public void validateAudiences(SignedJWT jwt, String expectedAudience) {
-    List<String> audiences = jwt.getJWTClaimsSet().getAudience();
+  public void validateAudiences(SignedJWT jwt, String expectedAudience)
+      throws JwtAudienceCheckFailedException, SignatureParseException {
+    List<String> audiences;
+    try {
+      audiences = jwt.getJWTClaimsSet().getAudience();
+    } catch (ParseException e) {
+      throw new SignatureParseException(e.getMessage());
+    }
     boolean isValidAudience = audiences.stream().anyMatch(x -> x.equals(expectedAudience));
     if (!isValidAudience) {
       throw new JwtAudienceCheckFailedException(expectedAudience, audiences);

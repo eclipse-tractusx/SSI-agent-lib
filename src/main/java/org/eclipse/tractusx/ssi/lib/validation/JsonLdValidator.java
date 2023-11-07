@@ -21,7 +21,7 @@
 
 package org.eclipse.tractusx.ssi.lib.validation;
 
-import org.eclipse.tractusx.ssi.lib.exception.InvalidJsonLdException;
+import org.eclipse.tractusx.ssi.lib.exception.json.InvalidJsonLdException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 
 public interface JsonLdValidator {

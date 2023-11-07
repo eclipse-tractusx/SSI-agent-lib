@@ -19,51 +19,62 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.exception;
+package org.eclipse.tractusx.ssi.lib.exception.key;
 
-/** The type Did web exception. */
-public class DidWebException extends RuntimeException {
+import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
-  /** Instantiates a new Did web exception. */
-  public DidWebException() {}
+/** The type Invalide private key format. */
+public class InvalidPrivateKeyFormatException extends SSIException {
+  /**
+   * Instantiates a new Invalid private key format.
+   *
+   * @param correctLength the correct length
+   * @param providedLength the provided length
+   */
+  public InvalidPrivateKeyFormatException(int correctLength, int providedLength) {
+    super(
+        String.format(
+            "Invalide Private Key Format, this key should have '%s' as lenght but we got %s",
+            correctLength, providedLength));
+  }
 
   /**
-   * Instantiates a new Did web exception.
+   * Instantiates a new Invalid private key format.
    *
-   * @param message the message
+   * @param message message
    */
-  public DidWebException(String message) {
+  public InvalidPrivateKeyFormatException(String message) {
     super(message);
   }
 
   /**
-   * Instantiates a new Did web exception.
+   * Instantiates a new Invalid private key format.
    *
-   * @param message the message
-   * @param cause the cause
+   * @param message message
+   * @param cuase the cause
    */
-  public DidWebException(String message, Throwable cause) {
+  public InvalidPrivateKeyFormatException(String message, Throwable cause) {
     super(message, cause);
   }
 
   /**
-   * Instantiates a new Did web exception.
+   * Instantiates a new Invalid private key format.
    *
-   * @param cause the cause
+   * @param cuase the cause
    */
-  public DidWebException(Throwable cause) {
+  public InvalidPrivateKeyFormatException(Throwable cause) {
     super(cause);
   }
 
   /**
-   * Instantiates a new Did web exception.
+   * Instantiates a new Invalid private key format.
    *
    * @param message the message
    * @param cause the cause
    * @param enableSuppression the enable suppression
    * @param writableStackTrace the writable stack trace
    */
-  public DidWebException(
+  public InvalidPrivateKeyFormatException(
       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }

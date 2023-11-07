@@ -19,51 +19,60 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.did.resolver;
+package org.eclipse.tractusx.ssi.lib.exception.resolver;
 
-import org.eclipse.tractusx.ssi.lib.exception.SSIException;
+import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
-/** The type Did resolver exception. */
-public class DidResolverException extends SSIException {
+/** The type SSI did document resolver already registered exception. */
+public class DidDocumentResolverAlreadyRegisteredException extends Exception {
 
   /**
-   * Instantiates a new Did resolver exception.
+   * Instantiates a new did document resolver already registered exception.
    *
    * @param message the message
    */
-  public DidResolverException(String message) {
+  public DidDocumentResolverAlreadyRegisteredException(DidMethod didMethod) {
+    super(String.format("No DID document resolver registered for DID method '%s'", didMethod));
+  }
+
+  /**
+   * Instantiates a new did document resolver already registered exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   */
+  public DidDocumentResolverAlreadyRegisteredException(String message) {
     super(message);
   }
 
   /**
-   * Instantiates a new Did resolver exception from another exception with a message.
+   * Instantiates a new did document resolver already registered exception.
    *
-   * @param message the message
    * @param cause the cause
    */
-  public DidResolverException(String message, Throwable cause) {
+  public DidDocumentResolverAlreadyRegisteredException(String message, Throwable cause) {
     super(message, cause);
   }
 
   /**
-   * Instantiates a new Did resolver exception from another exception.
+   * Instantiates a new did document resolver already registered exception.
    *
+   * @param message the message
    * @param cause the cause
    */
-  public DidResolverException(Throwable cause) {
+  public DidDocumentResolverAlreadyRegisteredException(Throwable cause) {
     super(cause);
   }
 
   /**
-   * Instantiates a new Did resolver exception with a message from another exception, allowing for
-   * disabling and printing the stack trace.
+   * Instantiates a new did document resolver already registered exception.
    *
    * @param message the message
    * @param cause the cause
    * @param enableSuppression the enable suppression
    * @param writableStackTrace the writable stack trace
    */
-  public DidResolverException(
+  public DidDocumentResolverAlreadyRegisteredException(
       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }

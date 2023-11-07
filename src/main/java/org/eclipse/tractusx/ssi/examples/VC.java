@@ -26,9 +26,10 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.SsiException;
-import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
+import org.eclipse.tractusx.ssi.lib.exception.json.TransformJsonLdException;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
@@ -83,7 +84,8 @@ public class VC {
    */
   public static VerifiableCredential createVCWithED21559Proof(
       VerifiableCredential credential, IPrivateKey privateKey, Did issuer)
-      throws UnsupportedSignatureTypeException, SsiException, InvalidePrivateKeyFormat {
+      throws UnsupportedSignatureTypeException, InvalidPrivateKeyFormatException,
+          SignatureGenerateFailedException, TransformJsonLdException {
 
     // VC Builder
     final VerifiableCredentialBuilder builder =
@@ -122,7 +124,8 @@ public class VC {
    */
   public static VerifiableCredential createVCWithJWSProof(
       VerifiableCredential credential, IPrivateKey privateKey, Did issuer)
-      throws UnsupportedSignatureTypeException, SsiException, InvalidePrivateKeyFormat {
+      throws UnsupportedSignatureTypeException, InvalidPrivateKeyFormatException,
+          SignatureGenerateFailedException, TransformJsonLdException {
 
     // VC Builder
     final VerifiableCredentialBuilder builder =
@@ -136,9 +139,10 @@ public class VC {
             .type(credential.getTypes());
 
     // JWS Proof Builder
-    final LinkedDataProofGenerator generator =
-        LinkedDataProofGenerator.newInstance(SignatureType.JWS);
-    final JWSSignature2020 proof =
+    LinkedDataProofGenerator generator = LinkedDataProofGenerator.newInstance(SignatureType.JWS);
+
+    JWSSignature2020 proof = null;
+    proof =
         (JWSSignature2020)
             generator.createProof(builder.build(), URI.create(issuer + "#key-1"), privateKey);
 

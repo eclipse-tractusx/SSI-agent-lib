@@ -19,7 +19,7 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.exception;
+package org.eclipse.tractusx.ssi.lib.exception.resolver;
 
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
@@ -33,5 +33,22 @@ public class DidDocumentResolverNotRegisteredException extends Exception {
    */
   public DidDocumentResolverNotRegisteredException(DidMethod didMethod) {
     super(String.format("No DID document resolver registered for DID method '%s'", didMethod));
+  }
+
+  public DidDocumentResolverNotRegisteredException(String message) {
+    super(message);
+  }
+
+  public DidDocumentResolverNotRegisteredException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  public DidDocumentResolverNotRegisteredException(Throwable cause) {
+    super(cause);
+  }
+
+  public DidDocumentResolverNotRegisteredException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
   }
 }

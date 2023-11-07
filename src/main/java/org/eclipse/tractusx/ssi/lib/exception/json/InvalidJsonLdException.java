@@ -19,51 +19,49 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.did.resolver;
+package org.eclipse.tractusx.ssi.lib.exception.json;
 
 import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
-/** The type Did resolver exception. */
-public class DidResolverException extends SSIException {
-
+/** The type Invalid json ld exception. */
+public class InvalidJsonLdException extends SSIException {
   /**
-   * Instantiates a new Did resolver exception.
+   * Instantiates a new Invalid json ld exception.
    *
    * @param message the message
    */
-  public DidResolverException(String message) {
+  public InvalidJsonLdException(String message) {
     super(message);
   }
 
   /**
-   * Instantiates a new Did resolver exception from another exception with a message.
+   * Instantiates a new Invalid json ld exception.
    *
    * @param message the message
    * @param cause the cause
    */
-  public DidResolverException(String message, Throwable cause) {
+  public InvalidJsonLdException(String message, Throwable cause) {
     super(message, cause);
   }
 
   /**
-   * Instantiates a new Did resolver exception from another exception.
+   * Instantiates a new Invalid json ld exception.
    *
    * @param cause the cause
    */
-  public DidResolverException(Throwable cause) {
+  public InvalidJsonLdException(Throwable cause) {
     super(cause);
   }
 
   /**
-   * Instantiates a new Did resolver exception with a message from another exception, allowing for
-   * disabling and printing the stack trace.
+   * Instantiates a new Invalid json ld exception.
    *
    * @param message the message
    * @param cause the cause
    * @param enableSuppression the enable suppression
    * @param writableStackTrace the writable stack trace
    */
-  public DidResolverException(
+  public InvalidJsonLdException(
       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }

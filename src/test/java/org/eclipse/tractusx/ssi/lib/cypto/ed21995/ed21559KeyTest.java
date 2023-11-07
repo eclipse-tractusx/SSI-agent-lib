@@ -26,14 +26,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.Arrays;
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IKeyGenerator;
 import org.eclipse.tractusx.ssi.lib.crypt.KeyPair;
 import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559Generator;
 import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.exception.key.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.junit.jupiter.api.Test;
 
@@ -60,6 +61,7 @@ public class ed21559KeyTest {
    * @throws IOException the io exception
    */
   @Test
+  @SneakyThrows
   public void testED21559KeySerliztion() throws KeyGenerationException, IOException {
     IKeyGenerator keyGenerator = new x21559Generator();
     KeyPair keyPair = keyGenerator.generateKey();
@@ -82,9 +84,10 @@ public class ed21559KeyTest {
    * @throws InvalidePublicKeyFormat the invalide public key format
    */
   @Test
+  @SneakyThrows
   public void testED21559KeyDeserliztion()
-      throws KeyGenerationException, IOException, InvalidePrivateKeyFormat,
-          InvalidePublicKeyFormat {
+      throws KeyGenerationException, IOException, InvalidPrivateKeyFormatException,
+          InvalidPublicKeyFormatException {
     IKeyGenerator keyGenerator = new x21559Generator();
     KeyPair keyPair = keyGenerator.generateKey();
 
