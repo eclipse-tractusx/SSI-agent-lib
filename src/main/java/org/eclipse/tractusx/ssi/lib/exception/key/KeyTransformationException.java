@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -25,43 +25,18 @@ import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
 public class KeyTransformationException extends SSIException {
 
-  private static final long serialVersionUID = 1L;
-  /**
-   * Instantiates a new key trnasformation exception.
-   *
-   * @param message the message
-   */
   public KeyTransformationException(String message) {
     super(message);
   }
 
-  /**
-   * Instantiates a new key trnasformation exception.
-   *
-   * @param message the message
-   * @param cause the cause
-   */
   public KeyTransformationException(String message, Throwable cause) {
     super(message, cause);
   }
 
-  /**
-   * Instantiates a new key trnasformation exception.
-   *
-   * @param cause the cause
-   */
   public KeyTransformationException(Throwable cause) {
     super(cause);
   }
 
-  /**
-   * Instantiates a new key trnasformation exception.
-   *
-   * @param message the message
-   * @param cause the cause
-   * @param enableSuppression the enable suppression
-   * @param writableStackTrace the writable stack trace
-   */
   public KeyTransformationException(
       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);

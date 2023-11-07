@@ -19,31 +19,49 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.exception.key;
+package org.eclipse.tractusx.ssi.lib.exception.resolver;
 
 import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
-public class InvalidPrivateKeyFormatException extends SSIException {
-  public InvalidPrivateKeyFormatException(int correctLength, int providedLength) {
-    super(
-        String.format(
-            "Invalide Private Key Format, this key should have '%s' as lenght but we got %s",
-            correctLength, providedLength));
-  }
+public class DidWebException extends SSIException {
 
-  public InvalidPrivateKeyFormatException(String message) {
+  /**
+   * Instantiates a new Did web exception.
+   *
+   * @param message the message
+   */
+  public DidWebException(String message) {
     super(message);
   }
 
-  public InvalidPrivateKeyFormatException(String message, Throwable cause) {
+  /**
+   * Instantiates a new Did web exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   */
+  public DidWebException(String message, Throwable cause) {
     super(message, cause);
   }
 
-  public InvalidPrivateKeyFormatException(Throwable cause) {
+  /**
+   * Instantiates a new Did web exception.
+   *
+   * @param cause the cause
+   */
+  public DidWebException(Throwable cause) {
     super(cause);
   }
 
-  public InvalidPrivateKeyFormatException(
+  /**
+   * Instantiates a new Did web exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   * @param enableSuppression the enable suppression
+   * @param writableStackTrace the writable stack trace
+   */
+  public DidWebException(
       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }
