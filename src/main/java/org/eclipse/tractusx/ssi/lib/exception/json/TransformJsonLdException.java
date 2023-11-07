@@ -19,26 +19,51 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.exception;
+package org.eclipse.tractusx.ssi.lib.exception.json;
 
-/** The type Did parse exception. */
-public class DidParseException extends SsiException {
+import org.eclipse.tractusx.ssi.lib.exception.SSIException;
+
+/** The type tranform json LD exception. */
+public class TransformJsonLdException extends SSIException {
+
   /**
-   * Instantiates a new Did parse exception.
+   * Instantiates a new tranform json LD exception.
    *
    * @param message the message
    */
-  public DidParseException(String message) {
+  public TransformJsonLdException(String message) {
     super(message);
   }
 
   /**
-   * Instantiates a new Did parse exception.
+   * Instantiates a new tranform json LD exception.
    *
    * @param message the message
    * @param cause the cause
    */
-  public DidParseException(String message, Throwable cause) {
+  public TransformJsonLdException(String message, Throwable cause) {
     super(message, cause);
+  }
+
+  /**
+   * Instantiates a new tranform json LD exception.
+   *
+   * @param cause the cause
+   */
+  public TransformJsonLdException(Throwable cause) {
+    super(cause);
+  }
+
+  /**
+   * Instantiates a new tranform json LD exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   * @param enableSuppression the enable suppression
+   * @param writableStackTrace the writable stack trace
+   */
+  public TransformJsonLdException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
   }
 }

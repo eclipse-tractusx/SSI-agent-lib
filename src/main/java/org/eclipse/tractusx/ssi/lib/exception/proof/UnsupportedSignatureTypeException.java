@@ -19,16 +19,51 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.exception;
+package org.eclipse.tractusx.ssi.lib.exception.proof;
+
+import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
 /** The type Unsupported signature type exception. */
-public class UnsupportedSignatureTypeException extends Exception {
+public class UnsupportedSignatureTypeException extends SSIException {
+
   /**
-   * Instantiates a new Unsupported signature type exception.
+   * Instantiates a new unsupported signature type exception.
    *
    * @param signatureType the signature type
    */
   public UnsupportedSignatureTypeException(String signatureType) {
     super("Unsupported signature type: " + signatureType);
+  }
+
+  /**
+   * Instantiates a unsupported signature type exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   */
+  public UnsupportedSignatureTypeException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  /**
+   * Instantiates a unsupported signature type exception.
+   *
+   * @param cause the cause
+   */
+  public UnsupportedSignatureTypeException(Throwable cause) {
+    super(cause);
+  }
+
+  /**
+   * Instantiates a unsupported signature type exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   * @param enableSuppression the enable suppression
+   * @param writableStackTrace the writable stack trace
+   */
+  public UnsupportedSignatureTypeException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
   }
 }

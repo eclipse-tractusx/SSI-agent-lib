@@ -19,27 +19,26 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.exception;
+package org.eclipse.tractusx.ssi.lib.exception.did;
 
-/** The type Invalide private key format. */
-public class InvalidePrivateKeyFormat extends Exception {
-  /**
-   * Instantiates a new Invalide private key format.
-   *
-   * @param correctLength the correct length
-   * @param providedLength the provided length
-   */
-  public InvalidePrivateKeyFormat(int correctLength, int providedLength) {
-    super(
-        String.format(
-            "Invalide Private Key Format, this key should have '%s' as lenght but we got %s",
-            correctLength, providedLength));
+import org.eclipse.tractusx.ssi.lib.exception.SSIException;
+
+public class DidParseException extends SSIException {
+
+  public DidParseException(String did) {
+    super(String.format("Invalid DID URL: %s, not able to parse it", did));
   }
 
-  /**
-   * Instantiates a new Invalide private key format.
-   *
-   * @param cause the cause
-   */
-  public InvalidePrivateKeyFormat(Throwable cause) {}
+  public DidParseException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  public DidParseException(Throwable cause) {
+    super(cause);
+  }
+
+  public DidParseException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+  }
 }

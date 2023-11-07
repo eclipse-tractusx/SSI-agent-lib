@@ -22,6 +22,7 @@
 package org.eclipse.tractusx.ssi.lib.did.web.util;
 
 import java.net.URI;
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethodIdentifier;
@@ -49,6 +50,7 @@ public class DidWebParserTest {
     "some-host:path1:path2, https://some-host/path1/path2/did.json",
     "some-host%3A9090:path1:path2, https://some-host:9090/path1/path2/did.json"
   })
+  @SneakyThrows
   public void testResolveUriFromDid(String methodIdentifier, String expectedUri) {
 
     final Did did = new Did(new DidMethod("web"), new DidMethodIdentifier(methodIdentifier), null);

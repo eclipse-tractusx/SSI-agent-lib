@@ -21,17 +21,13 @@
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
-import java.io.IOException;
 import java.net.URI;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
-import org.eclipse.tractusx.ssi.lib.exception.SsiException;
-import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -60,19 +56,10 @@ public class LinkedDataProofValidationComponentTest {
     this.didResolver = new TestDidResolver();
   }
 
-  /**
-   * Test vc proof failure on manipulated credential.
-   *
-   * @throws IOException the io exception
-   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
-   * @throws KeyGenerationException the key generation exception
-   */
+  /** Test vc proof failure on manipulated credential. */
   @Test
-  public void testVCProofFailureOnManipulatedCredential()
-      throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
-          KeyGenerationException {
-
+  @SneakyThrows
+  public void testVCProofFailureOnManipulatedCredential() {
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
     didResolver.register(credentialIssuer);
 
@@ -106,18 +93,10 @@ public class LinkedDataProofValidationComponentTest {
     Assertions.assertFalse(isOk);
   }
 
-  /**
-   * Test vc ed 21559 proof generation and verification.
-   *
-   * @throws IOException the io exception
-   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
-   * @throws KeyGenerationException the key generation exception
-   */
+  /** Test vc ed 21559 proof generation and verification. */
   @Test
-  public void testVCEd21559ProofGenerationAndVerification()
-      throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
-          KeyGenerationException {
+  @SneakyThrows
+  public void testVCEd21559ProofGenerationAndVerification() {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
     didResolver.register(credentialIssuer);
@@ -146,18 +125,10 @@ public class LinkedDataProofValidationComponentTest {
     Assertions.assertTrue(isOk);
   }
 
-  /**
-   * Test vcjws proof generation and verification.
-   *
-   * @throws IOException the io exception
-   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
-   * @throws KeyGenerationException the key generation exception
-   */
+  /** Test vcjws proof generation and verification. */
   @Test
-  public void testVCJWSProofGenerationAndVerification()
-      throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
-          KeyGenerationException {
+  @SneakyThrows
+  public void testVCJWSProofGenerationAndVerification() {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
     didResolver.register(credentialIssuer);
@@ -187,18 +158,10 @@ public class LinkedDataProofValidationComponentTest {
     Assertions.assertTrue(isOk);
   }
 
-  /**
-   * Test vp ed 21559 proof generation and verification.
-   *
-   * @throws IOException the io exception
-   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
-   * @throws KeyGenerationException the key generation exception
-   */
+  /** Test vp ed 21559 proof generation and verification. */
   @Test
-  public void testVPEd21559ProofGenerationAndVerification()
-      throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
-          KeyGenerationException {
+  @SneakyThrows
+  public void testVPEd21559ProofGenerationAndVerification() {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
     didResolver.register(credentialIssuer);
@@ -236,18 +199,10 @@ public class LinkedDataProofValidationComponentTest {
     Assertions.assertTrue(isOk);
   }
 
-  /**
-   * Test vpjws proof generation and verification.
-   *
-   * @throws IOException the io exception
-   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
-   * @throws KeyGenerationException the key generation exception
-   */
+  /** Test vpjws proof generation and verification. */
   @Test
-  public void testVPJWSProofGenerationAndVerification()
-      throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
-          KeyGenerationException {
+  @SneakyThrows
+  public void testVPJWSProofGenerationAndVerification() {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
     didResolver.register(credentialIssuer);
@@ -287,10 +242,10 @@ public class LinkedDataProofValidationComponentTest {
     Assertions.assertTrue(isOk);
   }
 
+  /** Test verification method. */
   @Test
-  public void testVerificationMethodOfVC()
-      throws IOException, KeyGenerationException, UnsupportedSignatureTypeException, SsiException,
-          InvalidePrivateKeyFormat {
+  @SneakyThrows
+  public void testVerificationMethodOfVC() {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
     didResolver.register(credentialIssuer);

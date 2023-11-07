@@ -28,6 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -69,7 +70,8 @@ public class SerializeUtilTest {
    */
   @Test
   @DisplayName("Test property order in json string for VC")
-  void testVCJsonPropertyOrder() throws JsonProcessingException {
+  @SneakyThrows
+  void testVCJsonPropertyOrder() {
     ObjectMapper objectMapper = new ObjectMapper();
 
     // test VC json
@@ -99,7 +101,8 @@ public class SerializeUtilTest {
    */
   @Test
   @DisplayName("Test property order in json string for did document")
-  void testDidDocumentJsonPropertyOrder() throws JsonProcessingException {
+  @SneakyThrows
+  void testDidDocumentJsonPropertyOrder() {
     ObjectMapper objectMapper = new ObjectMapper();
     // test did document json
     DidDocument didDocument =

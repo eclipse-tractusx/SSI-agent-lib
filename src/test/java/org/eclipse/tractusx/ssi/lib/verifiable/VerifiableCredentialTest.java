@@ -21,8 +21,6 @@
 
 package org.eclipse.tractusx.ssi.lib.verifiable;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import lombok.SneakyThrows;
@@ -45,7 +43,7 @@ public class VerifiableCredentialTest {
    */
   @Test
   @SneakyThrows
-  public void canSerializeVC() throws JsonMappingException, JsonProcessingException {
+  public void canSerializeVC() {
     final Map<String, Object> vpFromMap = TestResourceUtil.getAlumniVerifiableCredential();
     var vp = new VerifiableCredential(vpFromMap);
     var json = vp.toJson();

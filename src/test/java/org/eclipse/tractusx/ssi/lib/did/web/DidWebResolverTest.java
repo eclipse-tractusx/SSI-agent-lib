@@ -29,11 +29,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
@@ -72,8 +71,8 @@ public class DidWebResolverTest {
    * @throws URISyntaxException the uri syntax exception
    */
   @Test
-  public void shouldResolveValidWebDid()
-      throws DidResolverException, IOException, InterruptedException, URISyntaxException {
+  @SneakyThrows
+  public void shouldResolveValidWebDid() {
     Did validDidWeb = new Did(new DidMethod("web"), new DidMethodIdentifier("localhost"), null);
     assertTrue(resolver.isResolvable(validDidWeb));
     when(httpClient.send(any(), any())).thenReturn(response);
@@ -91,7 +90,8 @@ public class DidWebResolverTest {
    * @throws DidResolverException the did resolver exception
    */
   @Test
-  public void shouldNotResolveNonWebDid() throws DidResolverException {
+  @SneakyThrows
+  public void shouldNotResolveNonWebDid() {
     Did validDidKey =
         new Did(
             new DidMethod("key"),

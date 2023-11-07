@@ -31,13 +31,15 @@ import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.util.io.pem.PemWriter;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.exception.key.KeyTransformationException;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
 /** The type X 21559 public key. */
 public class x21559PublicKey implements IPublicKey {
 
+  private final int KEY_LENGTH = 32;
   private final @NonNull byte[] originalKey;
 
   /**
@@ -46,9 +48,9 @@ public class x21559PublicKey implements IPublicKey {
    * @param publicKey the public key
    * @throws InvalidePublicKeyFormat the invalide public key format
    */
-  public x21559PublicKey(byte[] publicKey) throws InvalidePublicKeyFormat {
+  public x21559PublicKey(byte[] publicKey) throws InvalidPublicKeyFormatException {
     if (this.getKeyLength() != publicKey.length) {
-      throw new InvalidePublicKeyFormat(getKeyLength(), publicKey.length);
+      throw new InvalidPublicKeyFormatException(getKeyLength(), publicKey.length);
     }
     this.originalKey = publicKey;
   }
@@ -61,10 +63,10 @@ public class x21559PublicKey implements IPublicKey {
    * @throws InvalidePublicKeyFormat the invalide public key format
    * @throws IOException the io exception
    */
-  public x21559PublicKey(String publicKey, boolean pemFormat)
-      throws InvalidePublicKeyFormat, IOException {
+  public x21559PublicKey(String publicKey, boolean PEMformat)
+      throws InvalidPublicKeyFormatException, IOException {
 
-    if (pemFormat) {
+    if (PEMformat) {
       StringReader sr = new StringReader(publicKey);
       PemReader reader = new PemReader(sr);
       PemObject pemObject = reader.readPemObject();
@@ -77,22 +79,27 @@ public class x21559PublicKey implements IPublicKey {
     }
 
     if (this.getKeyLength() != originalKey.length) {
-      throw new InvalidePublicKeyFormat(getKeyLength(), originalKey.length);
+      throw new InvalidPublicKeyFormatException(getKeyLength(), originalKey.length);
     }
   }
 
   @Override
-  public String asStringForStoring() throws IOException {
+  public String asStringForStoring() throws KeyTransformationException {
     PemObject pemObject = new PemObject("ED21559 Public Key", this.originalKey);
     StringWriter sw = new StringWriter();
     PemWriter writer = new PemWriter(sw);
-    writer.writeObject(pemObject);
-    writer.close();
+    try {
+      writer.writeObject(pemObject);
+      writer.close();
+    } catch (IOException e) {
+      throw new KeyTransformationException(e.getMessage());
+    }
+
     return sw.toString();
   }
 
   @Override
-  public String asStringForExchange(EncodeType encodeType) throws IOException {
+  public String asStringForExchange(EncodeType encodeType) {
     return MultibaseFactory.create(encodeType, originalKey).getEncoded();
   }
 
@@ -103,6 +110,6 @@ public class x21559PublicKey implements IPublicKey {
 
   @Override
   public int getKeyLength() {
-    return 32;
+    return KEY_LENGTH;
   }
 }

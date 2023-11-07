@@ -32,8 +32,8 @@ import com.nimbusds.jose.jwk.OctetKeyPair;
 import java.io.IOException;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.SsiException;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
 import org.eclipse.tractusx.ssi.lib.proof.ISigner;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
@@ -42,21 +42,21 @@ public class JWSProofSigner implements ISigner {
 
   @Override
   public byte[] sign(HashedLinkedData hashedLinkedData, IPrivateKey privateKey)
-      throws InvalidePrivateKeyFormat {
+      throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException {
 
     OctetKeyPairFactory octetKeyPairFactory = new OctetKeyPairFactory();
     OctetKeyPair keyPair;
     try {
       keyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
     } catch (IOException e) {
-      throw new InvalidePrivateKeyFormat(e.getCause());
+      throw new InvalidPrivateKeyFormatException(e.getCause());
     }
 
     JWSSigner signer;
     try {
       signer = new Ed25519Signer(keyPair);
     } catch (JOSEException e) {
-      throw new SsiException(e.getMessage());
+      throw new InvalidPrivateKeyFormatException(e.getMessage());
     }
 
     var header = new JWSHeader.Builder(JWSAlgorithm.EdDSA).build();
@@ -66,7 +66,7 @@ public class JWSProofSigner implements ISigner {
     try {
       jwsObject.sign(signer);
     } catch (JOSEException e) {
-      throw new SsiException(e.getMessage());
+      throw new SignatureGenerateFailedException(e.getMessage());
     }
 
     return jwsObject.serialize(true).getBytes();

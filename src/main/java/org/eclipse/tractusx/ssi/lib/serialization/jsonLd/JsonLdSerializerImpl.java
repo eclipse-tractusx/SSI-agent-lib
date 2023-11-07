@@ -21,7 +21,7 @@
 
 package org.eclipse.tractusx.ssi.lib.serialization.jsonLd;
 
-import org.eclipse.tractusx.ssi.lib.exception.InvalidJsonLdException;
+import org.eclipse.tractusx.ssi.lib.exception.json.InvalidJsonLdException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresentation;
 import org.eclipse.tractusx.ssi.lib.validation.JsonLdValidator;

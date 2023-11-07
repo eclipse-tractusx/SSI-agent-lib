@@ -21,13 +21,8 @@
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
-import com.nimbusds.jose.JOSEException;
-import java.io.IOException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed25519ProofSigner;
 import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed25519ProofVerifier;
@@ -50,9 +45,8 @@ public class SignAndVerifyTest {
    * @throws KeyGenerationException the key generation exception
    */
   @Test
-  public void testSignAndVerify_ED201559()
-      throws IOException, InvalidePrivateKeyFormat, InvalidePublicKeyFormat,
-          KeyGenerationException {
+  @SneakyThrows
+  public void testSignAndVerify_ED201559() {
     final TestDidResolver didResolver = new TestDidResolver();
 
     var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys();
@@ -81,9 +75,8 @@ public class SignAndVerifyTest {
    * @throws KeyGenerationException the key generation exception
    */
   @Test
-  public void testSignAndVerify_JWS()
-      throws IOException, JOSEException, NoSuchAlgorithmException, InvalidePrivateKeyFormat,
-          InvalidePublicKeyFormat, KeyGenerationException {
+  @SneakyThrows
+  public void testSignAndVerify_JWS() {
 
     final TestDidResolver didResolver = new TestDidResolver();
     var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys();

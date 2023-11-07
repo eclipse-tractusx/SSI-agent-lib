@@ -19,38 +19,28 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.did.resolver;
+package org.eclipse.tractusx.ssi.lib.exception.proof;
 
-import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
-import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
+import lombok.Getter;
+import org.eclipse.tractusx.ssi.lib.exception.SSIException;
+import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 
-/**
- * The interface Did document resolver registry.
- *
- * @deprecated replaced by {@link DidResolver}
- */
-public interface DidDocumentResolverRegistry {
-  /**
-   * Get did document resolver.
-   *
-   * @param did the did
-   * @return the did document resolver
-   * @throws DidDocumentResolverNotRegisteredException the did document resolver not registered
-   *     exception
-   */
-  DidDocumentResolver get(DidMethod did) throws DidDocumentResolverNotRegisteredException;
+/** The type Unsupported verification method exception. */
+public class UnsupportedVerificationMethodException extends SSIException {
+
+  /** The verification method */
+  @Getter private final VerificationMethod method;
 
   /**
-   * Register a new did document resolver
+   * Instantiates a new Unsupported verification method exception.
    *
-   * @param resolver the resolver
+   * @param method the method
+   * @param message the message
    */
-  void register(DidDocumentResolver resolver);
-
-  /**
-   * Unregister a did document resolver
-   *
-   * @param resolver the resolver
-   */
-  void unregister(DidDocumentResolver resolver);
+  public UnsupportedVerificationMethodException(VerificationMethod method, String message) {
+    super(
+        String.format(
+            "Unsupported verification method: %s. %s", method.getClass().getName(), message));
+    this.method = method;
+  }
 }

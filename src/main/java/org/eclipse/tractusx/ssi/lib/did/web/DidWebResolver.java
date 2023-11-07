@@ -33,6 +33,7 @@ import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.did.web.util.Constants;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 
@@ -51,7 +52,7 @@ public class DidWebResolver implements DidResolver {
 
   @SuppressWarnings("unchecked")
   @Override
-  public DidDocument resolve(Did did) throws DidResolverException {
+  public DidDocument resolve(Did did) throws DidResolverException, DidParseException {
     if (!did.getMethod().equals(Constants.DID_WEB_METHOD)) {
       throw new DidResolverException(
           String.format(

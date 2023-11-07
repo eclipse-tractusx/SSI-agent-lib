@@ -19,35 +19,27 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.exception;
+package org.eclipse.tractusx.ssi.lib.exception.proof;
 
-/** The type Invalid json ld exception. */
-public class InvalidJsonLdException extends Exception {
-  /**
-   * Instantiates a new Invalid json ld exception.
-   *
-   * @param message the message
-   */
-  public InvalidJsonLdException(String message) {
+import org.eclipse.tractusx.ssi.lib.exception.SSIException;
+
+/** NoVerificationKeyFoundExcpetion */
+public class NoVerificationKeyFoundException extends SSIException {
+
+  public NoVerificationKeyFoundException(String message) {
     super(message);
   }
 
-  /**
-   * Instantiates a new Invalid json ld exception.
-   *
-   * @param message the message
-   * @param cause the cause
-   */
-  public InvalidJsonLdException(String message, Throwable cause) {
+  public NoVerificationKeyFoundException(String message, Throwable cause) {
     super(message, cause);
   }
 
-  /**
-   * Instantiates a new Invalid json ld exception.
-   *
-   * @param cause the cause
-   */
-  public InvalidJsonLdException(Throwable cause) {
+  public NoVerificationKeyFoundException(Throwable cause) {
     super(cause);
+  }
+
+  public NoVerificationKeyFoundException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
   }
 }

@@ -19,12 +19,14 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.exception;
+package org.eclipse.tractusx.ssi.lib.exception.proof;
 
 import java.util.List;
+import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
 /** The type Jwt audience check failed exception. */
-public class JwtAudienceCheckFailedException extends JwtException {
+public class JwtAudienceCheckFailedException extends SSIException {
+
   /**
    * Instantiates a new Jwt audience check failed exception.
    *
@@ -37,5 +39,22 @@ public class JwtAudienceCheckFailedException extends JwtException {
             + expectedAudience
             + ", actual audience: "
             + String.join(",  ", actualAudience));
+  }
+
+  public JwtAudienceCheckFailedException(String message) {
+    super(message);
+  }
+
+  public JwtAudienceCheckFailedException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  public JwtAudienceCheckFailedException(Throwable cause) {
+    super(cause);
+  }
+
+  public JwtAudienceCheckFailedException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
   }
 }

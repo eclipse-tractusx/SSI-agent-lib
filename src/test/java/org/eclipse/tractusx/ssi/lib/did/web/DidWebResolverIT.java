@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.http.HttpClient;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
@@ -68,7 +68,8 @@ public class DidWebResolverIT {
    * @throws DidResolverException the did resolver exception
    */
   @Test
-  public void shouldResolveValidWebDid() throws DidResolverException {
+  @SneakyThrows
+  public void shouldResolveValidWebDid() {
     Did validDidWeb =
         new Did(
             new DidMethod("web"),
@@ -85,7 +86,8 @@ public class DidWebResolverIT {
    * @throws DidResolverException the did resolver exception
    */
   @Test
-  public void shouldResolveValidExternalWebDid() throws DidResolverException {
+  @SneakyThrows
+  public void shouldResolveValidExternalWebDid() {
     final String didIdentifier = "did.actor:alice";
     Did validDidWeb = new Did(new DidMethod("web"), new DidMethodIdentifier(didIdentifier), null);
     assertTrue(httpsResolver.isResolvable(validDidWeb));

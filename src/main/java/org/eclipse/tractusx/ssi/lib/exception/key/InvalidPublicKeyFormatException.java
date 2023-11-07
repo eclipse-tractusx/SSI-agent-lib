@@ -19,51 +19,62 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.did.resolver;
+package org.eclipse.tractusx.ssi.lib.exception.key;
 
 import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
-/** The type Did resolver exception. */
-public class DidResolverException extends SSIException {
+/** The type Invalid public key format. */
+public class InvalidPublicKeyFormatException extends SSIException {
+  /**
+   * Instantiates a new Invalide public key format.
+   *
+   * @param correctLength the correct length
+   * @param providedLength the provided length
+   */
+  public InvalidPublicKeyFormatException(int correctLength, int providedLength) {
+    super(
+        String.format(
+            "Invalide Publice Key Format, this key should have '%s' as lenght but we got %s",
+            correctLength, providedLength));
+  }
 
   /**
-   * Instantiates a new Did resolver exception.
+   * Instantiates a new invalide public key format exception.
    *
    * @param message the message
    */
-  public DidResolverException(String message) {
+  public InvalidPublicKeyFormatException(String message) {
     super(message);
   }
 
   /**
-   * Instantiates a new Did resolver exception from another exception with a message.
+   * Instantiates a new invalide public key format exception.
    *
    * @param message the message
    * @param cause the cause
    */
-  public DidResolverException(String message, Throwable cause) {
+  public InvalidPublicKeyFormatException(String message, Throwable cause) {
     super(message, cause);
   }
 
   /**
-   * Instantiates a new Did resolver exception from another exception.
+   * Instantiates a new invalide public key format exception.
    *
    * @param cause the cause
    */
-  public DidResolverException(Throwable cause) {
+  public InvalidPublicKeyFormatException(Throwable cause) {
     super(cause);
   }
 
   /**
-   * Instantiates a new Did resolver exception with a message from another exception, allowing for
-   * disabling and printing the stack trace.
+   * Instantiates a new invalide public key format exception.
    *
    * @param message the message
    * @param cause the cause
    * @param enableSuppression the enable suppression
    * @param writableStackTrace the writable stack trace
    */
-  public DidResolverException(
+  public InvalidPublicKeyFormatException(
       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }

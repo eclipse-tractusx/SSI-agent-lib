@@ -19,51 +19,50 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.exception;
+package org.eclipse.tractusx.ssi.lib.exception.resolver;
 
-/** The type Ssi exception. */
-public class SsiException extends RuntimeException {
+import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
-  /** Instantiates a new Ssi exception. */
-  public SsiException() {}
+/** The type Did web exception. */
+public class DidWebException extends SSIException {
 
   /**
-   * Instantiates a new Ssi exception.
+   * Instantiates a new Did web exception.
    *
    * @param message the message
    */
-  public SsiException(String message) {
+  public DidWebException(String message) {
     super(message);
   }
 
   /**
-   * Instantiates a new Ssi exception.
+   * Instantiates a new Did web exception.
    *
    * @param message the message
    * @param cause the cause
    */
-  public SsiException(String message, Throwable cause) {
+  public DidWebException(String message, Throwable cause) {
     super(message, cause);
   }
 
   /**
-   * Instantiates a new Ssi exception.
+   * Instantiates a new Did web exception.
    *
    * @param cause the cause
    */
-  public SsiException(Throwable cause) {
+  public DidWebException(Throwable cause) {
     super(cause);
   }
 
   /**
-   * Instantiates a new Ssi exception.
+   * Instantiates a new Did web exception.
    *
    * @param message the message
    * @param cause the cause
    * @param enableSuppression the enable suppression
    * @param writableStackTrace the writable stack trace
    */
-  public SsiException(
+  public DidWebException(
       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }
