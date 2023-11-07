@@ -24,8 +24,6 @@ package org.eclipse.tractusx.ssi.lib.exception;
 /** The type SSI exception. */
 public class SSIException extends Exception {
 
-  private static final long serialVersionUID = -6426089110128695365L;
-
   /**
    * Instantiates a new SSI exception.
    *

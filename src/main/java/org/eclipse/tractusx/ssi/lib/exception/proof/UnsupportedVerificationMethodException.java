@@ -27,6 +27,8 @@ import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 /** The type Unsupported verification method exception. */
 public class UnsupportedVerificationMethodException extends SignatureVerificationException {
 
+  private static final long serialVersionUID = 6406987797507777929L;
+
   /** The verification method */
   @Getter private final VerificationMethod method;
 
