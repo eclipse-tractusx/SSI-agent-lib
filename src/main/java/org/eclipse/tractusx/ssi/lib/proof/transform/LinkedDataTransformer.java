@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -33,7 +33,6 @@ import io.setl.rdf.normalization.RdfNormalize;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.NoSuchAlgorithmException;
-import org.apache.commons.lang3.SerializationUtils;
 import org.eclipse.tractusx.ssi.lib.exception.json.TransformJsonLdException;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.RemoteDocumentLoader;
@@ -41,17 +40,13 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 
 /** The type Linked data transformer. */
 public class LinkedDataTransformer {
-  /**
-   * Transform linked data.
-   *
-   * @param document the document
-   * @return the transformed linked data
-   */
+
   public TransformedLinkedData transform(Verifiable document) throws TransformJsonLdException {
-    // Make a copy and remove proof, as it is not part of the linked data
-    var copy = (JsonLdObject) SerializationUtils.clone(document);
-    copy.remove(Verifiable.PROOF);
-    return this.canocliztion(copy);
+
+    // We need Deep Clone to keep the original
+    // Verifiable vrCopy = document.deepClone().removeProofSignature();
+
+    return this.canocliztion(document);
   }
 
   private TransformedLinkedData canocliztion(JsonLdObject document)

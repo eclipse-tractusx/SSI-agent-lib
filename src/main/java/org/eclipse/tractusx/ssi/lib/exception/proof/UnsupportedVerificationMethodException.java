@@ -22,10 +22,10 @@
 package org.eclipse.tractusx.ssi.lib.exception.proof;
 
 import lombok.Getter;
+import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 
-/** The type Unsupported verification method exception. */
-public class UnsupportedVerificationMethodException extends SignatureVerificationException {
+public class UnsupportedVerificationMethodException extends SSIException {
 
   private static final long serialVersionUID = 1L;
 

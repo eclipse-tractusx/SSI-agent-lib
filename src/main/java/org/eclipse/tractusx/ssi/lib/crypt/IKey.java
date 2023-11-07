@@ -33,21 +33,8 @@ public interface IKey {
    */
   int getKeyLength();
 
-  /**
-   * Convert the key to a string for storing
-   *
-   * @return the string
-   * @throws IOException the io exception
-   */
   String asStringForStoring() throws KeyTransformationException;
 
-  /**
-   * Convert the key to a string for exchange.
-   *
-   * @param encodeType the encode type
-   * @return the string
-   * @throws IOException the io exception
-   */
   String asStringForExchange(EncodeType encodeType) throws KeyTransformationException;
 
   /**

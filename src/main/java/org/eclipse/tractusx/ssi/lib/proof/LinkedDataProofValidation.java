@@ -28,7 +28,13 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.json.InvalidJsonLdException;
+import org.eclipse.tractusx.ssi.lib.exception.json.TransformJsonLdException;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable.VerifiableType;
@@ -77,14 +83,20 @@ public class LinkedDataProofValidation {
    * depending on Verification Method to resolve the DID Document and fetching the required Public
    * Key
    *
-   * @param verifiable the verifiable
-   * @return the boolean
+   * @throws UnsupportedSignatureTypeException
+   * @throws DidDocumentResolverNotRegisteredException
+   * @throws NoVerificationKeyFoundException
+   * @throws SignatureVerificationFailedException
+   * @throws InvalidPublicKeyFormatException
+   * @throws DidParseException
+   * @throws SignatureParseException
+   * @throws TransformJsonLdException
    */
-  @SneakyThrows
-  public boolean verify(Verifiable verifiable) {
-    if (verifiable.getProof() == null) {
-      throw new UnsupportedSignatureTypeException("Proof can't be empty");
-    }
+  public boolean verify(Verifiable verifiable)
+      throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
+          InvalidPublicKeyFormatException, SignatureVerificationFailedException,
+          NoVerificationKeyFoundException, TransformJsonLdException {
+
     var type = verifiable.getProof().getType();
     IVerifier verifier = null;
 

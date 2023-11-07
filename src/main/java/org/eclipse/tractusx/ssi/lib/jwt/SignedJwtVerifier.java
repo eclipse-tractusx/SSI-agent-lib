@@ -36,8 +36,7 @@ import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedVerificationMethodException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
@@ -64,19 +63,19 @@ public class SignedJwtVerifier {
    * @throws DidParseException
    * @throws SignatureException
    * @throws DidResolverException
-   * @throws SignatureVerificationException
+   * @throws SignatureVerificationFailedException
    * @throws UnsupportedVerificationMethodException
-   * @throws SignatureParseException
+   * @throws JOSEException
    */
   public boolean verify(SignedJWT jwt)
-      throws DidParseException, DidResolverException, SignatureVerificationException,
-          UnsupportedVerificationMethodException, SignatureParseException {
+      throws DidParseException, SignatureException, DidResolverException,
+          SignatureVerificationFailedException, UnsupportedVerificationMethodException {
 
     JWTClaimsSet jwtClaimsSet;
     try {
       jwtClaimsSet = jwt.getJWTClaimsSet();
     } catch (ParseException e) {
-      throw new SignatureParseException(e.getMessage());
+      throw new SignatureException(e.getMessage());
     }
 
     final String issuer = jwtClaimsSet.getIssuer();
@@ -102,7 +101,7 @@ public class SignedJwtVerifier {
               return true;
             }
           } catch (JOSEException e) {
-            throw new SignatureVerificationException(e.getMessage());
+            throw new SignatureVerificationFailedException(e.getMessage());
           }
         } else {
           throw new UnsupportedVerificationMethodException(
@@ -123,7 +122,7 @@ public class SignedJwtVerifier {
             return true;
           }
         } catch (JOSEException e) {
-          throw new SignatureVerificationException(e.getMessage());
+          throw new SignatureVerificationFailedException(e.getMessage());
         }
       }
     }
