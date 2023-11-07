@@ -33,6 +33,7 @@ import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatExceptio
 import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedVerificationMethodException;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtVerifier;
@@ -79,11 +80,13 @@ public class Verification {
    * @throws DidParseException
    * @throws SignatureParseException
    * @throws UnsupportedSignatureTypeException
+   * @throws SignatureVerificationFailedException
    */
   public static boolean verifyED21559LD(VerifiableCredential verifiableCredential)
       throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
           InvalidPublicKeyFormatException, SignatureVerificationException,
-          NoVerificationKeyFoundException, TransformJsonLdException {
+          NoVerificationKeyFoundException, TransformJsonLdException,
+          SignatureVerificationFailedException {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();
@@ -97,7 +100,8 @@ public class Verification {
   public static boolean verifyJWSLD(VerifiableCredential verifiableCredential)
       throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
           InvalidPublicKeyFormatException, SignatureVerificationException,
-          NoVerificationKeyFoundException, TransformJsonLdException {
+          NoVerificationKeyFoundException, TransformJsonLdException,
+          SignatureVerificationFailedException {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();

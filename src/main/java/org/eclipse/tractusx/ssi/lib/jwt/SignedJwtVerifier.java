@@ -28,6 +28,7 @@ import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import java.security.SignatureException;
 import java.text.ParseException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

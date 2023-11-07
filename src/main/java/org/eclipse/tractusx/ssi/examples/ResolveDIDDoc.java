@@ -37,6 +37,7 @@ public class ResolveDIDDoc {
    *
    * @param didUrl the did url
    * @return the did document
+   * @throws org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException
    * @throws DidDocumentResolverNotRegisteredException the did document resolver not registered
    *     exception
    */
