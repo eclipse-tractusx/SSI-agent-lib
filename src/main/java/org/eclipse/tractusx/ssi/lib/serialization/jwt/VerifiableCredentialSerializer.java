@@ -29,7 +29,19 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
  * in an information loss, der is not serialization of the same credential possible anymore.
  */
 public interface VerifiableCredentialSerializer {
+  /**
+   * Deserialize verifiable credential.
+   *
+   * @param credentialJson the credential json
+   * @return the verifiable credential
+   */
   VerifiableCredential deserialize(Map<String, Object> credentialJson);
 
+  /**
+   * Serialize string.
+   *
+   * @param credential the credential
+   * @return the string
+   */
   String serialize(VerifiableCredential credential);
 }

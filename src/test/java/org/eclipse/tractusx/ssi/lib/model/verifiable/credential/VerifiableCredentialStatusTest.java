@@ -36,8 +36,14 @@ import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/** The type Verifiable credential status test. */
 class VerifiableCredentialStatusTest {
 
+  /**
+   * Test credential status serialization.
+   *
+   * @throws JsonProcessingException the json processing exception
+   */
   @Test
   void testCredentialStatusSerialization() throws JsonProcessingException {
     // test valid parsing from json object

@@ -33,6 +33,7 @@ import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
 
+/** X21559 key generator. */
 public class x21559Generator implements IKeyGenerator {
 
   @Override
@@ -59,9 +60,6 @@ public class x21559Generator implements IKeyGenerator {
     } catch (InvalidePublicKeyFormat e) {
       throw new KeyGenerationException(e.getCause());
     }
-
-    KeyPair pair = new KeyPair(x21559PublicKey, x21559PrivateKey);
-
-    return pair;
+    return new KeyPair(x21559PublicKey, x21559PrivateKey);
   }
 }

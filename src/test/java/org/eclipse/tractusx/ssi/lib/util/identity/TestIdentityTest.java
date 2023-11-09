@@ -31,8 +31,10 @@ import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/** The type Test identity test. */
 public class TestIdentityTest {
 
+  /** Test public private key. */
   @Test
   @SneakyThrows
   public void testPublicPrivateKey() {

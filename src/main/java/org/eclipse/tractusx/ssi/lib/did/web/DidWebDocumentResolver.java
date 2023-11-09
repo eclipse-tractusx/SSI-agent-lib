@@ -39,6 +39,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
+/** The type Did web document resolver. */
 @RequiredArgsConstructor
 @Deprecated
 /**

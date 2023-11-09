@@ -27,19 +27,38 @@ import lombok.NonNull;
 import lombok.Value;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 
+/** The type Base 64 with padding. */
 @Value
 @EqualsAndHashCode
 public class Base64WithPadding implements MultibaseString {
 
+  /**
+   * Check if a string can be decoded.
+   *
+   * @param encoded the encoded string
+   * @return the boolean
+   */
   public static boolean canDecode(String encoded) {
     return Multibase.encoding(encoded).equals(Multibase.Base.Base64Pad);
   }
 
+  /**
+   * Create base 64 with padding.
+   *
+   * @param decoded the decoded
+   * @return the base 64 with padding
+   */
   public static Base64WithPadding create(byte[] decoded) {
     final String encoded = Multibase.encode(Multibase.Base.Base64Pad, decoded);
     return new Base64WithPadding(decoded, encoded);
   }
 
+  /**
+   * Create base 64 with padding.
+   *
+   * @param encoded the encoded
+   * @return the base 64 with padding
+   */
   public static Base64WithPadding create(String encoded) {
 
     if (!canDecode(encoded)) {

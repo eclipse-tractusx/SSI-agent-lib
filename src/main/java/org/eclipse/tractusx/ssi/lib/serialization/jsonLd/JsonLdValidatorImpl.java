@@ -34,6 +34,7 @@ import java.util.Map;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.RemoteDocumentLoader;
 
+/** The type Json ld validator. */
 public class JsonLdValidatorImpl implements JsonLdValidator {
 
   private static final String UNDEFINED_TERM_URI = "urn:UNDEFINEDTERM";

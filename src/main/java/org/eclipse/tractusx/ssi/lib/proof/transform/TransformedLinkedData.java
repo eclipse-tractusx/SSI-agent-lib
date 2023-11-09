@@ -25,6 +25,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Value;
 
+/** The type Transformed linked data. */
 @Value
 @EqualsAndHashCode(of = "value")
 public class TransformedLinkedData {

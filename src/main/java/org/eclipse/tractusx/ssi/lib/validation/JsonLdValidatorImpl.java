@@ -37,6 +37,7 @@ import org.eclipse.tractusx.ssi.lib.model.RemoteDocumentLoader;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 
+/** The type Json ld validator. */
 public class JsonLdValidatorImpl implements JsonLdValidator {
   private static final String UNDEFINED_TERM_URI = "urn:UNDEFINEDTERM";
 

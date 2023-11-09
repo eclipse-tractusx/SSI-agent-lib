@@ -24,8 +24,15 @@ package org.eclipse.tractusx.ssi.lib.exception;
 import lombok.Getter;
 import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 
+/** The type Unsupported verification method exception. */
 public class UnsupportedVerificationMethodException extends RuntimeException {
 
+  /**
+   * Instantiates a new Unsupported verification method exception.
+   *
+   * @param method the method
+   * @param message the message
+   */
   public UnsupportedVerificationMethodException(VerificationMethod method, String message) {
     super(
         String.format(
@@ -33,5 +40,6 @@ public class UnsupportedVerificationMethodException extends RuntimeException {
     this.method = method;
   }
 
+  /** The verification method */
   @Getter private final VerificationMethod method;
 }

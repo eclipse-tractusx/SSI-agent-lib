@@ -28,10 +28,13 @@ import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
 /**
+ * The type Did document resolver registry.
+ *
  * @deprecated replaced by {@link DidResolver}
  */
 public class DidDocumentResolverRegistryImpl implements DidDocumentResolverRegistry {
 
+  /** The Resolvers. */
   public final Map<DidMethod, DidDocumentResolver> resolvers = new HashMap<>();
 
   @Override

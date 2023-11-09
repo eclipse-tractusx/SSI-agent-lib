@@ -29,14 +29,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/** The type Json ld validator test. */
 public class JsonLdValidatorTest {
   private JsonLdValidator validator;
 
+  /** Sets up. */
   @BeforeEach
   public void setUp() {
     validator = new JsonLdValidatorImpl();
   }
 
+  /** Validate test success. */
   @Test
   public void validateTestSuccess() {
     final VerifiableCredential toTest = loadValidjsonLDObject();

@@ -41,10 +41,12 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.MountableFile;
 
+/** The type Did uni resolver it. */
 @Testcontainers
 public class DidUniResolverIT {
   private DidUniResolver resolver;
 
+  /** The constant nginx. */
   @Container
   public static NginxContainer<?> nginx =
       new NginxContainer<>("nginx")
@@ -64,6 +66,12 @@ public class DidUniResolverIT {
           .withExposedPorts(8080)
           .waitingFor(new HostPortWaitStrategy());
 
+  /**
+   * Init each.
+   *
+   * @throws MalformedURLException the malformed url exception
+   * @throws URISyntaxException the uri syntax exception
+   */
   @BeforeEach
   public void initEach() throws MalformedURLException, URISyntaxException {
     resolver =
@@ -72,6 +80,11 @@ public class DidUniResolverIT {
             "http://" + uniResolver.getHost() + ":" + uniResolver.getFirstMappedPort());
   }
 
+  /**
+   * Should resolve valid did.
+   *
+   * @throws DidResolverException the did resolver exception
+   */
   @Test
   public void shouldResolveValidDid() throws DidResolverException {
     Did validDidWeb =

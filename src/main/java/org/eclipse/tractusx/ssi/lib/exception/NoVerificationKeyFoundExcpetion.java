@@ -24,6 +24,11 @@ package org.eclipse.tractusx.ssi.lib.exception;
 /** NoVerificationKeyFoundExcpetion */
 public class NoVerificationKeyFoundExcpetion extends Exception {
 
+  /**
+   * Instantiates a new No verification key found excpetion.
+   *
+   * @param message the message
+   */
   public NoVerificationKeyFoundExcpetion(String message) {
     super(message);
   }

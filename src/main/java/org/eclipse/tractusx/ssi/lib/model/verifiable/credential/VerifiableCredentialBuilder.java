@@ -31,6 +31,7 @@ import java.util.Map;
 import lombok.NoArgsConstructor;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 
+/** The type Verifiable credential builder. */
 @NoArgsConstructor
 public class VerifiableCredentialBuilder {
 
@@ -44,59 +45,124 @@ public class VerifiableCredentialBuilder {
   private Proof proof;
   private VerifiableCredentialStatus credentialStatus;
 
+  /**
+   * Context verifiable credential builder.
+   *
+   * @param context the context
+   * @return the verifiable credential builder
+   */
   public VerifiableCredentialBuilder context(List<URI> context) {
     this.context = context;
     return this;
   }
 
+  /**
+   * Id verifiable credential builder.
+   *
+   * @param id the id
+   * @return the verifiable credential builder
+   */
   public VerifiableCredentialBuilder id(URI id) {
     this.id = id;
     return this;
   }
 
+  /**
+   * Type verifiable credential builder.
+   *
+   * @param types the types
+   * @return the verifiable credential builder
+   */
   public VerifiableCredentialBuilder type(List<String> types) {
     this.types = types;
     return this;
   }
 
+  /**
+   * Issuer verifiable credential builder.
+   *
+   * @param issuer the issuer
+   * @return the verifiable credential builder
+   */
   public VerifiableCredentialBuilder issuer(URI issuer) {
     this.issuer = issuer;
     return this;
   }
 
+  /**
+   * Issuance date verifiable credential builder.
+   *
+   * @param issuanceDate the issuance date
+   * @return the verifiable credential builder
+   */
   public VerifiableCredentialBuilder issuanceDate(Instant issuanceDate) {
     this.issuanceDate = issuanceDate;
     return this;
   }
 
+  /**
+   * Expiration date verifiable credential builder.
+   *
+   * @param expirationDate the expiration date
+   * @return the verifiable credential builder
+   */
   public VerifiableCredentialBuilder expirationDate(Instant expirationDate) {
     this.expirationDate = expirationDate;
     return this;
   }
 
+  /**
+   * Credential subject verifiable credential builder.
+   *
+   * @param credentialSubject the credential subject
+   * @return the verifiable credential builder
+   */
   public VerifiableCredentialBuilder credentialSubject(
       List<VerifiableCredentialSubject> credentialSubject) {
     this.credentialSubject = credentialSubject;
     return this;
   }
 
+  /**
+   * Credential subject verifiable credential builder.
+   *
+   * @param credentialSubject the credential subject
+   * @return the verifiable credential builder
+   */
   public VerifiableCredentialBuilder credentialSubject(
       VerifiableCredentialSubject credentialSubject) {
     this.credentialSubject = List.of(credentialSubject);
     return this;
   }
 
+  /**
+   * Proof verifiable credential builder.
+   *
+   * @param proof the proof
+   * @return the verifiable credential builder
+   */
   public VerifiableCredentialBuilder proof(Proof proof) {
     this.proof = proof;
     return this;
   }
 
+  /**
+   * Verifiable credential status verifiable credential builder.
+   *
+   * @param credentialStatus the credential status
+   * @return the verifiable credential builder
+   */
   public VerifiableCredentialBuilder verifiableCredentialStatus(
       VerifiableCredentialStatus credentialStatus) {
     this.credentialStatus = credentialStatus;
     return this;
   }
 
+  /**
+   * Build verifiable credential.
+   *
+   * @return the verifiable credential
+   */
   public VerifiableCredential build() {
     DateTimeFormatter formatter =
         DateTimeFormatter.ofPattern(VerifiableCredential.TIME_FORMAT).withZone(ZoneOffset.UTC);

@@ -35,6 +35,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePres
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentationType;
 import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdSerializer;
 
+/** The type Serialized jwt presentation factory. */
 @RequiredArgsConstructor
 public class SerializedJwtPresentationFactoryImpl implements SerializedJwtPresentationFactory {
 

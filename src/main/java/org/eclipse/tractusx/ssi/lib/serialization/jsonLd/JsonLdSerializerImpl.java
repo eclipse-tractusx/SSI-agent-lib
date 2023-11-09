@@ -27,6 +27,7 @@ import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresen
 import org.eclipse.tractusx.ssi.lib.validation.JsonLdValidator;
 import org.eclipse.tractusx.ssi.lib.validation.JsonLdValidatorImpl;
 
+/** The type Json ld serializer. */
 public class JsonLdSerializerImpl implements JsonLdSerializer {
 
   @Override

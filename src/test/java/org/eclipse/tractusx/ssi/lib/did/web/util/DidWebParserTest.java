@@ -29,10 +29,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+/** The type Did web parser test. */
 public class DidWebParserTest {
 
   private final DidWebParser parser = new DidWebParser();
 
+  /**
+   * Test resolve uri from did.
+   *
+   * @param methodIdentifier the method identifier
+   * @param expectedUri the expected uri
+   */
   @ParameterizedTest
   @CsvSource({
     "localhost, https://localhost/.well-known/did.json",

@@ -50,6 +50,11 @@ public class SignedJwtFactory {
 
   private final OctetKeyPairFactory octetKeyPairFactory;
 
+  /**
+   * Instantiates a new Signed jwt factory.
+   *
+   * @param octetKeyPairFactory the octet key pair factory
+   */
   public SignedJwtFactory(OctetKeyPairFactory octetKeyPairFactory) {
     this.octetKeyPairFactory = Objects.requireNonNull(octetKeyPairFactory);
   }
@@ -59,7 +64,10 @@ public class SignedJwtFactory {
    * all private key types are possible, in the context of Distributed Identity using an Elliptic
    * Curve key ({@code P-256}) is advisable.
    *
+   * @param didIssuer the did issuer
    * @param audience the value of the token audience claim, e.g. the IDS Webhook address.
+   * @param serializedPresentation the serialized presentation
+   * @param privateKey the private key
    * @return a {@code SignedJWT} that is signed with the private key and contains all claims listed.
    */
   @SneakyThrows

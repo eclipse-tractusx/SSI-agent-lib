@@ -26,12 +26,26 @@ import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethodIdentifier;
 
+/** The type Did web factory. */
 public class DidWebFactory {
 
+  /**
+   * From hostname did.
+   *
+   * @param hostName the host name
+   * @return the did
+   */
   public static Did fromHostname(String hostName) {
     return fromHostnameAndPath(hostName, "");
   }
 
+  /**
+   * From hostname and path did.
+   *
+   * @param hostName the host name
+   * @param path the path
+   * @return the did
+   */
   public static Did fromHostnameAndPath(String hostName, String path) {
     Objects.requireNonNull(hostName, "Hostname must not be null");
     Objects.requireNonNull(path, "Path must not be null");
