@@ -25,6 +25,7 @@ import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable.VerifiableType;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
@@ -56,6 +57,7 @@ public class LinkedDataProofValidation {
   private final LinkedDataTransformer transformer;
   private final DidResolver didResolver;
   private final JsonLdValidator jsonLdValidator;
+
   /**
    * To verifiy {@link VerifiableCredential} or {@link VerifiablePresentation} In this method we are
    * depending on Verification Method to resolve the DID Document and fetching the required Public
@@ -63,6 +65,9 @@ public class LinkedDataProofValidation {
    */
   @SneakyThrows
   public boolean verify(Verifiable verifiable) {
+    if (verifiable.getProof() == null) {
+      throw new UnsupportedSignatureTypeException("Proof can't be empty");
+    }
     boolean isVerified = false;
     IVerifier verifier = null;
 
@@ -83,8 +88,50 @@ public class LinkedDataProofValidation {
     final TransformedLinkedData transformedData = transformer.transform(verifiable);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
 
-    isVerified = jsonLdValidator.validate(verifiable) && verifier.verify(hashedData, verifiable);
+    isVerified =
+        jsonLdValidator.validate(verifiable)
+            && verifier.verify(hashedData, verifiable)
+            && validateVerificationMethodOfVC(verifiable);
 
     return isVerified;
+  }
+
+  /**
+   * This method is to validate the Verification Method of VC
+   *
+   * @param verifiable
+   * @return
+   * @throws UnsupportedSignatureTypeException
+   */
+  @SneakyThrows
+  private Boolean validateVerificationMethodOfVC(Verifiable verifiable) {
+    // Verifiable Presentation doesn't have an Issuer
+    if (verifiable.getType() == VerifiableType.VP) {
+      return true;
+    }
+    final VerifiableCredential vc = new VerifiableCredential(verifiable);
+    final String issuer = vc.getIssuer().toString();
+    final String verficationMethod = getVerificationMethod(verifiable);
+    final String[] splitVerificationMethod = verficationMethod.split("#");
+    if (splitVerificationMethod[0].equals(issuer)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * This method is to get the Verification Method of VC
+   *
+   * @param verifiable
+   * @return
+   * @throws UnsupportedSignatureTypeException
+   */
+  @SneakyThrows
+  private String getVerificationMethod(Verifiable verifiable) {
+    try {
+      return (String) verifiable.getProof().get("verificationMethod");
+    } catch (Exception e) {
+      throw new UnsupportedSignatureTypeException("Signature type is not supported");
+    }
   }
 }
