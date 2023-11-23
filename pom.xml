@@ -366,7 +366,7 @@ SPDX-License-Identifier: Apache-2.0
                                 setting to 'true' will cause './mvnw release:perform' to publish
                                 to Maven Central automatically when OSSRH Staging is complete
                             -->
-                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                            <autoReleaseAfterClose>${env.AUTO_RELEASE_AFTER_CLOSE}</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
                     <!--

@@ -30,6 +30,11 @@ on:
         description: The development version to assign after the release
         required: true
         type: string
+      auto_release:
+        description: A switch for automatic release after closing the staging repository
+        required: false
+        type: boolean
+        default: false
   # only committers can trigger this
 jobs:
   publish-maven:
@@ -57,6 +62,7 @@ jobs:
           # used in settings.xml
           MAVEN_USERNAME: ${{ secrets.ORG_OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.ORG_OSSRH_PASSWORD }}
+          AUTO_RELEASE_AFTER_CLOSE: ${{ inputs.auto_release }}
         # command summary
         # -B/--batch-mode: only display progress and errors
         # -U: update snapshot-releases
