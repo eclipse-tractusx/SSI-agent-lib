@@ -32,6 +32,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
 
     steps:
 
@@ -42,12 +46,20 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
+      
+      - name: Set up codeql
+        uses: github/codeql-action/init@v2
+        with:
+            languages: java
 
       - name: Build Lib with Maven
         run: ./mvnw -s settings.xml  -B package --file ./pom.xml
         env:
           GITHUB_PACKAGE_USERNAME: ${{ github.actor }}
           GITHUB_PACKAGE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
 
       - name: Run tests
         run: ./mvnw -B test --file ./pom.xml
