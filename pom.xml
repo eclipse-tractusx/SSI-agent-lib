@@ -18,13 +18,11 @@ under the License.
 SPDX-License-Identifier: Apache-2.0
  -->
 
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.eclipse.tractusx.ssi</groupId>
     <artifactId>cx-ssi-lib</artifactId>
-    <version>0.0.17-SNAPSHOT</version>
+    <version>0.0.17</version>
     <packaging>jar</packaging>
 
     <!-- required when publishing to Maven Central -->
@@ -60,7 +58,8 @@ SPDX-License-Identifier: Apache-2.0
         <connection>scm:git:git://github.com/eclipse-tractusx/SSI-agent-lib.git</connection>
         <developerConnection>scm:git:https://github.com/eclipse-tractusx/SSI-agent-lib.git</developerConnection>
         <url>https://github.com/eclipse-tractusx/SSI-agent-lib/tree/main</url>
-    </scm>
+      <tag>0.0.17</tag>
+  </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
