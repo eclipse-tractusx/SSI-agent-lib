@@ -363,7 +363,7 @@ SPDX-License-Identifier: Apache-2.0
                                 docs: https://help.sonatype.com/repomanager2/staging-releases/configuring-your-project-for-deployment#ConfiguringYourProjectforDeployment-DeploymentwiththeNexusStagingMavenPlugin
                             -->
                             <serverId>ossrh</serverId>
-                            <nexusUrl>https://s01.oss.sonatype.org</nexusUrl>
+                            <nexusUrl>https://oss.sonatype.org</nexusUrl>
                             <!--
                                 setting to 'true' will cause './mvnw release:perform' to publish
                                 to Maven Central automatically when OSSRH Staging is complete
