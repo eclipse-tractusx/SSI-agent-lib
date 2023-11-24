@@ -93,9 +93,9 @@ jobs:
             javadoc:jar \
             source:jar \
             -s settings.xml \
-            -D gpg.passphrase=${{ secrets.ORG_GPG_PASSPHRASE }} \
-            -D releaseVersion=${{ inputs.releaseVersion }} \
-            -D developmentVersion=${{ inputs.developmentVersion }} \
+            -D gpg.passphrase="${{ secrets.ORG_GPG_PASSPHRASE }}" \
+            -D releaseVersion="${{ inputs.releaseVersion }}" \
+            -D developmentVersion="${{ inputs.developmentVersion }}" \
             deploy
 
         # artifact_name is cx-ssi-lib and the version should be the *-SNAPSHOT
