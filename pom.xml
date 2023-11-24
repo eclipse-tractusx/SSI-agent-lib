@@ -24,7 +24,7 @@ SPDX-License-Identifier: Apache-2.0
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.eclipse.tractusx.ssi</groupId>
     <artifactId>cx-ssi-lib</artifactId>
-    <version>0.0.16</version>
+    <version>0.0.17-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <!-- required when publishing to Maven Central -->
