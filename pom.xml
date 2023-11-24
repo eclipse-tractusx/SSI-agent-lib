@@ -450,23 +450,6 @@ SPDX-License-Identifier: Apache-2.0
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-        <!-- Eclipse DataSpace Components "Releases" -->
-        <repository>
-            <id>sonatype-snapshots</id>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
-        <!-- IDS Information Model. Dependency of Eclipse DataSpace Components -->
-        <repository>
-            <id>fraunhofer-iais-eis</id>
-            <name>Fraunhofer IAIS</name>
-            <url>https://maven.iais.fraunhofer.de/artifactory/eis-ids-public</url>
-        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
