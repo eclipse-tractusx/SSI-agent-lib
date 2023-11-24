@@ -343,6 +343,9 @@ SPDX-License-Identifier: Apache-2.0
         </profile>
         <profile>
             <id>ci-cd</id>
+            <properties>
+              <gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
+            </properties>
             <!--
                 Deployment of a Maven project
                 docs: https://central.sonatype.org/publish/publish-maven/#review-requirements

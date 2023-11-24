@@ -73,6 +73,7 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.ORG_OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.ORG_OSSRH_PASSWORD }}
           AUTO_RELEASE_AFTER_CLOSE: ${{ inputs.auto_release }}
+          GPG_PASSPHRASE: ${{ secrets.ORG_GPG_PASSPHRASE }}
         # command summary
         # -B/--batch-mode: only display progress and errors
         # -U: update snapshot-releases
@@ -93,7 +94,6 @@ jobs:
             javadoc:jar \
             source:jar \
             -s settings.xml \
-            -D gpg.passphrase="${{ secrets.ORG_GPG_PASSPHRASE }}" \
             -D releaseVersion="${{ inputs.releaseVersion }}" \
             -D developmentVersion="${{ inputs.developmentVersion }}" \
             deploy
