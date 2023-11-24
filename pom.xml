@@ -474,7 +474,7 @@ SPDX-License-Identifier: Apache-2.0
         <snapshotRepository>
             <id>osshr</id>
             <name>Maven Central Snapshots</name>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
