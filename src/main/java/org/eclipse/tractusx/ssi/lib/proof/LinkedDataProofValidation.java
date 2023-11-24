@@ -121,10 +121,7 @@ public class LinkedDataProofValidation {
     final String issuer = vc.getIssuer().toString();
     final String verficationMethod = getVerificationMethod(verifiable);
     final String[] splitVerificationMethod = verficationMethod.split("#");
-    if (splitVerificationMethod[0].equals(issuer)) {
-      return true;
-    }
-    return false;
+    return splitVerificationMethod[0].equals(issuer);
   }
 
   /**
