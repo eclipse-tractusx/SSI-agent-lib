@@ -86,7 +86,6 @@ jobs:
         # -D releaseVersion: set the version you're releasing (will also tag using this)
         # -D developmentVersion: set the next dev version
         run: |
-          echo "Publishing using version: ${{ inputs.version }}"
           ./mvnw -B -U \
             -Pci-cd \
             release:prepare \
