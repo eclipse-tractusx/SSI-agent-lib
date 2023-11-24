@@ -68,6 +68,7 @@ jobs:
 
         # Environment variables used in settings.xml and pom.xml
       - name: Publish to Maven
+        shell: bash
         env:
           MAVEN_USERNAME: ${{ secrets.ORG_OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.ORG_OSSRH_PASSWORD }}
@@ -84,7 +85,7 @@ jobs:
         # -D gpg.passphrase: a system property used by the build process for signing
         # -D releaseVersion: set the version you're releasing (will also tag using this)
         # -D developmentVersion: set the next dev version
-        run: |-
+        run: |
           echo "Publishing using version: ${{ inputs.version }}"
           ./mvnw -B -U \
             -Pci-cd \
@@ -101,7 +102,8 @@ jobs:
         # artifact_name is cx-ssi-lib and the version should be the *-SNAPSHOT
         # In the next step we'll use the releaseVersion to finalize the upload
       - name: Get generated artifact name
-        run: |-
+        shell: bash
+        run: |
           echo "artifact_name=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.artifactId -q -DforceStdout)" >> "$GITHUB_ENV"
           echo "artifact_version=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout)" >> "$GITHUB_ENV"
 
