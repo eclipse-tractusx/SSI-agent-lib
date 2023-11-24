@@ -49,6 +49,11 @@ jobs:
           java-version: 17
           distribution: temurin
 
+        # use the default GitHub runner user for the next steps
+        # this is needed during deploy, for pushing a tag
+      - name: Configure Git User
+        uses: fregante/setup-git-user@v2
+
       # this is necessary because it creates gpg.conf, etc.
       - name: List Keys
         shell: bash
