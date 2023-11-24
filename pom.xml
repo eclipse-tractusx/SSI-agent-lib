@@ -23,11 +23,44 @@ SPDX-License-Identifier: Apache-2.0
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.eclipse.tractusx.ssi</groupId>
-    <version>0.0.16</version>
+    <artifactId>cx-ssi-lib</artifactId>
+    <version>0.0.17-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+    <!-- required when publishing to Maven Central -->
+    <name>cx-ssi-lib</name>
+    <description>A library for processing verifiable credentials</description>
+    <url>https://github.com/eclipse-tractusx/SSI-agent-lib</url>
 
-    <artifactId>cx-ssi-lib</artifactId>
+    <!-- required when publishing to Maven Central -->
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <!-- required when publishing to Maven Central -->
+    <developers>
+        <developer>
+            <name>Abdulrahman Alkoptan</name>
+        </developer>
+        <developer>
+            <name>Dominik Pinsel</name>
+        </developer>
+        <developer>
+            <name>Boris Rizov</name>
+        </developer>
+    </developers>
+
+    <!-- required when publishing to Maven Central -->
+    <!-- these settings are used by the maven-release-plugin -->
+    <!-- docs: https://maven.apache.org/maven-release/maven-release-plugin/usage.html#prepare-your-project-to-use-the-maven-release-plugin -->
+    <scm>
+        <connection>scm:git:git://github.com/eclipse-tractusx/SSI-agent-lib.git</connection>
+        <developerConnection>scm:git:https://github.com/eclipse-tractusx/SSI-agent-lib.git</developerConnection>
+        <url>https://github.com/eclipse-tractusx/SSI-agent-lib/tree/main</url>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -308,29 +341,114 @@ SPDX-License-Identifier: Apache-2.0
                 <sourceDir>${delombokSourceDirectory}</sourceDir>
             </properties>
         </profile>
+        <profile>
+            <id>ci-cd</id>
+            <!--
+                Deployment of a Maven project
+                docs: https://central.sonatype.org/publish/publish-maven/#review-requirements
+            -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.13</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <!--
+                                The id of the server as defined in 'settings.xml'
+                                The username and password are retrieved from the server config in 'settings.xml'
+                                docs: https://help.sonatype.com/repomanager2/staging-releases/configuring-your-project-for-deployment#ConfiguringYourProjectforDeployment-DeploymentwiththeNexusStagingMavenPlugin
+                            -->
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://s01.oss.sonatype.org</nexusUrl>
+                            <!--
+                                setting to 'true' will cause './mvnw release:perform' to publish
+                                to Maven Central automatically when OSSRH Staging is complete
+                            -->
+                            <autoReleaseAfterClose>${env.AUTO_RELEASE_AFTER_CLOSE}</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <!--
+                        The Maven Release Plugin can be used to automate the changes to the Maven POM files,
+                        sanity checks, the SCM operations required and the actual deployment execution.
+                    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-release-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <configuration>
+                            <tagNameFormat>@{project.version}</tagNameFormat>
+                            <autoVersionSubmodules>true</autoVersionSubmodules>
+                            <useReleaseProfile>false</useReleaseProfile>
+                            <releaseProfiles>ci-cd</releaseProfiles>
+                            <goals>deploy</goals>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>default</id>
+                                <goals>
+                                    <goal>perform</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Required when publishing to Maven Central -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <repositories>
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
-        </repository>
-        <!-- Eclipse DataSpace Components "Releases" -->
-        <repository>
-            <id>sonatype-snapshots</id>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
-        <!-- IDS Information Model. Dependency of Eclipse DataSpace Components -->
-        <repository>
-            <id>fraunhofer-iais-eis</id>
-            <name>Fraunhofer IAIS</name>
-            <url>https://maven.iais.fraunhofer.de/artifactory/eis-ids-public</url>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -350,12 +468,12 @@ SPDX-License-Identifier: Apache-2.0
     </pluginRepositories>
 
     <distributionManagement>
-        <!-- Library Publish Repository -->
-        <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/catenax-ng/product-lab-ssi</url>
-        </repository>
+        <!-- <repository></repository> is not needed as we're using nexus-staging-maven-plugin -->
+        <snapshotRepository>
+            <id>osshr</id>
+            <name>Maven Central Snapshots</name>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
 
 </project>
