@@ -96,12 +96,9 @@ jobs:
             -Pci-cd \
             release:prepare \
             release:perform \
-            javadoc:jar \
-            source:jar \
             -s settings.xml \
             -D releaseVersion="${{ inputs.releaseVersion }}" \
             -D developmentVersion="${{ inputs.developmentVersion }}" \
-            deploy
 
         # artifact_name is cx-ssi-lib and the version should be the *-SNAPSHOT
         # In the next step we'll use the releaseVersion to finalize the upload
