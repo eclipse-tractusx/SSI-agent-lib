@@ -22,7 +22,7 @@ SPDX-License-Identifier: Apache-2.0
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.eclipse.tractusx.ssi</groupId>
     <artifactId>cx-ssi-lib</artifactId>
-    <version>0.0.17-SNAPSHOT</version>
+    <version>0.0.17</version>
     <packaging>jar</packaging>
 
     <!-- required when publishing to Maven Central -->
@@ -58,7 +58,7 @@ SPDX-License-Identifier: Apache-2.0
         <connection>scm:git:git://github.com/eclipse-tractusx/SSI-agent-lib.git</connection>
         <developerConnection>scm:git:https://github.com/eclipse-tractusx/SSI-agent-lib.git</developerConnection>
         <url>https://github.com/eclipse-tractusx/SSI-agent-lib/tree/main</url>
-      <tag>HEAD</tag>
+      <tag>0.0.17</tag>
   </scm>
 
     <properties>
