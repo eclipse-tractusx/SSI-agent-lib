@@ -458,7 +458,7 @@ SPDX-License-Identifier: Apache-2.0
     <distributionManagement>
         <!-- <repository></repository> is not needed as we're using nexus-staging-maven-plugin -->
         <snapshotRepository>
-            <id>osshr</id>
+            <id>ossrh</id>
             <name>Maven Central Snapshots</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
