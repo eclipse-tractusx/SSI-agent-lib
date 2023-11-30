@@ -23,7 +23,7 @@ SPDX-License-Identifier: Apache-2.0
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.eclipse.tractusx.ssi</groupId>
-    <version>0.0.19</version>
+    <version>0.0.20</version>
     <packaging>jar</packaging>
 
 
@@ -56,17 +56,18 @@ SPDX-License-Identifier: Apache-2.0
         </dependency>
 
         <!-- Bouncy Castle -->
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.70</version>
-        </dependency>
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcpkix-jdk15on</artifactId>
-			<version>1.70</version>
+			<artifactId>bcprov-jdk18on</artifactId>
+			<version>1.77</version>
 		</dependency>
-        <dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcpkix-jdk18on</artifactId>
+			<version>1.77</version>
+		</dependency>
+
+		<dependency>
             <groupId>com.nimbusds</groupId>
              <artifactId>nimbus-jose-jwt</artifactId>
              <version>9.37</version>
