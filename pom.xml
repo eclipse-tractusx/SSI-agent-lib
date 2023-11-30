@@ -67,7 +67,7 @@ SPDX-License-Identifier: Apache-2.0
         <maven.compiler.target>11</maven.compiler.target>
         <delombokSourceDirectory>${project.build.directory}/delombok</delombokSourceDirectory>
         <com.diffplug.spotless.maven.plugin.version>2.41.0</com.diffplug.spotless.maven.plugin.version>
-        <org.eclipse.dash.license.tool.plugin.version>0.0.1-SNAPSHOT</org.eclipse.dash.license.tool.plugin.version>
+        <org.eclipse.dash.license.tool.plugin.version>1.0.2</org.eclipse.dash.license.tool.plugin.version>
     </properties>
 
     <dependencies>
