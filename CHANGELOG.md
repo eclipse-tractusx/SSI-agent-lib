@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.17] - 2023-11-29
 
+## Added
+  - extra layer of validation in `org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation` for `verify`.
+
 ### BREAKING CHANGES
 
 - The misspelled method name `verifiy`
