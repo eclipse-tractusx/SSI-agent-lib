@@ -30,6 +30,7 @@ import java.util.List;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
 import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
+import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
@@ -284,5 +285,38 @@ public class LinkedDataProofValidationComponentTest {
     var isOk = linkedDataProofValidation.verify(vpWithProof);
 
     Assertions.assertTrue(isOk);
+  }
+
+  @Test
+  public void testVerificationMethodOfVC()
+      throws IOException, KeyGenerationException, UnsupportedSignatureTypeException, SsiException,
+          InvalidePrivateKeyFormat {
+
+    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
+    didResolver.register(credentialIssuer);
+
+    // Generator
+    linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
+
+    // Verification
+    linkedDataProofValidation = LinkedDataProofValidation.newInstance(this.didResolver);
+
+    final URI verificationMethod =
+        credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
+
+    final VerifiableCredential credential =
+        TestVerifiableFactory.createVerifiableCredential(credentialIssuer, null);
+
+    credential.replace("issuer", "did:test:4efee956-GGGG-42c0-8efb-0716e5e3f8de");
+    final Proof proof =
+        linkedDataProofGenerator.createProof(
+            credential, verificationMethod, credentialIssuer.getPrivateKey());
+
+    final VerifiableCredential credentialWithProof =
+        TestVerifiableFactory.attachProof(credential, proof);
+
+    var isOk = linkedDataProofValidation.verify(credentialWithProof);
+
+    Assertions.assertFalse(isOk);
   }
 }
