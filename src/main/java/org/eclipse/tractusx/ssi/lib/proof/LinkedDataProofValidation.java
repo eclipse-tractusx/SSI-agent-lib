@@ -99,10 +99,10 @@ public class LinkedDataProofValidation {
     final TransformedLinkedData transformedData = transformer.transform(verifiable);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
 
-    return jsonLdValidator.validate(verifiable) && verifier.verify(hashedData, verifiable) && validateVerificationMethodOfVC(verifiable);
+    return jsonLdValidator.validate(verifiable)
+        && verifier.verify(hashedData, verifiable)
+        && validateVerificationMethodOfVC(verifiable);
   }
-
-
 
   /**
    * This method is to validate the Verification Method of VC

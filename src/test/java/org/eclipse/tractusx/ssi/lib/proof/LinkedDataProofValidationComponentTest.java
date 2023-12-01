@@ -287,7 +287,7 @@ public class LinkedDataProofValidationComponentTest {
     Assertions.assertTrue(isOk);
   }
 
-    @Test
+  @Test
   public void testVerificationMethodOfVC()
       throws IOException, KeyGenerationException, UnsupportedSignatureTypeException, SsiException,
           InvalidePrivateKeyFormat {
