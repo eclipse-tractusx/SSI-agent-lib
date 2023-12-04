@@ -60,6 +60,7 @@ public class LinkedDataTransformerTest {
             .issuanceDate(Instant.now())
             .verifiableCredentialStatus(TestResourceUtil.getStatusListEntry())
             .credentialSubject(verifiableCredentialSubject)
+            .verifiableCredentialStatus(TestResourceUtil.getStatusListEntry())
             .build();
 
     // check status added in VC
