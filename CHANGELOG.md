@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-  - extra layer of validation in `org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation` for `verify`.
+- Extra layer of validation in `org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation` for `verify`.
 
 ### Fixed
 
