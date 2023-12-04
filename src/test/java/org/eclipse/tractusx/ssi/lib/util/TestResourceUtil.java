@@ -34,6 +34,7 @@ import lombok.SneakyThrows;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialStatusList2021Entry;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 
 public class TestResourceUtil {
@@ -138,5 +139,15 @@ public class TestResourceUtil {
         TestResourceUtil.class.getClassLoader().getResourceAsStream(resource);
 
     return Objects.requireNonNull(inputStream, "Resource not found: " + resource);
+  }
+
+  public static VerifiableCredentialStatusList2021Entry getStatusListEntry() {
+    return new VerifiableCredentialStatusList2021Entry(
+        Map.of(
+            "id", "https://example.com/credentials/status/3#94567",
+            "type", "BitstringStatusListEntry",
+            "statusPurpose", "revocation",
+            "statusListIndex", "94567",
+            "statusListCredential", "https://example.com/credentials/status/3"));
   }
 }
