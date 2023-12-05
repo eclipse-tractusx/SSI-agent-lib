@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.0.18] - 2023-12-5
+
 ### Added
 
 - A `NOTICE.md` file to be processed inside of the `docs/` folder, containing the necessary legal
