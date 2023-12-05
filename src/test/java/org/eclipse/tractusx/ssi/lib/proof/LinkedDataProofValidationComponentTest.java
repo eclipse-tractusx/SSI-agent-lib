@@ -276,14 +276,6 @@ public class LinkedDataProofValidationComponentTest {
     Assertions.assertTrue(isOk);
   }
 
-  /**
-   * Test Proof configuration signature
-   *
-   * @throws IOException the io exception
-   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
-   * @throws KeyGenerationException the key generation exception
-   */
   @Test
   @SneakyThrows
   public void testVCProofFailureOnManipulatedProofOptions() {

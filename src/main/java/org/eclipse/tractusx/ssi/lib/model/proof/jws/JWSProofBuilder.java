@@ -28,9 +28,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import lombok.NoArgsConstructor;
 
-/** The type Jws signature 2020 builder. */
+/** The type Jws proof builder. */
 @NoArgsConstructor
-public class JWSSignature2020Builder {
+public class JWSProofBuilder {
 
   private String proofPurpose;
   private String jws;
@@ -38,12 +38,12 @@ public class JWSSignature2020Builder {
   private Instant created;
 
   /**
-   * Proof purpose jws signature 2020 builder.
+   * Proof purpose jws 2020 builder.
    *
    * @param proofPurpose the proof purpose
    * @return the jws signature 2020 builder
    */
-  public JWSSignature2020Builder proofPurpose(String proofPurpose) {
+  public JWSProofBuilder proofPurpose(String proofPurpose) {
     this.proofPurpose = proofPurpose;
     return this;
   }
@@ -54,29 +54,29 @@ public class JWSSignature2020Builder {
    * @param proofValue the proof value
    * @return the jws signature 2020 builder
    */
-  public JWSSignature2020Builder proofValue(String proofValue) {
+  public JWSProofBuilder proofValue(String proofValue) {
     this.jws = proofValue;
     return this;
   }
 
   /**
-   * Verification method jws signature 2020 builder.
+   * Verification method jws builder.
    *
    * @param verificationMethod the verification method
    * @return the jws signature 2020 builder
    */
-  public JWSSignature2020Builder verificationMethod(URI verificationMethod) {
+  public JWSProofBuilder verificationMethod(URI verificationMethod) {
     this.verificationMethod = verificationMethod;
     return this;
   }
 
   /**
-   * Created jws signature 2020 builder.
+   * Created jws builder.
    *
    * @param created the created
    * @return the jws signature 2020 builder
    */
-  public JWSSignature2020Builder created(Instant created) {
+  public JWSProofBuilder created(Instant created) {
     this.created = created;
     return this;
   }
@@ -104,5 +104,28 @@ public class JWSSignature2020Builder {
             formatter.format(created));
 
     return new JWSSignature2020(map);
+  }
+
+  /**
+   * Build jws Proof Configuration
+   *
+   * @return the jws configuratuin
+   */
+  public JWSProofConfiguration buildProofConfiguration() {
+    DateTimeFormatter formatter =
+        DateTimeFormatter.ofPattern(JWSSignature2020.TIME_FORMAT).withZone(ZoneOffset.UTC);
+
+    Map<String, Object> map =
+        Map.of(
+            JWSSignature2020.TYPE,
+            JWSSignature2020.JWS_VERIFICATION_KEY_2020,
+            JWSSignature2020.PROOF_PURPOSE,
+            proofPurpose,
+            JWSSignature2020.VERIFICATION_METHOD,
+            verificationMethod.toString(),
+            JWSSignature2020.CREATED,
+            formatter.format(created));
+
+    return new JWSProofConfiguration(map);
   }
 }

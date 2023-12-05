@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 
 /** The type Ed 25519 signature 2020 builder. */
 @NoArgsConstructor
-public class Ed25519Signature2020Builder {
+public class Ed25519ProofBuilder {
 
   private String proofPurpose;
   private String proofValue;
@@ -43,7 +43,7 @@ public class Ed25519Signature2020Builder {
    * @param proofPurpose the proof purpose
    * @return the ed 25519 signature 2020 builder
    */
-  public Ed25519Signature2020Builder proofPurpose(String proofPurpose) {
+  public Ed25519ProofBuilder proofPurpose(String proofPurpose) {
     this.proofPurpose = proofPurpose;
     return this;
   }
@@ -54,7 +54,7 @@ public class Ed25519Signature2020Builder {
    * @param proofValue the proof value
    * @return the ed 25519 signature 2020 builder
    */
-  public Ed25519Signature2020Builder proofValue(String proofValue) {
+  public Ed25519ProofBuilder proofValue(String proofValue) {
     this.proofValue = proofValue;
     return this;
   }
@@ -65,7 +65,7 @@ public class Ed25519Signature2020Builder {
    * @param verificationMethod the verification method
    * @return the ed 25519 signature 2020 builder
    */
-  public Ed25519Signature2020Builder verificationMethod(URI verificationMethod) {
+  public Ed25519ProofBuilder verificationMethod(URI verificationMethod) {
     this.verificationMethod = verificationMethod;
     return this;
   }
@@ -76,7 +76,7 @@ public class Ed25519Signature2020Builder {
    * @param created the created
    * @return the ed 25519 signature 2020 builder
    */
-  public Ed25519Signature2020Builder created(Instant created) {
+  public Ed25519ProofBuilder created(Instant created) {
     this.created = created;
     return this;
   }

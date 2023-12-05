@@ -91,6 +91,7 @@ public class LinkedDataProofValidation {
    * @throws DidParseException
    * @throws SignatureParseException
    * @throws TransformJsonLdException
+   * @throws InvalidJsonLdException
    */
   public boolean verify(Verifiable verifiable)
       throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
@@ -113,7 +114,11 @@ public class LinkedDataProofValidation {
       throw new UnsupportedSignatureTypeException("Proof type can't be empty");
     }
 
-    final TransformedLinkedData transformedData = transformer.transform(verifiable);
+    // We need to make a deep copy to keep the original Verifiable as it is for Verification step
+    var verifiableWithoutProofSignature = verifiable.deepClone().removeProofSignature();
+
+    final TransformedLinkedData transformedData =
+        transformer.transform(verifiableWithoutProofSignature);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
 
     try {

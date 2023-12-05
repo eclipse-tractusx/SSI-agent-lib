@@ -22,12 +22,17 @@
 package org.eclipse.tractusx.ssi.lib.model.verifiable;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import lombok.NonNull;
+import org.apache.commons.lang3.SerializationUtils;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 /** The type Verifiable. */
@@ -67,6 +72,22 @@ public abstract class Verifiable extends JsonLdObject {
   }
 
   /**
+   * Gets proof.
+   *
+   * @return the proof
+   */
+  public Proof getProof() {
+
+    final Object subject = this.get(PROOF);
+
+    if (subject == null) {
+      return null;
+    }
+
+    return new Proof((Map<String, Object>) subject);
+  }
+
+  /**
    * Gets id.
    *
    * @return the id
@@ -84,22 +105,6 @@ public abstract class Verifiable extends JsonLdObject {
   @NonNull
   public List<String> getTypes() {
     return (List<String>) this.get(TYPE);
-  }
-
-  /**
-   * Gets proof.
-   *
-   * @return the proof
-   */
-  public Proof getProof() {
-
-    final Object subject = this.get(PROOF);
-
-    if (subject == null) {
-      return null;
-    }
-
-    return new Proof((Map<String, Object>) subject);
   }
 
   /**
@@ -125,5 +130,59 @@ public abstract class Verifiable extends JsonLdObject {
               "Invalid VerifiableCredential. Credential ID must start with one or more letters followed by a colon. This is a temporary mitigation for the following security risk: %s",
               "https://github.com/eclipse-tractusx/SSI-agent-lib/issues/4"));
     }
+  }
+
+  /**
+   * Deep Clone for Verifiable instance
+   *
+   * @return new deep copy
+   */
+  public Verifiable deepClone() {
+    var copy = (Verifiable) SerializationUtils.clone(this);
+    return copy;
+  }
+
+  /**
+   * To get verifiable object with Proof Configuration attribute
+   *
+   * @return Verifiable
+   */
+  public Verifiable removeProofSignature() {
+
+    // Be careful, this function will return new object
+    Proof proof = this.getProof();
+
+    if (proof != null) {
+      var proofConfiguration = proof.toConfiguration();
+
+      // We need to update this object with new Proof
+      this.put(PROOF, proofConfiguration);
+    }
+
+    if (this.getType() == VerifiableType.VP) {
+
+      VerifiablePresentation vp = (VerifiablePresentation) this;
+      List<VerifiableCredential> newVCsWithConfiguration = new ArrayList<>();
+
+      for (Iterator<VerifiableCredential> iterator = vp.getVerifiableCredentials().iterator();
+          iterator.hasNext(); ) {
+
+        VerifiableCredential vc = (VerifiableCredential) iterator.next();
+        proof = vc.getProof();
+
+        if (proof != null) {
+          var proofConfiguration = proof.toConfiguration();
+
+          // We need to update the copy object with new Proof
+          vc.put(PROOF, proofConfiguration);
+        }
+        newVCsWithConfiguration.add(vc);
+      }
+
+      vp.remove(VerifiablePresentation.VERIFIABLE_CREDENTIAL);
+      vp.put(VerifiablePresentation.VERIFIABLE_CREDENTIAL, newVCsWithConfiguration);
+    }
+
+    return this;
   }
 }
