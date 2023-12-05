@@ -4,3 +4,7 @@ repositories:
   - name: "SSI-agent-lib"
     usage: "Implementation of Self-Sovereign Identity solution"
     url: "https://github.com/eclipse-tractusx/SSI-agent-lib" 
+skipReleaseChecks:
+  # Skip TRG 4.02 aligned base images, as it won't be published
+  alignedBaseImage:
+    - "docs/pandoc.Dockerfile"
