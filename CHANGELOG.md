@@ -7,11 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- A `NOTICE.md` file to be processed inside of the `docs/` folder, containing the necessary legal
+  headers.
+- A `skipReleaseChecks` section to the tractus-x metadata file, as the Dockerfile in the `docs/`
+  directory is not being published.
+
+### Fixed
+
+- The Docker image tag inside of the `docs/` directory use the `tractus-x` prefix now.
+
 ## [0.0.18-SNAPSHOT] 2023-12-4
 
 ### Added
 
-- Extra layer of validation in `org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation` for `verify`.
+- Extra layer of validation in `org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation`
+  for `verify`.
 
 ### Fixed
 
