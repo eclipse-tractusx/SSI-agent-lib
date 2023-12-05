@@ -41,6 +41,7 @@ import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatExceptio
 import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
@@ -60,13 +61,9 @@ public class JWSProofVerifier implements IVerifier {
   @SneakyThrows({DidResolverException.class})
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable document)
       throws SignatureParseException, DidParseException, InvalidPublicKeyFormatException,
-          SignatureVerificationFailedException {
+          SignatureVerificationFailedException, UnsupportedSignatureTypeException {
 
     final Proof proof = document.getProof();
-    if (!proof.getType().equals(JWSSignature2020.JWS_VERIFICATION_KEY_2020)) {
-      throw new SignatureParseException(
-          String.format("Unsupported verification method: %s", proof.getType()));
-    }
 
     final JWSSignature2020 jwsSignature2020 = new JWSSignature2020(proof);
 
