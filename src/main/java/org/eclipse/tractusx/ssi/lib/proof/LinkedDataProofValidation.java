@@ -158,10 +158,11 @@ public class LinkedDataProofValidation {
    * @return
    * @throws UnsupportedSignatureTypeException
    */
-  @SneakyThrows
-  private String getVerificationMethod(Verifiable verifiable) {
+  private String getVerificationMethod(Verifiable verifiable)
+      throws UnsupportedSignatureTypeException {
+    final String VERIFICATION_METHOD = "verificationMethod";
     try {
-      return (String) verifiable.getProof().get("verificationMethod");
+      return (String) verifiable.getProof().get(VERIFICATION_METHOD);
     } catch (Exception e) {
       throw new UnsupportedSignatureTypeException("Signature type is not supported");
     }
