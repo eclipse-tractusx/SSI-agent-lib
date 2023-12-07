@@ -21,9 +21,11 @@
 
 package org.eclipse.tractusx.ssi.lib.serialization.jwt;
 
+import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
@@ -102,5 +104,9 @@ class SerializedJwtPresentationFactoryImplTest {
 
     Assertions.assertNotNull(presentation);
     Assertions.assertDoesNotThrow(() -> jwtVerifier.verify(presentation));
+    JWTClaimsSet jwtClaimsSet = presentation.getJWTClaimsSet();
+    Map<String, Object> vp = jwtClaimsSet.getJSONObjectClaim("vp");
+
+    Assertions.assertEquals(vp.get("id"), jwtClaimsSet.getJWTID());
   }
 }
