@@ -145,7 +145,7 @@ public class TestResourceUtil {
     return new VerifiableCredentialStatusList2021Entry(
         Map.of(
             "id", "https://example.com/credentials/status/3#94567",
-            "type", "BitstringStatusListEntry",
+            "type", "StatusList2021Entry",
             "statusPurpose", "revocation",
             "statusListIndex", "94567",
             "statusListCredential", "https://example.com/credentials/status/3"));
