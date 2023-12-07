@@ -35,13 +35,22 @@ import lombok.Getter;
 import lombok.ToString;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
+/** The type Json ld object. */
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public abstract class JsonLdObject extends HashMap<String, Object> {
 
+  /** The constant CONTEXT. */
   public static final String CONTEXT = "@context";
+
+  /** The {@link DocumentLoader} */
   @ToString.Exclude @Getter private DocumentLoader documentLoader;
 
+  /**
+   * Instantiates a new Json ld object.
+   *
+   * @param json the json
+   */
   public JsonLdObject(Map<String, Object> json) {
     super(json);
 
@@ -63,6 +72,11 @@ public abstract class JsonLdObject extends HashMap<String, Object> {
     }
   }
 
+  /**
+   * Gets context.
+   *
+   * @return the context
+   */
   public List<URI> getContext() {
     final Object context = this.get(CONTEXT);
     if (context instanceof String || context instanceof URI) {
@@ -88,14 +102,29 @@ public abstract class JsonLdObject extends HashMap<String, Object> {
     }
   }
 
+  /**
+   * To json string.
+   *
+   * @return the string
+   */
   public String toJson() {
     return SerializeUtil.toJson(this);
   }
 
+  /**
+   * To pretty json string.
+   *
+   * @return the string
+   */
   public String toPrettyJson() {
     return SerializeUtil.toPrettyJson(this);
   }
 
+  /**
+   * To json object json object.
+   *
+   * @return the json object
+   */
   public synchronized JsonObject toJsonObject() {
     return Json.createObjectBuilder(this).build();
   }

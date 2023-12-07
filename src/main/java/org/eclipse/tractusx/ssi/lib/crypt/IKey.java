@@ -24,13 +24,36 @@ package org.eclipse.tractusx.ssi.lib.crypt;
 import java.io.IOException;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 
+/** The interface Key. */
 public interface IKey {
-  // TODO add docs
+  /**
+   * Gets key length.
+   *
+   * @return the key length
+   */
   int getKeyLength();
 
+  /**
+   * Convert the key to a string for storing
+   *
+   * @return the string
+   * @throws IOException the io exception
+   */
   String asStringForStoring() throws IOException;
 
+  /**
+   * Convert the key to a string for exchange.
+   *
+   * @param encodeType the encode type
+   * @return the string
+   * @throws IOException the io exception
+   */
   String asStringForExchange(EncodeType encodeType) throws IOException;
 
+  /**
+   * Convert the key to a byte array.
+   *
+   * @return the byte [ ]
+   */
   byte[] asByte();
 }

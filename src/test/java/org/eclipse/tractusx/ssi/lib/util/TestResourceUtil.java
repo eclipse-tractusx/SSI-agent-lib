@@ -36,6 +36,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 
+/** The type Test resource util. */
 public class TestResourceUtil {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -50,23 +51,49 @@ public class TestResourceUtil {
       "verifiable-presentation/alumni-presentation.json";
   private static String VERIFIABLE_CREDENTIAL_BPN = "verifiable-credential/bpn-credential.json";
 
+  /**
+   * Gets all did documents.
+   *
+   * @return the all did documents
+   */
   public static List<Map<String, Object>> getAllDidDocuments() {
     return Arrays.asList(
         readJsonResource(DID_DOCUMENT_ED25519), readJsonResource(DID_DOCUMENT_ED25519_BPN));
   }
 
+  /**
+   * Gets alumni verifiable credential.
+   *
+   * @return the alumni verifiable credential
+   */
   public static VerifiableCredential getAlumniVerifiableCredential() {
     return new VerifiableCredential(readJsonResource(VERIFIABLE_CREDENTIAL_ALUMNI));
   }
 
+  /**
+   * Gets alumni verifiable presentation.
+   *
+   * @return the alumni verifiable presentation
+   */
   public static VerifiablePresentation getAlumniVerifiablePresentation() {
     return new VerifiablePresentation(readJsonResource(VERIFIABLE_PRESENTATION_ALUMNI));
   }
 
+  /**
+   * Gets bpn verifiable credential.
+   *
+   * @return the bpn verifiable credential
+   */
   public static VerifiableCredential getBPNVerifiableCredential() {
     return new VerifiableCredential(readJsonResource(VERIFIABLE_CREDENTIAL_BPN));
   }
 
+  /**
+   * Gets did document.
+   *
+   * @param verificationKeyType the verification key type
+   * @return the did document
+   */
   public static Map<String, Object> getDidDocument(String verificationKeyType) {
     if (Ed25519VerificationMethod.DEFAULT_TYPE.equals(verificationKeyType)) {
       return readJsonResource(DID_DOCUMENT_ED25519);
@@ -75,14 +102,29 @@ public class TestResourceUtil {
     throw new IllegalArgumentException("Unsupported verification key type: " + verificationKeyType);
   }
 
+  /**
+   * Gets bpn did document.
+   *
+   * @return the bpn did document
+   */
   public static Map<String, Object> getBPNDidDocument() {
     return readJsonResource(DID_DOCUMENT_ED25519_BPN);
   }
 
+  /**
+   * Gets published did document.
+   *
+   * @return the published did document
+   */
   public static Map<String, Object> getPublishedDidDocument() {
     return readJsonResource(DID_DOCUMENT_PUBLISHED);
   }
 
+  /**
+   * Gets published did document as string.
+   *
+   * @return the published did document as string
+   */
   public static String getPublishedDidDocumentAsString() {
     try {
       return new String(
@@ -92,14 +134,29 @@ public class TestResourceUtil {
     }
   }
 
+  /**
+   * Get public key ed 25519 byte [ ].
+   *
+   * @return the byte [ ]
+   */
   public static byte[] getPublicKeyEd25519() {
     return readPemResource(PUBLIC_KEY_ED25519);
   }
 
+  /**
+   * Get private key ed 25519 byte [ ].
+   *
+   * @return the byte [ ]
+   */
   public static byte[] getPrivateKeyEd25519() {
     return readPemResource(PRIVATE_KEY_ED25519);
   }
 
+  /**
+   * Gets public key ed 25519 as string.
+   *
+   * @return the public key ed 25519 as string
+   */
   public static String getPublicKeyEd25519AsString() {
     try {
       return new String(
@@ -109,6 +166,11 @@ public class TestResourceUtil {
     }
   }
 
+  /**
+   * Gets private key ed 25519 as string.
+   *
+   * @return the private key ed 25519 as string
+   */
   public static String getPrivateKeyEd25519AsString() {
     try {
       return new String(

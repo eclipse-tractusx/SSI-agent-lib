@@ -30,16 +30,25 @@ import lombok.ToString;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
-// spec https://www.w3.org/TR/did-core/
+/** The type Did document. Spec: <a href="https://www.w3.org/TR/did-core/">...</a> */
 @ToString
 public class DidDocument extends JsonLdObject {
 
+  /** The constant DEFAULT_CONTEXT. */
   public static final String DEFAULT_CONTEXT = "https://www.w3.org/ns/did/v1";
+  /** The constant ID. */
   public static final String ID = "id";
+  /** The constant VERIFICATION_METHOD. */
   public static final String VERIFICATION_METHOD = "verificationMethod";
 
+  /** The constant AUTHENTICATION. */
   public static final String AUTHENTICATION = "authentication";
 
+  /**
+   * Instantiates a new Did document.
+   *
+   * @param json the json
+   */
   public DidDocument(Map<String, Object> json) {
     super(json);
 
@@ -54,10 +63,20 @@ public class DidDocument extends JsonLdObject {
     }
   }
 
+  /**
+   * Gets id.
+   *
+   * @return the id
+   */
   public URI getId() {
     return SerializeUtil.asURI(get(ID));
   }
 
+  /**
+   * Gets verification methods.
+   *
+   * @return the verification methods
+   */
   public List<VerificationMethod> getVerificationMethods() {
 
     List<VerificationMethod> result = new ArrayList<>();
@@ -74,6 +93,12 @@ public class DidDocument extends JsonLdObject {
     return result;
   }
 
+  /**
+   * From json did document.
+   *
+   * @param json the json
+   * @return the did document
+   */
   public static DidDocument fromJson(String json) {
     var map = SerializeUtil.fromJson(json);
     return new DidDocument(map);

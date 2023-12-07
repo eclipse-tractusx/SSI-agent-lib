@@ -47,6 +47,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.proof.IVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
+/** The type Ed 25519 proof verifier. */
 @RequiredArgsConstructor
 public class Ed25519ProofVerifier implements IVerifier {
 
@@ -101,6 +102,14 @@ public class Ed25519ProofVerifier implements IVerifier {
     return publicKey;
   }
 
+  /**
+   * Verify hashedLinkedData.
+   *
+   * @param hashedLinkedData the hashed linked data
+   * @param signature the signature
+   * @param publicKey the public key
+   * @return the boolean the verification result
+   */
   @SneakyThrows
   public boolean verify(HashedLinkedData hashedLinkedData, byte[] signature, IPublicKey publicKey) {
 

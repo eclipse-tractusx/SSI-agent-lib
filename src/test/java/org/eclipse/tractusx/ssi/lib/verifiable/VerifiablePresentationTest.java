@@ -29,10 +29,12 @@ import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/** The type Verifiable presentation test. */
 public class VerifiablePresentationTest {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
+  /** Can serialize vp. */
   @Test
   @SneakyThrows
   public void canSerializeVP() {
@@ -45,6 +47,7 @@ public class VerifiablePresentationTest {
         vp.get(VerifiablePresentation.VERIFIABLE_CREDENTIAL));
   }
 
+  /** Can serialize v pwith credential not as list. */
   @Test
   @SneakyThrows
   public void canSerializeVPwithCredentialNotAsList() {

@@ -31,6 +31,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
+/** The type Test did document resolver. */
 @Deprecated
 /** Remove when {@code DidDocumentResolver} is removed. */
 public class TestDidDocumentResolver implements DidDocumentResolver {
@@ -59,10 +60,20 @@ public class TestDidDocumentResolver implements DidDocumentResolver {
     return documents.get(didWithoutFragment);
   }
 
+  /**
+   * Register.
+   *
+   * @param testIdentity the test identity
+   */
   public void register(TestIdentity testIdentity) {
     documents.put(testIdentity.getDid(), testIdentity.getDidDocument());
   }
 
+  /**
+   * With registry did document resolver registry.
+   *
+   * @return the did document resolver registry
+   */
   public DidDocumentResolverRegistry withRegistry() {
     final DidDocumentResolverRegistry registry = new DidDocumentResolverRegistryImpl();
     registry.register(this);

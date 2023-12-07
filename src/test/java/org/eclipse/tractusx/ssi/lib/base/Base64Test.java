@@ -26,18 +26,21 @@ import org.eclipse.tractusx.ssi.lib.model.base.Base64;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/** The type Base 64 test. */
 public class Base64Test {
 
   private static final byte[] DECODED =
       "Multibase is awesome! \\o/".getBytes(StandardCharsets.UTF_8);
   private static final String ENCODED = "mTXVsdGliYXNlIGlzIGF3ZXNvbWUhIFxvLw";
 
+  /** Test encoding. */
   @Test
   public void testEncoding() {
     var multibase = Base64.create(DECODED);
     Assertions.assertEquals(ENCODED, multibase.getEncoded());
   }
 
+  /** Test decoding. */
   @Test
   public void testDecoding() {
     var multibase = Base64.create(ENCODED);

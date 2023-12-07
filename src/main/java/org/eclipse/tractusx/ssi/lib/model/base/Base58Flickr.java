@@ -27,14 +27,27 @@ import lombok.NonNull;
 import lombok.Value;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 
+/** The type Base 58 flickr. */
 @Value
 @EqualsAndHashCode
 public class Base58Flickr implements MultibaseString {
 
+  /**
+   * Check if it can decode a string.
+   *
+   * @param encoded the encoded
+   * @return the boolean
+   */
   public static boolean canDecode(String encoded) {
     return Multibase.encoding(encoded).equals(Multibase.Base.Base58Flickr);
   }
 
+  /**
+   * Create base 58 flickr.
+   *
+   * @param encoded the encoded
+   * @return the base 58 flickr
+   */
   public static Base58Flickr create(String encoded) {
 
     if (!canDecode(encoded)) {

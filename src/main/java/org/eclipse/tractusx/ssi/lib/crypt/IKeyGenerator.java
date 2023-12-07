@@ -23,6 +23,14 @@ package org.eclipse.tractusx.ssi.lib.crypt;
 
 import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
 
+/** The interface KeyGenerator. */
 public interface IKeyGenerator {
+
+  /**
+   * Generate key pair.
+   *
+   * @return the key pair
+   * @throws KeyGenerationException the key generation exception
+   */
   KeyPair generateKey() throws KeyGenerationException;
 }

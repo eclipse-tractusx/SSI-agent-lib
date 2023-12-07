@@ -21,22 +21,48 @@
 
 package org.eclipse.tractusx.ssi.lib.exception;
 
+/** The type Did web exception. */
 public class DidWebException extends RuntimeException {
 
+  /** Instantiates a new Did web exception. */
   public DidWebException() {}
 
+  /**
+   * Instantiates a new Did web exception.
+   *
+   * @param message the message
+   */
   public DidWebException(String message) {
     super(message);
   }
 
+  /**
+   * Instantiates a new Did web exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   */
   public DidWebException(String message, Throwable cause) {
     super(message, cause);
   }
 
+  /**
+   * Instantiates a new Did web exception.
+   *
+   * @param cause the cause
+   */
   public DidWebException(Throwable cause) {
     super(cause);
   }
 
+  /**
+   * Instantiates a new Did web exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   * @param enableSuppression the enable suppression
+   * @param writableStackTrace the writable stack trace
+   */
   public DidWebException(
       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);

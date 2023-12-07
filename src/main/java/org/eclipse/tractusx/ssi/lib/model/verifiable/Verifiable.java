@@ -30,19 +30,33 @@ import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
+/** The type Verifiable. */
 public abstract class Verifiable extends JsonLdObject {
 
+  /** The constant ID. */
   public static final String ID = "id";
+  /** The constant TYPE. */
   public static final String TYPE = "type";
+  /** The constant PROOF. */
   public static final String PROOF = "proof";
 
+  /** The verification type */
   private VerifiableType verifableType;
 
+  /** The enum Verifiable type. */
   public enum VerifiableType {
+    /** Vc verifiable type. */
     VC,
+    /** Vp verifiable type. */
     VP
   }
 
+  /**
+   * Instantiates a new Verifiable.
+   *
+   * @param json the json
+   * @param type the type
+   */
   public Verifiable(Map<String, Object> json, VerifiableType type) {
     super(json);
     Objects.requireNonNull(this.getId());
@@ -52,16 +66,31 @@ public abstract class Verifiable extends JsonLdObject {
     this.checkId();
   }
 
+  /**
+   * Gets id.
+   *
+   * @return the id
+   */
   @NonNull
   public URI getId() {
     return SerializeUtil.asURI(this.get(ID));
   }
 
+  /**
+   * Gets types.
+   *
+   * @return the types
+   */
   @NonNull
   public List<String> getTypes() {
     return (List<String>) this.get(TYPE);
   }
 
+  /**
+   * Gets proof.
+   *
+   * @return the proof
+   */
   public Proof getProof() {
 
     final Object subject = this.get(PROOF);
@@ -73,6 +102,11 @@ public abstract class Verifiable extends JsonLdObject {
     return new Proof((Map<String, Object>) subject);
   }
 
+  /**
+   * Gets type.
+   *
+   * @return the type
+   */
   public VerifiableType getType() {
     return verifableType;
   }

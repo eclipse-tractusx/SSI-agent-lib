@@ -26,27 +26,51 @@ import java.util.Map;
 import lombok.NoArgsConstructor;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 
+/** The type Ed 25519 verification method builder. */
 @NoArgsConstructor
 public class Ed25519VerificationMethodBuilder {
   private URI id;
   private URI controller;
   private String publicKeyMultiBase;
 
+  /**
+   * Id ed 25519 verification method builder.
+   *
+   * @param id the id
+   * @return the ed 25519 verification method builder
+   */
   public Ed25519VerificationMethodBuilder id(URI id) {
     this.id = id;
     return this;
   }
 
+  /**
+   * Controller ed 25519 verification method builder.
+   *
+   * @param controller the controller
+   * @return the ed 25519 verification method builder
+   */
   public Ed25519VerificationMethodBuilder controller(URI controller) {
     this.controller = controller;
     return this;
   }
 
+  /**
+   * Public key multi base ed 25519 verification method builder.
+   *
+   * @param multibaseString the multibase string
+   * @return the ed 25519 verification method builder
+   */
   public Ed25519VerificationMethodBuilder publicKeyMultiBase(MultibaseString multibaseString) {
     this.publicKeyMultiBase = multibaseString.getEncoded();
     return this;
   }
 
+  /**
+   * Build ed 25519 verification method.
+   *
+   * @return the ed 25519 verification method
+   */
   public Ed25519VerificationMethod build() {
     return new Ed25519VerificationMethod(
         Map.of(

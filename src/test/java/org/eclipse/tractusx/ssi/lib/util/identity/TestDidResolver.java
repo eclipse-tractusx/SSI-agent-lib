@@ -28,6 +28,7 @@ import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 
+/** The type Test did resolver. */
 public class TestDidResolver implements DidResolver {
   private final Map<Did, DidDocument> documents = new HashMap<>();
 
@@ -53,6 +54,11 @@ public class TestDidResolver implements DidResolver {
     return documents.get(didWithoutFragment);
   }
 
+  /**
+   * Register.
+   *
+   * @param testIdentity the test identity
+   */
   public void register(TestIdentity testIdentity) {
     documents.put(testIdentity.getDid(), testIdentity.getDidDocument());
   }

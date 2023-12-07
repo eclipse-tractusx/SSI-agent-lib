@@ -26,18 +26,21 @@ import org.eclipse.tractusx.ssi.lib.model.base.Base64WithPadding;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/** The type Base 64 with padding test. */
 public class Base64WithPaddingTest {
 
   private static final byte[] DECODED =
       "Multibase is awesome! \\o/".getBytes(StandardCharsets.UTF_8);
   private static final String ENCODED = "MTXVsdGliYXNlIGlzIGF3ZXNvbWUhIFxvLw==";
 
+  /** Test encoding. */
   @Test
   public void testEncoding() {
     var multibase = Base64WithPadding.create(DECODED);
     Assertions.assertEquals(ENCODED, multibase.getEncoded());
   }
 
+  /** Test decoding. */
   @Test
   public void testDecoding() {
     var multibase = Base64WithPadding.create(ENCODED);
