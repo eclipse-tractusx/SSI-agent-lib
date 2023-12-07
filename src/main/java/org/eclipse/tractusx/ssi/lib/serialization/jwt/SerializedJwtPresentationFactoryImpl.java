@@ -61,6 +61,11 @@ public class SerializedJwtPresentationFactoryImpl implements SerializedJwtPresen
 
     final SerializedVerifiablePresentation serializedVerifiablePresentation =
         jsonLdSerializer.serializePresentation(verifiablePresentation);
-    return signedJwtFactory.create(issuer, audience, serializedVerifiablePresentation, privateKey);
+    return signedJwtFactory.create(
+        verifiablePresentation.getId(),
+        issuer,
+        audience,
+        serializedVerifiablePresentation,
+        privateKey);
   }
 }
