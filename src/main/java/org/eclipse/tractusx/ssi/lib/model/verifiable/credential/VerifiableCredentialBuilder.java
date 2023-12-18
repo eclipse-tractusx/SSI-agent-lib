@@ -173,11 +173,11 @@ public class VerifiableCredentialBuilder {
     map.put(VerifiableCredential.ID, id.toString());
     map.put(VerifiableCredential.TYPE, types);
     map.put(VerifiableCredential.ISSUER, issuer.toString());
+    map.put(VerifiableCredential.CREDENTIAL_SUBJECT, credentialSubject);
     map.put(VerifiableCredential.ISSUANCE_DATE, formatter.format(issuanceDate));
     if (expirationDate != null) {
       map.put(VerifiableCredential.EXPIRATION_DATE, formatter.format(expirationDate));
     }
-    map.put(VerifiableCredential.CREDENTIAL_SUBJECT, credentialSubject);
     if (proof != null) {
       map.put(VerifiableCredential.PROOF, proof);
     }
