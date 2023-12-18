@@ -28,8 +28,15 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.eclipse.tractusx.ssi.lib.exception.DidParseException;
 
+/** The type Did parser. */
 public class DidParser {
 
+  /**
+   * Parse did.
+   *
+   * @param uri the uri
+   * @return the did
+   */
   public static Did parse(URI uri) {
     Objects.requireNonNull(uri);
 
@@ -58,6 +65,12 @@ public class DidParser {
         fragment);
   }
 
+  /**
+   * Parse did.
+   *
+   * @param did the did
+   * @return the did
+   */
   public static Did parse(String did) {
     Objects.requireNonNull(did);
 

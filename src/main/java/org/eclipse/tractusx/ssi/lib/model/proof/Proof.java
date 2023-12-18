@@ -25,10 +25,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/** The type Proof. */
 public class Proof extends HashMap<String, Object> {
 
+  /** The constant TYPE. */
   public static final String TYPE = "type";
 
+  /**
+   * Instantiates a new Proof.
+   *
+   * @param json the json
+   */
   public Proof(Map<String, Object> json) {
     super(json);
 
@@ -40,6 +47,11 @@ public class Proof extends HashMap<String, Object> {
     }
   }
 
+  /**
+   * Gets type.
+   *
+   * @return the type
+   */
   public String getType() {
     return (String) this.get(TYPE);
   }

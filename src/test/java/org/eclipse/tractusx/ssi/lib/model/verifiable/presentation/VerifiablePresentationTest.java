@@ -25,8 +25,10 @@ import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/** The type Verifiable presentation test. */
 public class VerifiablePresentationTest {
 
+  /** Equals success. */
   @Test
   public void equalsSuccess() {
     final VerifiablePresentation vp1 = TestResourceUtil.getAlumniVerifiablePresentation();
@@ -35,6 +37,7 @@ public class VerifiablePresentationTest {
     Assertions.assertEquals(vp1.toString(), vp2.toString());
   }
 
+  /** Equals failure. */
   @Test
   public void equalsFailure() {
     final VerifiablePresentation vp1 = TestResourceUtil.getAlumniVerifiablePresentation();

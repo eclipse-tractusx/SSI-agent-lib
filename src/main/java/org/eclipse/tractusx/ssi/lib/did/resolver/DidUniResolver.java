@@ -42,11 +42,27 @@ public class DidUniResolver implements DidResolver {
   private final URI uniResolverEndpoint;
   private static final String uniResolverResolvePath = "./1.0/identifiers/";
 
+  /**
+   * Instantiates a new Did uni resolver.
+   *
+   * @param client the client
+   * @param uniResolverEndpoint the uni resolver endpoint
+   * @throws MalformedURLException the malformed url exception
+   * @throws URISyntaxException the uri syntax exception
+   */
   public DidUniResolver(HttpClient client, String uniResolverEndpoint)
       throws MalformedURLException, URISyntaxException {
     this(client, URI.create(uniResolverEndpoint));
   }
 
+  /**
+   * Instantiates a new Did uni resolver.
+   *
+   * @param client the client
+   * @param uniResolverEndpoint the uni resolver endpoint
+   * @throws MalformedURLException the malformed url exception
+   * @throws URISyntaxException the uri syntax exception
+   */
   public DidUniResolver(HttpClient client, URI uniResolverEndpoint)
       throws MalformedURLException, URISyntaxException {
     this.client = client;

@@ -27,26 +27,50 @@ import java.util.List;
 import java.util.Map;
 import lombok.NoArgsConstructor;
 
+/** The type Did document builder. */
 @NoArgsConstructor
 public class DidDocumentBuilder {
   private URI id;
   private final List<VerificationMethod> verificationMethods = new ArrayList<>();
 
+  /**
+   * Id did document builder.
+   *
+   * @param id the document id
+   * @return the did document builder
+   */
   public DidDocumentBuilder id(URI id) {
     this.id = id;
     return this;
   }
 
+  /**
+   * Verification methods did document builder.
+   *
+   * @param verificationMethods the verification methods
+   * @return the did document builder
+   */
   public DidDocumentBuilder verificationMethods(List<VerificationMethod> verificationMethods) {
     this.verificationMethods.addAll(verificationMethods);
     return this;
   }
 
+  /**
+   * Verification method did document builder.
+   *
+   * @param verificationMethod the verification method
+   * @return the did document builder
+   */
   public DidDocumentBuilder verificationMethod(VerificationMethod verificationMethod) {
     this.verificationMethods.add(verificationMethod);
     return this;
   }
 
+  /**
+   * Build did document.
+   *
+   * @return the did document
+   */
   public DidDocument build() {
     return new DidDocument(
         Map.of(

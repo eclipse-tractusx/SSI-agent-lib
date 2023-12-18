@@ -27,28 +27,55 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
+/** The type Did. */
 @EqualsAndHashCode
 public class Did {
 
+  /** The Method. */
   @EqualsAndHashCode.Include @Setter @Getter @NonNull DidMethod method;
+  /** The Method identifier. */
   @EqualsAndHashCode.Include @Setter @Getter @NonNull DidMethodIdentifier methodIdentifier;
+  /** The Fragment. */
   @EqualsAndHashCode.Include @Setter @Getter String fragment;
 
+  /**
+   * Instantiates a new Did.
+   *
+   * @param method the method
+   * @param didMethodIdentifier the did method identifier
+   * @param fragment the fragment
+   */
   public Did(DidMethod method, DidMethodIdentifier didMethodIdentifier, String fragment) {
     this.method = method;
     this.methodIdentifier = didMethodIdentifier;
     this.fragment = fragment;
   }
 
+  /**
+   * Instantiates a new Did.
+   *
+   * @param method the method
+   * @param didMethodIdentifier the did method identifier
+   */
   public Did(DidMethod method, DidMethodIdentifier didMethodIdentifier) {
     new Did(method, didMethodIdentifier, null);
   }
 
+  /**
+   * Exclude fragment did.
+   *
+   * @return the did
+   */
   public Did excludeFragment() {
     Did newDid = new Did(method, methodIdentifier, null);
     return newDid;
   }
 
+  /**
+   * To uri.
+   *
+   * @return the uri
+   */
   public URI toUri() {
     return URI.create(toString());
   }

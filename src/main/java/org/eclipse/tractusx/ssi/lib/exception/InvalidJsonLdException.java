@@ -21,15 +21,32 @@
 
 package org.eclipse.tractusx.ssi.lib.exception;
 
+/** The type Invalid json ld exception. */
 public class InvalidJsonLdException extends Exception {
+  /**
+   * Instantiates a new Invalid json ld exception.
+   *
+   * @param message the message
+   */
   public InvalidJsonLdException(String message) {
     super(message);
   }
 
+  /**
+   * Instantiates a new Invalid json ld exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   */
   public InvalidJsonLdException(String message, Throwable cause) {
     super(message, cause);
   }
 
+  /**
+   * Instantiates a new Invalid json ld exception.
+   *
+   * @param cause the cause
+   */
   public InvalidJsonLdException(Throwable cause) {
     super(cause);
   }

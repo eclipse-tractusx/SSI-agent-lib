@@ -35,10 +35,17 @@ import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
+/** The type X21559 private key. */
 public class x21559PrivateKey implements IPrivateKey {
 
   private final @NonNull byte[] key;
 
+  /**
+   * Instantiates a new X 21559 private key.
+   *
+   * @param privateKey the private key
+   * @throws InvalidePrivateKeyFormat the invalide private key format
+   */
   public x21559PrivateKey(byte[] privateKey) throws InvalidePrivateKeyFormat {
     if (this.getKeyLength() != privateKey.length) {
       throw new InvalidePrivateKeyFormat(getKeyLength(), privateKey.length);
@@ -46,9 +53,17 @@ public class x21559PrivateKey implements IPrivateKey {
     this.key = privateKey;
   }
 
-  public x21559PrivateKey(String privateKey, boolean PEMFormat)
+  /**
+   * Instantiates a new X 21559 private key.
+   *
+   * @param privateKey the private key
+   * @param pemFormat the pem format
+   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws IOException the io exception
+   */
+  public x21559PrivateKey(String privateKey, boolean pemFormat)
       throws InvalidePrivateKeyFormat, IOException {
-    if (PEMFormat) {
+    if (pemFormat) {
       StringReader sr = new StringReader(privateKey);
       PemReader reader = new PemReader(sr);
       PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(reader.readPemObject().getContent());
@@ -77,7 +92,7 @@ public class x21559PrivateKey implements IPrivateKey {
   }
 
   @Override
-  public String asStringForExchange(EncodeType encodeType) throws IOException {
+  public String asStringForExchange(EncodeType encodeType) {
 
     return MultibaseFactory.create(encodeType, key).getEncoded();
   }

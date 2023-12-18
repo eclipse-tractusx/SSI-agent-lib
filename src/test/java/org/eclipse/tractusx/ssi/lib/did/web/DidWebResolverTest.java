@@ -47,6 +47,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/** The type Did web resolver test. */
 @ExtendWith(MockitoExtension.class)
 public class DidWebResolverTest {
 
@@ -56,11 +57,20 @@ public class DidWebResolverTest {
 
   private DidWebResolver resolver;
 
+  /** Init each. */
   @BeforeEach
   public void initEach() {
     resolver = new DidWebResolver(httpClient, parser, false);
   }
 
+  /**
+   * Should resolve valid web did.
+   *
+   * @throws DidResolverException the did resolver exception
+   * @throws IOException the io exception
+   * @throws InterruptedException the interrupted exception
+   * @throws URISyntaxException the uri syntax exception
+   */
   @Test
   public void shouldResolveValidWebDid()
       throws DidResolverException, IOException, InterruptedException, URISyntaxException {
@@ -75,6 +85,11 @@ public class DidWebResolverTest {
     assertEquals(new DidDocument(TestResourceUtil.getPublishedDidDocument()), actualDidDoc);
   }
 
+  /**
+   * Should not resolve non web did.
+   *
+   * @throws DidResolverException the did resolver exception
+   */
   @Test
   public void shouldNotResolveNonWebDid() throws DidResolverException {
     Did validDidKey =

@@ -21,7 +21,10 @@
 
 package org.eclipse.tractusx.ssi.lib.model.base;
 
+/** The enum Encode type. */
 public enum EncodeType {
+  /** Base 64 encode type. */
   Base64,
+  /** Base 58 encode type. */
   Base58,
 }

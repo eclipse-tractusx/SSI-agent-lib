@@ -28,6 +28,7 @@ import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.proof.ISigner;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
+/** The type Ed 25519 proof signer. */
 public class Ed25519ProofSigner implements ISigner {
 
   @Override

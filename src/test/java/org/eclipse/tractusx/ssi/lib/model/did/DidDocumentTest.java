@@ -29,10 +29,12 @@ import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/** The type Did document test. */
 public class DidDocumentTest {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
+  /** Can create did document. */
   @Test
   public void canCreateDidDocument() {
     final List<Map<String, Object>> documents = TestResourceUtil.getAllDidDocuments();
@@ -42,6 +44,7 @@ public class DidDocumentTest {
     }
   }
 
+  /** Can serialize did document. */
   @Test
   @SneakyThrows
   public void canSerializeDidDocument() {
@@ -54,6 +57,7 @@ public class DidDocumentTest {
     }
   }
 
+  /** Can deserialize did document. */
   @Test
   @SneakyThrows
   public void canDeserializeDidDocument() {

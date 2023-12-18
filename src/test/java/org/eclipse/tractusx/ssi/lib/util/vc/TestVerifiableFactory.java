@@ -36,6 +36,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePres
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentationType;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
 
+/** The type Test verifiable factory. */
 public class TestVerifiableFactory {
   static List<URI> contextList =
       List.of(
@@ -45,6 +46,13 @@ public class TestVerifiableFactory {
           URI.create("https://w3id.org/security/suites/jws-2020/v1"),
           URI.create("https://w3id.org/security/suites/ed25519-2020/v1"));
 
+  /**
+   * Create verifiable credential verifiable credential.
+   *
+   * @param issuer the issuer
+   * @param proof the proof
+   * @return the verifiable credential
+   */
   @SneakyThrows
   public static VerifiableCredential createVerifiableCredential(TestIdentity issuer, Proof proof) {
     final VerifiableCredentialBuilder verifiableCredentialBuilder =
@@ -67,6 +75,14 @@ public class TestVerifiableFactory {
         .build();
   }
 
+  /**
+   * Create verifiable presentation verifiable presentation.
+   *
+   * @param issuer the issuer
+   * @param vcs the vcs
+   * @param proof the proof
+   * @return the verifiable presentation
+   */
   @SneakyThrows
   public static VerifiablePresentation createVerifiablePresentation(
       TestIdentity issuer, List<VerifiableCredential> vcs, Proof proof) {
@@ -82,6 +98,13 @@ public class TestVerifiableFactory {
         .build();
   }
 
+  /**
+   * Attach proof verifiable credential.
+   *
+   * @param verifiableCredential the verifiable credential
+   * @param proof the proof
+   * @return the verifiable credential
+   */
   public static VerifiableCredential attachProof(
       VerifiableCredential verifiableCredential, Proof proof) {
     VerifiableCredentialBuilder verifiableCredentialBuilder = new VerifiableCredentialBuilder();
@@ -99,6 +122,13 @@ public class TestVerifiableFactory {
         .build();
   }
 
+  /**
+   * Attach proof verifiable presentation.
+   *
+   * @param verifiablePresentation the verifiable presentation
+   * @param proof the proof
+   * @return the verifiable presentation
+   */
   public static VerifiablePresentation attachProof(
       VerifiablePresentation verifiablePresentation, Proof proof) {
 

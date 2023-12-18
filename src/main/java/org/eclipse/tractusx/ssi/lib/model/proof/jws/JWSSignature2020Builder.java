@@ -28,6 +28,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import lombok.NoArgsConstructor;
 
+/** The type Jws signature 2020 builder. */
 @NoArgsConstructor
 public class JWSSignature2020Builder {
 
@@ -36,26 +37,55 @@ public class JWSSignature2020Builder {
   private URI verificationMethod;
   private Instant created;
 
+  /**
+   * Proof purpose jws signature 2020 builder.
+   *
+   * @param proofPurpose the proof purpose
+   * @return the jws signature 2020 builder
+   */
   public JWSSignature2020Builder proofPurpose(String proofPurpose) {
     this.proofPurpose = proofPurpose;
     return this;
   }
 
+  /**
+   * Proof value jws signature 2020 builder.
+   *
+   * @param proofValue the proof value
+   * @return the jws signature 2020 builder
+   */
   public JWSSignature2020Builder proofValue(String proofValue) {
     this.jws = proofValue;
     return this;
   }
 
+  /**
+   * Verification method jws signature 2020 builder.
+   *
+   * @param verificationMethod the verification method
+   * @return the jws signature 2020 builder
+   */
   public JWSSignature2020Builder verificationMethod(URI verificationMethod) {
     this.verificationMethod = verificationMethod;
     return this;
   }
 
+  /**
+   * Created jws signature 2020 builder.
+   *
+   * @param created the created
+   * @return the jws signature 2020 builder
+   */
   public JWSSignature2020Builder created(Instant created) {
     this.created = created;
     return this;
   }
 
+  /**
+   * Build jws signature 2020.
+   *
+   * @return the jws signature 2020
+   */
   public JWSSignature2020 build() {
     DateTimeFormatter formatter =
         DateTimeFormatter.ofPattern(JWSSignature2020.TIME_FORMAT).withZone(ZoneOffset.UTC);

@@ -44,6 +44,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/** The type Composite did resolver test. */
 @ExtendWith(MockitoExtension.class)
 public class CompositeDidResolverTest {
   @Mock private DidResolver resolver1;
@@ -54,12 +55,18 @@ public class CompositeDidResolverTest {
   private static final Did DID =
       new Did(new DidMethod("web"), new DidMethodIdentifier("localhost"), null);
 
+  /** Reset mocks. */
   @BeforeEach
   public void resetMocks() {
     reset(resolver1);
     reset(resolver2);
   }
 
+  /**
+   * Should resolve with one resolver.
+   *
+   * @throws DidResolverException the did resolver exception
+   */
   @Test
   public void shouldResolveWithOneResolver() throws DidResolverException {
     when(resolver1.isResolvable(any())).thenReturn(true);
@@ -69,6 +76,11 @@ public class CompositeDidResolverTest {
     assertEquals(RESOLVED_DID_DOC, resolver.resolve(DID));
   }
 
+  /**
+   * Should resolve with first resolver.
+   *
+   * @throws DidResolverException the did resolver exception
+   */
   @Test
   public void shouldResolveWithFirstResolver() throws DidResolverException {
     when(resolver1.isResolvable(any())).thenReturn(true);
@@ -81,6 +93,11 @@ public class CompositeDidResolverTest {
     verify(resolver2, never()).resolve(any());
   }
 
+  /**
+   * Should resolve with second resolver.
+   *
+   * @throws DidResolverException the did resolver exception
+   */
   @Test
   public void shouldResolveWithSecondResolver() throws DidResolverException {
     when(resolver1.isResolvable(any())).thenReturn(false);
@@ -93,6 +110,11 @@ public class CompositeDidResolverTest {
     verify(resolver1, never()).resolve(any());
   }
 
+  /**
+   * Must not resolve on false.
+   *
+   * @throws DidResolverException the did resolver exception
+   */
   @Test
   public void mustNotResolveOnFalse() throws DidResolverException {
     when(resolver1.isResolvable(any())).thenReturn(false);
@@ -105,6 +127,11 @@ public class CompositeDidResolverTest {
     verify(resolver2, never()).resolve(any());
   }
 
+  /**
+   * Must not resolve on exception.
+   *
+   * @throws DidResolverException the did resolver exception
+   */
   @Test
   public void mustNotResolveOnException() throws DidResolverException {
     when(resolver1.isResolvable(any())).thenReturn(true);
@@ -121,6 +148,11 @@ public class CompositeDidResolverTest {
     verify(resolver2, never()).resolve(any());
   }
 
+  /**
+   * Should construct composite resolver using static method.
+   *
+   * @throws DidResolverException the did resolver exception
+   */
   @Test
   public void shouldConstructCompositeResolverUsingStaticMethod() throws DidResolverException {
     when(resolver1.isResolvable(any())).thenReturn(true);

@@ -25,12 +25,13 @@ import org.eclipse.tractusx.ssi.lib.exception.InvalidJsonLdException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresentation;
 
+/** The interface Json ld serializer. */
 public interface JsonLdSerializer {
 
   /**
-   * Serlizer a presentation to a Json string
+   * Serializer a presentation to a Json string
    *
-   * @param verifiablePresentation
+   * @param verifiablePresentation the verifiable presentation
    * @return {@link SerializedVerifiablePresentation}
    */
   SerializedVerifiablePresentation serializePresentation(
@@ -39,10 +40,10 @@ public interface JsonLdSerializer {
   /**
    * Deserialize a presentation with options to validate JSON-LD or not.
    *
-   * @param serializedPresentation
-   * @param validateJsonLd
-   * @return VerifiablePresentation
-   * @throws InvalidJsonLdException
+   * @param serializedPresentation the serialized presentation
+   * @param validateJsonLd the validate json ld
+   * @return VerifiablePresentation verifiable presentation
+   * @throws InvalidJsonLdException the invalid json ld exception
    */
   VerifiablePresentation deserializePresentation(
       SerializedVerifiablePresentation serializedPresentation, boolean validateJsonLd)
@@ -51,9 +52,9 @@ public interface JsonLdSerializer {
   /**
    * Deserialize a presentation and validates the JSON-LD.
    *
-   * @param serializedPresentation
-   * @return VerifiablePresentation
-   * @throws InvalidJsonLdException
+   * @param serializedPresentation the serialized presentation
+   * @return VerifiablePresentation verifiable presentation
+   * @throws InvalidJsonLdException the invalid json ld exception
    */
   VerifiablePresentation deserializePresentation(
       SerializedVerifiablePresentation serializedPresentation) throws InvalidJsonLdException;

@@ -25,11 +25,22 @@ import java.net.URI;
 import lombok.Getter;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 
+/** The type Jwt signature check failed exception. */
 @Getter
 public class JwtSignatureCheckFailedException extends JwtException {
+
+  /** Issuer did */
   private final Did issuerDid;
+
+  /** Verification key */
   private final URI verificationKey;
 
+  /**
+   * Instantiates a new Jwt signature check failed exception.
+   *
+   * @param issuerDid the issuer did
+   * @param verificationKey the verification key
+   */
   public JwtSignatureCheckFailedException(Did issuerDid, URI verificationKey) {
     super(
         "JWT signature check failed for issuer "

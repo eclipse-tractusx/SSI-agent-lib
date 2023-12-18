@@ -32,12 +32,20 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
+/** The type Verifiable presentation. */
 @ToString(callSuper = true)
 public class VerifiablePresentation extends Verifiable {
+  /** The constant DEFAULT_CONTEXT. */
   public static final URI DEFAULT_CONTEXT = URI.create("https://www.w3.org/2018/credentials/v1");
 
+  /** The constant VERIFIABLE_CREDENTIAL. */
   public static final String VERIFIABLE_CREDENTIAL = "verifiableCredential";
 
+  /**
+   * Instantiates a new Verifiable presentation.
+   *
+   * @param json the json
+   */
   public VerifiablePresentation(Map<String, Object> json) {
     super(json, VerifiableType.VP);
 
@@ -51,11 +59,22 @@ public class VerifiablePresentation extends Verifiable {
     }
   }
 
+  /**
+   * From json verifiable presentation.
+   *
+   * @param json the json
+   * @return the verifiable presentation
+   */
   public static VerifiablePresentation fromJson(String json) {
     var map = SerializeUtil.fromJson(json);
     return new VerifiablePresentation(map);
   }
 
+  /**
+   * Gets verifiable credentials.
+   *
+   * @return the verifiable credentials
+   */
   @NonNull
   public List<VerifiableCredential> getVerifiableCredentials() {
 

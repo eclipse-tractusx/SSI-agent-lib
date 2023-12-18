@@ -23,6 +23,7 @@ package org.eclipse.tractusx.ssi.lib.serialization.jwt;
 
 import lombok.Value;
 
+/** The type Serialized verifiable presentation. */
 @Value
 public class SerializedVerifiablePresentation {
   String json;

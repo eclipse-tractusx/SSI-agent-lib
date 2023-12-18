@@ -23,7 +23,14 @@ package org.eclipse.tractusx.ssi.lib.serialization.jsonLd;
 
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 
+/** The interface Json ld validator. */
 public interface JsonLdValidator {
 
+  /**
+   * Validate json ld object..
+   *
+   * @param jsonLdObject the json ld object
+   * @return the boolean
+   */
   public boolean validate(JsonLdObject jsonLdObject);
 }

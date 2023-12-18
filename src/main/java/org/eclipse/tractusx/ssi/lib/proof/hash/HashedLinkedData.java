@@ -24,6 +24,7 @@ package org.eclipse.tractusx.ssi.lib.proof.hash;
 import lombok.NonNull;
 import lombok.Value;
 
+/** The type Hashed linked data. */
 @Value
 public class HashedLinkedData {
   byte @NonNull [] value;

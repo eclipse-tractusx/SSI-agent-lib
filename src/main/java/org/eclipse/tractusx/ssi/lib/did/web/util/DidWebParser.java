@@ -28,16 +28,30 @@ import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.exception.DidParseException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 
+/** The type Did web parser. */
 @RequiredArgsConstructor
 public class DidWebParser {
 
   private static final String WELL_KNOWN_DID_JSON = "/.well-known/did.json";
   private static final String PATH_DID_JSON = "/did.json";
 
+  /**
+   * Parse uri.
+   *
+   * @param did the did
+   * @return the uri
+   */
   public URI parse(Did did) {
     return parse(did, true);
   }
 
+  /**
+   * Parse uri.
+   *
+   * @param did the did
+   * @param enforceHttps the enforce https
+   * @return the uri
+   */
   @SneakyThrows({URISyntaxException.class})
   public URI parse(Did did, boolean enforceHttps) {
     if (!did.getMethod().equals(Constants.DID_WEB_METHOD)) {

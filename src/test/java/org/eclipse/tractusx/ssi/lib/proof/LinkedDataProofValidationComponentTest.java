@@ -44,6 +44,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/** The type Linked data proof validation component test. */
 public class LinkedDataProofValidationComponentTest {
 
   private LinkedDataProofValidation linkedDataProofValidation;
@@ -52,12 +53,21 @@ public class LinkedDataProofValidationComponentTest {
   private TestIdentity credentialIssuer;
   private TestDidResolver didResolver;
 
+  /** Sets . */
   @BeforeEach
   public void setup() {
     SsiLibrary.initialize();
     this.didResolver = new TestDidResolver();
   }
 
+  /**
+   * Test vc proof failure on manipulated credential.
+   *
+   * @throws IOException the io exception
+   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
+   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws KeyGenerationException the key generation exception
+   */
   @Test
   public void testVCProofFailureOnManipulatedCredential()
       throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
@@ -96,6 +106,14 @@ public class LinkedDataProofValidationComponentTest {
     Assertions.assertFalse(isOk);
   }
 
+  /**
+   * Test vc ed 21559 proof generation and verification.
+   *
+   * @throws IOException the io exception
+   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
+   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws KeyGenerationException the key generation exception
+   */
   @Test
   public void testVCEd21559ProofGenerationAndVerification()
       throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
@@ -128,6 +146,14 @@ public class LinkedDataProofValidationComponentTest {
     Assertions.assertTrue(isOk);
   }
 
+  /**
+   * Test vcjws proof generation and verification.
+   *
+   * @throws IOException the io exception
+   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
+   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws KeyGenerationException the key generation exception
+   */
   @Test
   public void testVCJWSProofGenerationAndVerification()
       throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
@@ -161,6 +187,14 @@ public class LinkedDataProofValidationComponentTest {
     Assertions.assertTrue(isOk);
   }
 
+  /**
+   * Test vp ed 21559 proof generation and verification.
+   *
+   * @throws IOException the io exception
+   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
+   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws KeyGenerationException the key generation exception
+   */
   @Test
   public void testVPEd21559ProofGenerationAndVerification()
       throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
@@ -202,6 +236,14 @@ public class LinkedDataProofValidationComponentTest {
     Assertions.assertTrue(isOk);
   }
 
+  /**
+   * Test vpjws proof generation and verification.
+   *
+   * @throws IOException the io exception
+   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
+   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws KeyGenerationException the key generation exception
+   */
   @Test
   public void testVPJWSProofGenerationAndVerification()
       throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
