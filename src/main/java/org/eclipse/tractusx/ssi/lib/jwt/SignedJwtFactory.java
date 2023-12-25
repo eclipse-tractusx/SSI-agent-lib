@@ -30,11 +30,11 @@ import com.nimbusds.jose.crypto.Ed25519Signer;
 import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
@@ -72,6 +72,7 @@ public class SignedJwtFactory {
    */
   @SneakyThrows
   public SignedJWT create(
+      URI id,
       Did didIssuer,
       String audience,
       SerializedVerifiablePresentation serializedPresentation,
@@ -91,7 +92,7 @@ public class SignedJwtFactory {
             .audience(audience)
             .claim("vp", vp)
             .expirationTime(new Date(new Date().getTime() + 60 * 1000))
-            .jwtID(UUID.randomUUID().toString())
+            .jwtID(id.toString())
             .build();
 
     final OctetKeyPair octetKeyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
