@@ -21,7 +21,13 @@
 
 package org.eclipse.tractusx.ssi.lib.exception;
 
+/** The type Unsupported signature type exception. */
 public class UnsupportedSignatureTypeException extends Exception {
+  /**
+   * Instantiates a new Unsupported signature type exception.
+   *
+   * @param signatureType the signature type
+   */
   public UnsupportedSignatureTypeException(String signatureType) {
     super("Unsupported signature type: " + signatureType);
   }

@@ -21,6 +21,8 @@
 
 package org.eclipse.tractusx.ssi.lib.model.verifiable.presentation;
 
+/** The type Verifiable presentation type. */
 public class VerifiablePresentationType {
+  /** The constant VERIFIABLE_PRESENTATION. */
   public static final String VERIFIABLE_PRESENTATION = "VerifiablePresentation";
 }

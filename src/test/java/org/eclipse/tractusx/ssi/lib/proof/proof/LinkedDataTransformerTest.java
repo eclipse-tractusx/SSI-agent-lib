@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+/** The type Linked data transformer test. */
 public class LinkedDataTransformerTest {
 
   private static final String SummaryVerifiableCredential =
@@ -70,6 +71,7 @@ public class LinkedDataTransformerTest {
 
   private final LinkedDataTransformer transformer = new LinkedDataTransformer();
 
+  /** Test two transformations equal. */
   @Test
   public void testTwoTransformationsEqual() {
     final VerifiableCredential credential1 = deserializeCredential(SummaryVerifiableCredential);
@@ -79,6 +81,12 @@ public class LinkedDataTransformerTest {
     Assertions.assertEquals(data1, data2);
   }
 
+  /**
+   * Test two transformation difference.
+   *
+   * @param original the original
+   * @param replace the replace
+   */
   @ParameterizedTest()
   @CsvSource(
       value = {

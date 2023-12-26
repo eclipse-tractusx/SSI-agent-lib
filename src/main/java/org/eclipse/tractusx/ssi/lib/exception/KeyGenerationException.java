@@ -21,7 +21,13 @@
 
 package org.eclipse.tractusx.ssi.lib.exception;
 
+/** The type Key generation exception. */
 public class KeyGenerationException extends Exception {
 
+  /**
+   * Instantiates a new Key generation exception.
+   *
+   * @param cause the cause
+   */
   public KeyGenerationException(Throwable cause) {}
 }

@@ -32,8 +32,14 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
  * DID or fails to return a DID document.
  */
 public class CompositeDidResolver implements DidResolver {
+  /** The Did resolvers. */
   DidResolver[] didResolvers;
 
+  /**
+   * Instantiates a new Composite did resolver.
+   *
+   * @param didResolvers the did resolvers
+   */
   public CompositeDidResolver(DidResolver... didResolvers) {
     this.didResolvers = didResolvers;
   }
@@ -66,7 +72,7 @@ public class CompositeDidResolver implements DidResolver {
 
   /**
    * Constructs a new {@code CompositeDidResolver} by appending the {@code toBeAppended} resolver to
-   * the {@target} resolver.
+   * the target {@link DidResolver} resolver.
    *
    * @param target the {@code DidResolver} to append the other to
    * @param toBeAppended the {@code DidResolver} to be appended

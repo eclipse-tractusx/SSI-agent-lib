@@ -23,8 +23,14 @@ package org.eclipse.tractusx.ssi.lib.exception;
 
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
+/** The type Did document resolver not registered exception. */
 public class DidDocumentResolverNotRegisteredException extends Exception {
 
+  /**
+   * Instantiates a new Did document resolver not registered exception.
+   *
+   * @param didMethod the did method
+   */
   public DidDocumentResolverNotRegisteredException(DidMethod didMethod) {
     super(String.format("No DID document resolver registered for DID method '%s'", didMethod));
   }

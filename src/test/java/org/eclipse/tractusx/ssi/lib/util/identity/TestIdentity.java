@@ -27,6 +27,7 @@ import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 
+/** The type Test identity. */
 @Value
 public class TestIdentity {
   Did did;

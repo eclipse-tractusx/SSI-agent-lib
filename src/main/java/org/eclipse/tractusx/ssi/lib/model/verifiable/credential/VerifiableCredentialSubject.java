@@ -26,10 +26,17 @@ import java.util.HashMap;
 import java.util.Map;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
+/** The type Verifiable credential subject. */
 public class VerifiableCredentialSubject extends HashMap<String, Object> {
 
+  /** The constant ID. */
   public static final String ID = "id";
 
+  /**
+   * Instantiates a new Verifiable credential subject.
+   *
+   * @param json the json
+   */
   public VerifiableCredentialSubject(Map<String, Object> json) {
     super(json);
 
@@ -42,6 +49,11 @@ public class VerifiableCredentialSubject extends HashMap<String, Object> {
     }
   }
 
+  /**
+   * Gets id.
+   *
+   * @return the id
+   */
   public URI getId() {
     Object id = this.get(ID);
     return id == null ? null : SerializeUtil.asURI(id);

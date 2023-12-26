@@ -32,10 +32,17 @@ import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/** The type Verifiable credential test. */
 public class VerifiableCredentialTest {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
+  /**
+   * Can serialize vc.
+   *
+   * @throws JsonMappingException the json mapping exception
+   * @throws JsonProcessingException the json processing exception
+   */
   @Test
   @SneakyThrows
   public void canSerializeVC() throws JsonMappingException, JsonProcessingException {
@@ -47,6 +54,7 @@ public class VerifiableCredentialTest {
         mapFromJson.get(VerifiableCredential.ISSUER), vp.get(VerifiableCredential.ISSUER));
   }
 
+  /** Should load cached context. */
   @Test
   public void shouldLoadCachedContext() {
     var vcFromMap = TestResourceUtil.getAlumniVerifiableCredential();

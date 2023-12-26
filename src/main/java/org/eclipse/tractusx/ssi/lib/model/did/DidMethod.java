@@ -25,11 +25,17 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Value;
 
+/** The type Did method. */
 @Value
 @EqualsAndHashCode
 public class DidMethod {
   @EqualsAndHashCode.Include @NonNull String value;
 
+  /**
+   * Instantiates a new Did method.
+   *
+   * @param val the val
+   */
   public DidMethod(String val) {
     if (val.isEmpty()) {
       throw new IllegalArgumentException("Empty value not allowed");

@@ -21,16 +21,33 @@
 
 package org.eclipse.tractusx.ssi.lib.exception;
 
+/** The type Jwt exception. */
 public class JwtException extends Exception {
 
+  /**
+   * Instantiates a new Jwt exception.
+   *
+   * @param message the message
+   */
   public JwtException(String message) {
     super(message);
   }
 
+  /**
+   * Instantiates a new Jwt exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   */
   public JwtException(String message, Throwable cause) {
     super(message, cause);
   }
 
+  /**
+   * Instantiates a new Jwt exception.
+   *
+   * @param cause the cause
+   */
   public JwtException(Throwable cause) {
     super(cause);
   }

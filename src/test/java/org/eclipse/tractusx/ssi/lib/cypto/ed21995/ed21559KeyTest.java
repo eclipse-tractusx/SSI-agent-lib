@@ -37,8 +37,14 @@ import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.junit.jupiter.api.Test;
 
+/** The type Ed 21559 key test. */
 public class ed21559KeyTest {
 
+  /**
+   * Test ed 21559 key generation.
+   *
+   * @throws KeyGenerationException the key generation exception
+   */
   @Test
   public void testED21559KeyGeneration() throws KeyGenerationException {
     IKeyGenerator keyGenerator = new x21559Generator();
@@ -47,6 +53,12 @@ public class ed21559KeyTest {
     assertNotNull(keyPair.getPublicKey());
   }
 
+  /**
+   * Test ed 21559 key serliztion.
+   *
+   * @throws KeyGenerationException the key generation exception
+   * @throws IOException the io exception
+   */
   @Test
   public void testED21559KeySerliztion() throws KeyGenerationException, IOException {
     IKeyGenerator keyGenerator = new x21559Generator();
@@ -61,6 +73,14 @@ public class ed21559KeyTest {
     assertNotNull(keyPair.getPublicKey().asStringForExchange(EncodeType.Base64));
   }
 
+  /**
+   * Test ed 21559 key deserliztion.
+   *
+   * @throws KeyGenerationException the key generation exception
+   * @throws IOException the io exception
+   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws InvalidePublicKeyFormat the invalide public key format
+   */
   @Test
   public void testED21559KeyDeserliztion()
       throws KeyGenerationException, IOException, InvalidePrivateKeyFormat,

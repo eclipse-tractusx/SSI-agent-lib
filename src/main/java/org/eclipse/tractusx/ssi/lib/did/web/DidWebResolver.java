@@ -36,6 +36,7 @@ import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 
+/** The type Did web resolver. */
 @RequiredArgsConstructor
 public class DidWebResolver implements DidResolver {
 

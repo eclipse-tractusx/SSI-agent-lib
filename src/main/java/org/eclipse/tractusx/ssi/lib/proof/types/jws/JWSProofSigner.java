@@ -45,6 +45,7 @@ import org.eclipse.tractusx.ssi.lib.proof.ISigner;
 import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
+/** The type Jws proof signer. */
 public class JWSProofSigner implements ISigner {
 
   private SignatureType signatureType;

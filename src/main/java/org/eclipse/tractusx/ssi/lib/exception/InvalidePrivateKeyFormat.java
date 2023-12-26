@@ -21,7 +21,14 @@
 
 package org.eclipse.tractusx.ssi.lib.exception;
 
+/** The type Invalide private key format. */
 public class InvalidePrivateKeyFormat extends Exception {
+  /**
+   * Instantiates a new Invalide private key format.
+   *
+   * @param correctLength the correct length
+   * @param providedLength the provided length
+   */
   public InvalidePrivateKeyFormat(int correctLength, int providedLength) {
     super(
         String.format(
@@ -29,5 +36,10 @@ public class InvalidePrivateKeyFormat extends Exception {
             correctLength, providedLength));
   }
 
+  /**
+   * Instantiates a new Invalide private key format.
+   *
+   * @param cause the cause
+   */
   public InvalidePrivateKeyFormat(Throwable cause) {}
 }

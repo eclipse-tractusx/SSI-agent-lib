@@ -25,7 +25,9 @@ import java.security.Security;
 import net.i2p.crypto.eddsa.EdDSASecurityProvider;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+/** The type SSI library. */
 public final class SsiLibrary {
+  /** Initialize. */
   public static void initialize() {
     Security.addProvider(new EdDSASecurityProvider());
     Security.addProvider(new BouncyCastleProvider());

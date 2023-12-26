@@ -28,6 +28,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import lombok.NoArgsConstructor;
 
+/** The type Ed 25519 signature 2020 builder. */
 @NoArgsConstructor
 public class Ed25519Signature2020Builder {
 
@@ -36,26 +37,55 @@ public class Ed25519Signature2020Builder {
   private URI verificationMethod;
   private Instant created;
 
+  /**
+   * Proof purpose ed 25519 signature 2020 builder.
+   *
+   * @param proofPurpose the proof purpose
+   * @return the ed 25519 signature 2020 builder
+   */
   public Ed25519Signature2020Builder proofPurpose(String proofPurpose) {
     this.proofPurpose = proofPurpose;
     return this;
   }
 
+  /**
+   * Proof value ed 25519 signature 2020 builder.
+   *
+   * @param proofValue the proof value
+   * @return the ed 25519 signature 2020 builder
+   */
   public Ed25519Signature2020Builder proofValue(String proofValue) {
     this.proofValue = proofValue;
     return this;
   }
 
+  /**
+   * Verification method ed 25519 signature 2020 builder.
+   *
+   * @param verificationMethod the verification method
+   * @return the ed 25519 signature 2020 builder
+   */
   public Ed25519Signature2020Builder verificationMethod(URI verificationMethod) {
     this.verificationMethod = verificationMethod;
     return this;
   }
 
+  /**
+   * Created ed 25519 signature 2020 builder.
+   *
+   * @param created the created
+   * @return the ed 25519 signature 2020 builder
+   */
   public Ed25519Signature2020Builder created(Instant created) {
     this.created = created;
     return this;
   }
 
+  /**
+   * Build ed 25519 signature 2020.
+   *
+   * @return the ed 25519 signature 2020
+   */
   public Ed25519Signature2020 build() {
     DateTimeFormatter formatter =
         DateTimeFormatter.ofPattern(Ed25519Signature2020.TIME_FORMAT).withZone(ZoneOffset.UTC);

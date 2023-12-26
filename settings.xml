@@ -24,11 +24,16 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
     <servers>
-        <!-- Catena-X NG: Github Packages -->
         <server>
-            <id>github</id>
-            <username>${env.GITHUB_PACKAGE_USERNAME}</username>
-            <password>${env.GITHUB_PACKAGE_PASSWORD}</password>
+            <id>ossrh</id>
+            <!--
+                MAVEN_USERNAME and MAVEN_PASSWORD are the credentials
+                you have chosen when registering in Maven Jira.
+                This is different for any ORG repositories, so be
+                mindful when releasing.
+            -->
+            <username>${env.MAVEN_USERNAME}</username>
+            <password>${env.MAVEN_PASSWORD}</password>
         </server>
     </servers>
 </settings>
