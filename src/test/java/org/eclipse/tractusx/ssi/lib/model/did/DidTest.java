@@ -30,9 +30,80 @@ public class DidTest {
   @Test
   public void testDidEquals() {
 
+    Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "myFragment");
+    Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "myFragment");
+
+    Assertions.assertEquals(did1, did2);
+  }
+
+  @Test
+  public void testDidNotEqualsIdentifier() {
+
+    Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "myFragment");
+    Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("otherKey"), "myFragment");
+
+    Assertions.assertNotEquals(did1, did2);
+  }
+
+  @Test
+  public void testDidEqualsConvenienceConstructor() {
+
     Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));
     Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));
 
     Assertions.assertEquals(did1, did2);
+  }
+
+  @Test
+  public void testDidNotEqualsFragment() {
+
+    Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "myFragment");
+    Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "otherFragment");
+
+    Assertions.assertNotEquals(did1, did2);
+  }
+
+  @Test
+  public void testDidEqualsFragmentNull() {
+
+    Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), null);
+    Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), null);
+
+    Assertions.assertEquals(did1, did2);
+  }
+
+  @Test
+  public void testDidEqualsFragmentBlank() {
+
+    Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "");
+    Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "");
+
+    Assertions.assertEquals(did1, did2);
+  }
+
+  @Test
+  public void testDidEqualsFragmentNullBlank() {
+
+    Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), null);
+    Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "");
+
+    Assertions.assertEquals(did1, did2);
+  }
+
+  public void testDidEqualsNoFragment() {
+
+    Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));
+    Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));
+
+    Assertions.assertEquals(did1, did2);
+  }
+
+  @Test
+  public void testDidNotEqualsFragmentNull() {
+
+    Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "myFragment");
+    Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));
+
+    Assertions.assertNotEquals(did1, did2);
   }
 }
