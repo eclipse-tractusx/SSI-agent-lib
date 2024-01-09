@@ -19,6 +19,7 @@
 
 package org.eclipse.tractusx.ssi.lib.jwt;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -34,6 +35,7 @@ import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
+import org.eclipse.tractusx.ssi.lib.serialization.jwt.JwtConfig;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresentation;
 
 /**
@@ -65,13 +67,41 @@ public class SignedJwtFactory {
       SerializedVerifiablePresentation serializedPresentation,
       IPrivateKey privateKey,
       String keyId) {
+    JwtConfig jwtConfig = JwtConfig.builder().expirationTime(60).build();
+    return create(didIssuer, audience, serializedPresentation, privateKey, keyId, jwtConfig);
+  }
+
+  /**
+   * Creates a signed JWT {@link SignedJWT} that contains a set of claims and an issuer. Although
+   * all private key types are possible, in the context of Distributed Identity using an Elliptic
+   * Curve key ({@code P-256}) is advisable.
+   *
+   * @param audience the value of the token audience claim, e.g. the IDS Webhook address.
+   * @param keyId the id of the key, the kid of the jws-header will be constructed via
+   *     <issuer>+"#"+<keyId>
+   * @param config the custom configuration for the JWT to create, e.g. custom expiration time (exp)
+   * @return a {@code SignedJWT} that is signed with the private key and contains all claims listed.
+   */
+  @SneakyThrows
+  public SignedJWT create(
+      Did didIssuer,
+      String audience,
+      SerializedVerifiablePresentation serializedPresentation,
+      IPrivateKey privateKey,
+      String keyId,
+      JwtConfig config) {
 
     final String issuer = didIssuer.toString();
     final String subject = didIssuer.toString();
 
+    TypeReference<HashMap<String, Object>> typeRef =
+        new TypeReference<HashMap<String, Object>>() {};
+
     // make on object out of it so that it can get serialized again
     Map<String, Object> vp =
-        new ObjectMapper().readValue(serializedPresentation.getJson(), HashMap.class);
+        new ObjectMapper().readValue(serializedPresentation.getJson(), typeRef);
+
+    Date iat = new Date();
 
     var claimsSet =
         new JWTClaimsSet.Builder()
@@ -79,7 +109,8 @@ public class SignedJwtFactory {
             .subject(subject)
             .audience(audience)
             .claim("vp", vp)
-            .expirationTime(new Date(new Date().getTime() + 60 * 1000))
+            .issueTime(iat)
+            .expirationTime(new Date(iat.getTime() + config.getExpirationTime() * 1000))
             .jwtID(UUID.randomUUID().toString())
             .build();
 
@@ -104,23 +135,7 @@ public class SignedJwtFactory {
 
       var algorithm = JWSAlgorithm.EdDSA;
       var type = JOSEObjectType.JWT;
-      var header =
-          // FIXME issuer must be actual keyId and not only DID
-          new JWSHeader(
-              algorithm,
-              type,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              issuer + "#" + keyId,
-              true,
-              null,
-              null);
+      var header = new JWSHeader.Builder(algorithm).type(type).keyID(issuer + "#" + keyId).build();
       var vc = new SignedJWT(header, claimsSet);
 
       vc.sign(signer);
