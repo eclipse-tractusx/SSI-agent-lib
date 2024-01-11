@@ -25,6 +25,7 @@ import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
 public class KeyTransformationException extends SSIException {
 
+  private static final long serialVersionUID = 7992457773475211865L;
   /**
    * Instantiates a new key trnasformation exception.
    *

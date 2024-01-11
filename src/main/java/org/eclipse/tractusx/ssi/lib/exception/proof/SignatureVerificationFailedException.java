@@ -25,7 +25,7 @@ import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
 /** The type Signature Verification Failed exception. */
 public class SignatureVerificationFailedException extends SSIException {
-
+private static final long serialVersionUID = 7515946489095871265L;
   /**
    * Instantiates a new signature verification failed exception.
    *

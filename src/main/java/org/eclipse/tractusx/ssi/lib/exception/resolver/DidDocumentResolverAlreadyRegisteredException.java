@@ -26,6 +26,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 /** The type SSI did document resolver already registered exception. */
 public class DidDocumentResolverAlreadyRegisteredException extends Exception {
 
+  private static final long serialVersionUID = 1101625710675168299L;
   /**
    * Instantiates a new did document resolver already registered exception.
    *

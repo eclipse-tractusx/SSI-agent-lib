@@ -25,6 +25,7 @@ import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
 /** The type Invalid public key format. */
 public class InvalidPublicKeyFormatException extends SSIException {
+  private static final long serialVersionUID = -8303592321627404757L;
   /**
    * Instantiates a new Invalide public key format.
    *
