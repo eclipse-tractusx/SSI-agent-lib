@@ -85,7 +85,18 @@ SPDX-License-Identifier: Apache-2.0
             <groupId>io.setl</groupId>
             <artifactId>rdf-urdna</artifactId>
             <version>1.2</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.squareup.okio</groupId>
+					<artifactId>okio-jvm</artifactId>
+				</exclusion>
+			</exclusions>
         </dependency>
+		<dependency>
+			<groupId>com.squareup.okio</groupId>
+			<artifactId>okio-jvm</artifactId>
+			<version>3.6.0</version>
+		</dependency>
 
       <!-- https://mvnrepository.com/artifact/jakarta.json/jakarta.json-api -->
         <dependency>
@@ -98,7 +109,7 @@ SPDX-License-Identifier: Apache-2.0
         <dependency>
             <groupId>org.eclipse.parsson</groupId>
             <artifactId>parsson</artifactId>
-            <version>1.1.3</version>
+            <version>1.1.5</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml -->
@@ -126,8 +137,20 @@ SPDX-License-Identifier: Apache-2.0
        <dependency>
            <groupId>commons-validator</groupId>
            <artifactId>commons-validator</artifactId>
-           <version>1.7</version>
+           <version>1.8.0</version>
+		   <exclusions>
+			   <exclusion>
+				   <groupId>commons-collections</groupId>
+				   <artifactId>commons-collections</artifactId>
+			   </exclusion>
+		   </exclusions>
        </dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.4</version>
+		</dependency>
+
 
 		<!-- Google Tink -->
 		<!-- Note: that for EdDSA you need to include the optional Tink
@@ -177,7 +200,7 @@ SPDX-License-Identifier: Apache-2.0
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>testcontainers</artifactId>
-			<version>1.18.3</version>
+			<version>1.19.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
