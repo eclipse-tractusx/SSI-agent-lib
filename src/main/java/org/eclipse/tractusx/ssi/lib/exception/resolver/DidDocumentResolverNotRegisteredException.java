@@ -26,6 +26,8 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 /** The type Did document resolver not registered exception. */
 public class DidDocumentResolverNotRegisteredException extends Exception {
 
+  
+  private static final long serialVersionUID = 1101625710675168299L;
   /**
    * Instantiates a new Did document resolver not registered exception.
    *

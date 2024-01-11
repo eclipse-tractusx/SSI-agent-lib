@@ -21,13 +21,16 @@
 
 package org.eclipse.tractusx.ssi.lib.base;
 
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import org.eclipse.tractusx.ssi.lib.model.base.Base58Bitcoin;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /** The type Base 58 bitcoin test. */
-public class Base58BitcoinTest {
+public class Base58BitcoinTest implements Serializable {
+
+  static final long serialVersionUID = 6034044314589513430L;
 
   private static final byte[] DECODED =
       "Multibase is awesome! \\o/".getBytes(StandardCharsets.UTF_8);

@@ -26,7 +26,7 @@ import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
 /** The type Jwt audience check failed exception. */
 public class JwtAudienceCheckFailedException extends SSIException {
-
+  private static final long serialVersionUID = -3258865938704740787L;
   /**
    * Instantiates a new Jwt audience check failed exception.
    *
