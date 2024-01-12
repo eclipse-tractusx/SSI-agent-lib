@@ -25,7 +25,7 @@ import java.net.URI;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.NoArgsConstructor;
@@ -169,7 +169,7 @@ public class VerifiableCredentialBuilder {
         DateTimeFormatter.ofPattern(VerifiableCredential.TIME_FORMAT).withZone(ZoneOffset.UTC);
 
     // Map.of does not work, as proof can be null
-    Map<String, Object> map = new HashMap<>();
+    Map<String, Object> map = new LinkedHashMap<>();
     map.put(VerifiableCredential.CONTEXT, context);
     map.put(Verifiable.ID, id.toString());
     map.put(Verifiable.TYPE, types);

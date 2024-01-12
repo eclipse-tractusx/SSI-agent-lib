@@ -26,7 +26,7 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -38,7 +38,7 @@ import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 /** The type Json ld object. */
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public abstract class JsonLdObject extends HashMap<String, Object> {
+public abstract class JsonLdObject extends LinkedHashMap<String, Object> {
 
   /** The constant CONTEXT. */
   public static final String CONTEXT = "@context";

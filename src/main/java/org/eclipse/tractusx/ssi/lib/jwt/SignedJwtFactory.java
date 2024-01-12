@@ -34,11 +34,12 @@ import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresentation;
 
 /**
- * Convenience/helper class to generate and verify Signed JSON Web Tokens (JWTs) for communicating
- * between connector instances.
+ * Convenience/helper class to generate * Convenience/helper class to generate and verify Signed
+ * JSON Web Tokens (JWTs) for communicating between connector instances.
  */
 public class SignedJwtFactory {
 
@@ -87,7 +88,33 @@ public class SignedJwtFactory {
     return createSignedES256Jwt(octetKeyPair, claimsSet, issuer, keyId);
   }
 
-  private static SignedJWT createSignedES256Jwt(
+  @SneakyThrows
+  public SignedJWT create(
+      Did didIssuer,
+      Did holderIssuer,
+      Date expDate,
+      LinkedHashMap<String, Object> vc,
+      IPrivateKey privateKey,
+      String keyId) {
+    final String issuer = didIssuer.toString();
+    final String subject = holderIssuer.toString();
+
+    vc.remove(VerifiableCredential.PROOF);
+
+    var claimsSet =
+        new JWTClaimsSet.Builder()
+            .issuer(issuer)
+            .subject(subject)
+            .claim("vc", vc)
+            .expirationTime(expDate)
+            .jwtID(UUID.randomUUID().toString())
+            .build();
+
+    final OctetKeyPair octetKeyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
+    return createSignedES256Jwt(octetKeyPair, claimsSet, issuer, keyId);
+  }
+
+  public SignedJWT createSignedES256Jwt(
       OctetKeyPair privateKey, JWTClaimsSet claimsSet, String issuer, String keyId) {
     JWSSigner signer;
     try {
