@@ -82,14 +82,11 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
 
       findUndefinedTerms(jsonObject);
     } catch (JsonLdError ex) {
-      throw new InvalidJsonLdException(
-          String.format(
-              "Json LD validation failed for json: %s", jsonLdObject.toJsonObject().toString()),
-          ex);
+      throw new InvalidJsonLdException(ex.getCode().toMessage());
     }
   }
 
-  private static void findUndefinedTerms(JsonArray jsonArray) {
+  private static void findUndefinedTerms(JsonArray jsonArray) throws InvalidJsonLdException {
     for (JsonValue entry : jsonArray) {
       if (entry instanceof JsonObject) {
         findUndefinedTerms((JsonObject) entry);
@@ -97,11 +94,11 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
     }
   }
 
-  private static void findUndefinedTerms(JsonObject jsonObject) {
+  private static void findUndefinedTerms(JsonObject jsonObject) throws InvalidJsonLdException {
     for (Map.Entry<String, JsonValue> entry : jsonObject.entrySet()) {
       if (entry.getKey().startsWith(UNDEFINED_TERM_URI)) {
 
-        throw new RuntimeException(
+        throw new InvalidJsonLdException(
             "Undefined JSON-LD term: " + entry.getKey().substring(UNDEFINED_TERM_URI.length()));
       }
 

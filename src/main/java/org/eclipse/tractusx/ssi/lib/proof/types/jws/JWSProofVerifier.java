@@ -35,12 +35,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
@@ -60,7 +60,7 @@ public class JWSProofVerifier implements IVerifier {
   @SneakyThrows({DidResolverException.class})
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable document)
       throws SignatureParseException, DidParseException, InvalidPublicKeyFormatException,
-          SignatureVerificationFailedException {
+          SignatureVerificationException {
 
     final Proof proof = document.getProof();
     if (!proof.getType().equals(JWSSignature2020.JWS_VERIFICATION_KEY_2020)) {
@@ -97,7 +97,7 @@ public class JWSProofVerifier implements IVerifier {
     try {
       return jws.verify(verifier);
     } catch (JOSEException e) {
-      throw new SignatureVerificationFailedException(e.getMessage());
+      throw new SignatureVerificationException(e.getMessage());
     }
   }
 
@@ -136,11 +136,11 @@ public class JWSProofVerifier implements IVerifier {
    * @param publicKey the public key
    * @return the boolean
    * @throws SignatureParseException
-   * @throws SignatureVerificationFailedException
+   * @throws SignatureVerificationException
    * @throws InvalidPublicKeyFormatException
    */
   public boolean verify(HashedLinkedData hashedLinkedData, byte[] signature, IPublicKey publicKey)
-      throws SignatureParseException, SignatureVerificationFailedException,
+      throws SignatureParseException, SignatureVerificationException,
           InvalidPublicKeyFormatException {
 
     var keyPair =
@@ -162,7 +162,7 @@ public class JWSProofVerifier implements IVerifier {
     try {
       return jws.verify(verifier);
     } catch (JOSEException e) {
-      throw new SignatureVerificationFailedException(e.getMessage());
+      throw new SignatureVerificationException(e.getMessage());
     }
   }
 }

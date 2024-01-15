@@ -19,61 +19,50 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.exception.resolver;
+package org.eclipse.tractusx.ssi.lib.exception.proof;
 
-import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
+import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
-/** The type SSI did document resolver already registered exception. */
-public class DidDocumentResolverAlreadyRegisteredException extends Exception {
+/** The type Signature Verification Failed exception. */
+public class SignatureVerificationException extends SSIException {
 
-  private static final long serialVersionUID = 1101625710675168299L;
   /**
-   * Instantiates a new did document resolver already registered exception.
+   * Instantiates a new signature verification failed exception.
    *
    * @param message the message
    */
-  public DidDocumentResolverAlreadyRegisteredException(DidMethod didMethod) {
-    super(String.format("No DID document resolver registered for DID method '%s'", didMethod));
-  }
-
-  /**
-   * Instantiates a new did document resolver already registered exception.
-   *
-   * @param message the message
-   * @param cause the cause
-   */
-  public DidDocumentResolverAlreadyRegisteredException(String message) {
+  public SignatureVerificationException(String message) {
     super(message);
   }
 
   /**
-   * Instantiates a new did document resolver already registered exception.
-   *
-   * @param cause the cause
-   */
-  public DidDocumentResolverAlreadyRegisteredException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  /**
-   * Instantiates a new did document resolver already registered exception.
+   * Instantiates a new signature verification failed exception.
    *
    * @param message the message
    * @param cause the cause
    */
-  public DidDocumentResolverAlreadyRegisteredException(Throwable cause) {
+  protected SignatureVerificationException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  /**
+   * Instantiates a new signature verification failed exception.
+   *
+   * @param cause the cause
+   */
+  protected SignatureVerificationException(Throwable cause) {
     super(cause);
   }
 
   /**
-   * Instantiates a new did document resolver already registered exception.
+   * Instantiates a new signature verification failed exception.
    *
    * @param message the message
    * @param cause the cause
    * @param enableSuppression the enable suppression
    * @param writableStackTrace the writable stack trace
    */
-  public DidDocumentResolverAlreadyRegisteredException(
+  protected SignatureVerificationException(
       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }

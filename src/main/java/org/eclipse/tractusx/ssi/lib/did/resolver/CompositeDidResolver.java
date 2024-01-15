@@ -21,6 +21,7 @@
 package org.eclipse.tractusx.ssi.lib.did.resolver;
 
 import java.util.Arrays;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 

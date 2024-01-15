@@ -30,10 +30,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.did.web.util.Constants;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 
@@ -63,7 +63,6 @@ public class DidWebResolver implements DidResolver {
     final URI uri = parser.parse(did, enforceHttps);
 
     final HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
-
     try {
       final HttpResponse<String> response =
           client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -84,6 +83,7 @@ public class DidWebResolver implements DidResolver {
       final Map<String, Object> json = mapper.readValue(body, Map.class);
 
       return new DidDocument(json);
+
     } catch (Exception e) {
       throw new DidResolverException(
           String.format("Unexpected exception: %s", e.getClass().getName()), e);

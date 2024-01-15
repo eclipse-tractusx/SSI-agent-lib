@@ -19,37 +19,40 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.exception.resolver;
+package org.eclipse.tractusx.ssi.lib.exception.proof;
 
-import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
+import java.util.List;
 
-/** The type Did document resolver not registered exception. */
-public class DidDocumentResolverNotRegisteredException extends Exception {
-
-  
-  private static final long serialVersionUID = 1101625710675168299L;
+/** The type Jwt audience check failed exception. */
+public class JwtAudienceCheckException extends SignatureValidationException {
+  private static final long serialVersionUID = -3258865938704740787L;
   /**
-   * Instantiates a new Did document resolver not registered exception.
+   * Instantiates a new Jwt audience check failed exception.
    *
-   * @param didMethod the did method
+   * @param expectedAudience the expected audience
+   * @param actualAudience the actual audience
    */
-  public DidDocumentResolverNotRegisteredException(DidMethod didMethod) {
-    super(String.format("No DID document resolver registered for DID method '%s'", didMethod));
+  public JwtAudienceCheckException(String expectedAudience, List<String> actualAudience) {
+    super(
+        "JWT audience check failed. Expected audience: "
+            + expectedAudience
+            + ", actual audience: "
+            + String.join(",  ", actualAudience));
   }
 
-  public DidDocumentResolverNotRegisteredException(String message) {
+  public JwtAudienceCheckException(String message) {
     super(message);
   }
 
-  public DidDocumentResolverNotRegisteredException(String message, Throwable cause) {
+  public JwtAudienceCheckException(String message, Throwable cause) {
     super(message, cause);
   }
 
-  public DidDocumentResolverNotRegisteredException(Throwable cause) {
+  public JwtAudienceCheckException(Throwable cause) {
     super(cause);
   }
 
-  public DidDocumentResolverNotRegisteredException(
+  public JwtAudienceCheckException(
       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }
