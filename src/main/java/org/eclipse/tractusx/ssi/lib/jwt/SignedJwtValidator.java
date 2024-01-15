@@ -25,7 +25,7 @@ import com.nimbusds.jwt.SignedJWT;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-import org.eclipse.tractusx.ssi.lib.exception.proof.JwtAudienceCheckFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.JwtAudienceCheckException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.JwtExpiredException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
 
@@ -46,7 +46,7 @@ public class SignedJwtValidator {
   }
 
   public void validateAudiences(SignedJWT jwt, String expectedAudience)
-      throws JwtAudienceCheckFailedException, SignatureParseException {
+      throws JwtAudienceCheckException, SignatureParseException {
     List<String> audiences;
     try {
       audiences = jwt.getJWTClaimsSet().getAudience();
@@ -55,7 +55,7 @@ public class SignedJwtValidator {
     }
     boolean isValidAudience = audiences.stream().anyMatch(x -> x.equals(expectedAudience));
     if (!isValidAudience) {
-      throw new JwtAudienceCheckFailedException(expectedAudience, audiences);
+      throw new JwtAudienceCheckException(expectedAudience, audiences);
     }
   }
 }

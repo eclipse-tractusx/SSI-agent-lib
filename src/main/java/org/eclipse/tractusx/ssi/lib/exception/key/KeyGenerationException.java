@@ -20,6 +20,7 @@
  */
 
 package org.eclipse.tractusx.ssi.lib.exception.key;
+
 import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
 /** The type Key Generation Exception */

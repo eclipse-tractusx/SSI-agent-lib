@@ -22,7 +22,7 @@
 package org.eclipse.tractusx.ssi.examples;
 
 import com.nimbusds.jwt.SignedJWT;
-import org.eclipse.tractusx.ssi.lib.exception.proof.JwtAudienceCheckFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.JwtAudienceCheckException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.JwtExpiredException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtValidator;
@@ -34,11 +34,11 @@ public class Validation {
    *
    * @param signedJWT the signed jwt
    * @param audience the audience
-   * @throws JwtAudienceCheckFailedException the jwt audience check failed exception
+   * @throws JwtAudienceCheckException the jwt audience check failed exception
    * @throws JwtExpiredException the jwt expired exception
    */
   public static void validateJWTDate(SignedJWT signedJWT, String audience)
-      throws JwtAudienceCheckFailedException, JwtExpiredException, SignatureParseException {
+      throws JwtAudienceCheckException, JwtExpiredException, SignatureParseException {
     SignedJwtValidator jwtValidator = new SignedJwtValidator();
     jwtValidator.validateDate(signedJWT);
   }
@@ -48,11 +48,11 @@ public class Validation {
    *
    * @param signedJWT the signed jwt
    * @param audience the audience
-   * @throws JwtAudienceCheckFailedException the jwt audience check failed exception
+   * @throws JwtAudienceCheckException the jwt audience check failed exception
    * @throws JwtExpiredException the jwt expired exception
    */
   public static void validateJWTAudiences(SignedJWT signedJWT, String audience)
-      throws JwtAudienceCheckFailedException, JwtExpiredException, SignatureParseException {
+      throws JwtAudienceCheckException, JwtExpiredException, SignatureParseException {
     SignedJwtValidator jwtValidator = new SignedJwtValidator();
     jwtValidator.validateAudiences(signedJWT, audience);
   }

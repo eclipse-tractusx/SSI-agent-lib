@@ -19,50 +19,51 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.exception.proof;
+package org.eclipse.tractusx.ssi.lib.exception.did;
 
 import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
-/** The type Signature Verification Failed exception. */
-public class SignatureVerificationFailedException extends SSIException {
-private static final long serialVersionUID = 7515946489095871265L;
+/** The type Did resolver exception. */
+public class DidResolverException extends SSIException {
+
   /**
-   * Instantiates a new signature verification failed exception.
+   * Instantiates a new Did resolver exception.
    *
    * @param message the message
    */
-  public SignatureVerificationFailedException(String message) {
+  public DidResolverException(String message) {
     super(message);
   }
 
   /**
-   * Instantiates a new signature verification failed exception.
+   * Instantiates a new Did resolver exception from another exception with a message.
    *
    * @param message the message
    * @param cause the cause
    */
-  protected SignatureVerificationFailedException(String message, Throwable cause) {
+  public DidResolverException(String message, Throwable cause) {
     super(message, cause);
   }
 
   /**
-   * Instantiates a new signature verification failed exception.
+   * Instantiates a new Did resolver exception from another exception.
    *
    * @param cause the cause
    */
-  protected SignatureVerificationFailedException(Throwable cause) {
+  public DidResolverException(Throwable cause) {
     super(cause);
   }
 
   /**
-   * Instantiates a new signature verification failed exception.
+   * Instantiates a new Did resolver exception with a message from another exception, allowing for
+   * disabling and printing the stack trace.
    *
    * @param message the message
    * @param cause the cause
    * @param enableSuppression the enable suppression
    * @param writableStackTrace the writable stack trace
    */
-  protected SignatureVerificationFailedException(
+  public DidResolverException(
       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }

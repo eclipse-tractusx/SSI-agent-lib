@@ -31,9 +31,8 @@ import org.eclipse.tractusx.ssi.lib.exception.json.TransformJsonLdException;
 import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
-import org.eclipse.tractusx.ssi.lib.exception.resolver.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable.VerifiableType;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -86,7 +85,7 @@ public class LinkedDataProofValidation {
    * @throws UnsupportedSignatureTypeException
    * @throws DidDocumentResolverNotRegisteredException
    * @throws NoVerificationKeyFoundException
-   * @throws SignatureVerificationFailedException
+   * @throws SignatureVerificationException
    * @throws InvalidPublicKeyFormatException
    * @throws DidParseException
    * @throws SignatureParseException
@@ -94,9 +93,8 @@ public class LinkedDataProofValidation {
    */
   public boolean verify(Verifiable verifiable)
       throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
-          InvalidPublicKeyFormatException, SignatureVerificationFailedException,
-          NoVerificationKeyFoundException, DidDocumentResolverNotRegisteredException,
-          TransformJsonLdException {
+          InvalidPublicKeyFormatException, SignatureVerificationException,
+          NoVerificationKeyFoundException, TransformJsonLdException {
 
     var type = verifiable.getProof().getType();
     IVerifier verifier = null;

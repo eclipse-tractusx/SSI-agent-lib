@@ -28,15 +28,15 @@ import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import java.security.SignatureException;
 import java.text.ParseException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedVerificationMethodException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
@@ -63,18 +63,19 @@ public class SignedJwtVerifier {
    * @throws DidParseException
    * @throws SignatureException
    * @throws DidResolverException
-   * @throws SignatureVerificationFailedException
+   * @throws SignatureVerificationException
    * @throws UnsupportedVerificationMethodException
+   * @throws SignatureParseException
    */
   public boolean verify(SignedJWT jwt)
-      throws DidParseException, SignatureException, DidResolverException,
-          SignatureVerificationFailedException, UnsupportedVerificationMethodException {
+      throws DidParseException, DidResolverException, SignatureVerificationException,
+          UnsupportedVerificationMethodException, SignatureParseException {
 
     JWTClaimsSet jwtClaimsSet;
     try {
       jwtClaimsSet = jwt.getJWTClaimsSet();
     } catch (ParseException e) {
-      throw new SignatureException(e.getMessage());
+      throw new SignatureParseException(e.getMessage());
     }
 
     final String issuer = jwtClaimsSet.getIssuer();
@@ -100,7 +101,7 @@ public class SignedJwtVerifier {
               return true;
             }
           } catch (JOSEException e) {
-            throw new SignatureVerificationFailedException(e.getMessage());
+            throw new SignatureVerificationException(e.getMessage());
           }
         } else {
           throw new UnsupportedVerificationMethodException(
@@ -121,7 +122,7 @@ public class SignedJwtVerifier {
             return true;
           }
         } catch (JOSEException e) {
-          throw new SignatureVerificationFailedException(e.getMessage());
+          throw new SignatureVerificationException(e.getMessage());
         }
       }
     }

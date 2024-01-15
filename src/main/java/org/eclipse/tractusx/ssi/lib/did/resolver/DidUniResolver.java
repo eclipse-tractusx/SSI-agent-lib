@@ -27,6 +27,8 @@ import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 
@@ -70,7 +72,7 @@ public class DidUniResolver implements DidResolver {
   }
 
   @Override
-  public DidDocument resolve(Did did) throws DidResolverException {
+  public DidDocument resolve(Did did) throws DidResolverException, DidParseException {
     URI requestUri =
         uniResolverEndpoint.resolve(uniResolverResolvePath).resolve("./" + did.toString());
     final HttpRequest request = HttpRequest.newBuilder().uri(requestUri).GET().build();

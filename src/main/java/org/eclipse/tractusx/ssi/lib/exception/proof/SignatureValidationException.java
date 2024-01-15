@@ -21,39 +21,48 @@
 
 package org.eclipse.tractusx.ssi.lib.exception.proof;
 
-import java.util.List;
 import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
-/** The type Jwt audience check failed exception. */
-public class JwtAudienceCheckFailedException extends SSIException {
-  private static final long serialVersionUID = -3258865938704740787L;
-  /**
-   * Instantiates a new Jwt audience check failed exception.
-   *
-   * @param expectedAudience the expected audience
-   * @param actualAudience the actual audience
-   */
-  public JwtAudienceCheckFailedException(String expectedAudience, List<String> actualAudience) {
-    super(
-        "JWT audience check failed. Expected audience: "
-            + expectedAudience
-            + ", actual audience: "
-            + String.join(",  ", actualAudience));
-  }
+/** The type Signature Validation exception. */
+public class SignatureValidationException extends SSIException {
 
-  public JwtAudienceCheckFailedException(String message) {
+  /**
+   * Instantiates a new signature verification exception.
+   *
+   * @param message the message
+   */
+  public SignatureValidationException(String message) {
     super(message);
   }
 
-  public JwtAudienceCheckFailedException(String message, Throwable cause) {
+  /**
+   * Instantiates a new signature validation exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   */
+  protected SignatureValidationException(String message, Throwable cause) {
     super(message, cause);
   }
 
-  public JwtAudienceCheckFailedException(Throwable cause) {
+  /**
+   * Instantiates a new signature verification exception.
+   *
+   * @param cause the cause
+   */
+  protected SignatureValidationException(Throwable cause) {
     super(cause);
   }
 
-  public JwtAudienceCheckFailedException(
+  /**
+   * Instantiates a new signature verification exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   * @param enableSuppression the enable suppression
+   * @param writableStackTrace the writable stack trace
+   */
+  protected SignatureValidationException(
       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);
   }

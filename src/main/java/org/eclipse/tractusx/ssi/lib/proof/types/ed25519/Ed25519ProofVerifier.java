@@ -31,12 +31,11 @@ import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
-import org.eclipse.tractusx.ssi.lib.exception.resolver.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
@@ -57,8 +56,7 @@ public class Ed25519ProofVerifier implements IVerifier {
   @SneakyThrows({DidResolverException.class})
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable verifiable)
       throws UnsupportedSignatureTypeException, InvalidPublicKeyFormatException,
-          NoVerificationKeyFoundException, DidParseException,
-          DidDocumentResolverNotRegisteredException {
+          NoVerificationKeyFoundException, DidParseException {
 
     final Proof proof = verifiable.getProof();
     final Ed25519Signature2020 ed25519Signature2020 = new Ed25519Signature2020(proof);
@@ -75,9 +73,8 @@ public class Ed25519ProofVerifier implements IVerifier {
   }
 
   private IPublicKey discoverPublicKey(Ed25519Signature2020 signature)
-      throws DidDocumentResolverNotRegisteredException, UnsupportedSignatureTypeException,
-          InvalidPublicKeyFormatException, NoVerificationKeyFoundException, DidResolverException,
-          DidParseException {
+      throws UnsupportedSignatureTypeException, InvalidPublicKeyFormatException,
+          NoVerificationKeyFoundException, DidResolverException, DidParseException {
 
     final Did issuer = DidParser.parse(signature.getVerificationMethod());
 

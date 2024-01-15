@@ -21,10 +21,8 @@
 
 package org.eclipse.tractusx.ssi.lib.exception.proof;
 
-import org.eclipse.tractusx.ssi.lib.exception.SSIException;
-
 /** The type Unsupported signature type exception. */
-public class UnsupportedSignatureTypeException extends SSIException {
+public class UnsupportedSignatureTypeException extends SignatureVerificationException {
 
   /**
    * Instantiates a new unsupported signature type exception.

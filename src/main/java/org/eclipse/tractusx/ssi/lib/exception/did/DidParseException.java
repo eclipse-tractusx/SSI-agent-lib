@@ -22,20 +22,21 @@
 package org.eclipse.tractusx.ssi.lib.exception.did;
 
 import org.eclipse.tractusx.ssi.lib.exception.SSIException;
-/** The type Did parse exception. */ 
+
+/** The type Did parse exception. */
 public class DidParseException extends SSIException {
 
   private static final long serialVersionUID = -8099856673022088164L;
-/**
-   * Instantiates a new Did parse exception. 
+  /**
+   * Instantiates a new Did parse exception.
    *
    * @param message the message
    */
   public DidParseException(String did) {
     super(String.format("Invalid DID URL: %s, not able to parse it", did));
   }
-/**
-   * Instantiates a new Did parse exception. 
+  /**
+   * Instantiates a new Did parse exception.
    *
    * @param message the message
    * @param cause the cause
@@ -43,15 +44,15 @@ public class DidParseException extends SSIException {
   public DidParseException(String message, Throwable cause) {
     super(message, cause);
   }
- /**
-   * Instantiates a new Did parse exception. 
+  /**
+   * Instantiates a new Did parse exception.
    *
    * @param cause the cause
    */
   public DidParseException(Throwable cause) {
     super(cause);
   }
-/**
+  /**
    * Instantiates a new Did parse exception.
    *
    * @param message the message

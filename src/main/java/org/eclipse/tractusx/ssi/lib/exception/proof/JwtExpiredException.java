@@ -22,11 +22,10 @@
 package org.eclipse.tractusx.ssi.lib.exception.proof;
 
 import java.util.Date;
-import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
 /** The type Jwt expired exception. */
-public class JwtExpiredException extends SSIException {
-private static final long serialVersionUID = -1766884006095685877L;
+public class JwtExpiredException extends SignatureValidationException {
+  private static final long serialVersionUID = -1766884006095685877L;
   /**
    * Instantiates a new Jwt expired exception.
    *

@@ -22,13 +22,11 @@
 package org.eclipse.tractusx.ssi.examples;
 
 import java.net.http.HttpClient;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebResolver;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
-import org.eclipse.tractusx.ssi.lib.exception.resolver.DidDocumentResolverAlreadyRegisteredException;
-import org.eclipse.tractusx.ssi.lib.exception.resolver.DidDocumentResolverNotRegisteredException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 
@@ -43,8 +41,7 @@ public class ResolveDIDDoc {
    *     exception
    */
   public static DidDocument ResovleDocument(String didUrl)
-      throws DidDocumentResolverNotRegisteredException,
-          DidDocumentResolverAlreadyRegisteredException, DidParseException, DidResolverException {
+      throws DidParseException, DidResolverException {
 
     // DID Resolver Constracture params
     DidWebParser didParser = new DidWebParser();

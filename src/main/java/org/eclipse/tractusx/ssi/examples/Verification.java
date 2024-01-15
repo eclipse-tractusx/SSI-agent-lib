@@ -24,18 +24,17 @@ package org.eclipse.tractusx.ssi.examples;
 import com.nimbusds.jwt.SignedJWT;
 import java.net.http.HttpClient;
 import java.security.SignatureException;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebResolver;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.json.TransformJsonLdException;
 import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedVerificationMethodException;
-import org.eclipse.tractusx.ssi.lib.exception.resolver.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtVerifier;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
@@ -47,14 +46,15 @@ import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
  * @throws DidParseException
  * @throws SignatureException
  * @throws DidResolverException
- * @throws SignatureVerificationFailedException
+ * @throws SignatureVerificationException
  * @throws UnsupportedVerificationMethodException
  */
 public class Verification {
 
   public static void verifyJWT(SignedJWT jwt)
       throws DidParseException, SignatureException, DidResolverException,
-          SignatureVerificationFailedException, UnsupportedVerificationMethodException {
+          SignatureVerificationException, UnsupportedVerificationMethodException,
+          SignatureParseException {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();
@@ -74,7 +74,7 @@ public class Verification {
    * @throws DidDocumentResolverNotRegisteredException
    * @throws TransformJsonLdException
    * @throws NoVerificationKeyFoundException
-   * @throws SignatureVerificationFailedException
+   * @throws SignatureVerificationException
    * @throws InvalidPublicKeyFormatException
    * @throws DidParseException
    * @throws SignatureParseException
@@ -82,9 +82,8 @@ public class Verification {
    */
   public static boolean verifyED21559LD(VerifiableCredential verifiableCredential)
       throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
-          InvalidPublicKeyFormatException, SignatureVerificationFailedException,
-          NoVerificationKeyFoundException, TransformJsonLdException,
-          DidDocumentResolverNotRegisteredException {
+          InvalidPublicKeyFormatException, SignatureVerificationException,
+          NoVerificationKeyFoundException, TransformJsonLdException {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();
@@ -97,9 +96,8 @@ public class Verification {
 
   public static boolean verifyJWSLD(VerifiableCredential verifiableCredential)
       throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
-          InvalidPublicKeyFormatException, SignatureVerificationFailedException,
-          NoVerificationKeyFoundException, DidDocumentResolverNotRegisteredException,
-          TransformJsonLdException {
+          InvalidPublicKeyFormatException, SignatureVerificationException,
+          NoVerificationKeyFoundException, TransformJsonLdException {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();
