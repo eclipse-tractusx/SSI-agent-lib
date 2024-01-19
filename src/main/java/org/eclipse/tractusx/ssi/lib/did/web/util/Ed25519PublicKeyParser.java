@@ -27,12 +27,14 @@ import org.bouncycastle.util.io.pem.PemReader;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
+/** The type Ed 25519 public key parser. */
 public class Ed25519PublicKeyParser {
 
   /**
    * Parses public key in format -----BEGIN PUBLIC KEY-----
    * MCowBQYDK2VwAyEABqAmUe/amV/nAVUt01XyrLpmQLOyLqF6LnAkH4QdyqI= -----END PUBLIC KEY-----
    *
+   * @param publicKey the public key
    * @return public key as multibase string
    */
   public static MultibaseString parsePublicKey(String publicKey) {

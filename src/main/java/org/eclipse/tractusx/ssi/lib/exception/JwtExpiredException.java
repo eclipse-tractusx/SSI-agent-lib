@@ -23,8 +23,14 @@ package org.eclipse.tractusx.ssi.lib.exception;
 
 import java.util.Date;
 
+/** The type Jwt expired exception. */
 public class JwtExpiredException extends JwtException {
 
+  /**
+   * Instantiates a new Jwt expired exception.
+   *
+   * @param expiryDate the expiry date
+   */
   public JwtExpiredException(Date expiryDate) {
     super("JWT expired at " + expiryDate);
   }

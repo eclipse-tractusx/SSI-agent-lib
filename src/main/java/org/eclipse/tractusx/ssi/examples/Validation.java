@@ -26,13 +26,30 @@ import org.eclipse.tractusx.ssi.lib.exception.JwtAudienceCheckFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.JwtExpiredException;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtValidator;
 
+/** This is example class to demonstrate how to validate JWT expiry date and audience */
 public class Validation {
+  /**
+   * Validate jwt date.
+   *
+   * @param signedJWT the signed jwt
+   * @param audience the audience
+   * @throws JwtAudienceCheckFailedException the jwt audience check failed exception
+   * @throws JwtExpiredException the jwt expired exception
+   */
   public static void validateJWTDate(SignedJWT signedJWT, String audience)
       throws JwtAudienceCheckFailedException, JwtExpiredException {
     SignedJwtValidator jwtValidator = new SignedJwtValidator();
     jwtValidator.validateDate(signedJWT);
   }
 
+  /**
+   * Validate jwt audiences.
+   *
+   * @param signedJWT the signed jwt
+   * @param audience the audience
+   * @throws JwtAudienceCheckFailedException the jwt audience check failed exception
+   * @throws JwtExpiredException the jwt expired exception
+   */
   public static void validateJWTAudiences(SignedJWT signedJWT, String audience)
       throws JwtAudienceCheckFailedException, JwtExpiredException {
     SignedJwtValidator jwtValidator = new SignedJwtValidator();

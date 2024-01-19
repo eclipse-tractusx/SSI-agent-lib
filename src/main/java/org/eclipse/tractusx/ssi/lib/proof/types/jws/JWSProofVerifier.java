@@ -51,6 +51,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.proof.IVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
+/** The type Jws proof verifier. */
 @RequiredArgsConstructor
 public class JWSProofVerifier implements IVerifier {
 
@@ -122,6 +123,14 @@ public class JWSProofVerifier implements IVerifier {
     return keyPair;
   }
 
+  /**
+   * Verify hashedLinkedData.
+   *
+   * @param hashedLinkedData the hashed linked data
+   * @param signature the signature
+   * @param publicKey the public key
+   * @return the boolean
+   */
   @SneakyThrows
   public boolean verify(HashedLinkedData hashedLinkedData, byte[] signature, IPublicKey publicKey) {
 

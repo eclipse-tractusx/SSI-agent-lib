@@ -21,11 +21,23 @@
 
 package org.eclipse.tractusx.ssi.lib.exception;
 
+/** The type Did parse exception. */
 public class DidParseException extends SsiException {
+  /**
+   * Instantiates a new Did parse exception.
+   *
+   * @param message the message
+   */
   public DidParseException(String message) {
     super(message);
   }
 
+  /**
+   * Instantiates a new Did parse exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   */
   public DidParseException(String message, Throwable cause) {
     super(message, cause);
   }

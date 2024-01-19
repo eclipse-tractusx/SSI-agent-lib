@@ -29,22 +29,36 @@ import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 /**
- * E.g. "proof": {"type": "JsonWebSignature2020", "created": "2019-12-11T03:50:55Z", "jws":
+ * The type of Ed25519Signature2020
+ *
+ * <p>E.g. "proof": {"type": "JsonWebSignature2020", "created": "2019-12-11T03:50:55Z", "jws":
  * "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..MJ5GwWRMsadCyLNXU_flgJtsS32584MydBxBuygps_cM0sbU3abTEOMyUvmLNcKOwOBE1MfDoB1_YY425W3sAg",
  * "proofPurpose": "assertionMethod", "verificationMethod":
  * "https://example.com/issuer/123#ovsDKYBjFemIy8DVhc-w2LSi8CvXMw2AYDzHj04yxkc"}
  */
 public class JWSSignature2020 extends Proof {
 
+  /** The constant JWS_VERIFICATION_KEY_2020. */
   public static final String JWS_VERIFICATION_KEY_2020 = "JsonWebSignature2020";
+  /** The constant TIME_FORMAT. */
   public static final String TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
+  /** The constant ASSERTION_METHOD. */
   public static final String ASSERTION_METHOD = "assertionMethod";
+  /** The constant PROOF_PURPOSE. */
   public static final String PROOF_PURPOSE = "proofPurpose";
+  /** The constant JWS. */
   public static final String JWS = "jws";
+  /** The constant CREATED. */
   public static final String CREATED = "created";
+  /** The constant VERIFICATION_METHOD. */
   public static final String VERIFICATION_METHOD = "verificationMethod";
 
+  /**
+   * Instantiates a new Jws signature 2020.
+   *
+   * @param json the json
+   */
   public JWSSignature2020(Map<String, Object> json) {
     super(json);
 
@@ -63,18 +77,38 @@ public class JWSSignature2020 extends Proof {
     }
   }
 
+  /**
+   * Gets proof purpose.
+   *
+   * @return the proof purpose
+   */
   public String getProofPurpose() {
     return (String) this.get(PROOF_PURPOSE);
   }
 
+  /**
+   * Gets jws.
+   *
+   * @return the jws
+   */
   public String getJws() {
     return (String) this.get(JWS);
   }
 
+  /**
+   * Gets verification method.
+   *
+   * @return the verification method
+   */
   public URI getVerificationMethod() {
     return SerializeUtil.asURI(this.get(VERIFICATION_METHOD));
   }
 
+  /**
+   * Gets created.
+   *
+   * @return the created
+   */
   public Instant getCreated() {
     return Instant.parse((String) this.get(CREATED));
   }

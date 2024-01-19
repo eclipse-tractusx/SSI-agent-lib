@@ -38,8 +38,10 @@ import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
 import org.junit.jupiter.api.Test;
 
+/** The type Json web key 2020 builder test. */
 class JsonWebKey2020BuilderTest {
 
+  /** Test json web key 2020 verification method. */
   @SneakyThrows
   @Test
   public void testJsonWebKey2020VerificationMethod() {

@@ -21,4 +21,5 @@
 
 package org.eclipse.tractusx.ssi.lib.exception;
 
+/** The type Jwt signature verification key not found exception. */
 public class JwtSignatureVerificationKeyNotFoundException {}

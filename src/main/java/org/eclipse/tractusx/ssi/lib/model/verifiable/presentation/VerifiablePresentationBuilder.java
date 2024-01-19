@@ -29,6 +29,7 @@ import lombok.NoArgsConstructor;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 
+/** The type Verifiable presentation builder. */
 @NoArgsConstructor
 public class VerifiablePresentationBuilder {
   private List<URI> context = List.of(VerifiablePresentation.DEFAULT_CONTEXT);
@@ -37,32 +38,67 @@ public class VerifiablePresentationBuilder {
   private List<VerifiableCredential> verifiableCredentials;
   private Proof proof;
 
+  /**
+   * Context verifiable presentation builder.
+   *
+   * @param context the context
+   * @return the verifiable presentation builder
+   */
   public VerifiablePresentationBuilder context(List<URI> context) {
     this.context = context;
     return this;
   }
 
+  /**
+   * Id verifiable presentation builder.
+   *
+   * @param id the id
+   * @return the verifiable presentation builder
+   */
   public VerifiablePresentationBuilder id(URI id) {
     this.id = id;
     return this;
   }
 
+  /**
+   * Type verifiable presentation builder.
+   *
+   * @param types the types
+   * @return the verifiable presentation builder
+   */
   public VerifiablePresentationBuilder type(List<String> types) {
     this.types = types;
     return this;
   }
 
+  /**
+   * Verifiable credentials verifiable presentation builder.
+   *
+   * @param verifiableCredentials the verifiable credentials
+   * @return the verifiable presentation builder
+   */
   public VerifiablePresentationBuilder verifiableCredentials(
       List<VerifiableCredential> verifiableCredentials) {
     this.verifiableCredentials = verifiableCredentials;
     return this;
   }
 
+  /**
+   * Proof verifiable presentation builder.
+   *
+   * @param proof the proof
+   * @return the verifiable presentation builder
+   */
   public VerifiablePresentationBuilder proof(Proof proof) {
     this.proof = proof;
     return this;
   }
 
+  /**
+   * Build verifiable presentation.
+   *
+   * @return the verifiable presentation
+   */
   public VerifiablePresentation build() {
     Map<String, Object> map = new HashMap<>();
     map.put(VerifiablePresentation.CONTEXT, context);

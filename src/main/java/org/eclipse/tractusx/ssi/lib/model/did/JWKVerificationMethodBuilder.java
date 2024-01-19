@@ -26,21 +26,39 @@ import java.util.Map;
 import lombok.NoArgsConstructor;
 import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
 
+/** The type Jwk verification method builder. */
 @NoArgsConstructor
 public class JWKVerificationMethodBuilder {
   private Did did;
   private JsonWebKey jwk;
 
+  /**
+   * Did jwk verification method builder.
+   *
+   * @param did the did
+   * @return the jwk verification method builder
+   */
   public JWKVerificationMethodBuilder did(Did did) {
     this.did = did;
     return this;
   }
 
+  /**
+   * Jwk jwk verification method builder.
+   *
+   * @param jwk the jwk
+   * @return the jwk verification method builder
+   */
   public JWKVerificationMethodBuilder jwk(JsonWebKey jwk) {
     this.jwk = jwk;
     return this;
   }
 
+  /**
+   * Build jwk verification method.
+   *
+   * @return the jwk verification method
+   */
   public JWKVerificationMethod build() {
     return new JWKVerificationMethod(
         Map.of(

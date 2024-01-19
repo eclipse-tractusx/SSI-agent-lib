@@ -21,8 +21,15 @@
 
 package org.eclipse.tractusx.ssi.lib.exception;
 
+/** The type Invalide public key format. */
 public class InvalidePublicKeyFormat extends Exception {
 
+  /**
+   * Instantiates a new Invalide public key format.
+   *
+   * @param correctLength the correct length
+   * @param providedLength the provided length
+   */
   public InvalidePublicKeyFormat(int correctLength, int providedLength) {
     super(
         String.format(
@@ -30,5 +37,10 @@ public class InvalidePublicKeyFormat extends Exception {
             correctLength, providedLength));
   }
 
+  /**
+   * Instantiates a new Invalide public key format.
+   *
+   * @param cause the cause
+   */
   public InvalidePublicKeyFormat(Throwable cause) {}
 }

@@ -28,22 +28,45 @@ import java.io.IOException;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 
+/** The type Octet key pair factory. */
 public class OctetKeyPairFactory {
 
+  /**
+   * Create {@link OctetKeyPair} from {@link IPrivateKey}
+   *
+   * @param privateKey the private key
+   * @return the octet key pair
+   * @throws IOException the io exception
+   */
   public OctetKeyPair fromPrivateKey(IPrivateKey privateKey) throws IOException {
     return new OctetKeyPair.Builder(Curve.Ed25519, new Base64URL(""))
         .d(Base64URL.encode(privateKey.asByte()))
         .build();
   }
 
-  public OctetKeyPair fromKeyPair(IPublicKey publicKey, IPrivateKey privateKey) throws IOException {
+  /**
+   * Create {@link OctetKeyPair} from {@link IPublicKey} and {@link IPrivateKey}
+   *
+   * @param publicKey the public key
+   * @param privateKey the private key
+   * @return the octet key pair
+   */
+  public OctetKeyPair fromKeyPair(IPublicKey publicKey, IPrivateKey privateKey) {
     return new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey.asByte()))
         .d(Base64URL.encode(privateKey.asByte()))
         .build();
   }
 
+  /**
+   * Create {@link OctetKeyPair} from {@link IPublicKey}, {@link IPrivateKey} and id
+   *
+   * @param keyID the key id
+   * @param publicKey the public key
+   * @param privateKey the private key
+   * @return the octet key pair
+   */
   public OctetKeyPair fromKeyPairWithKeyID(
-      String keyID, IPublicKey publicKey, IPrivateKey privateKey) throws IOException {
+      String keyID, IPublicKey publicKey, IPrivateKey privateKey) {
     return new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey.asByte()))
         .d(Base64URL.encode(privateKey.asByte()))
         .keyID(keyID)

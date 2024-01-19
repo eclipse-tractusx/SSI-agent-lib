@@ -39,8 +39,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+/** The type Serialize util test. */
 public class SerializeUtilTest {
 
+  /** Should serialize vc context first. */
   @Test
   public void shouldSerializeVcContextFirst() {
     VerifiableCredential vc = TestResourceUtil.getAlumniVerifiableCredential();
@@ -50,6 +52,7 @@ public class SerializeUtilTest {
         serializedVc.startsWith("{\"@context\":["), "Serialized VC should start with @context");
   }
 
+  /** Should serialize vp context first. */
   @Test
   public void shouldSerializeVpContextFirst() {
     VerifiablePresentation vp = TestResourceUtil.getAlumniVerifiablePresentation();
@@ -59,6 +62,11 @@ public class SerializeUtilTest {
         serializedVc.startsWith("{\"@context\":["), "Serialized VP should start with @context");
   }
 
+  /**
+   * Test vc json property order.
+   *
+   * @throws JsonProcessingException the json processing exception
+   */
   @Test
   @DisplayName("Test property order in json string for VC")
   void testVCJsonPropertyOrder() throws JsonProcessingException {
@@ -84,6 +92,11 @@ public class SerializeUtilTest {
     }
   }
 
+  /**
+   * Test did document json property order.
+   *
+   * @throws JsonProcessingException the json processing exception
+   */
   @Test
   @DisplayName("Test property order in json string for did document")
   void testDidDocumentJsonPropertyOrder() throws JsonProcessingException {
@@ -109,6 +122,11 @@ public class SerializeUtilTest {
     }
   }
 
+  /**
+   * Test vp json property order.
+   *
+   * @throws JsonProcessingException the json processing exception
+   */
   @Test
   @DisplayName("Test property order in json string for VP")
   void testVPJsonPropertyOrder() throws JsonProcessingException {
@@ -134,6 +152,11 @@ public class SerializeUtilTest {
     }
   }
 
+  /**
+   * Test status list json property order.
+   *
+   * @throws JsonProcessingException the json processing exception
+   */
   @Test
   @DisplayName("Test property order in json string for status list")
   void testStatusListJsonPropertyOrder() throws JsonProcessingException {

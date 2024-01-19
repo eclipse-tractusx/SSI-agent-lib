@@ -27,19 +27,38 @@ import lombok.NonNull;
 import lombok.Value;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 
+/** The type Base64. */
 @Value
 @EqualsAndHashCode
 public class Base64 implements MultibaseString {
 
+  /**
+   * Check if it can decode a string.
+   *
+   * @param encoded the encoded string
+   * @return the boolean
+   */
   public static boolean canDecode(String encoded) {
     return Multibase.encoding(encoded).equals(Multibase.Base.Base64);
   }
 
+  /**
+   * Create Base64.
+   *
+   * @param decoded the decoded
+   * @return the Base64
+   */
   public static Base64 create(byte[] decoded) {
     final String encoded = Multibase.encode(Multibase.Base.Base64, decoded);
     return new Base64(decoded, encoded);
   }
 
+  /**
+   * Create Base64.
+   *
+   * @param encoded the encoded
+   * @return the Base64
+   */
   public static Base64 create(String encoded) {
 
     if (!canDecode(encoded)) {

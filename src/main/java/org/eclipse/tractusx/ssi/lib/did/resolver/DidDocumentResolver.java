@@ -25,13 +25,25 @@ import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
+/** The interface Did document resolver. */
 @Deprecated
 /**
  * @deprecated replaced by {@link DidResolver}
  */
 public interface DidDocumentResolver {
 
+  /**
+   * Gets supported method.
+   *
+   * @return the supported method
+   */
   DidMethod getSupportedMethod();
 
+  /**
+   * Resolve did document.
+   *
+   * @param did the did
+   * @return the did document
+   */
   DidDocument resolve(Did did);
 }

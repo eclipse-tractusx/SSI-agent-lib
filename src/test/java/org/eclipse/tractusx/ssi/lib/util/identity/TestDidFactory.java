@@ -26,9 +26,16 @@ import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethodIdentifier;
 
+/** The type Test did factory. */
 public class TestDidFactory {
+  /** The constant DID_METHOD. */
   public static final DidMethod DID_METHOD = new DidMethod("test");
 
+  /**
+   * Create random did.
+   *
+   * @return the did
+   */
   public static Did createRandom() {
     return new Did(DID_METHOD, new DidMethodIdentifier(UUID.randomUUID().toString()), null);
   }

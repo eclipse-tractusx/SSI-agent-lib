@@ -25,8 +25,10 @@ import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/** The type Verifiable credential test. */
 public class VerifiableCredentialTest {
 
+  /** Equals success. */
   @Test
   public void equalsSuccess() {
     final VerifiableCredential vc1 = TestResourceUtil.getAlumniVerifiableCredential();
@@ -34,6 +36,7 @@ public class VerifiableCredentialTest {
     Assertions.assertEquals(vc1.toString(), vc2.toString());
   }
 
+  /** Equals failure. */
   @Test
   public void equalsFailure() {
     final VerifiableCredential vc1 = TestResourceUtil.getBPNVerifiableCredential();
@@ -42,6 +45,7 @@ public class VerifiableCredentialTest {
     Assertions.assertNotEquals(vc1, vc2);
   }
 
+  /** Credential id must be valid uri. */
   @Test
   public void credentialIdMustBeValidURI() {
     final VerifiableCredential vc = TestResourceUtil.getAlumniVerifiableCredential();

@@ -28,8 +28,14 @@ import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.exception.JwtAudienceCheckFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.JwtExpiredException;
 
+/** The type Signed jwt validator. */
 public class SignedJwtValidator {
 
+  /**
+   * Validate date.
+   *
+   * @param jwt the jwt
+   */
   @SneakyThrows
   public void validateDate(SignedJWT jwt) {
     Date expiryDate = jwt.getJWTClaimsSet().getExpirationTime();
@@ -39,6 +45,12 @@ public class SignedJwtValidator {
     }
   }
 
+  /**
+   * Validate audiences.
+   *
+   * @param jwt the jwt
+   * @param expectedAudience the expected audience
+   */
   @SneakyThrows
   public void validateAudiences(SignedJWT jwt, String expectedAudience) {
     List<String> audiences = jwt.getJWTClaimsSet().getAudience();

@@ -28,13 +28,24 @@ import java.util.Objects;
 import lombok.ToString;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
-// spec https://www.w3.org/TR/did-core/#verification-methods
+/**
+ * The type Verification method. Spec: <a
+ * href="https://www.w3.org/TR/did-core/#verification-methods">...</a>
+ */
 @ToString
 public class VerificationMethod extends HashMap<String, Object> {
+  /** The constant ID. */
   public static final String ID = "id";
+  /** The constant TYPE. */
   public static final String TYPE = "type";
+  /** The constant CONTROLLER. */
   public static final String CONTROLLER = "controller";
 
+  /**
+   * Instantiates a new Verification method.
+   *
+   * @param json the json
+   */
   public VerificationMethod(Map<String, Object> json) {
     super(json);
 
@@ -49,14 +60,29 @@ public class VerificationMethod extends HashMap<String, Object> {
     }
   }
 
+  /**
+   * Gets id.
+   *
+   * @return the id
+   */
   public URI getId() {
     return SerializeUtil.asURI(this.get(ID));
   }
 
+  /**
+   * Gets type.
+   *
+   * @return the type
+   */
   public String getType() {
     return (String) this.get(TYPE);
   }
 
+  /**
+   * Gets controller.
+   *
+   * @return the controller
+   */
   public URI getController() {
     return SerializeUtil.asURI(this.get(CONTROLLER));
   }
