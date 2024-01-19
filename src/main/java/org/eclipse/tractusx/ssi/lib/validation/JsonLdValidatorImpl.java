@@ -109,6 +109,9 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
       }
     } else {
       LOG.warning("Unsupported Verifiable type: " + verifiable.getClass().getName());
+      throw new InvalidJsonLdException( 
+          String.format(
+              "Verifiable type %s is not supported", verifiable.getClass().getSimpleName()));
     }
   }
 }
