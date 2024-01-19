@@ -41,24 +41,8 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePres
 
 /** The type Json ld validator. */
 public class JsonLdValidatorImpl implements JsonLdValidator {
-  private static final String UNDEFINED_TERM_URI = "urn:UNDEFINEDTERM";
   static final Logger LOG = Logger.getLogger(JsonLdValidatorImpl.class.getName());
-
-  public void validate(Verifiable verifiable) throws InvalidJsonLdException {
-    if (verifiable instanceof VerifiableCredential) {
-      validateJsonLd(verifiable);
-    } else if (verifiable instanceof VerifiablePresentation) {
-      VerifiablePresentation verifiablePresentation = (VerifiablePresentation) verifiable;
-      for (VerifiableCredential verifiableCredential :
-          verifiablePresentation.getVerifiableCredentials()) {
-        validate(verifiableCredential);
-      }
-    } else {
-      LOG.warning("Unsupported Verifiable type: " + verifiable.getClass().getName());
-      throw new InvalidJsonLdException(
-          String.format("Unsupported Verifiable type: %s", verifiable.getClass().getName()));
-    }
-  }
+  private static final String UNDEFINED_TERM_URI = "urn:UNDEFINEDTERM";
 
   private static void findUndefinedTerms(JsonArray jsonArray) throws InvalidJsonLdException {
     for (JsonValue entry : jsonArray) {
@@ -112,6 +96,23 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
           String.format(
               "Json LD validation failed for json: %s", jsonLdObject.toJsonObject().toString()),
           ex);
+    }
+  }
+
+  public void validate(Verifiable verifiable) throws InvalidJsonLdException {
+    if (verifiable instanceof VerifiableCredential) {
+      validateJsonLd(verifiable);
+    } else if (verifiable instanceof VerifiablePresentation) {
+      VerifiablePresentation verifiablePresentation = (VerifiablePresentation) verifiable;
+      for (VerifiableCredential verifiableCredential :
+          verifiablePresentation.getVerifiableCredentials()) {
+        validate(verifiableCredential);
+      }
+    } else {
+      LOG.warning("Unsupported Verifiable type: " + verifiable.getClass().getName());
+      throw new InvalidJsonLdException(
+          String.format(
+              "Verifiable type %s is not supported", verifiable.getClass().getSimpleName()));
     }
   }
 }
