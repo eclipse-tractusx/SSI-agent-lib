@@ -31,27 +31,33 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 import java.util.Map;
+import java.util.logging.Logger;
 import org.eclipse.tractusx.ssi.lib.exception.InvalidJsonLdException;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.RemoteDocumentLoader;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 
 /** The type Json ld validator. */
 public class JsonLdValidatorImpl implements JsonLdValidator {
+  static final Logger LOG = Logger.getLogger(JsonLdValidatorImpl.class.getName());
   private static final String UNDEFINED_TERM_URI = "urn:UNDEFINEDTERM";
 
-  public void validate(VerifiablePresentation verifiablePresentation)
-      throws InvalidJsonLdException {
-    for (VerifiableCredential verifiableCredential :
-        verifiablePresentation.getVerifiableCredentials()) {
-      validate(verifiableCredential);
+  public void validate(Verifiable verifiable) throws InvalidJsonLdException {
+    if (verifiable instanceof VerifiableCredential) {
+      validateJsonLd(verifiable);
+    } else if (verifiable instanceof VerifiablePresentation) {
+      VerifiablePresentation verifiablePresentation = (VerifiablePresentation) verifiable;
+      for (VerifiableCredential verifiableCredential :
+          verifiablePresentation.getVerifiableCredentials()) {
+        validate(verifiableCredential);
+      }
+    } else {
+      LOG.warning("Unsupported Verifiable type: " + verifiable.getClass().getName());
+      throw new InvalidJsonLdException(
+          String.format("Unsupported Verifiable type: %s", verifiable.getClass().getName()));
     }
-  }
-
-  @Override
-  public void validate(VerifiableCredential verifiableCredential) throws InvalidJsonLdException {
-    validateJsonLd(verifiableCredential);
   }
 
   private void validateJsonLd(JsonLdObject jsonLdObject) throws InvalidJsonLdException {
