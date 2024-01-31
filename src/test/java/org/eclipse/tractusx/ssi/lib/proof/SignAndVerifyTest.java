@@ -20,6 +20,7 @@
 package org.eclipse.tractusx.ssi.lib.proof;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.Curve;
 import java.io.IOException;
 import java.net.URI;
@@ -36,6 +37,7 @@ import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.exception.NoVerificationKeyFoundExcpetion;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
+import org.eclipse.tractusx.ssi.lib.model.ProofPurpose;
 import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -51,6 +53,7 @@ import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofSigner;
 import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofVerifier;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestDidResolver;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
+import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityConfig;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -173,6 +176,18 @@ public class SignAndVerifyTest {
     verifyCredential(testIdentity, SignatureType.JWS_SEC_P_256K1);
   }
 
+  @Test
+  void verifyCredentialWithRelation()
+      throws UnsupportedSignatureTypeException, InvalidePrivateKeyFormat, JsonProcessingException,
+          NoSuchAlgorithmException, DidDocumentResolverNotRegisteredException,
+          NoVerificationKeyFoundExcpetion, InvalidePublicKeyFormat,
+          InvalidAlgorithmParameterException {
+    var testIdentity =
+        TestIdentityFactory.newIdentityWithECKeys("secp256k1", Curve.SECP256K1, true, true);
+
+    verifyCredential(testIdentity, SignatureType.JWS_SEC_P_256K1);
+  }
+
   void verifyCredential(TestIdentity testIdentity, SignatureType signatureType)
       throws UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
           DidDocumentResolverNotRegisteredException, NoVerificationKeyFoundExcpetion,
@@ -210,7 +225,65 @@ public class SignAndVerifyTest {
 
     LinkedDataProofGenerator proofGenerator = LinkedDataProofGenerator.newInstance(signatureType);
     Proof proof =
-        proofGenerator.createProof(cred, verificationMethod.getId(), testIdentity.getPrivateKey());
+        proofGenerator.createProof(
+            cred,
+            verificationMethod.getId(),
+            testIdentity.getPrivateKey(),
+            ProofPurpose.AUTHENTICATION);
+
+    VerifiableCredential withProof = verifiableCredentialBuilder.proof(proof).build();
+
+    LinkedDataHasher hasher = new LinkedDataHasher();
+    LinkedDataTransformer transformer = new LinkedDataTransformer();
+    final TransformedLinkedData transformedData = transformer.transform(withProof);
+    final HashedLinkedData hashedData = hasher.hash(transformedData);
+
+    JWSProofVerifier verifier = new JWSProofVerifier(didResolver);
+    Assertions.assertTrue(verifier.verify(hashedData, withProof));
+  }
+
+  void verifyCredential(TestIdentityConfig testIdentity, SignatureType signatureType)
+      throws UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
+          DidDocumentResolverNotRegisteredException, NoVerificationKeyFoundExcpetion,
+          InvalidePublicKeyFormat {
+    final TestDidResolver didResolver = new TestDidResolver();
+    didResolver.register(testIdentity.toTestIdentity(ProofPurpose.AUTHENTICATION));
+
+    VerificationMethod verificationMethod =
+        testIdentity.getDidDocument().getVerificationMethods().get(0);
+
+    VerifiableCredentialBuilder verifiableCredentialBuilder = new VerifiableCredentialBuilder();
+    verifiableCredentialBuilder.context(
+        List.of(
+            URI.create("https://www.w3.org/2018/credentials/v1"),
+            URI.create("https://www.w3.org/2018/credentials/examples/v1"),
+            URI.create(
+                "https://catenax-ng.github.io/product-core-schemas/businessPartnerData.json"),
+            URI.create("https://w3id.org/security/suites/jws-2020/v1")));
+
+    verifiableCredentialBuilder.id(URI.create("http://example.edu/credentials/1872"));
+    verifiableCredentialBuilder.type(List.of("VerifiableCredential", "AlumniCredential"));
+    verifiableCredentialBuilder.issuer(URI.create("https://example.edu/issuers/565049"));
+    verifiableCredentialBuilder.issuanceDate(Instant.now().minus(Duration.ofDays(20)));
+    verifiableCredentialBuilder.expirationDate(Instant.now().plus(Duration.ofDays(20)));
+
+    Map<String, Object> alumniOf = Map.of("id", "did:example:c276e12ec21ebfeb1f712ebc6f1");
+
+    Map<String, Object> subjProps =
+        Map.of("id", "did:example:ebfeb1f712ebc6f1c276e12ec21", "alumniOf", alumniOf);
+
+    Map<String, Object> subject = Map.of("MembershipCredential", subjProps);
+
+    verifiableCredentialBuilder.credentialSubject(new VerifiableCredentialSubject(subject));
+    VerifiableCredential cred = verifiableCredentialBuilder.build();
+
+    LinkedDataProofGenerator proofGenerator = LinkedDataProofGenerator.newInstance(signatureType);
+    Proof proof =
+        proofGenerator.createProof(
+            cred,
+            testIdentity.getAuthenticationVerificationMethod().getId(),
+            testIdentity.getAuthenticationPrivateKey(),
+            ProofPurpose.AUTHENTICATION);
 
     VerifiableCredential withProof = verifiableCredentialBuilder.proof(proof).build();
 

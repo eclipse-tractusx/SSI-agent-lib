@@ -23,6 +23,7 @@ package org.eclipse.tractusx.ssi.lib.model.did;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.NoArgsConstructor;
@@ -30,8 +31,18 @@ import lombok.NoArgsConstructor;
 /** The type Did document builder. */
 @NoArgsConstructor
 public class DidDocumentBuilder {
+
   private URI id;
+
   private final List<VerificationMethod> verificationMethods = new ArrayList<>();
+
+  private List<URI> authentication;
+
+  private List<URI> assertionMethod;
+
+  private List<URI> capabilityInvocation;
+
+  private List<URI> capabilityDelegation;
 
   /**
    * Id did document builder.
@@ -66,19 +77,55 @@ public class DidDocumentBuilder {
     return this;
   }
 
+  public DidDocumentBuilder authentication(List<URI> authentication) {
+    this.authentication = authentication;
+    return this;
+  }
+
+  public DidDocumentBuilder assertionMethod(List<URI> assertionMethod) {
+    this.assertionMethod = assertionMethod;
+    return this;
+  }
+
+  public DidDocumentBuilder capabilityInvocation(List<URI> capabilityInvocation) {
+    this.capabilityInvocation = capabilityInvocation;
+    return this;
+  }
+
+  public DidDocumentBuilder capabilityDelegation(List<URI> capabilityDelegation) {
+    this.capabilityDelegation = capabilityDelegation;
+    return this;
+  }
+
   /**
    * Build did document.
    *
    * @return the did document
    */
   public DidDocument build() {
-    return new DidDocument(
+
+    Map<String, Object> requiredEntries =
         Map.of(
             DidDocument.CONTEXT,
             DidDocument.DEFAULT_CONTEXT,
             DidDocument.ID,
             id.toString(),
             DidDocument.VERIFICATION_METHOD,
-            verificationMethods));
+            verificationMethods);
+
+    HashMap<String, Object> entries = new HashMap<>(requiredEntries);
+    if (assertionMethod != null && !assertionMethod.isEmpty())
+      entries.put("assertionMethod", assertionMethod);
+
+    if (authentication != null && !authentication.isEmpty())
+      entries.put("authentication", authentication);
+
+    if (capabilityDelegation != null && !capabilityDelegation.isEmpty())
+      entries.put("capabilityDelegation", capabilityDelegation);
+
+    if (capabilityInvocation != null && !capabilityInvocation.isEmpty())
+      entries.put("capabilityInvocation", capabilityInvocation);
+
+    return new DidDocument(entries);
   }
 }

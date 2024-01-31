@@ -28,11 +28,10 @@ import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
+import org.eclipse.tractusx.ssi.lib.model.ProofPurpose;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
-import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020Builder;
-import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020Builder;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
@@ -82,6 +81,16 @@ public class LinkedDataProofGenerator {
   public Proof createProof(Verifiable document, URI verificationMethodId, IPrivateKey privateKey)
       throws SsiException, InvalidePrivateKeyFormat {
 
+    return createProof(document, verificationMethodId, privateKey, ProofPurpose.ASSERTION_METHOD);
+  }
+
+  public Proof createProof(
+      Verifiable document,
+      URI verificationMethodId,
+      IPrivateKey privateKey,
+      ProofPurpose proofPurpose)
+      throws SsiException, InvalidePrivateKeyFormat {
+
     final TransformedLinkedData transformedData = transformer.transform(document);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
     byte[] signature;
@@ -91,7 +100,7 @@ public class LinkedDataProofGenerator {
 
       final MultibaseString multibaseString = MultibaseFactory.create(signature);
       return new Ed25519Signature2020Builder()
-          .proofPurpose(Ed25519Signature2020.ASSERTION_METHOD)
+          .proofPurpose(proofPurpose.purpose)
           .proofValue(multibaseString.getEncoded())
           .verificationMethod(verificationMethodId)
           .created(Instant.now())
@@ -99,7 +108,7 @@ public class LinkedDataProofGenerator {
     } else {
 
       return new JWSSignature2020Builder()
-          .proofPurpose(JWSSignature2020.ASSERTION_METHOD)
+          .proofPurpose(proofPurpose.purpose)
           .proofValue(new String(signature, StandardCharsets.UTF_8))
           .verificationMethod(verificationMethodId)
           .created(Instant.now())
