@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import lombok.NoArgsConstructor;
 
 /** The type Did document builder. */
@@ -36,13 +37,13 @@ public class DidDocumentBuilder {
 
   private final List<VerificationMethod> verificationMethods = new ArrayList<>();
 
-  private List<URI> authentication;
+  private List<Object> authentication;
 
-  private List<URI> assertionMethod;
+  private List<Object> assertionMethod;
 
-  private List<URI> capabilityInvocation;
+  private List<Object> capabilityInvocation;
 
-  private List<URI> capabilityDelegation;
+  private List<Object> capabilityDelegation;
 
   /**
    * Id did document builder.
@@ -77,24 +78,44 @@ public class DidDocumentBuilder {
     return this;
   }
 
-  public DidDocumentBuilder authentication(List<URI> authentication) {
+  public DidDocumentBuilder authentication(List<Object> authentication) {
+    checkVerificationMethodTypes(authentication);
     this.authentication = authentication;
     return this;
   }
 
-  public DidDocumentBuilder assertionMethod(List<URI> assertionMethod) {
+  public DidDocumentBuilder assertionMethod(List<Object> assertionMethod) {
+    checkVerificationMethodTypes(assertionMethod);
     this.assertionMethod = assertionMethod;
     return this;
   }
 
-  public DidDocumentBuilder capabilityInvocation(List<URI> capabilityInvocation) {
+  public DidDocumentBuilder capabilityInvocation(List<Object> capabilityInvocation) {
+    checkVerificationMethodTypes(capabilityInvocation);
     this.capabilityInvocation = capabilityInvocation;
     return this;
   }
 
-  public DidDocumentBuilder capabilityDelegation(List<URI> capabilityDelegation) {
+  public DidDocumentBuilder capabilityDelegation(List<Object> capabilityDelegation) {
+    checkVerificationMethodTypes(capabilityDelegation);
     this.capabilityDelegation = capabilityDelegation;
     return this;
+  }
+
+  private void checkVerificationMethodTypes(List<Object> vms) {
+    Objects.requireNonNull(vms);
+
+    if (vms.isEmpty()) {
+      throw new IllegalArgumentException("verification methods must not be empty");
+    }
+
+    vms.forEach(
+        vm -> {
+          if (!(vm instanceof URI) && !(vm instanceof VerificationMethod)) {
+            throw new IllegalArgumentException(
+                "verification Method must be of type URI or VerificationMethod");
+          }
+        });
   }
 
   /**

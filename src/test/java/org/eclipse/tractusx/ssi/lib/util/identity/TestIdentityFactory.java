@@ -182,7 +182,7 @@ public class TestIdentityFactory {
   }
 
   public static TestIdentityConfig newIdentityWithECKeys(
-      String alg, Curve crv, boolean assertionMethod, boolean authentication)
+      String alg, Curve crv, boolean assertionMethod, boolean authentication, boolean embedded)
       throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, JsonProcessingException {
 
     TestIdentityConfig.TestIdentityConfigBuilder builder =
@@ -214,8 +214,12 @@ public class TestIdentityFactory {
 
     if (assertionMethod) {
       VerificationMethodConfig assertMethodVM = generateVerificationMethod(crv, alg, did);
-      didDocumentBuilder.assertionMethod(List.of(assertMethodVM.verificationMethod.getId()));
-      vms.add(assertMethodVM.verificationMethod);
+      if (embedded) {
+        didDocumentBuilder.assertionMethod(List.of(assertMethodVM.verificationMethod));
+      } else {
+        didDocumentBuilder.assertionMethod(List.of(assertMethodVM.verificationMethod.getId()));
+        vms.add(assertMethodVM.verificationMethod);
+      }
       builder
           .assertionMethodPrivateKey(assertMethodVM.privateKey)
           .assertionMethodPublicKey(assertMethodVM.publicKey)
@@ -224,8 +228,12 @@ public class TestIdentityFactory {
 
     if (authentication) {
       VerificationMethodConfig authVM = generateVerificationMethod(crv, alg, did);
-      didDocumentBuilder.authentication(List.of(authVM.verificationMethod.getId()));
-      vms.add(authVM.verificationMethod);
+      if (embedded) {
+        didDocumentBuilder.authentication(List.of(authVM.verificationMethod));
+      } else {
+        didDocumentBuilder.authentication(List.of(authVM.verificationMethod.getId()));
+        vms.add(authVM.verificationMethod);
+      }
       builder
           .authenticationPrivateKey(authVM.privateKey)
           .authenticationPublicKey(authVM.publicKey)
