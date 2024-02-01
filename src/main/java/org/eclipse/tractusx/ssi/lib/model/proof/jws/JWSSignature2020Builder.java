@@ -27,7 +27,6 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import lombok.NoArgsConstructor;
 
 /** The type Jws signature 2020 builder. */
@@ -101,12 +100,11 @@ public class JWSSignature2020Builder {
             JWSSignature2020.VERIFICATION_METHOD,
             verificationMethod.toString(),
             JWSSignature2020.CREATED,
-            formatter.format(created));
+            formatter.format(created),
+            JWSSignature2020.PROOF_PURPOSE,
+            proofPurpose);
 
     HashMap<String, Object> entries = new HashMap<>(standardEntries);
-
-    Optional.ofNullable(proofPurpose)
-        .ifPresent(p -> entries.put(JWSSignature2020.PROOF_PURPOSE, proofPurpose));
 
     return new JWSSignature2020(entries);
   }
