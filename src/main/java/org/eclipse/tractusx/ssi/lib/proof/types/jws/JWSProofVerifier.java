@@ -205,6 +205,11 @@ public class JWSProofVerifier implements IVerifier {
         if (relationShip.equals(verificationMethodId)) {
           return new VerificationRelationShipResult(true);
         }
+      } else if (o instanceof String) {
+        URI relationShip = URI.create((String) o);
+        if (relationShip.equals(verificationMethodId)) {
+          return new VerificationRelationShipResult(true);
+        }
       } else if (o instanceof Map) {
         // embedded relationship, only usable by proofPurpose == relationShip
         Map<String, Object> mapRelationShip = (Map<String, Object>) o;
