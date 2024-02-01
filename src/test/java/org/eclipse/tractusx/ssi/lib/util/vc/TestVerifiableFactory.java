@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -68,7 +68,7 @@ public class TestVerifiableFactory {
         .type(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
         .issuer(issuer.getDid().toUri())
         .expirationDate(Instant.parse("2025-02-15T17:21:42Z").plusSeconds(3600))
-        .issuanceDate(Instant.parse("2023-02-15T17:21:42Z"))
+        .issuanceDate(Instant.parse("2024-02-15T17:21:42Z"))
         .proof(proof)
         .credentialSubject(verifiableCredentialSubject)
         .verifiableCredentialStatus(null)

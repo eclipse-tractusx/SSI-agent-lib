@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -19,7 +19,7 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.crypt.x21559;
+package org.eclipse.tractusx.ssi.lib.crypt.x25519;
 
 import java.security.SecureRandom;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
@@ -33,8 +33,8 @@ import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatExcepti
 import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
 import org.eclipse.tractusx.ssi.lib.exception.key.KeyGenerationException;
 
-/** X21559 key generator. */
-public class x21559Generator implements IKeyGenerator {
+/** x25519 key generator. */
+public class x25519Generator implements IKeyGenerator {
 
   @Override
   public KeyPair generateKey() throws KeyGenerationException {
@@ -48,18 +48,18 @@ public class x21559Generator implements IKeyGenerator {
     Ed25519PrivateKeyParameters privateKey = (Ed25519PrivateKeyParameters) keyPair.getPrivate();
     Ed25519PublicKeyParameters publicKey = (Ed25519PublicKeyParameters) keyPair.getPublic();
 
-    x21559PrivateKey x21559PrivateKey;
+    x25519PrivateKey x25519PrivateKey;
     try {
-      x21559PrivateKey = new x21559PrivateKey(privateKey.getEncoded());
+      x25519PrivateKey = new x25519PrivateKey(privateKey.getEncoded());
     } catch (InvalidPrivateKeyFormatException e) {
       throw new KeyGenerationException(e.getCause());
     }
-    x21559PublicKey x21559PublicKey;
+    x25519PublicKey x25519PublicKey;
     try {
-      x21559PublicKey = new x21559PublicKey(publicKey.getEncoded());
+      x25519PublicKey = new x25519PublicKey(publicKey.getEncoded());
     } catch (InvalidPublicKeyFormatException e) {
       throw new KeyGenerationException(e.getCause());
     }
-    return new KeyPair(x21559PublicKey, x21559PrivateKey);
+    return new KeyPair(x25519PublicKey, x25519PrivateKey);
   }
 }

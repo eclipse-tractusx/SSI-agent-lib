@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -64,7 +64,7 @@ public class LinkedDataProofValidationComponentTest {
     didResolver.register(credentialIssuer);
 
     // Generator
-    linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
+    linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED25519);
 
     // Verification
     linkedDataProofValidation = LinkedDataProofValidation.newInstance(this.didResolver);
@@ -93,16 +93,16 @@ public class LinkedDataProofValidationComponentTest {
     Assertions.assertFalse(isOk);
   }
 
-  /** Test vc ed 21559 proof generation and verification. */
+  /** Test vc ed 25519 proof generation and verification. */
   @Test
   @SneakyThrows
-  public void testVCEd21559ProofGenerationAndVerification() {
+  public void testVCED25519ProofGenerationAndVerification() {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
     didResolver.register(credentialIssuer);
 
     // Generator
-    linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
+    linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED25519);
 
     // Verification
     linkedDataProofValidation = LinkedDataProofValidation.newInstance(this.didResolver);
@@ -158,16 +158,16 @@ public class LinkedDataProofValidationComponentTest {
     Assertions.assertTrue(isOk);
   }
 
-  /** Test vp ed 21559 proof generation and verification. */
+  /** Test vp ed 25519 proof generation and verification. */
   @Test
   @SneakyThrows
-  public void testVPEd21559ProofGenerationAndVerification() {
+  public void testVPED25519ProofGenerationAndVerification() {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
     didResolver.register(credentialIssuer);
 
     // Generator
-    linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
+    linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED25519);
 
     // Verifier
     linkedDataProofValidation = LinkedDataProofValidation.newInstance(didResolver);
@@ -251,7 +251,7 @@ public class LinkedDataProofValidationComponentTest {
     didResolver.register(credentialIssuer);
 
     // Generator
-    linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
+    linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED25519);
 
     // Verification
     linkedDataProofValidation = LinkedDataProofValidation.newInstance(this.didResolver);
