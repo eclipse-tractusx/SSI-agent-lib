@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -31,7 +31,7 @@ import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatExcepti
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
+import org.eclipse.tractusx.ssi.lib.model.proof.ed25519.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
@@ -72,7 +72,7 @@ public class VC {
   }
 
   /**
-   * Create verifiable credential with ED21559 proof
+   * Create verifiable credential with ED25519 proof
    *
    * @param credential the credential
    * @param privateKey the private key
@@ -82,7 +82,7 @@ public class VC {
    * @throws SsiException the ssi exception
    * @throws InvalidePrivateKeyFormat the invalide private key format
    */
-  public static VerifiableCredential createVCWithED21559Proof(
+  public static VerifiableCredential createVCWithED25519Proof(
       VerifiableCredential credential, IPrivateKey privateKey, Did issuer)
       throws UnsupportedSignatureTypeException, InvalidPrivateKeyFormatException,
           SignatureGenerateFailedException, TransformJsonLdException {
@@ -100,7 +100,7 @@ public class VC {
 
     // Ed25519 Proof Builder
     final LinkedDataProofGenerator generator =
-        LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
+        LinkedDataProofGenerator.newInstance(SignatureType.ED25519);
     final Ed25519Signature2020 proof =
         (Ed25519Signature2020)
             generator.createProof(builder.build(), URI.create(issuer + "#key-1"), privateKey);

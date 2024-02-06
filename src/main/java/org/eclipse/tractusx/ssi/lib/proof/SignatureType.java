@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -23,8 +23,8 @@ package org.eclipse.tractusx.ssi.lib.proof;
 
 /** The enum Signature type. */
 public enum SignatureType {
-  /** The Ed 21559. */
-  ED21559 {
+  /** The Ed 25519. */
+  ED25519 {
     public String toString() {
       return "Ed25519Signature2020";
     }

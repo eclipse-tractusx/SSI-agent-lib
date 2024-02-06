@@ -89,7 +89,7 @@ public class LinkedDataProofValidation {
     IVerifier verifier = null;
 
     if (type != null && !type.isBlank()) {
-      if (type.equals(SignatureType.ED21559.toString())) {
+      if (type.equals(SignatureType.ED25519.toString())) {
         verifier = new Ed25519ProofVerifier(this.didResolver);
       } else if (type.equals(SignatureType.JWS.toString())) {
         verifier = new JWSProofVerifier(this.didResolver);

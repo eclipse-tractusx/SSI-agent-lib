@@ -29,7 +29,7 @@ import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.KeyPair;
 import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559Generator;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.x25519Generator;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
@@ -53,7 +53,7 @@ public class TestIdentityFactory {
 
     final Did did = TestDidFactory.createRandom();
 
-    IKeyGenerator keyGenerator = new x21559Generator();
+    IKeyGenerator keyGenerator = new x25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
     IPublicKey publicKey = keyPair.getPublicKey();
     IPrivateKey privateKey = keyPair.getPrivateKey();
