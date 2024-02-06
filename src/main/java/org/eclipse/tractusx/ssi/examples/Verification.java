@@ -68,7 +68,7 @@ public class Verification {
   }
 
   /**
-   * Verify ed21559 signed ld.
+   * Verify ed25519 signed ld.
    *
    * @param verifiableCredential the verifiable credential
    * @return the boolean
@@ -82,7 +82,7 @@ public class Verification {
    * @throws UnsupportedSignatureTypeException
    * @throws SignatureVerificationFailedException
    */
-  public static boolean verifyED21559LD(VerifiableCredential verifiableCredential)
+  public static boolean verifyED25519LD(VerifiableCredential verifiableCredential)
       throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
           InvalidPublicKeyFormatException, SignatureVerificationException,
           NoVerificationKeyFoundException, TransformJsonLdException,

@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -19,7 +19,7 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.model.proof.ed21559;
+package org.eclipse.tractusx.ssi.lib.model.proof.ed25519;
 
 import java.net.URI;
 import java.time.Instant;
