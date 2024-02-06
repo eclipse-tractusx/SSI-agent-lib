@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import lombok.NoArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
+import org.eclipse.tractusx.ssi.lib.model.ProofPurpose;
 
 /** The type Did document builder. */
 @NoArgsConstructor
@@ -135,17 +137,17 @@ public class DidDocumentBuilder {
             verificationMethods);
 
     HashMap<String, Object> entries = new HashMap<>(requiredEntries);
-    if (assertionMethod != null && !assertionMethod.isEmpty())
-      entries.put("assertionMethod", assertionMethod);
+    if (CollectionUtils.isNotEmpty(assertionMethod))
+      entries.put(ProofPurpose.ASSERTION_METHOD.purpose, assertionMethod);
 
-    if (authentication != null && !authentication.isEmpty())
-      entries.put("authentication", authentication);
+    if (CollectionUtils.isNotEmpty(authentication))
+      entries.put(ProofPurpose.AUTHENTICATION.purpose, authentication);
 
-    if (capabilityDelegation != null && !capabilityDelegation.isEmpty())
-      entries.put("capabilityDelegation", capabilityDelegation);
+    if (CollectionUtils.isNotEmpty(capabilityDelegation))
+      entries.put(ProofPurpose.CAPABILITY_DELEGATION.purpose, capabilityDelegation);
 
-    if (capabilityInvocation != null && !capabilityInvocation.isEmpty())
-      entries.put("capabilityInvocation", capabilityInvocation);
+    if (CollectionUtils.isNotEmpty(capabilityInvocation))
+      entries.put(ProofPurpose.CAPABILITY_INVOCATION.purpose, capabilityInvocation);
 
     return new DidDocument(entries);
   }

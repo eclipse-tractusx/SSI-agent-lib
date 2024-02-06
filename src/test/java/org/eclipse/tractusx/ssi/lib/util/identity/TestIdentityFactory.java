@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.eclipse.tractusx.ssi.lib.crypt.IKeyGenerator;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
@@ -251,7 +252,7 @@ public class TestIdentityFactory {
     return builder.build();
   }
 
-  private static VerificationMethodConfig generateVerificationMethod(Curve crv, String alg, Did did)
+  public static VerificationMethodConfig generateVerificationMethod(Curve crv, String alg, Did did)
       throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
     KeyPairGenerator kpg = KeyPairGenerator.getInstance("EC", new BouncyCastleProvider());
     ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec(alg);
@@ -273,7 +274,8 @@ public class TestIdentityFactory {
   }
 
   @AllArgsConstructor
-  private static class VerificationMethodConfig {
+  @Getter
+  public static class VerificationMethodConfig {
 
     IPrivateKey privateKey;
 
