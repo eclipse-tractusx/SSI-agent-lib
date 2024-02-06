@@ -19,9 +19,19 @@
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.jwk.Curve;
+import com.nimbusds.jose.jwk.JWK;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.MessageDigest;
@@ -36,8 +46,12 @@ import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.exception.NoVerificationKeyFoundExcpetion;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
+import org.eclipse.tractusx.ssi.lib.model.ProofPurpose;
 import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
+import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
+import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
@@ -49,11 +63,13 @@ import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed25519ProofSigner;
 import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed25519ProofVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofSigner;
 import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofVerifier;
+import org.eclipse.tractusx.ssi.lib.util.identity.CredentialCreationConfig;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestDidResolver;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 /** The type Sign and verify test. */
 public class SignAndVerifyTest {
@@ -140,7 +156,14 @@ public class SignAndVerifyTest {
           NoSuchAlgorithmException, DidDocumentResolverNotRegisteredException,
           NoVerificationKeyFoundExcpetion, InvalidePublicKeyFormat {
     TestIdentity testIdentity = TestIdentityFactory.newIdentityWithRSAKeys();
-    verifyCredential(testIdentity, SignatureType.JWS_RSA);
+
+    var credentialCreationConfig =
+        new CredentialCreationConfig(
+            ProofPurpose.AUTHENTICATION,
+            testIdentity.getDidDocument().getVerificationMethods().get(0),
+            testIdentity.getPrivateKey(),
+            SignatureType.JWS_RSA);
+    verifyCredential(credentialCreationConfig, testIdentity);
   }
 
   @Test
@@ -150,7 +173,14 @@ public class SignAndVerifyTest {
           NoVerificationKeyFoundExcpetion, InvalidePublicKeyFormat,
           InvalidAlgorithmParameterException {
     var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp256r1", Curve.P_256);
-    verifyCredential(testIdentity, SignatureType.JWS_P256);
+    var credentialCreationConfig =
+        new CredentialCreationConfig(
+            ProofPurpose.AUTHENTICATION,
+            testIdentity.getDidDocument().getVerificationMethods().get(0),
+            testIdentity.getPrivateKey(),
+            SignatureType.JWS_P256);
+
+    verifyCredential(credentialCreationConfig, testIdentity);
   }
 
   @Test
@@ -160,7 +190,14 @@ public class SignAndVerifyTest {
           NoVerificationKeyFoundExcpetion, InvalidePublicKeyFormat,
           InvalidAlgorithmParameterException {
     var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp384r1", Curve.P_384);
-    verifyCredential(testIdentity, SignatureType.JWS_P384);
+    var credentialCreationConfig =
+        new CredentialCreationConfig(
+            ProofPurpose.AUTHENTICATION,
+            testIdentity.getDidDocument().getVerificationMethods().get(0),
+            testIdentity.getPrivateKey(),
+            SignatureType.JWS_P384);
+
+    verifyCredential(credentialCreationConfig, testIdentity);
   }
 
   @Test
@@ -170,33 +207,141 @@ public class SignAndVerifyTest {
           NoVerificationKeyFoundExcpetion, InvalidePublicKeyFormat,
           InvalidAlgorithmParameterException {
     var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp256k1", Curve.SECP256K1);
-    verifyCredential(testIdentity, SignatureType.JWS_SEC_P_256K1);
+    var credentialCreationConfig =
+        new CredentialCreationConfig(
+            ProofPurpose.AUTHENTICATION,
+            testIdentity.getDidDocument().getVerificationMethods().get(0),
+            testIdentity.getPrivateKey(),
+            SignatureType.JWS_SEC_P_256K1);
+
+    verifyCredential(credentialCreationConfig, testIdentity);
   }
 
-  void verifyCredential(TestIdentity testIdentity, SignatureType signatureType)
+  @Test
+  void verifyCredentialWithRelation()
+      throws UnsupportedSignatureTypeException, InvalidePrivateKeyFormat, JsonProcessingException,
+          NoSuchAlgorithmException, DidDocumentResolverNotRegisteredException,
+          NoVerificationKeyFoundExcpetion, InvalidePublicKeyFormat,
+          InvalidAlgorithmParameterException {
+    var testIdentityConfig =
+        TestIdentityFactory.newIdentityWithECKeys("secp256k1", Curve.SECP256K1, true, true, false);
+
+    var credentialCreationConfig =
+        new CredentialCreationConfig(
+            ProofPurpose.AUTHENTICATION,
+            testIdentityConfig.getAuthenticationVerificationMethod(),
+            testIdentityConfig.getAuthenticationPrivateKey(),
+            SignatureType.JWS_SEC_P_256K1);
+
+    verifyCredential(
+        credentialCreationConfig, testIdentityConfig.toTestIdentity(ProofPurpose.AUTHENTICATION));
+  }
+
+  @Test
+  void verifyCredentialWithRelationEmbedded()
+      throws UnsupportedSignatureTypeException, InvalidePrivateKeyFormat, JsonProcessingException,
+          NoSuchAlgorithmException, DidDocumentResolverNotRegisteredException,
+          NoVerificationKeyFoundExcpetion, InvalidePublicKeyFormat,
+          InvalidAlgorithmParameterException {
+    var testIdentityConfig =
+        TestIdentityFactory.newIdentityWithECKeys("secp256k1", Curve.SECP256K1, true, true, true);
+
+    var credentialCreationConfig =
+        new CredentialCreationConfig(
+            ProofPurpose.AUTHENTICATION,
+            testIdentityConfig.getAuthenticationVerificationMethod(),
+            testIdentityConfig.getAuthenticationPrivateKey(),
+            SignatureType.JWS_SEC_P_256K1);
+    verifyCredential(
+        credentialCreationConfig, testIdentityConfig.toTestIdentity(ProofPurpose.AUTHENTICATION));
+  }
+
+  @Test
+  void shouldFailWhenWrongProofType() {
+    Proof proof = Mockito.mock(Proof.class);
+    when(proof.getType()).thenReturn(Ed25519Signature2020.ED25519_VERIFICATION_KEY_2018);
+
+    Verifiable mockDoc = Mockito.mock(Verifiable.class);
+    when(mockDoc.getProof()).thenReturn(proof);
+
+    HashedLinkedData hashedLinkedData = Mockito.mock(HashedLinkedData.class);
+
+    JWSProofVerifier verifier = new JWSProofVerifier(new TestDidResolver());
+    assertThrows(
+        UnsupportedSignatureTypeException.class, () -> verifier.verify(hashedLinkedData, mockDoc));
+  }
+
+  @Test
+  void shouldFailToGetJWKOnNotSupportedAlgorithmInJWSHeader()
+      throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    Method method =
+        JWSProofVerifier.class.getDeclaredMethod("getJWK", JWSHeader.class, JWSSignature2020.class);
+    method.setAccessible(true);
+
+    JWSProofVerifier verifier = new JWSProofVerifier(new TestDidResolver());
+
+    JWSHeader mockHeader = Mockito.mock(JWSHeader.class);
+    when(mockHeader.getAlgorithm()).thenReturn(JWSAlgorithm.HS384);
+
+    VerificationMethod mockVm = Mockito.mock(VerificationMethod.class);
+    when(mockVm.getId()).thenReturn(URI.create("http://example.com"));
+    when(mockVm.getType()).thenReturn("type");
+    when(mockVm.getController()).thenReturn(URI.create("http://controller.com"));
+
+    JWSSignature2020 signature = Mockito.mock(JWSSignature2020.class);
+    when(signature.getProofPurpose()).thenReturn("authentication");
+    when(signature.getJws()).thenReturn("jws");
+    when(signature.getVerificationMethod())
+        .thenReturn(URI.create("http://verification-method.com"));
+    when(signature.getCreated()).thenReturn(Instant.now());
+
+    InvocationTargetException invocationTargetException =
+        assertThrows(
+            InvocationTargetException.class, () -> method.invoke(verifier, mockHeader, signature));
+
+    assertInstanceOf(IllegalArgumentException.class, invocationTargetException.getCause());
+  }
+
+  @Test
+  void shouldFailToGetVerifierOnNotSupportedAlgorithmInHeader() throws NoSuchMethodException {
+    Method method =
+        JWSProofVerifier.class.getDeclaredMethod("getVerifier", JWSHeader.class, JWK.class);
+    method.setAccessible(true);
+
+    JWSProofVerifier verifier = new JWSProofVerifier(new TestDidResolver());
+
+    JWSHeader mockHeader = Mockito.mock(JWSHeader.class);
+    when(mockHeader.getAlgorithm()).thenReturn(JWSAlgorithm.HS384);
+
+    InvocationTargetException invocationTargetException =
+        assertThrows(
+            InvocationTargetException.class, () -> method.invoke(verifier, mockHeader, null));
+
+    assertInstanceOf(IllegalArgumentException.class, invocationTargetException.getCause());
+  }
+
+  void verifyCredential(CredentialCreationConfig creationConfig, TestIdentity testIdentity)
       throws UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
           DidDocumentResolverNotRegisteredException, NoVerificationKeyFoundExcpetion,
           InvalidePublicKeyFormat {
     final TestDidResolver didResolver = new TestDidResolver();
     didResolver.register(testIdentity);
 
-    VerificationMethod verificationMethod =
-        testIdentity.getDidDocument().getVerificationMethods().get(0);
-
     VerifiableCredentialBuilder verifiableCredentialBuilder = new VerifiableCredentialBuilder();
-    verifiableCredentialBuilder.context(
-        List.of(
-            URI.create("https://www.w3.org/2018/credentials/v1"),
-            URI.create("https://www.w3.org/2018/credentials/examples/v1"),
-            URI.create(
-                "https://catenax-ng.github.io/product-core-schemas/businessPartnerData.json"),
-            URI.create("https://w3id.org/security/suites/jws-2020/v1")));
 
-    verifiableCredentialBuilder.id(URI.create("http://example.edu/credentials/1872"));
-    verifiableCredentialBuilder.type(List.of("VerifiableCredential", "AlumniCredential"));
-    verifiableCredentialBuilder.issuer(URI.create("https://example.edu/issuers/565049"));
-    verifiableCredentialBuilder.issuanceDate(Instant.now().minus(Duration.ofDays(20)));
-    verifiableCredentialBuilder.expirationDate(Instant.now().plus(Duration.ofDays(20)));
+    verifiableCredentialBuilder
+        .context(
+            List.of(
+                URI.create("https://www.w3.org/2018/credentials/v1"),
+                URI.create("https://www.w3.org/2018/credentials/examples/v1"),
+                URI.create(
+                    "https://catenax-ng.github.io/product-core-schemas/businessPartnerData.json"),
+                URI.create("https://w3id.org/security/suites/jws-2020/v1")))
+        .id(URI.create("http://example.edu/credentials/1872"))
+        .type(List.of("VerifiableCredential", "AlumniCredential"))
+        .issuer(URI.create("https://example.edu/issuers/565049"))
+        .issuanceDate(Instant.now().minus(Duration.ofDays(20)))
+        .expirationDate(Instant.now().plus(Duration.ofDays(20)));
 
     Map<String, Object> alumniOf = Map.of("id", "did:example:c276e12ec21ebfeb1f712ebc6f1");
 
@@ -208,9 +353,14 @@ public class SignAndVerifyTest {
     verifiableCredentialBuilder.credentialSubject(new VerifiableCredentialSubject(subject));
     VerifiableCredential cred = verifiableCredentialBuilder.build();
 
-    LinkedDataProofGenerator proofGenerator = LinkedDataProofGenerator.newInstance(signatureType);
+    LinkedDataProofGenerator proofGenerator =
+        LinkedDataProofGenerator.newInstance(creationConfig.getSignatureType());
     Proof proof =
-        proofGenerator.createProof(cred, verificationMethod.getId(), testIdentity.getPrivateKey());
+        proofGenerator.createProof(
+            cred,
+            creationConfig.getVerificationMethod().getId(),
+            creationConfig.getPrivateKey(),
+            creationConfig.getProofPurpose());
 
     VerifiableCredential withProof = verifiableCredentialBuilder.proof(proof).build();
 

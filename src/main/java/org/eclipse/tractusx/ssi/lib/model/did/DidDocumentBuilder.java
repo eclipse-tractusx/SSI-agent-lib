@@ -23,15 +23,29 @@ package org.eclipse.tractusx.ssi.lib.model.did;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import lombok.NoArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
+import org.eclipse.tractusx.ssi.lib.model.ProofPurpose;
 
 /** The type Did document builder. */
 @NoArgsConstructor
 public class DidDocumentBuilder {
+
   private URI id;
+
   private final List<VerificationMethod> verificationMethods = new ArrayList<>();
+
+  private List<Object> authentication;
+
+  private List<Object> assertionMethod;
+
+  private List<Object> capabilityInvocation;
+
+  private List<Object> capabilityDelegation;
 
   /**
    * Id did document builder.
@@ -66,19 +80,75 @@ public class DidDocumentBuilder {
     return this;
   }
 
+  public DidDocumentBuilder authentication(List<Object> authentication) {
+    checkVerificationMethodTypes(authentication);
+    this.authentication = authentication;
+    return this;
+  }
+
+  public DidDocumentBuilder assertionMethod(List<Object> assertionMethod) {
+    checkVerificationMethodTypes(assertionMethod);
+    this.assertionMethod = assertionMethod;
+    return this;
+  }
+
+  public DidDocumentBuilder capabilityInvocation(List<Object> capabilityInvocation) {
+    checkVerificationMethodTypes(capabilityInvocation);
+    this.capabilityInvocation = capabilityInvocation;
+    return this;
+  }
+
+  public DidDocumentBuilder capabilityDelegation(List<Object> capabilityDelegation) {
+    checkVerificationMethodTypes(capabilityDelegation);
+    this.capabilityDelegation = capabilityDelegation;
+    return this;
+  }
+
+  private void checkVerificationMethodTypes(List<Object> vms) {
+    Objects.requireNonNull(vms);
+
+    if (vms.isEmpty()) {
+      throw new IllegalArgumentException("verification methods must not be empty");
+    }
+
+    vms.forEach(
+        vm -> {
+          if (!(vm instanceof URI) && !(vm instanceof VerificationMethod)) {
+            throw new IllegalArgumentException(
+                "verification Method must be of type URI or VerificationMethod");
+          }
+        });
+  }
+
   /**
    * Build did document.
    *
    * @return the did document
    */
   public DidDocument build() {
-    return new DidDocument(
+
+    Map<String, Object> requiredEntries =
         Map.of(
             DidDocument.CONTEXT,
             DidDocument.DEFAULT_CONTEXT,
             DidDocument.ID,
             id.toString(),
             DidDocument.VERIFICATION_METHOD,
-            verificationMethods));
+            verificationMethods);
+
+    HashMap<String, Object> entries = new HashMap<>(requiredEntries);
+    if (CollectionUtils.isNotEmpty(assertionMethod))
+      entries.put(ProofPurpose.ASSERTION_METHOD.purpose, assertionMethod);
+
+    if (CollectionUtils.isNotEmpty(authentication))
+      entries.put(ProofPurpose.AUTHENTICATION.purpose, authentication);
+
+    if (CollectionUtils.isNotEmpty(capabilityDelegation))
+      entries.put(ProofPurpose.CAPABILITY_DELEGATION.purpose, capabilityDelegation);
+
+    if (CollectionUtils.isNotEmpty(capabilityInvocation))
+      entries.put(ProofPurpose.CAPABILITY_INVOCATION.purpose, capabilityInvocation);
+
+    return new DidDocument(entries);
   }
 }

@@ -41,6 +41,9 @@ import com.nimbusds.jose.proc.JWSVerifierFactory;
 import com.nimbusds.jose.util.Base64URL;
 import java.net.URI;
 import java.text.ParseException;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
@@ -103,7 +106,7 @@ public class JWSProofVerifier implements IVerifier {
   private JWK getJWK(JWSHeader header, JWSSignature2020 signature)
       throws NoVerificationKeyFoundExcpetion {
     if (EdDSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm())) {
-      return discoverOctectKey(signature);
+      return discoverOctetKey(signature);
     } else {
       if (RSASSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm()))
         return discoverRSAKey(signature);
@@ -157,7 +160,23 @@ public class JWSProofVerifier implements IVerifier {
     }
 
     final URI verificationMethodId = signature.getVerificationMethod();
+    List<Object> verificationRelationShip =
+        (List<Object>) document.get(signature.getProofPurpose());
 
+    if (verificationRelationShip != null) {
+      var verificationRelationShipValid =
+          validateVerificationRelationShip(verificationRelationShip, verificationMethodId);
+
+      if (!verificationRelationShipValid.valid) {
+        throw new IllegalStateException("verification relation ship is not valid");
+      }
+
+      if (Optional.ofNullable(verificationRelationShipValid.verificationMethod).isPresent()) {
+        return verificationRelationShipValid.verificationMethod;
+      }
+    }
+
+    // document and loop
     return document.getVerificationMethods().stream()
         .filter(v -> v.getId().equals(verificationMethodId))
         .filter(JWKVerificationMethod::isInstance)
@@ -169,11 +188,55 @@ public class JWSProofVerifier implements IVerifier {
                     "No JWS verification Key found in DID Document"));
   }
 
-  private OctetKeyPair discoverOctectKey(JWSSignature2020 signature)
+  private OctetKeyPair discoverOctetKey(JWSSignature2020 signature)
       throws NoVerificationKeyFoundExcpetion {
     JWKVerificationMethod key = discoverKey(signature);
     var x = ((OctetKeyPair) key.getJwk()).getX();
     return new OctetKeyPair.Builder(Curve.Ed25519, x).build();
+  }
+
+  // check if verificationMethodId is in verificationRelationship(proofPurpose) and return embedded
+  // verificationMethod if is embedded
+  private VerificationRelationShipResult validateVerificationRelationShip(
+      List<Object> verificationRelationShip, URI verificationMethodId) {
+    for (Object o : verificationRelationShip) {
+      if (o instanceof URI) {
+        URI relationShip = (URI) o;
+        if (relationShip.equals(verificationMethodId)) {
+          return new VerificationRelationShipResult(true);
+        }
+      } else if (o instanceof String) {
+        URI relationShip = URI.create((String) o);
+        if (relationShip.equals(verificationMethodId)) {
+          return new VerificationRelationShipResult(true);
+        }
+      } else if (o instanceof Map) {
+        // embedded relationship, only usable by proofPurpose == relationShip
+        Map<String, Object> mapRelationShip = (Map<String, Object>) o;
+        URI relationShip = (URI) mapRelationShip.get("id");
+        if (relationShip.equals(verificationMethodId)) {
+          return new VerificationRelationShipResult(
+              true, new JWKVerificationMethod(mapRelationShip));
+        }
+      }
+    }
+    return new VerificationRelationShipResult(false);
+  }
+
+  private static class VerificationRelationShipResult {
+
+    final boolean valid;
+
+    JWKVerificationMethod verificationMethod;
+
+    public VerificationRelationShipResult(boolean valid) {
+      this.valid = valid;
+    }
+
+    public VerificationRelationShipResult(boolean valid, JWKVerificationMethod verificationMethod) {
+      this.valid = valid;
+      this.verificationMethod = verificationMethod;
+    }
   }
 
   /**

@@ -25,6 +25,7 @@ import java.net.URI;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Map;
 import lombok.NoArgsConstructor;
 
@@ -90,19 +91,21 @@ public class JWSSignature2020Builder {
     DateTimeFormatter formatter =
         DateTimeFormatter.ofPattern(JWSSignature2020.TIME_FORMAT).withZone(ZoneOffset.UTC);
 
-    Map<String, Object> map =
+    Map<String, Object> standardEntries =
         Map.of(
             JWSSignature2020.TYPE,
             JWSSignature2020.JWS_VERIFICATION_KEY_2020,
-            JWSSignature2020.PROOF_PURPOSE,
-            proofPurpose,
             JWSSignature2020.JWS,
             jws,
             JWSSignature2020.VERIFICATION_METHOD,
             verificationMethod.toString(),
             JWSSignature2020.CREATED,
-            formatter.format(created));
+            formatter.format(created),
+            JWSSignature2020.PROOF_PURPOSE,
+            proofPurpose);
 
-    return new JWSSignature2020(map);
+    HashMap<String, Object> entries = new HashMap<>(standardEntries);
+
+    return new JWSSignature2020(entries);
   }
 }
