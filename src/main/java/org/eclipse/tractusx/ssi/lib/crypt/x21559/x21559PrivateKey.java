@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -19,7 +19,7 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.crypt.x25519;
+package org.eclipse.tractusx.ssi.lib.crypt.x21559;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -36,19 +36,19 @@ import org.eclipse.tractusx.ssi.lib.exception.key.KeyTransformationException;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
-/** The type x25519 private key. */
-public class x25519PrivateKey implements IPrivateKey {
+/** The type X21559 private key. */
+public class x21559PrivateKey implements IPrivateKey {
 
   private final int KEY_LENGTH = 32;
   private final @NonNull byte[] key;
 
   /**
-   * Instantiates a new X 25519 private key.
+   * Instantiates a new X 21559 private key.
    *
    * @param privateKey the private key
    * @throws InvalidePrivateKeyFormat the invalide private key format
    */
-  public x25519PrivateKey(byte[] privateKey) throws InvalidPrivateKeyFormatException {
+  public x21559PrivateKey(byte[] privateKey) throws InvalidPrivateKeyFormatException {
     if (this.getKeyLength() != privateKey.length) {
       throw new InvalidPrivateKeyFormatException(getKeyLength(), privateKey.length);
     }
@@ -56,14 +56,14 @@ public class x25519PrivateKey implements IPrivateKey {
   }
 
   /**
-   * Instantiates a new X 25519 private key.
+   * Instantiates a new X 21559 private key.
    *
    * @param privateKey the private key
    * @param pemFormat the pem format
    * @throws InvalidePrivateKeyFormat the invalide private key format
    * @throws IOException the io exception
    */
-  public x25519PrivateKey(String privateKey, boolean PEMFormat)
+  public x21559PrivateKey(String privateKey, boolean PEMFormat)
       throws InvalidPrivateKeyFormatException {
     if (PEMFormat) {
       StringReader sr = new StringReader(privateKey);
@@ -90,7 +90,7 @@ public class x25519PrivateKey implements IPrivateKey {
   @Override
   public String asStringForStoring() throws KeyTransformationException {
 
-    PemObject pemObject = new PemObject("ED25519 Private Key", this.key);
+    PemObject pemObject = new PemObject("ED21559 Private Key", this.key);
     StringWriter sw = new StringWriter();
     PemWriter writer = new PemWriter(sw);
     try {

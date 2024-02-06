@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -25,6 +25,7 @@ import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
 /** The type Did parse exception. */
 public class DidParseException extends SSIException {
+
   private static final long serialVersionUID = -8099856673022088164L;
   /**
    * Instantiates a new Did parse exception.

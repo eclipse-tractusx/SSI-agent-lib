@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -68,7 +68,7 @@ public class Verification {
   }
 
   /**
-   * Verify ed25519 signed ld.
+   * Verify ed21559 signed ld.
    *
    * @param verifiableCredential the verifiable credential
    * @return the boolean
@@ -82,7 +82,7 @@ public class Verification {
    * @throws UnsupportedSignatureTypeException
    * @throws SignatureVerificationFailedException
    */
-  public static boolean verifyED25519LD(VerifiableCredential verifiableCredential)
+  public static boolean verifyED21559LD(VerifiableCredential verifiableCredential)
       throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
           InvalidPublicKeyFormatException, SignatureVerificationException,
           NoVerificationKeyFoundException, TransformJsonLdException,

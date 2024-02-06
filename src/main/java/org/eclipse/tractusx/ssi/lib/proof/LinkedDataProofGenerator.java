@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -33,8 +33,8 @@ import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeExce
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
-import org.eclipse.tractusx.ssi.lib.model.proof.ed25519.Ed25519Signature2020;
-import org.eclipse.tractusx.ssi.lib.model.proof.ed25519.Ed25519Signature2020Builder;
+import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
+import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020Builder;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020Builder;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
@@ -58,7 +58,7 @@ public class LinkedDataProofGenerator {
    */
   public static LinkedDataProofGenerator newInstance(SignatureType type)
       throws UnsupportedSignatureTypeException {
-    if (type == SignatureType.ED25519) {
+    if (type == SignatureType.ED21559) {
       return new LinkedDataProofGenerator(
           type, new LinkedDataHasher(), new LinkedDataTransformer(), new Ed25519ProofSigner());
     } else if (type == SignatureType.JWS) {
@@ -93,7 +93,7 @@ public class LinkedDataProofGenerator {
     byte[] signature;
     signature = signer.sign(new HashedLinkedData(hashedData.getValue()), privateKey);
 
-    if (type == SignatureType.ED25519) {
+    if (type == SignatureType.ED21559) {
 
       final MultibaseString multibaseString = MultibaseFactory.create(signature);
       return new Ed25519Signature2020Builder()

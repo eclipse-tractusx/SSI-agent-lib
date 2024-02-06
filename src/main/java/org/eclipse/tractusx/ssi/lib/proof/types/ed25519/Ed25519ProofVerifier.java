@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -29,7 +29,7 @@ import org.bouncycastle.crypto.Signer;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x25519.x25519PublicKey;
+import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
@@ -42,7 +42,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
-import org.eclipse.tractusx.ssi.lib.model.proof.ed25519.Ed25519Signature2020;
+import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.proof.IVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
@@ -94,7 +94,7 @@ public class Ed25519ProofVerifier implements IVerifier {
 
     IPublicKey publicKey;
     try {
-      publicKey = (IPublicKey) new x25519PublicKey(key.getPublicKeyBase58().getEncoded(), false);
+      publicKey = (IPublicKey) new x21559PublicKey(key.getPublicKeyBase58().getEncoded(), false);
     } catch (IOException e) {
       throw new InvalidPublicKeyFormatException(e.getCause());
     }

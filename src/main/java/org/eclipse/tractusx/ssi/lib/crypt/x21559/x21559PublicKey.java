@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -19,7 +19,7 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.crypt.x25519;
+package org.eclipse.tractusx.ssi.lib.crypt.x21559;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -36,19 +36,19 @@ import org.eclipse.tractusx.ssi.lib.exception.key.KeyTransformationException;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
-/** The type X 25519 public key. */
-public class x25519PublicKey implements IPublicKey {
+/** The type X 21559 public key. */
+public class x21559PublicKey implements IPublicKey {
 
   private final int KEY_LENGTH = 32;
   private final @NonNull byte[] originalKey;
 
   /**
-   * Instantiates a new X 25519 public key.
+   * Instantiates a new X 21559 public key.
    *
    * @param publicKey the public key
    * @throws InvalidePublicKeyFormat the invalide public key format
    */
-  public x25519PublicKey(byte[] publicKey) throws InvalidPublicKeyFormatException {
+  public x21559PublicKey(byte[] publicKey) throws InvalidPublicKeyFormatException {
     if (this.getKeyLength() != publicKey.length) {
       throw new InvalidPublicKeyFormatException(getKeyLength(), publicKey.length);
     }
@@ -56,14 +56,14 @@ public class x25519PublicKey implements IPublicKey {
   }
 
   /**
-   * Instantiates a new x25519 public key.
+   * Instantiates a new X21559 public key.
    *
    * @param publicKey the public key
    * @param pemFormat the pe mformat
    * @throws InvalidePublicKeyFormat the invalide public key format
    * @throws IOException the io exception
    */
-  public x25519PublicKey(String publicKey, boolean PEMformat)
+  public x21559PublicKey(String publicKey, boolean PEMformat)
       throws InvalidPublicKeyFormatException, IOException {
 
     if (PEMformat) {
@@ -85,7 +85,7 @@ public class x25519PublicKey implements IPublicKey {
 
   @Override
   public String asStringForStoring() throws KeyTransformationException {
-    PemObject pemObject = new PemObject("ED25519 Public Key", this.originalKey);
+    PemObject pemObject = new PemObject("ED21559 Public Key", this.originalKey);
     StringWriter sw = new StringWriter();
     PemWriter writer = new PemWriter(sw);
     try {
