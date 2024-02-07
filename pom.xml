@@ -294,12 +294,14 @@ SPDX-License-Identifier: Apache-2.0
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.1.2</version>
                 <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
+                  <execution>
+                    <id>integration-test</id>
+                    <goals>
+                      <goal>integration-test</goal>
+                      <goal>verify</goal>
+                    </goals>
+                    <phase>test</phase>
+                  </execution>
                 </executions>
             </plugin>
             <plugin>

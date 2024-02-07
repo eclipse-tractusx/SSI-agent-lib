@@ -46,7 +46,7 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
-      
+
       - name: Set up codeql
         uses: github/codeql-action/init@v2
         with:
@@ -57,7 +57,7 @@ jobs:
         env:
           GITHUB_PACKAGE_USERNAME: ${{ github.actor }}
           GITHUB_PACKAGE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
 
