@@ -62,7 +62,7 @@ public class DidUniResolverIT {
    */
   @Container
   public static GenericContainer<?> uniResolver =
-      new GenericContainer<>("universalresolver/driver-did-key:latest")
+      new GenericContainer<>("universalresolver/driver-did-key:0.2.0-f98a04a")
           .withExposedPorts(8080)
           .waitingFor(new HostPortWaitStrategy());
 
