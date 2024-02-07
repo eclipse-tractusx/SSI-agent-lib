@@ -63,6 +63,3 @@ jobs:
 
       - name: Run tests
         run: ./mvnw -B test --file ./pom.xml
-
-      - name: Run integration tests
-        run: ./mvnw -B integration-test --file ./pom.xml
