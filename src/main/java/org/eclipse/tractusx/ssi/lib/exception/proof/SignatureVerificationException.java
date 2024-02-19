@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -26,6 +26,7 @@ import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 /** The type Signature Verification Failed exception. */
 public class SignatureVerificationException extends SSIException {
 
+  private static final long serialVersionUID = 1L;
   /**
    * Instantiates a new signature verification failed exception.
    *

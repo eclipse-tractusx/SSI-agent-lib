@@ -26,6 +26,7 @@ import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 /** The type Did resolver exception. */
 public class DidResolverException extends SSIException {
 
+  private static final long serialVersionUID = 1L;
   /**
    * Instantiates a new Did resolver exception.
    *

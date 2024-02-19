@@ -26,7 +26,7 @@ import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 /** The type Did parse exception. */
 public class DidParseException extends SSIException {
 
-  private static final long serialVersionUID = -8099856673022088164L;
+  private static final long serialVersionUID = 1L;
   /**
    * Instantiates a new Did parse exception.
    *

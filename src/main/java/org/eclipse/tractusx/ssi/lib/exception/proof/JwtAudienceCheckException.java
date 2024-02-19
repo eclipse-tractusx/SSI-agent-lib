@@ -25,7 +25,7 @@ import java.util.List;
 
 /** The type Jwt audience check failed exception. */
 public class JwtAudienceCheckException extends SignatureValidationException {
-  private static final long serialVersionUID = -3258865938704740787L;
+  private static final long serialVersionUID = 1L;
   /**
    * Instantiates a new Jwt audience check failed exception.
    *

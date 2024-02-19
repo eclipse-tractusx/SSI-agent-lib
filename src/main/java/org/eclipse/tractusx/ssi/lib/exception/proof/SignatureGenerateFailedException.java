@@ -25,7 +25,8 @@ import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
 /** The type signature check failed exception. */
 public class SignatureGenerateFailedException extends SSIException {
-  private static final long serialVersionUID = -994642818493030478L;
+  private static final long serialVersionUID = 1L;
+
   /**
    * Instantiates a new signature generate failed exception.
    *

@@ -23,7 +23,7 @@ package org.eclipse.tractusx.ssi.lib.exception.key;
 
 /** The type Invalide private key format. */
 public class InvalidPrivateKeyFormatException extends KeyGenerationException {
-  private static final long serialVersionUID = -3348735256693555408L;
+  private static final long serialVersionUID = 1L;
   /**
    * Instantiates a new Invalid private key format.
    *
