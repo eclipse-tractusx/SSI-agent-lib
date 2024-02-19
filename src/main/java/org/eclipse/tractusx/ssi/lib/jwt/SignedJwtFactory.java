@@ -118,7 +118,7 @@ public class SignedJwtFactory {
       var algorithm = JWSAlgorithm.EdDSA;
       var type = JOSEObjectType.JWT;
 
-      //https://w3c.github.io/vc-jws-2020/#json-web-signature-2020
+      // https://w3c.github.io/vc-jws-2020/#json-web-signature-2020
       var crit = new HashSet<String>();
       crit.add("b64");
 
