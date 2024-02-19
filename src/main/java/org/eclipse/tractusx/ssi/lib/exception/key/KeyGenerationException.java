@@ -26,7 +26,7 @@ import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 /** The type Key Generation Exception */
 public class KeyGenerationException extends SSIException {
 
-  private static final long serialVersionUID = -6351788213852014647L;
+  private static final long serialVersionUID = 1L;
 
   /**
    * Instantiates a new key generation exception.

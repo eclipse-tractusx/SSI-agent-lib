@@ -24,7 +24,7 @@ package org.eclipse.tractusx.ssi.lib.exception.proof;
 /** The type Unsupported signature type exception. */
 public class UnsupportedSignatureTypeException extends SignatureVerificationException {
 
-  private static final long serialVersionUID = 6406987797507777929L;
+  private static final long serialVersionUID = 1L;
 
   /**
    * Instantiates a new unsupported signature type exception.
