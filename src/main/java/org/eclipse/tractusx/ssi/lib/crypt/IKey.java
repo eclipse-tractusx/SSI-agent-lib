@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -21,7 +21,7 @@
 
 package org.eclipse.tractusx.ssi.lib.crypt;
 
-import java.io.IOException;
+import org.eclipse.tractusx.ssi.lib.exception.key.KeyTransformationException;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 
 /** The interface Key. */
@@ -39,7 +39,7 @@ public interface IKey {
    * @return the string
    * @throws IOException the io exception
    */
-  String asStringForStoring() throws IOException;
+  String asStringForStoring() throws KeyTransformationException;
 
   /**
    * Convert the key to a string for exchange.
@@ -48,7 +48,7 @@ public interface IKey {
    * @return the string
    * @throws IOException the io exception
    */
-  String asStringForExchange(EncodeType encodeType) throws IOException;
+  String asStringForExchange(EncodeType encodeType) throws KeyTransformationException;
 
   /**
    * Convert the key to a byte array.

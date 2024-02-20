@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -22,14 +22,13 @@
 package org.eclipse.tractusx.ssi.examples;
 
 import java.net.http.HttpClient;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistryImpl;
-import org.eclipse.tractusx.ssi.lib.did.web.DidWebDocumentResolver;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
+import org.eclipse.tractusx.ssi.lib.did.web.DidWebResolver;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
-import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
-import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
 /** This is an example class to demonstrate did document resolve from given did web url */
 public class ResolveDIDDoc {
@@ -38,26 +37,23 @@ public class ResolveDIDDoc {
    *
    * @param didUrl the did url
    * @return the did document
+   * @throws org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException
    * @throws DidDocumentResolverNotRegisteredException the did document resolver not registered
    *     exception
    */
   public static DidDocument ResovleDocument(String didUrl)
-      throws DidDocumentResolverNotRegisteredException {
+      throws DidParseException, DidResolverException {
 
     // DID Resolver Constracture params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();
     var enforceHttps = false;
 
-    // DID Method
-    DidMethod didWeb = new DidMethod("web");
-
     // DID
     Did did = DidWebFactory.fromHostname(didUrl);
 
-    var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
-    didDocumentResolverRegistry.register(
-        new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
-    return didDocumentResolverRegistry.get(didWeb).resolve(did);
+    var didResolver = new DidWebResolver(httpClient, didParser, enforceHttps);
+
+    return didResolver.resolve(did);
   }
 }

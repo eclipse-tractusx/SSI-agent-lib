@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -26,18 +26,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import org.eclipse.tractusx.ssi.lib.exception.DidParseException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 
 /** The type Did parser. */
 public class DidParser {
-
   /**
-   * Parse did.
+   * Parse did from URI.
    *
    * @param uri the uri
    * @return the did
    */
-  public static Did parse(URI uri) {
+  public static Did parse(URI uri) throws DidParseException {
     Objects.requireNonNull(uri);
 
     if (!uri.getScheme().equals("did")) {
@@ -66,12 +65,12 @@ public class DidParser {
   }
 
   /**
-   * Parse did.
+   * Parse did from String.
    *
-   * @param did the did
+   * @param did the did String
    * @return the did
    */
-  public static Did parse(String did) {
+  public static Did parse(String did) throws DidParseException {
     Objects.requireNonNull(did);
 
     final URI uri;

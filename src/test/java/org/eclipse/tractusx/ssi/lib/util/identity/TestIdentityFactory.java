@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -21,16 +21,15 @@
 
 package org.eclipse.tractusx.ssi.lib.util.identity;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IKeyGenerator;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.KeyPair;
 import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559Generator;
-import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.x25519Generator;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
@@ -48,15 +47,13 @@ public class TestIdentityFactory {
    * New identity with ed 25519 keys test identity.
    *
    * @return the test identity
-   * @throws IOException the io exception
-   * @throws KeyGenerationException the key generation exception
    */
-  public static TestIdentity newIdentityWithED25519Keys()
-      throws IOException, KeyGenerationException {
+  @SneakyThrows
+  public static TestIdentity newIdentityWithED25519Keys() {
 
     final Did did = TestDidFactory.createRandom();
 
-    IKeyGenerator keyGenerator = new x21559Generator();
+    IKeyGenerator keyGenerator = new x25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
     IPublicKey publicKey = keyPair.getPublicKey();
     IPrivateKey privateKey = keyPair.getPrivateKey();

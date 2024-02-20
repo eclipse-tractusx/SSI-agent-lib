@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -24,7 +24,6 @@ package org.eclipse.tractusx.ssi.lib.proof.types.ed25519;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.proof.ISigner;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
@@ -32,8 +31,7 @@ import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 public class Ed25519ProofSigner implements ISigner {
 
   @Override
-  public byte[] sign(HashedLinkedData hashedLinkedData, IPrivateKey privateKey)
-      throws SsiException {
+  public byte[] sign(HashedLinkedData hashedLinkedData, IPrivateKey privateKey) {
     final byte[] message = hashedLinkedData.getValue();
 
     Ed25519PrivateKeyParameters secretKeyParameters =

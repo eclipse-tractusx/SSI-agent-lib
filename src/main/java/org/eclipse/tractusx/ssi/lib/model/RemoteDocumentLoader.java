@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -44,6 +44,7 @@ import lombok.Setter;
 /** The type Remote document loader. */
 public class RemoteDocumentLoader implements DocumentLoader {
 
+  private static int CACHE_PERIOD_IN_DAYS = 1;
   private static DocumentLoader DEFAULT_HTTP_LOADER;
   private static DocumentLoader DEFAULT_FILE_LOADER;
   @Getter private DocumentLoader httpLoader;
@@ -57,7 +58,7 @@ public class RemoteDocumentLoader implements DocumentLoader {
 
   @Getter @Setter
   private Cache<URI, Document> remoteCache =
-      Caffeine.newBuilder().expireAfterWrite(Duration.ofDays(1)).build();
+      Caffeine.newBuilder().expireAfterWrite(Duration.ofDays(CACHE_PERIOD_IN_DAYS)).build();
 
   @Getter @Setter private List<URI> httpContexts = new ArrayList<URI>();
   @Getter @Setter private List<URI> httpsContexts = new ArrayList<URI>();

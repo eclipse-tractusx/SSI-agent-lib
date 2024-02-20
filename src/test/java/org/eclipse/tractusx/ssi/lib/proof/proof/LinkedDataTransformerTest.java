@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -73,6 +73,7 @@ public class LinkedDataTransformerTest {
 
   /** Test two transformations equal. */
   @Test
+  @SneakyThrows
   public void testTwoTransformationsEqual() {
     final VerifiableCredential credential1 = deserializeCredential(SummaryVerifiableCredential);
     final var data1 = transformer.transform(credential1);
@@ -92,6 +93,7 @@ public class LinkedDataTransformerTest {
       value = {
         "issuer\": \"did:web:localhost%3A8080:BPNOPERATOR, issuer\": \"did:web:localhost%3A8080:BPNATTACKER"
       })
+  @SneakyThrows
   public void testTwoTransformationDifference(String original, String replace) {
     final VerifiableCredential credential1 = deserializeCredential(SummaryVerifiableCredential);
     final VerifiableCredential credential2 =
