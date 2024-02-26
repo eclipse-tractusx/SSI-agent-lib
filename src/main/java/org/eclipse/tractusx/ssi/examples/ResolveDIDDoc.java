@@ -48,7 +48,6 @@ public class ResolveDIDDoc {
   public static DidDocument resolveDidDocument(String didUrl)
       throws DidParseException, DidResolverException {
 
-    // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();
     var enforceHttps = false;
