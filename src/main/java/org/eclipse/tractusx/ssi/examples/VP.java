@@ -53,13 +53,11 @@ class VP {
       Did issuer, List<VerifiableCredential> credentials) {
     final VerifiablePresentationBuilder verifiablePresentationBuilder =
         new VerifiablePresentationBuilder();
-    final VerifiablePresentation verifiablePresentation =
-        verifiablePresentationBuilder
-            .id(issuer.toUri()) // NOTE: Provide unique ID number to each VP you create!!
-            .type(List.of(VerifiablePresentationType.VERIFIABLE_PRESENTATION))
-            .verifiableCredentials(credentials)
-            .build();
-    return verifiablePresentation;
+    return verifiablePresentationBuilder
+        .id(issuer.toUri()) // NOTE: Provide unique ID number to each VP you create!!
+        .type(List.of(VerifiablePresentationType.VERIFIABLE_PRESENTATION))
+        .verifiableCredentials(credentials)
+        .build();
   }
 
   /**

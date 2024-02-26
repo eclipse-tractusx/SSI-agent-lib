@@ -34,7 +34,7 @@ public class InvalidPublicKeyFormatException extends KeyGenerationException {
   public InvalidPublicKeyFormatException(int correctLength, int providedLength) {
     super(
         String.format(
-            "Invalide Publice Key Format, this key should have '%s' as lenght but we got %s",
+            "Invalid Public Key Format, this key should have '%s' as length but we got %s",
             correctLength, providedLength));
   }
 
