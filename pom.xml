@@ -121,7 +121,7 @@ SPDX-License-Identifier: Apache-2.0
                 <groupId>com.apicatalog</groupId>
                 <artifactId>titanium-json-ld-jre8</artifactId>
               </exclusion>
-            </exclusions>			
+            </exclusions>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/jakarta.json/jakarta.json-api -->
@@ -347,12 +347,14 @@ SPDX-License-Identifier: Apache-2.0
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.2.2</version>
                 <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
+                  <execution>
+                    <id>integration-test</id>
+                    <goals>
+                      <goal>integration-test</goal>
+                      <goal>verify</goal>
+                    </goals>
+                    <phase>test</phase>
+                  </execution>
                 </executions>
             </plugin>
             <plugin>
