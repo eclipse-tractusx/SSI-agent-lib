@@ -34,7 +34,9 @@ import lombok.SneakyThrows;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialStatusList2021Entry;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
+import org.testcontainers.shaded.org.apache.commons.lang3.RandomUtils;
 
 /** The type Test resource util. */
 public class TestResourceUtil {
@@ -200,5 +202,19 @@ public class TestResourceUtil {
         TestResourceUtil.class.getClassLoader().getResourceAsStream(resource);
 
     return Objects.requireNonNull(inputStream, "Resource not found: " + resource);
+  }
+
+  /**
+   * @return verifiableCredentialStatusList2021Entry
+   */
+  public static VerifiableCredentialStatusList2021Entry getStatusListEntry() {
+    int index = RandomUtils.nextInt();
+    return new VerifiableCredentialStatusList2021Entry(
+        Map.of(
+            "id", "https://example.com/credentials/status/3#" + index,
+            "type", "BitstringStatusListEntry",
+            "statusPurpose", "revocation",
+            "statusListIndex", String.valueOf(index),
+            "statusListCredential", "https://example.com/credentials/status/3"));
   }
 }
