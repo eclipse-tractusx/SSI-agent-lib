@@ -24,22 +24,18 @@ package org.eclipse.tractusx.ssi.lib.cypto.ed21995;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Arrays;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IKeyGenerator;
 import org.eclipse.tractusx.ssi.lib.crypt.KeyPair;
-import org.eclipse.tractusx.ssi.lib.crypt.x25519.x25519Generator;
-import org.eclipse.tractusx.ssi.lib.crypt.x25519.x25519PrivateKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x25519.x25519PublicKey;
-import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatException;
-import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519Generator;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519PrivateKey;
 import org.eclipse.tractusx.ssi.lib.exception.key.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.junit.jupiter.api.Test;
 
 /** The type Ed 25519 key test. */
-public class ed25519KeyTest {
+public class ED25519KeyTest {
 
   /**
    * Test ed 25519 key generation.
@@ -48,7 +44,7 @@ public class ed25519KeyTest {
    */
   @Test
   public void testED25519KeyGeneration() throws KeyGenerationException {
-    IKeyGenerator keyGenerator = new x25519Generator();
+    IKeyGenerator keyGenerator = new X25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
     assertNotNull(keyPair.getPrivateKey());
     assertNotNull(keyPair.getPublicKey());
@@ -57,48 +53,40 @@ public class ed25519KeyTest {
   /**
    * Test ed 25519 key serliztion.
    *
-   * @throws KeyGenerationException the key generation exception
-   * @throws IOException the io exception
    */
   @Test
   @SneakyThrows
-  public void testED21559KeySerliztion() throws KeyGenerationException, IOException {
-    IKeyGenerator keyGenerator = new x25519Generator();
+  public void testED21559KeySerliztion() {
+    IKeyGenerator keyGenerator = new X25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
 
     assertNotNull(keyPair.getPrivateKey().asStringForStoring());
 
-    assertNotNull(keyPair.getPrivateKey().asStringForExchange(EncodeType.Base64));
+    assertNotNull(keyPair.getPrivateKey().asStringForExchange(EncodeType.BASE_64));
 
     assertNotNull(keyPair.getPublicKey().asStringForStoring());
 
-    assertNotNull(keyPair.getPublicKey().asStringForExchange(EncodeType.Base64));
+    assertNotNull(keyPair.getPublicKey().asStringForExchange(EncodeType.BASE_64));
   }
 
   /**
    * Test ed 25519 key deserliztion.
    *
-   * @throws KeyGenerationException the key generation exception
-   * @throws IOException the io exception
-   * @throws InvalidPrivateKeyFormatException the invalide private key format
-   * @throws InvalidPublicKeyFormatException the invalide public key format
    */
   @Test
   @SneakyThrows
-  public void testED21559KeyDeserliztion()
-      throws KeyGenerationException, IOException, InvalidPrivateKeyFormatException,
-          InvalidPublicKeyFormatException {
-    IKeyGenerator keyGenerator = new x25519Generator();
+  public void testED21559KeyDeserliztion(){
+    IKeyGenerator keyGenerator = new X25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
 
     var originalPrivateKey = keyPair.getPrivateKey().asByte();
     var originalPublicKey = keyPair.getPublicKey().asByte();
 
     String privateKeyString = keyPair.getPrivateKey().asStringForStoring();
-    var privateKey = new x25519PrivateKey(privateKeyString, true);
+    var privateKey = new X25519PrivateKey(privateKeyString, true);
 
     String publicKeyString = keyPair.getPublicKey().asStringForStoring();
-    var publicKey = new x25519PublicKey(publicKeyString, true);
+    var publicKey = new X25519PrivateKey(publicKeyString, true);
 
     assertTrue(Arrays.equals(originalPrivateKey, privateKey.asByte()));
 

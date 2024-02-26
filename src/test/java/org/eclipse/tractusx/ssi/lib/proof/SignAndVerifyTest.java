@@ -34,19 +34,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /** The type Sign and verify test. */
-public class SignAndVerifyTest {
+class SignAndVerifyTest {
 
   /**
    * Test sign and verify ed 201559.
-   *
-   * @throws IOException the io exception
-   * @throws InvalidPrivateKeyFormatException the invalide private key format
-   * @throws InvalidPublicKeyFormatException the invalide public key format
-   * @throws KeyGenerationException the key generation exception
    */
   @Test
   @SneakyThrows
-  public void testSignAndVerify_ED201559() {
+  void testSignAndVerify_ED201559() {
     final TestDidResolver didResolver = new TestDidResolver();
 
     var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys();
@@ -64,19 +59,10 @@ public class SignAndVerifyTest {
     Assertions.assertTrue(isSigned);
   }
 
-  /**
-   * Test sign and verify jws.
-   *
-   * @throws IOException the io exception
-   * @throws JOSEException the jose exception
-   * @throws NoSuchAlgorithmException the no such algorithm exception
-   * @throws InvalidPrivateKeyFormatException the invalide private key format
-   * @throws InvalidPublicKeyFormatException the invalide public key format
-   * @throws KeyGenerationException the key generation exception
-   */
+  /** Test sign and verify jws. */
   @Test
   @SneakyThrows
-  public void testSignAndVerify_JWS() {
+  void testSignAndVerify_JWS() {
 
     final TestDidResolver didResolver = new TestDidResolver();
     var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys();

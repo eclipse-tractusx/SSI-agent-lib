@@ -26,11 +26,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /** The type Verifiable credential test. */
-public class VerifiableCredentialTest {
+class VerifiableCredentialTest {
 
   /** Equals success. */
   @Test
-  public void equalsSuccess() {
+  void equalsSuccess() {
     final VerifiableCredential vc1 = TestResourceUtil.getAlumniVerifiableCredential();
     final VerifiableCredential vc2 = TestResourceUtil.getAlumniVerifiableCredential();
     Assertions.assertEquals(vc1.toString(), vc2.toString());
@@ -38,7 +38,7 @@ public class VerifiableCredentialTest {
 
   /** Equals failure. */
   @Test
-  public void equalsFailure() {
+  void equalsFailure() {
     final VerifiableCredential vc1 = TestResourceUtil.getBPNVerifiableCredential();
     final VerifiableCredential vc2 = TestResourceUtil.getAlumniVerifiableCredential();
 
@@ -47,7 +47,7 @@ public class VerifiableCredentialTest {
 
   /** Credential id must be valid uri. */
   @Test
-  public void credentialIdMustBeValidURI() {
+  void credentialIdMustBeValidURI() {
     final VerifiableCredential vc = TestResourceUtil.getAlumniVerifiableCredential();
     vc.put(VerifiableCredential.ID, "b9d94fd6-d7e8-4acf-a222-6e84fca87b68");
 

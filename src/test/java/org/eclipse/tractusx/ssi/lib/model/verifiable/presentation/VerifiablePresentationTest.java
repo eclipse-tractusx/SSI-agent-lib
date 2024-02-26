@@ -26,11 +26,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /** The type Verifiable presentation test. */
-public class VerifiablePresentationTest {
+class VerifiablePresentationTest {
 
   /** Equals success. */
   @Test
-  public void equalsSuccess() {
+  void equalsSuccess() {
     final VerifiablePresentation vp1 = TestResourceUtil.getAlumniVerifiablePresentation();
     final VerifiablePresentation vp2 = TestResourceUtil.getAlumniVerifiablePresentation();
 
@@ -39,7 +39,7 @@ public class VerifiablePresentationTest {
 
   /** Equals failure. */
   @Test
-  public void equalsFailure() {
+  void equalsFailure() {
     final VerifiablePresentation vp1 = TestResourceUtil.getAlumniVerifiablePresentation();
     final VerifiablePresentation vp2 = TestResourceUtil.getAlumniVerifiablePresentation();
     vp2.put(VerifiablePresentation.ID, "foo");

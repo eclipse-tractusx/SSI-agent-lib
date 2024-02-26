@@ -37,18 +37,22 @@ import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
 /** The type X 25519 public key. */
-public class x25519PublicKey implements IPublicKey {
+public class X25519PublicKey implements IPublicKey {
 
-  private final int KEY_LENGTH = 32;
+  private static final int KEY_LENGTH = 32;
   private final @NonNull byte[] originalKey;
 
   /**
    * Instantiates a new X 25519 public key.
    *
    * @param publicKey the public key
+<<<<<<< HEAD:src/main/java/org/eclipse/tractusx/ssi/lib/crypt/x25519/x25519PublicKey.java
    * @throws InvalidPublicKeyFormatException the invalide public key format
+=======
+   * @throws InvalidPublicKeyFormatException the invalid public key format
+>>>>>>> 23fcfb3 (fix: sonar findings):src/main/java/org/eclipse/tractusx/ssi/lib/crypt/x25519/X25519PublicKey.java
    */
-  public x25519PublicKey(byte[] publicKey) throws InvalidPublicKeyFormatException {
+  public X25519PublicKey(byte[] publicKey) throws InvalidPublicKeyFormatException {
     if (this.getKeyLength() != publicKey.length) {
       throw new InvalidPublicKeyFormatException(getKeyLength(), publicKey.length);
     }
@@ -60,13 +64,13 @@ public class x25519PublicKey implements IPublicKey {
    *
    * @param publicKey the public key
    * @param pemFormat the pe mformat
-   * @throws InvalidPublicKeyFormatException the invalide public key format
+   * @throws InvalidPublicKeyFormatException the invalid public key format
    * @throws IOException the io exception
    */
-  public x25519PublicKey(String publicKey, boolean PEMformat)
+  public X25519PublicKey(String publicKey, boolean pemFormat)
       throws InvalidPublicKeyFormatException, IOException {
 
-    if (PEMformat) {
+    if (pemFormat) {
       StringReader sr = new StringReader(publicKey);
       PemReader reader = new PemReader(sr);
       PemObject pemObject = reader.readPemObject();

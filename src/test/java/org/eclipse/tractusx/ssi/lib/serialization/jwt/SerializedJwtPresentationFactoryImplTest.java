@@ -36,7 +36,7 @@ import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 import org.eclipse.tractusx.ssi.lib.proof.hash.LinkedDataHasher;
 import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
 import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed25519ProofSigner;
-import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdSerializerImpl;
+import org.eclipse.tractusx.ssi.lib.serialization.jsonld.JsonLdSerializerImpl;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestDidResolver;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityFactory;
@@ -106,7 +106,7 @@ class SerializedJwtPresentationFactoryImplTest {
     Assertions.assertEquals(
         DEFAULT_EXPIRATION_TIME,
         (presentation.getJWTClaimsSet().getExpirationTime().getTime()
-                - presentation.getJWTClaimsSet().getIssueTime().getTime())
+            - presentation.getJWTClaimsSet().getIssueTime().getTime())
             / 1000);
   }
 
@@ -139,7 +139,7 @@ class SerializedJwtPresentationFactoryImplTest {
     Assertions.assertEquals(
         CUSTOM_EXPIRATION_TIME,
         (presentation.getJWTClaimsSet().getExpirationTime().getTime()
-                - presentation.getJWTClaimsSet().getIssueTime().getTime())
+            - presentation.getJWTClaimsSet().getIssueTime().getTime())
             / 1000);
   }
 

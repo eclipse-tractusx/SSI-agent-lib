@@ -31,7 +31,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentationBuilder;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentationType;
-import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdSerializer;
+import org.eclipse.tractusx.ssi.lib.serialization.jsonld.JsonLdSerializer;
 
 /** The type Serialized jwt presentation factory. */
 @RequiredArgsConstructor

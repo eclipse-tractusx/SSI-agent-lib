@@ -32,12 +32,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /** The type Test identity test. */
-public class TestIdentityTest {
+class TestIdentityTest {
 
   /** Test public private key. */
   @Test
   @SneakyThrows
-  public void testPublicPrivateKey() {
+  void testPublicPrivateKey() {
 
     byte[] message = "Json String".getBytes(StandardCharsets.UTF_8);
 

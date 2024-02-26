@@ -30,8 +30,8 @@ import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x25519.x25519PrivateKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x25519.x25519PublicKey;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519PrivateKey;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
@@ -42,6 +42,11 @@ import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 
 /** This is example class to demonstrate how to create @{@link DidDocument} using Json web key */
 public class BuildDIDDocJsonWebKey2020 {
+
+  private BuildDIDDocJsonWebKey2020() {
+    throw new IllegalStateException("Example class");
+  }
+
   /**
    * Build did document.
    *
@@ -54,8 +59,8 @@ public class BuildDIDDocJsonWebKey2020 {
     final Did did = DidWebFactory.fromHostname(hostName);
     OctetKeyPair octetKeyPair = new OctetKeyPairGenerator(Curve.Ed25519).keyID("1").generate();
 
-    IPrivateKey privateKey = new x25519PrivateKey(octetKeyPair.getDecodedD());
-    IPublicKey publicKey = new x25519PublicKey(octetKeyPair.getDecodedX());
+    IPrivateKey privateKey = new X25519PrivateKey(octetKeyPair.getDecodedD());
+    IPublicKey publicKey = new X25519PublicKey(octetKeyPair.getDecodedX());
 
     // JWK
     JsonWebKey jwk = new JsonWebKey(octetKeyPair.getKeyID(), publicKey, privateKey);

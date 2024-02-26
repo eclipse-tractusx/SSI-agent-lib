@@ -62,7 +62,7 @@ public abstract class Verifiable extends JsonLdObject {
    * @param json the json
    * @param type the type
    */
-  public Verifiable(Map<String, Object> json, VerifiableType type) {
+  protected Verifiable(Map<String, Object> json, VerifiableType type) {
     super(json);
     Objects.requireNonNull(this.getId());
     Objects.requireNonNull(this.getTypes());

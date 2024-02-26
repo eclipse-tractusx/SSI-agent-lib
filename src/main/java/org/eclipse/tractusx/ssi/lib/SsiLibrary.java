@@ -27,6 +27,11 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /** The type SSI library. */
 public final class SsiLibrary {
+
+  private SsiLibrary() {
+    throw new IllegalStateException("Utility class");
+  }
+
   /** Initialize. */
   public static void initialize() {
     Security.addProvider(new EdDSASecurityProvider());

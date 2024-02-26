@@ -30,6 +30,11 @@ import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 
 /** The type Did parser. */
 public class DidParser {
+
+  private DidParser() {
+    throw new IllegalStateException("Utility class");
+  }
+
   /**
    * Parse did.
    *

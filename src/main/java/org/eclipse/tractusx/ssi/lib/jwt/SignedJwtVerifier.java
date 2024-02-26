@@ -60,16 +60,13 @@ public class SignedJwtVerifier {
    *
    * @param jwt a {@link SignedJWT} that was sent by the claiming party.
    * @return true if verified, false otherwise
-   * @throws DidParseException
-   * @throws SignatureException
-   * @throws DidResolverException
-   * @throws SignatureVerificationFailedException
-   * @throws UnsupportedVerificationMethodException
-   * @throws JOSEException
-   */
+   * @throws DidParseException the did parse error
+   * @throws DidResolverException the did resolver exception
+   * @throws UnsupportedVerificationMethodException the unsupported verification method exception
+   * @throws SignatureVerificationFailedException the signature verification failed exception exception
+*/
   public boolean verify(SignedJWT jwt)
-      throws DidParseException, SignatureException, DidResolverException,
-          SignatureVerificationFailedException, UnsupportedVerificationMethodException {
+      throws DidParseException,DidResolverException, SignatureException, UnsupportedVerificationMethodException, SignatureVerificationFailedException {
 
     JWTClaimsSet jwtClaimsSet;
     try {

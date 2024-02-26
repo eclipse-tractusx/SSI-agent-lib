@@ -132,9 +132,7 @@ public class JWSProofVerifier implements IVerifier {
 
     var x = Base64URL.from(key.getPublicKeyJwk().getX());
 
-    var keyPair = new OctetKeyPair.Builder(Curve.Ed25519, x).build();
-
-    return keyPair;
+    return new OctetKeyPair.Builder(Curve.Ed25519, x).build();
   }
 
   public boolean verify(HashedLinkedData hashedLinkedData, byte[] signature, IPublicKey publicKey)
@@ -145,7 +143,7 @@ public class JWSProofVerifier implements IVerifier {
         new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey.asByte())).build();
     JWSVerifier verifier;
     try {
-      verifier = (JWSVerifier) new Ed25519Verifier(keyPair.toPublicJWK());
+      verifier = new Ed25519Verifier(keyPair.toPublicJWK());
     } catch (JOSEException e) {
       throw new InvalidPublicKeyFormatException(e.getMessage());
     }

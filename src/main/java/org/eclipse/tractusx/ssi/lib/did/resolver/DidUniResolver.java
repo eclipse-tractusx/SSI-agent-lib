@@ -42,7 +42,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 public class DidUniResolver implements DidResolver {
   private final HttpClient client;
   private final URI uniResolverEndpoint;
-  private static final String uniResolverResolvePath = "./1.0/identifiers/";
+  private static final String UNI_RESOLVER_RESOLVE_PATH = "./1.0/identifiers/";
 
   /**
    * Instantiates a new Did uni resolver.
@@ -74,7 +74,7 @@ public class DidUniResolver implements DidResolver {
   @Override
   public DidDocument resolve(Did did) throws DidResolverException, DidParseException {
     URI requestUri =
-        uniResolverEndpoint.resolve(uniResolverResolvePath).resolve("./" + did.toString());
+        uniResolverEndpoint.resolve(UNI_RESOLVER_RESOLVE_PATH).resolve("./" + did.toString());
     final HttpRequest request = HttpRequest.newBuilder().uri(requestUri).GET().build();
 
     try {
