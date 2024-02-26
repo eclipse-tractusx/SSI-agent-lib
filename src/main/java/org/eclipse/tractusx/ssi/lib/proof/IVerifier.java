@@ -24,7 +24,6 @@ package org.eclipse.tractusx.ssi.lib.proof;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
@@ -39,18 +38,16 @@ public interface IVerifier {
    * model to get the public key of issuer.
    *
    * @param hashedLinkedData the hashed linked data
-   * @param document {@link VerifiableCredential} the verifiable
+   * @param verifiable {@link VerifiableCredential} the verifiable
    * @return boolean if verified or not
    * @throws UnsupportedSignatureTypeException
    * @throws SignatureParseException
    * @throws InvalidPublicKeyFormatException
-   * @throws SignatureGenerateFailedException
    * @throws SignatureVerificationException
    * @throws DidParseException
    * @throws NoVerificationKeyFoundException
    */
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable verifiable)
       throws SignatureParseException, DidParseException, InvalidPublicKeyFormatException,
-          SignatureVerificationException, UnsupportedSignatureTypeException,
-          NoVerificationKeyFoundException;
+          SignatureVerificationException;
 }

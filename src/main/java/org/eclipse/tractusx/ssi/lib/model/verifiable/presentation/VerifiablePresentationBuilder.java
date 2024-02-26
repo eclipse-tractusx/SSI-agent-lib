@@ -26,7 +26,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.NoArgsConstructor;
+import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 
 /** The type Verifiable presentation builder. */
@@ -101,11 +103,11 @@ public class VerifiablePresentationBuilder {
    */
   public VerifiablePresentation build() {
     Map<String, Object> map = new HashMap<>();
-    map.put(VerifiablePresentation.CONTEXT, context);
-    map.put(VerifiablePresentation.ID, id.toString());
-    map.put(VerifiablePresentation.TYPE, types);
+    map.put(JsonLdObject.CONTEXT, context);
+    map.put(Verifiable.ID, id.toString());
+    map.put(Verifiable.TYPE, types);
     map.put(VerifiablePresentation.VERIFIABLE_CREDENTIAL, verifiableCredentials);
-    map.put(VerifiablePresentation.PROOF, proof);
+    map.put(Verifiable.PROOF, proof);
     return new VerifiablePresentation(map);
   }
 }

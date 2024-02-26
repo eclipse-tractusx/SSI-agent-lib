@@ -22,8 +22,6 @@
 package org.eclipse.tractusx.ssi.lib.proof;
 
 import java.util.logging.Logger;
-// import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidator;
-// import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidatorImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -117,9 +115,8 @@ public class LinkedDataProofValidation {
   /**
    * This method is to validate the Verification Method of VC
    *
-   * @param verifiable
-   * @return
-   * @throws UnsupportedSignatureTypeException
+   * @param verifiable the verifiable
+   * @return validation result
    */
   @SneakyThrows
   private Boolean validateVerificationMethodOfVC(Verifiable verifiable) {
@@ -129,8 +126,8 @@ public class LinkedDataProofValidation {
     }
     final VerifiableCredential vc = new VerifiableCredential(verifiable);
     final String issuer = vc.getIssuer().toString();
-    final String verficationMethod = getVerificationMethod(verifiable);
-    final String[] splitVerificationMethod = verficationMethod.split("#");
+    final String verificationMethod = getVerificationMethod(verifiable);
+    final String[] splitVerificationMethod = verificationMethod.split("#");
     return splitVerificationMethod[0].equals(issuer);
   }
 

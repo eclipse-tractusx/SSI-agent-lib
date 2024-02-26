@@ -90,6 +90,8 @@ public class JWKVerificationMethod extends VerificationMethod {
   @Data
   @AllArgsConstructor
   public static class PublicKeyJwk {
-    private String kty, crv, x;
+    private String kty;
+    private String crv;
+    private String x;
   }
 }

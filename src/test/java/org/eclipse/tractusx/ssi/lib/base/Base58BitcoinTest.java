@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /** The type Base 58 bitcoin test. */
-public class Base58BitcoinTest implements Serializable {
+class Base58BitcoinTest implements Serializable {
 
   static final long serialVersionUID = 6034044314589513430L;
 
@@ -38,14 +38,14 @@ public class Base58BitcoinTest implements Serializable {
 
   /** Test encoding. */
   @Test
-  public void testEncoding() {
+  void testEncoding() {
     var multibase = Base58Bitcoin.create(DECODED);
     Assertions.assertEquals(ENCODED, multibase.getEncoded());
   }
 
   /** Test decoding. */
   @Test
-  public void testDecoding() {
+  void testDecoding() {
     var multibase = Base58Bitcoin.create(ENCODED);
     Assertions.assertEquals(new String(DECODED), new String(multibase.getDecoded()));
   }

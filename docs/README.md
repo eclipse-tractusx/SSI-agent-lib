@@ -10,14 +10,14 @@ To install and use the lib, you have two options: building from source or using 
 
 To build the project from source, follow these steps:
 
-1. Clone the repository: 
+1. Clone the repository:
    ```
-   git clone https://github.com/eclipse-tractusx/SSI-agent-lib.git 
+   git clone https://github.com/eclipse-tractusx/SSI-agent-lib.git
    ```
 
 2. Navigate to the project directory:
    ```
-   cd cx-ssi-lib 
+   cd cx-ssi-lib
    ```
 
 3. Build the project using Maven:
@@ -79,12 +79,12 @@ import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020Builder;
 public static DidDocument buildDidDocument(String hostName,byte[] privateKey,byte[] publicKey) {
     final Did did = DidWebFactory.fromHostname(hostName);
-    
-    //Extracting keys 
+
+    //Extracting keys
     final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
     final MultibaseString publicKeyBase = MultibaseFactory.create(keySet.getPublicKey());
-    
-     
+
+
 
     //Building Verification Methods:
     final List<VerificationMethod> verificationMethods = new ArrayList<>();
@@ -96,11 +96,11 @@ public static DidDocument buildDidDocument(String hostName,byte[] privateKey,byt
              .publicKeyMultiBase(publicKeyBase)
              .build();
     verificationMethods.add(key);
-    
+
     final DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();
     didDocumentBuilder.id(did.toUri());
     didDocumentBuilder.verificationMethods(verificationMethods);
-    
+
     return didDocumentBuilder.build();
 }
 
@@ -108,7 +108,7 @@ public static DidDocument buildDidDocument(String hostName,byte[] privateKey,byt
 // ...
 ```
 
-3. To Resolve DID document using DID Web: 
+3. To Resolve DID document using DID Web:
 
 ```java
 import java.net.http.HttpClient;
@@ -123,11 +123,11 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistryImpl;
 
 public static DidDocument resovleDocument(String didUrl) throws DidDocumentResolverNotRegisteredException {
-        
+
     //DID Resolver Constracture params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();
-    var enforceHttps = false; 
+    var enforceHttps = false;
 
     //DID Method
     DidMethod didWeb = new DidMethod("web");
@@ -156,8 +156,8 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialType;
 
-public static VerifiableCredential createVCWithoutProof() { 
-       
+public static VerifiableCredential createVCWithoutProof() {
+
 
     //VC Bulider
     final VerifiableCredentialBuilder verifiableCredentialBuilder =
@@ -166,7 +166,7 @@ public static VerifiableCredential createVCWithoutProof() {
     //VC Subject
     final VerifiableCredentialSubject verifiableCredentialSubject =
     new VerifiableCredentialSubject(Map.of("test", "test"));
-       
+
     //Using Builder
     final VerifiableCredential credentialWithoutProof =
     verifiableCredentialBuilder
@@ -282,6 +282,7 @@ public static VerifiablePresentation createVP( Did issuer, List<VerifiableCreden
 ```
 
 7. To Generate Signed Verifiable Presentation:
+
 ```java
 import java.util.List;
 
@@ -289,30 +290,27 @@ import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
 import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519KeySet;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentationBuilder;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentationType;
 import org.eclipse.tractusx.ssi.lib.resolver.OctetKeyPairFactory;
-import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdSerializerImpl;
+import org.eclipse.tractusx.ssi.lib.serialization.jsonld.JsonLdSerializerImpl;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationFactory;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationFactoryImpl;
 
 import com.nimbusds.jwt.SignedJWT;
 
 
- public static SignedJWT createVPAsJWT(Did issuer,List<VerifiableCredential> credentials, String audience,byte[] privateKey,byte[] publicKey){
- 
-    //Extracting keys 
-    final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
-    final Ed25519Key signingKey = new Ed25519Key(keySet.getPrivateKey()); 
-    
-    //JWT Factory
-    final SerializedJwtPresentationFactory presentationFactory = new SerializedJwtPresentationFactoryImpl(
-            new SignedJwtFactory(new OctetKeyPairFactory()), new JsonLdSerializerImpl(), issuer);
+public static SignedJWT createVPAsJWT(Did issuer, List<VerifiableCredential> credentials, String audience, byte[] privateKey, byte[] publicKey) {
 
-    //Build JWT
-    return presentationFactory.createPresentation(
-        issuer, credentials, audience, signingKey);
+  //Extracting keys
+  final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
+  final Ed25519Key signingKey = new Ed25519Key(keySet.getPrivateKey());
+
+  //JWT Factory
+  final SerializedJwtPresentationFactory presentationFactory = new SerializedJwtPresentationFactoryImpl(
+      new SignedJwtFactory(new OctetKeyPairFactory()), new JsonLdSerializerImpl(), issuer);
+
+  //Build JWT
+  return presentationFactory.createPresentation(
+      issuer, credentials, audience, signingKey);
 
 
 }

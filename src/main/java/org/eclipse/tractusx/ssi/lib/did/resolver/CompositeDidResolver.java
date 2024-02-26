@@ -56,7 +56,7 @@ public class CompositeDidResolver implements DidResolver {
           }
         } catch (DidResolverException dre) {
           throw dre;
-        } catch (Throwable th) {
+        } catch (Exception th) {
           // catch any other exception and re-throw wrapped as DidResolverException
           throw new DidResolverException(
               String.format("Unrecognized exception: %s", th.getClass().getName()), th);

@@ -37,18 +37,18 @@ import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
 /** The type X25519 private key. */
-public class x25519PrivateKey implements IPrivateKey {
+public class X25519PrivateKey implements IPrivateKey {
 
-  private final int KEY_LENGTH = 32;
+  private static final int KEY_LENGTH = 32;
   private final @NonNull byte[] key;
 
   /**
    * Instantiates a new X 25519 private key.
    *
    * @param privateKey the private key
-   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws InvalidPrivateKeyFormatException the invalid private key format
    */
-  public x25519PrivateKey(byte[] privateKey) throws InvalidPrivateKeyFormatException {
+  public X25519PrivateKey(byte[] privateKey) throws InvalidPrivateKeyFormatException {
     if (this.getKeyLength() != privateKey.length) {
       throw new InvalidPrivateKeyFormatException(getKeyLength(), privateKey.length);
     }
@@ -60,12 +60,11 @@ public class x25519PrivateKey implements IPrivateKey {
    *
    * @param privateKey the private key
    * @param pemFormat the pem format
-   * @throws InvalidePrivateKeyFormat the invalide private key format
-   * @throws IOException the io exception
+   * @throws InvalidPrivateKeyFormatException the invalid private key format
    */
-  public x25519PrivateKey(String privateKey, boolean PEMFormat)
+  public X25519PrivateKey(String privateKey, boolean pemFormat)
       throws InvalidPrivateKeyFormatException {
-    if (PEMFormat) {
+    if (pemFormat) {
       StringReader sr = new StringReader(privateKey);
       PemReader reader = new PemReader(sr);
       PKCS8EncodedKeySpec keySpec;

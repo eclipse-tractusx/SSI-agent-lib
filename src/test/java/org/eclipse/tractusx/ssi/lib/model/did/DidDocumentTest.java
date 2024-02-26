@@ -30,13 +30,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /** The type Did document test. */
-public class DidDocumentTest {
+class DidDocumentTest {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
   /** Can create did document. */
   @Test
-  public void canCreateDidDocument() {
+  void canCreateDidDocument() {
     final List<Map<String, Object>> documents = TestResourceUtil.getAllDidDocuments();
 
     for (Map<String, Object> document : documents) {
@@ -47,7 +47,7 @@ public class DidDocumentTest {
   /** Can serialize did document. */
   @Test
   @SneakyThrows
-  public void canSerializeDidDocument() {
+  void canSerializeDidDocument() {
     final List<Map<String, Object>> documents = TestResourceUtil.getAllDidDocuments();
     for (Map<String, Object> document : documents) {
       var doc = new DidDocument(document);
@@ -60,7 +60,7 @@ public class DidDocumentTest {
   /** Can deserialize did document. */
   @Test
   @SneakyThrows
-  public void canDeserializeDidDocument() {
+  void canDeserializeDidDocument() {
     final List<Map<String, Object>> documents = TestResourceUtil.getAllDidDocuments();
     for (Map<String, Object> document : documents) {
       var docFromMap = new DidDocument(document);

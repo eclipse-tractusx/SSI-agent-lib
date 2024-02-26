@@ -62,14 +62,10 @@ public class DidWebResolverIT {
     httpsResolver = new DidWebResolver(HttpClient.newHttpClient(), new DidWebParser(), true);
   }
 
-  /**
-   * Should resolve valid web did.
-   *
-   * @throws DidResolverException the did resolver exception
-   */
+  /** Should resolve valid web did. */
   @Test
   @SneakyThrows
-  public void shouldResolveValidWebDid() {
+  void shouldResolveValidWebDid() {
     Did validDidWeb =
         new Did(
             new DidMethod("web"),
@@ -80,14 +76,10 @@ public class DidWebResolverIT {
     assertEquals(new DidDocument(TestResourceUtil.getPublishedDidDocument()), actualDidDoc);
   }
 
-  /**
-   * Should resolve valid external web did.
-   *
-   * @throws DidResolverException the did resolver exception
-   */
+  /** Should resolve valid external web did. */
   @Test
   @SneakyThrows
-  public void shouldResolveValidExternalWebDid() {
+  void shouldResolveValidExternalWebDid() {
     final String didIdentifier = "did.actor:alice";
     Did validDidWeb = new Did(new DidMethod("web"), new DidMethodIdentifier(didIdentifier), null);
     assertTrue(httpsResolver.isResolvable(validDidWeb));

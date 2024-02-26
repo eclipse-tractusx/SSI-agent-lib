@@ -31,6 +31,10 @@ import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 /** The type Ed 25519 public key parser. */
 public class Ed25519PublicKeyParser {
 
+  private Ed25519PublicKeyParser() {
+    throw new IllegalStateException("Utility class");
+  }
+
   /**
    * Parses public key in format -----BEGIN PUBLIC KEY-----
    * MCowBQYDK2VwAyEABqAmUe/amV/nAVUt01XyrLpmQLOyLqF6LnAkH4QdyqI= -----END PUBLIC KEY-----

@@ -89,7 +89,7 @@ public class DidUniResolverIT {
    * @throws DidParseException
    */
   @Test
-  public void shouldResolveValidDid() throws DidResolverException, DidParseException {
+  void shouldResolveValidDid() throws DidResolverException, DidParseException {
     Did validDidWeb =
         new Did(
             new DidMethod("key"),
