@@ -33,12 +33,16 @@ import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 public class JWKVerificationMethod extends VerificationMethod {
   /** The constant DEFAULT_TYPE. */
   public static final String DEFAULT_TYPE = "JsonWebKey2020";
+
   /** The constant PUBLIC_KEY_JWK. */
   public static final String PUBLIC_KEY_JWK = "publicKeyJwk";
+
   /** The constant JWK_KEK_TYPE. */
   public static final String JWK_KEK_TYPE = "kty";
+
   /** The constant JWK_CURVE. */
   public static final String JWK_CURVE = "crv";
+
   /** The constant JWK_X. */
   public static final String JWK_X = "x";
 

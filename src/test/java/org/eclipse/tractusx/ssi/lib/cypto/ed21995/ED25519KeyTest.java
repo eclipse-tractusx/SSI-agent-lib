@@ -30,12 +30,13 @@ import org.eclipse.tractusx.ssi.lib.crypt.IKeyGenerator;
 import org.eclipse.tractusx.ssi.lib.crypt.KeyPair;
 import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519Generator;
 import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519PrivateKey;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519PublicKey;
 import org.eclipse.tractusx.ssi.lib.exception.key.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.junit.jupiter.api.Test;
 
 /** The type Ed 25519 key test. */
-public class ED25519KeyTest {
+class ED25519KeyTest {
 
   /**
    * Test ed 25519 key generation.
@@ -43,20 +44,17 @@ public class ED25519KeyTest {
    * @throws KeyGenerationException the key generation exception
    */
   @Test
-  public void testED25519KeyGeneration() throws KeyGenerationException {
+  void testED25519KeyGeneration() throws KeyGenerationException {
     IKeyGenerator keyGenerator = new X25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
     assertNotNull(keyPair.getPrivateKey());
     assertNotNull(keyPair.getPublicKey());
   }
 
-  /**
-   * Test ed 25519 key serliztion.
-   *
-   */
+  /** Test ed 25519 key serliztion. */
   @Test
   @SneakyThrows
-  public void testED21559KeySerliztion() {
+  void testED25519KeySerliztion() {
     IKeyGenerator keyGenerator = new X25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
 
@@ -69,13 +67,10 @@ public class ED25519KeyTest {
     assertNotNull(keyPair.getPublicKey().asStringForExchange(EncodeType.BASE_64));
   }
 
-  /**
-   * Test ed 25519 key deserliztion.
-   *
-   */
+  /** Test ed 25519 key deserliztion. */
   @Test
   @SneakyThrows
-  public void testED21559KeyDeserliztion(){
+  void testED25519KeyDeserliztion() {
     IKeyGenerator keyGenerator = new X25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
 
@@ -86,7 +81,7 @@ public class ED25519KeyTest {
     var privateKey = new X25519PrivateKey(privateKeyString, true);
 
     String publicKeyString = keyPair.getPublicKey().asStringForStoring();
-    var publicKey = new X25519PrivateKey(publicKeyString, true);
+    var publicKey = new X25519PublicKey(publicKeyString, true);
 
     assertTrue(Arrays.equals(originalPrivateKey, privateKey.asByte()));
 

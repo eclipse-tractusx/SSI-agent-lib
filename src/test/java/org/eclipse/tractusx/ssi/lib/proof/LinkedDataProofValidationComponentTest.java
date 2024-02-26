@@ -55,10 +55,7 @@ class LinkedDataProofValidationComponentTest {
     this.didResolver = new TestDidResolver();
   }
 
-  /**
-   * Test vc proof failure on manipulated credential.
-   *
-   */
+  /** Test vc proof failure on manipulated credential. */
   @Test
   @SneakyThrows
   void testVCProofFailureOnManipulatedCredential() {
@@ -95,13 +92,10 @@ class LinkedDataProofValidationComponentTest {
     Assertions.assertFalse(isOk);
   }
 
-  /**
-   * Test vc ed 25519 proof generation and verification.
-   *
-   */
+  /** Test vc ed 25519 proof generation and verification. */
   @Test
   @SneakyThrows
-  void testVCEd21559ProofGenerationAndVerification() {
+  void testVCEd25519ProofGenerationAndVerification() {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
     didResolver.register(credentialIssuer);
@@ -130,10 +124,7 @@ class LinkedDataProofValidationComponentTest {
     Assertions.assertTrue(isOk);
   }
 
-  /**
-   * Test vcjws proof generation and verification.
-   *
-   */
+  /** Test vcjws proof generation and verification. */
   @Test
   @SneakyThrows
   void testVCJWSProofGenerationAndVerification() {
@@ -165,13 +156,10 @@ class LinkedDataProofValidationComponentTest {
     Assertions.assertTrue(isOk);
   }
 
-  /**
-   * Test vp ed 25519 proof generation and verification.
-   *
-   */
+  /** Test vp ed 25519 proof generation and verification. */
   @Test
   @SneakyThrows
-  void testVPEd21559ProofGenerationAndVerification() {
+  void testVPEd25519ProofGenerationAndVerification() {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
     didResolver.register(credentialIssuer);
@@ -209,10 +197,7 @@ class LinkedDataProofValidationComponentTest {
     Assertions.assertTrue(isOk);
   }
 
-  /**
-   * Test vpjws proof generation and verification.
-   *
-   */
+  /** Test vpjws proof generation and verification. */
   @Test
   @SneakyThrows
   void testVPJWSProofGenerationAndVerification() {
@@ -253,10 +238,7 @@ class LinkedDataProofValidationComponentTest {
     Assertions.assertTrue(isOk);
   }
 
-  /**
-   * Test Proof configuration signature
-   *
-   */
+  /** Test Proof configuration signature */
   @Test
   @SneakyThrows
   void testVCProofFailureOnManipulatedProofOptions() {
@@ -298,10 +280,7 @@ class LinkedDataProofValidationComponentTest {
     Assertions.assertFalse(isOkUpdatedProof);
   }
 
-  /**
-   * Test Verification Method and Issuer should be equal
-   *
-   */
+  /** Test Verification Method and Issuer should be equal */
   @Test
   @SneakyThrows
   void testVerificationMethodOfVC() {

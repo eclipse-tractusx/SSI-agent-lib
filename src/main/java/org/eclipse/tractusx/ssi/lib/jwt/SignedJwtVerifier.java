@@ -36,6 +36,8 @@ import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedVerificationMethodException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
@@ -61,13 +63,19 @@ public class SignedJwtVerifier {
    * @param jwt a {@link SignedJWT} that was sent by the claiming party.
    * @return true if verified, false otherwise
    * @throws DidParseException the did parse error
-   * @throws DidResolverException the did resolver exception
-   * @throws UnsupportedVerificationMethodException the unsupported verification method exception
-   * @throws SignatureVerificationFailedException the signature verification failed exception exception
-*/
-
+   * @throws DidResolverException the did resolve error
+   * @throws SignatureVerificationException the signature verification error
+   * @throws SignatureParseException the signature parse error
+   * @throws SignatureException the signature exception
+   * @throws SignatureVerificationFailedException the signature verification failed exception
+   */
   public boolean verify(SignedJWT jwt)
-      throws DidParseException,DidResolverException, SignatureException, UnsupportedVerificationMethodException, SignatureVerificationFailedException {
+      throws DidParseException,
+          DidResolverException,
+          SignatureVerificationException,
+          SignatureParseException,
+          SignatureException,
+          SignatureVerificationFailedException {
 
     JWTClaimsSet jwtClaimsSet;
     try {

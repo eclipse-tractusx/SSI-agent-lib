@@ -48,6 +48,7 @@ public class LinkedDataTransformer {
 
     return this.canocliztion(document);
   }
+
   /**
    * Canocliztion transformed linked data.
    *
@@ -72,6 +73,7 @@ public class LinkedDataTransformer {
       throw new TransformJsonLdException(e.getMessage());
     }
   }
+
   /**
    * To dataset rdf dataset.
    *

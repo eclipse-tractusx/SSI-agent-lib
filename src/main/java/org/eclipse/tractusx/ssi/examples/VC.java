@@ -84,8 +84,10 @@ public class VC {
    */
   public static VerifiableCredential createVCWithED25519Proof(
       VerifiableCredential credential, IPrivateKey privateKey, Did issuer)
-      throws UnsupportedSignatureTypeException, InvalidPrivateKeyFormatException,
-          SignatureGenerateFailedException, TransformJsonLdException {
+      throws UnsupportedSignatureTypeException,
+          InvalidPrivateKeyFormatException,
+          SignatureGenerateFailedException,
+          TransformJsonLdException {
 
     // VC Builder
     final VerifiableCredentialBuilder builder =
@@ -130,8 +132,10 @@ public class VC {
    */
   public static VerifiableCredential createVCWithJWSProof(
       VerifiableCredential credential, IPrivateKey privateKey, Did issuer)
-      throws UnsupportedSignatureTypeException, InvalidPrivateKeyFormatException,
-          SignatureGenerateFailedException, TransformJsonLdException {
+      throws UnsupportedSignatureTypeException,
+          InvalidPrivateKeyFormatException,
+          SignatureGenerateFailedException,
+          TransformJsonLdException {
 
     // VC Builder
     final VerifiableCredentialBuilder builder =

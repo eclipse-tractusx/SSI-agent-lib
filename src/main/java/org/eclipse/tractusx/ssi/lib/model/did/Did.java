@@ -33,8 +33,10 @@ public class Did {
 
   /** The Method. */
   @EqualsAndHashCode.Include @Setter @Getter @NonNull DidMethod method;
+
   /** The Method identifier. */
   @EqualsAndHashCode.Include @Setter @Getter @NonNull DidMethodIdentifier methodIdentifier;
+
   /** The Fragment. */
   @EqualsAndHashCode.Include @Getter String fragment;
 

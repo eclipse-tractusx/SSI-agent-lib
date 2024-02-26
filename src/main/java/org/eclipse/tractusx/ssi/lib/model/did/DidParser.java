@@ -69,6 +69,7 @@ public class DidParser {
         new DidMethodIdentifier(String.join(":", methodIdentifierParts)),
         fragment);
   }
+
   /**
    * Parse did.
    *

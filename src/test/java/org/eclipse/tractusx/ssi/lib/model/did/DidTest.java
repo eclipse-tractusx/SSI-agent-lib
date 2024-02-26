@@ -37,7 +37,7 @@ class DidTest {
   }
 
   @Test
-  public void testDidNotEqualsIdentifier() {
+  void testDidNotEqualsIdentifier() {
 
     Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "myFragment");
     Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("otherKey"), "myFragment");
@@ -46,7 +46,7 @@ class DidTest {
   }
 
   @Test
-  public void testDidEqualsConvenienceConstructor() {
+  void testDidEqualsConvenienceConstructor() {
 
     Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));
     Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));
@@ -55,7 +55,7 @@ class DidTest {
   }
 
   @Test
-  public void testDidNotEqualsFragment() {
+  void testDidNotEqualsFragment() {
 
     Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "myFragment");
     Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "otherFragment");
@@ -64,7 +64,7 @@ class DidTest {
   }
 
   @Test
-  public void testDidEqualsFragmentNull() {
+  void testDidEqualsFragmentNull() {
 
     Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), null);
     Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), null);
@@ -73,7 +73,7 @@ class DidTest {
   }
 
   @Test
-  public void testDidEqualsFragmentBlank() {
+  void testDidEqualsFragmentBlank() {
 
     Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "");
     Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "");
@@ -82,7 +82,7 @@ class DidTest {
   }
 
   @Test
-  public void testDidEqualsFragmentNullBlank() {
+  void testDidEqualsFragmentNullBlank() {
 
     Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), null);
     Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "");
@@ -90,7 +90,8 @@ class DidTest {
     Assertions.assertEquals(did1, did2);
   }
 
-  public void testDidEqualsNoFragment() {
+  @Test
+  void testDidEqualsNoFragment() {
 
     Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));
     Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));
@@ -99,7 +100,7 @@ class DidTest {
   }
 
   @Test
-  public void testDidNotEqualsFragmentNull() {
+  void testDidNotEqualsFragmentNull() {
 
     Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "myFragment");
     Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));

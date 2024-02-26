@@ -72,8 +72,11 @@ public class JWSProofVerifier implements IVerifier {
    */
   @SneakyThrows({DidResolverException.class})
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable document)
-      throws SignatureParseException, DidParseException, InvalidPublicKeyFormatException,
-          SignatureVerificationFailedException, UnsupportedSignatureTypeException {
+      throws SignatureParseException,
+          DidParseException,
+          InvalidPublicKeyFormatException,
+          SignatureVerificationFailedException,
+          UnsupportedSignatureTypeException {
 
     final Proof proof = document.getProof();
 
@@ -136,7 +139,8 @@ public class JWSProofVerifier implements IVerifier {
   }
 
   public boolean verify(HashedLinkedData hashedLinkedData, byte[] signature, IPublicKey publicKey)
-      throws SignatureParseException, SignatureVerificationFailedException,
+      throws SignatureParseException,
+          SignatureVerificationFailedException,
           InvalidPublicKeyFormatException {
 
     var keyPair =

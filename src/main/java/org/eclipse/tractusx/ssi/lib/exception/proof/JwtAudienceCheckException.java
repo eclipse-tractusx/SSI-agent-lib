@@ -26,6 +26,7 @@ import java.util.List;
 /** The type Jwt audience check failed exception. */
 public class JwtAudienceCheckException extends SignatureValidationException {
   private static final long serialVersionUID = 1L;
+
   /**
    * Instantiates a new Jwt audience check failed exception.
    *
@@ -39,6 +40,7 @@ public class JwtAudienceCheckException extends SignatureValidationException {
             + ", actual audience: "
             + String.join(",  ", actualAudience));
   }
+
   /**
    * Instantiates a new Jwt audience check failed exception.
    *
@@ -47,6 +49,7 @@ public class JwtAudienceCheckException extends SignatureValidationException {
   public JwtAudienceCheckException(String message) {
     super(message);
   }
+
   /**
    * Instantiates a new jwt audience check failed exception.
    *
@@ -56,6 +59,7 @@ public class JwtAudienceCheckException extends SignatureValidationException {
   public JwtAudienceCheckException(String message, Throwable cause) {
     super(message, cause);
   }
+
   /**
    * Instantiates a new jwt audience check failed exception.
    *
@@ -64,6 +68,7 @@ public class JwtAudienceCheckException extends SignatureValidationException {
   public JwtAudienceCheckException(Throwable cause) {
     super(cause);
   }
+
   /**
    * Instantiates a new jwt audience check failed exception.
    *
