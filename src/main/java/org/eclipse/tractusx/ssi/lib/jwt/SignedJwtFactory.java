@@ -1,5 +1,4 @@
-/*
- * ******************************************************************************
+/********************************************************************************
  * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -16,11 +15,11 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- * *******************************************************************************
- */
+ ********************************************************************************/
 
 package org.eclipse.tractusx.ssi.lib.jwt;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -30,31 +29,24 @@ import com.nimbusds.jose.crypto.Ed25519Signer;
 import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import java.net.URI;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.serialization.jwt.JwtConfig;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresentation;
 
 /**
- * Convenience/helper class to generate and verify Signed JSON Web Tokens (JWTs) for communicating
- * between connector instances.
+ * Convenience/helper class to generate * Convenience/helper class to generate and verify Signed
+ * JSON Web Tokens (JWTs) for communicating between connector instances.
  */
 public class SignedJwtFactory {
 
   private final OctetKeyPairFactory octetKeyPairFactory;
 
-  /**
-   * Instantiates a new Signed jwt factory.
-   *
-   * @param octetKeyPairFactory the octet key pair factory
-   */
   public SignedJwtFactory(OctetKeyPairFactory octetKeyPairFactory) {
     this.octetKeyPairFactory = Objects.requireNonNull(octetKeyPairFactory);
   }
@@ -64,26 +56,53 @@ public class SignedJwtFactory {
    * all private key types are possible, in the context of Distributed Identity using an Elliptic
    * Curve key ({@code P-256}) is advisable.
    *
-   * @param didIssuer the did issuer
    * @param audience the value of the token audience claim, e.g. the IDS Webhook address.
-   * @param serializedPresentation the serialized presentation
-   * @param privateKey the private key
+   * @param keyId the id of the key, the kid of the jws-header will be constructed via
+   *     <issuer>+"#"+<keyId>
    * @return a {@code SignedJWT} that is signed with the private key and contains all claims listed.
    */
   @SneakyThrows
   public SignedJWT create(
-      URI id,
       Did didIssuer,
       String audience,
       SerializedVerifiablePresentation serializedPresentation,
-      IPrivateKey privateKey) {
+      IPrivateKey privateKey,
+      String keyId) {
+    JwtConfig jwtConfig = JwtConfig.builder().expirationTime(60).build();
+    return create(didIssuer, audience, serializedPresentation, privateKey, keyId, jwtConfig);
+  }
+
+  /**
+   * Creates a signed JWT {@link SignedJWT} that contains a set of claims and an issuer. Although
+   * all private key types are possible, in the context of Distributed Identity using an Elliptic
+   * Curve key ({@code P-256}) is advisable.
+   *
+   * @param audience the value of the token audience claim, e.g. the IDS Webhook address.
+   * @param keyId the id of the key, the kid of the jws-header will be constructed via
+   *     <issuer>+"#"+<keyId>
+   * @param config the custom configuration for the JWT to create, e.g. custom expiration time (exp)
+   * @return a {@code SignedJWT} that is signed with the private key and contains all claims listed.
+   */
+  @SneakyThrows
+  public SignedJWT create(
+      Did didIssuer,
+      String audience,
+      SerializedVerifiablePresentation serializedPresentation,
+      IPrivateKey privateKey,
+      String keyId,
+      JwtConfig config) {
 
     final String issuer = didIssuer.toString();
     final String subject = didIssuer.toString();
 
+    TypeReference<HashMap<String, Object>> typeRef =
+        new TypeReference<HashMap<String, Object>>() {};
+
     // make on object out of it so that it can get serialized again
     Map<String, Object> vp =
-        new ObjectMapper().readValue(serializedPresentation.getJson(), HashMap.class);
+        new ObjectMapper().readValue(serializedPresentation.getJson(), typeRef);
+
+    Date iat = new Date();
 
     var claimsSet =
         new JWTClaimsSet.Builder()
@@ -91,16 +110,43 @@ public class SignedJwtFactory {
             .subject(subject)
             .audience(audience)
             .claim("vp", vp)
-            .expirationTime(new Date(new Date().getTime() + 60 * 1000))
-            .jwtID(id.toString())
+            .issueTime(iat)
+            .expirationTime(new Date(iat.getTime() + config.getExpirationTime() * 1000))
+            .jwtID(UUID.randomUUID().toString())
             .build();
 
     final OctetKeyPair octetKeyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
-    return createSignedES256Jwt(octetKeyPair, claimsSet, issuer);
+    return createSignedES256Jwt(octetKeyPair, claimsSet, issuer, keyId);
   }
 
-  private static SignedJWT createSignedES256Jwt(
-      OctetKeyPair privateKey, JWTClaimsSet claimsSet, String issuer) {
+  @SneakyThrows
+  public SignedJWT create(
+      Did didIssuer,
+      Did holderIssuer,
+      Date expDate,
+      LinkedHashMap<String, Object> vc,
+      IPrivateKey privateKey,
+      String keyId) {
+    final String issuer = didIssuer.toString();
+    final String subject = holderIssuer.toString();
+
+    vc.remove(VerifiableCredential.PROOF);
+
+    var claimsSet =
+        new JWTClaimsSet.Builder()
+            .issuer(issuer)
+            .subject(subject)
+            .claim("vc", vc)
+            .expirationTime(expDate)
+            .jwtID(UUID.randomUUID().toString())
+            .build();
+
+    final OctetKeyPair octetKeyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
+    return createSignedES256Jwt(octetKeyPair, claimsSet, issuer, keyId);
+  }
+
+  public SignedJWT createSignedES256Jwt(
+      OctetKeyPair privateKey, JWTClaimsSet claimsSet, String issuer, String keyId) {
     JWSSigner signer;
     try {
 
@@ -116,11 +162,7 @@ public class SignedJwtFactory {
 
       var algorithm = JWSAlgorithm.EdDSA;
       var type = JOSEObjectType.JWT;
-
-      JWSHeader.Builder jwsHeaderBuilder =
-          new JWSHeader.Builder(algorithm).type(type).keyID(issuer).base64URLEncodePayload(true);
-
-      var header = jwsHeaderBuilder.build();
+      var header = new JWSHeader.Builder(algorithm).type(type).keyID(issuer + "#" + keyId).build();
       var vc = new SignedJWT(header, claimsSet);
 
       vc.sign(signer);
