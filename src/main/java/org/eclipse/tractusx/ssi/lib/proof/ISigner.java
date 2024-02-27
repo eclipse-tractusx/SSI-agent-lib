@@ -35,7 +35,7 @@ public interface ISigner {
    * @param privateKey the private key
    * @return the byte [ ]
    * @throws SsiException the ssi exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws InvalidPrivateKeyFormatException the invalide private key format
    */
   public byte[] sign(HashedLinkedData hashedLinkedData, IPrivateKey privateKey)
       throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException;

@@ -82,7 +82,7 @@ public class LinkedDataProofGenerator {
    * @param privateKey the private key
    * @return the proof
    * @throws SsiException the ssi exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws InvalidPrivateKeyFormatException the invalide private key format
    */
   public Proof createProof(Verifiable document, URI verificationMethodId, IPrivateKey privateKey)
       throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException,
