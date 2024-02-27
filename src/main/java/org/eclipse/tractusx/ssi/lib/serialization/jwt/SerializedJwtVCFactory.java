@@ -22,35 +22,17 @@
 package org.eclipse.tractusx.ssi.lib.serialization.jwt;
 
 import com.nimbusds.jwt.SignedJWT;
-import java.util.List;
+import java.util.Date;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 
-/** The interface Serialized jwt presentation factory. */
-public interface SerializedJwtPresentationFactory {
-
-  /**
-   * Create presentation signed jwt.
-   *
-   * @param issuer the issuer
-   * @param credentials the credentials
-   * @param audience the audience
-   * @param privateKey the private key
-   * @return the signed jwt
-   */
-  SignedJWT createPresentation(
+public interface SerializedJwtVCFactory {
+  SignedJWT createVCJwt(
       Did issuer,
-      List<VerifiableCredential> credentials,
-      String audience,
+      Did holder,
+      Date expDate,
+      VerifiableCredential credentials,
       IPrivateKey privateKey,
       String keyId);
-
-  SignedJWT createPresentation(
-      Did issuer,
-      List<VerifiableCredential> credentials,
-      String audience,
-      IPrivateKey privateKey,
-      String keyId,
-      JwtConfig config);
 }
