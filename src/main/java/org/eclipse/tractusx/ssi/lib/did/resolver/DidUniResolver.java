@@ -93,6 +93,7 @@ public class DidUniResolver implements DidResolver {
     } catch (DidResolverException e) {
       throw e;
     } catch (Exception e) {
+      Thread.currentThread().interrupt();
       throw new DidResolverException(
           String.format("Unexpected exception: %s", e.getClass().getName()), e);
     }

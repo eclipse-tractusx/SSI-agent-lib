@@ -84,6 +84,7 @@ public class DidWebResolver implements DidResolver {
 
       return new DidDocument(json);
     } catch (Exception e) {
+      Thread.currentThread().interrupt();
       throw new DidResolverException(
           String.format("Unexpected exception: %s", e.getClass().getName()), e);
     }

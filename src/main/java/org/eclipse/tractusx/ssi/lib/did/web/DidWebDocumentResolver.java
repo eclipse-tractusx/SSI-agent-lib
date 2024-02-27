@@ -89,6 +89,7 @@ public class DidWebDocumentResolver implements DidDocumentResolver {
 
       return new DidDocument(json);
     } catch (IOException | InterruptedException e) {
+      Thread.currentThread().interrupt();
       throw new RuntimeException(e);
     }
   }
