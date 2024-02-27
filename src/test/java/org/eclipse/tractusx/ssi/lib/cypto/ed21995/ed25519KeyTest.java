@@ -80,8 +80,8 @@ public class ed25519KeyTest {
    *
    * @throws KeyGenerationException the key generation exception
    * @throws IOException the io exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
-   * @throws InvalidePublicKeyFormat the invalide public key format
+   * @throws InvalidPrivateKeyFormatException the invalide private key format
+   * @throws InvalidPublicKeyFormatException the invalide public key format
    */
   @Test
   @SneakyThrows
