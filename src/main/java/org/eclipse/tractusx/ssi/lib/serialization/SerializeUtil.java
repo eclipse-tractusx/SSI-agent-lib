@@ -38,8 +38,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePres
 /** The type Serialize util. */
 public final class SerializeUtil {
 
-
-  private SerializeUtil(){
+  private SerializeUtil() {
     // static class
   }
 
