@@ -98,7 +98,7 @@ public class DidUniResolver implements DidResolver {
       throw new DidResolverException(
           String.format("Unexpected exception: %s", e.getClass().getName()), e);
     }
-      return null;
+    return null;
   }
 
   /**
