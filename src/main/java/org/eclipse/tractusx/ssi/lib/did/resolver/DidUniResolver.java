@@ -94,11 +94,11 @@ public class DidUniResolver implements DidResolver {
       throw e;
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
+      throw new RuntimeException(e);
     } catch (Exception e) {
       throw new DidResolverException(
           String.format("Unexpected exception: %s", e.getClass().getName()), e);
     }
-    return null;
   }
 
   /**
