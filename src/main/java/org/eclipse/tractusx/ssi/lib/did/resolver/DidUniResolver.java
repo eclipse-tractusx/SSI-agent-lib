@@ -92,11 +92,13 @@ public class DidUniResolver implements DidResolver {
       return DidDocument.fromJson(response.body());
     } catch (DidResolverException e) {
       throw e;
-    } catch (Exception e) {
+    } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
+    } catch (Exception e) {
       throw new DidResolverException(
           String.format("Unexpected exception: %s", e.getClass().getName()), e);
     }
+      return null;
   }
 
   /**
