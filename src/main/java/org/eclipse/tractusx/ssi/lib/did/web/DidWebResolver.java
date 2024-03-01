@@ -83,6 +83,10 @@ public class DidWebResolver implements DidResolver {
       final Map<String, Object> json = mapper.readValue(body, Map.class);
 
       return new DidDocument(json);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new DidResolverException(
+          String.format("Unexpected exception: %s", e.getClass().getName()), e);
     } catch (Exception e) {
       throw new DidResolverException(
           String.format("Unexpected exception: %s", e.getClass().getName()), e);

@@ -58,7 +58,9 @@ public class Did {
    * @param didMethodIdentifier the did method identifier
    */
   public Did(DidMethod method, DidMethodIdentifier didMethodIdentifier) {
-    new Did(method, didMethodIdentifier, null);
+    this.method = method;
+    this.methodIdentifier = didMethodIdentifier;
+    new Did(this.method, this.methodIdentifier, null);
   }
 
   /**

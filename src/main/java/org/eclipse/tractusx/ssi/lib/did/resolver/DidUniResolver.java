@@ -92,6 +92,10 @@ public class DidUniResolver implements DidResolver {
       return DidDocument.fromJson(response.body());
     } catch (DidResolverException e) {
       throw e;
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new DidResolverException(
+          String.format("Unexpected exception: %s", e.getClass().getName()), e);
     } catch (Exception e) {
       throw new DidResolverException(
           String.format("Unexpected exception: %s", e.getClass().getName()), e);
