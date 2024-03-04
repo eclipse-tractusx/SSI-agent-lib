@@ -65,6 +65,7 @@ public final class SerializeUtil {
           List.of(
               JsonLdObject.CONTEXT,
               DidDocument.ID,
+              DidDocument.SERVICE,
               DidDocument.VERIFICATION_METHOD,
               DidDocument.AUTHENTICATION),
           VerifiableCredentialStatusList2021Entry.class,
