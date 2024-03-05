@@ -21,12 +21,12 @@
 
 package org.eclipse.tractusx.ssi.lib.model.did;
 
-import lombok.ToString;
-import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import lombok.ToString;
+import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 @ToString
 public class Service extends HashMap<String, Object> {
