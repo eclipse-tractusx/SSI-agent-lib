@@ -108,8 +108,7 @@ public class DidDocument extends JsonLdObject {
       result.add(new Service((Map<String, Object>) service));
     }
     if (service instanceof List) {
-      ((List<Map<String, Object>>) service)
-          .forEach(s -> result.add(new Service(s)));
+      ((List<Map<String, Object>>) service).forEach(s -> result.add(new Service(s)));
     }
 
     return result;
