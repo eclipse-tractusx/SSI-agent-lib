@@ -40,7 +40,8 @@ public class DidDocument extends JsonLdObject {
   public static final String ID = "id";
   /** The constant VERIFICATION_METHOD. */
   public static final String VERIFICATION_METHOD = "verificationMethod";
-
+  /** The constant SERVICE. */
+  public static final String SERVICE = "service";
   /** The constant AUTHENTICATION. */
   public static final String AUTHENTICATION = "authentication";
 
@@ -88,6 +89,26 @@ public class DidDocument extends JsonLdObject {
     if (verificationMethod instanceof List) {
       ((List<Map<String, Object>>) verificationMethod)
           .forEach(vm -> result.add(new VerificationMethod(vm)));
+    }
+
+    return result;
+  }
+
+  /**
+   * Gets services.
+   *
+   * @return the services
+   */
+  public List<Service> getServices() {
+
+    List<Service> result = new ArrayList<>();
+
+    Object service = get(SERVICE);
+    if (service instanceof Map) {
+      result.add(new Service((Map<String, Object>) service));
+    }
+    if (service instanceof List) {
+      ((List<Map<String, Object>>) service).forEach(s -> result.add(new Service(s)));
     }
 
     return result;
