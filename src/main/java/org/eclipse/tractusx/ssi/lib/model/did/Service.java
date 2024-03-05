@@ -52,7 +52,7 @@ public class Service extends HashMap<String, Object> {
       Objects.requireNonNull(this.getServiceEndpoint(), "serviceEndpoint is null");
     } catch (Exception e) {
       throw new IllegalArgumentException(
-          String.format("Invalid VerificationMethod: %s", SerializeUtil.toJson(json)), e);
+          String.format("Invalid Service: %s", SerializeUtil.toJson(json)), e);
     }
   }
 
