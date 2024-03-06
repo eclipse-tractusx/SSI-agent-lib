@@ -22,6 +22,7 @@
 package org.eclipse.tractusx.ssi.lib.model.did;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import lombok.SneakyThrows;
@@ -42,6 +43,22 @@ public class DidDocumentTest {
     for (Map<String, Object> document : documents) {
       Assertions.assertDoesNotThrow(() -> new DidDocument(document));
     }
+  }
+
+  /** Can create did document with service. */
+  @Test
+  public void canCreateDidDocumentWithService() {
+    final Map<String, Object> content = TestResourceUtil.getBPNDidDocument();
+    final URI id = URI.create("did:test:localhost:BPNL000000000000");
+    final String type = "CredentialService";
+    final URI serviceEndpoint = URI.create("https://cs.example.com");
+
+    DidDocument didDocument = new DidDocument(content);
+    Service service = didDocument.getServices().get(0);
+
+    Assertions.assertEquals(id, service.getId());
+    Assertions.assertEquals(type, service.getType());
+    Assertions.assertEquals(serviceEndpoint, service.getServiceEndpoint());
   }
 
   /** Can serialize did document. */

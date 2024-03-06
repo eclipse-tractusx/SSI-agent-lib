@@ -3,7 +3,7 @@ package org.eclipse.tractusx.ssi.lib.crypt.rsa;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.eclipse.tractusx.ssi.lib.crypt.KeyPair;
-import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
+import org.eclipse.tractusx.ssi.lib.exception.key.KeyGenerationException;
 import org.junit.jupiter.api.Test;
 
 /**

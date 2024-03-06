@@ -1,5 +1,6 @@
-/********************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+/*
+ * ******************************************************************************
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -19,11 +20,15 @@
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
+import java.util.logging.Logger;
+// import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidator;
+// import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidatorImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
-import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
+import org.eclipse.tractusx.ssi.lib.exception.json.InvalidJsonLdException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable.VerifiableType;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -34,11 +39,12 @@ import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
 import org.eclipse.tractusx.ssi.lib.proof.transform.TransformedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed25519ProofVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofVerifier;
-import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidator;
-import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidatorImpl;
+import org.eclipse.tractusx.ssi.lib.validation.JsonLdValidator;
+import org.eclipse.tractusx.ssi.lib.validation.JsonLdValidatorImpl;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class LinkedDataProofValidation {
+  static final Logger LOG = Logger.getLogger(LinkedDataProofValidation.class.getName());
 
   public static LinkedDataProofValidation newInstance(DidResolver didResolver) {
 
@@ -74,7 +80,7 @@ public class LinkedDataProofValidation {
     var type = verifiable.getProof().getType();
 
     if (type != null && !type.isBlank()) {
-      if (type.equals(SignatureType.ED21559.type))
+      if (type.equals(SignatureType.ED25519.type))
         verifier = new Ed25519ProofVerifier(this.didResolver);
       else if (type.equals(SignatureType.JWS.type))
         verifier = new JWSProofVerifier(this.didResolver);
@@ -88,10 +94,16 @@ public class LinkedDataProofValidation {
     final TransformedLinkedData transformedData = transformer.transform(verifiable);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
 
+    try {
+      jsonLdValidator.validate(verifiable);
+    } catch (InvalidJsonLdException e) {
+      LOG.severe("Could not valiate " + verifiable.getId());
+      LOG.throwing(this.getClass().getName(), "verify", e);
+      return false;
+    }
+
     isVerified =
-        jsonLdValidator.validate(verifiable)
-            && verifier.verify(hashedData, verifiable)
-            && validateVerificationMethodOfVC(verifiable);
+        verifier.verify(hashedData, verifiable) && validateVerificationMethodOfVC(verifiable);
 
     return isVerified;
   }

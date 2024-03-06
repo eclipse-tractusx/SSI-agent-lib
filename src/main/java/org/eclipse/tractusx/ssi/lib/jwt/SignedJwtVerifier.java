@@ -1,5 +1,6 @@
-/********************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+/*
+ * ******************************************************************************
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -32,16 +33,18 @@ import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.proc.JWSVerifierFactory;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import java.security.SignatureException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
-import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
-import org.eclipse.tractusx.ssi.lib.exception.JwtException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedVerificationMethodException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
@@ -63,19 +66,22 @@ public class SignedJwtVerifier {
    *
    * @param jwt a {@link SignedJWT} that was sent by the claiming party.
    * @return true if verified, false otherwise
-   * @throws JwtException the jwt exception
-   * @throws DidDocumentResolverNotRegisteredException the did document resolver not registered
-   *     exception
+   * @throws DidParseException
+   * @throws SignatureException
+   * @throws DidResolverException
+   * @throws SignatureVerificationException
+   * @throws UnsupportedVerificationMethodException
+   * @throws SignatureParseException
    */
-  @SneakyThrows({JOSEException.class, DidResolverException.class})
   public boolean verify(SignedJWT jwt)
-      throws JwtException, DidDocumentResolverNotRegisteredException {
+      throws DidParseException, DidResolverException, SignatureVerificationException,
+          UnsupportedVerificationMethodException, SignatureParseException {
 
     JWTClaimsSet jwtClaimsSet;
     try {
       jwtClaimsSet = jwt.getJWTClaimsSet();
     } catch (ParseException e) {
-      throw new JwtException(e);
+      throw new SignatureParseException(e.getMessage());
     }
 
     final String issuer = jwtClaimsSet.getIssuer();
@@ -94,13 +100,17 @@ public class SignedJwtVerifier {
           String.format("no verification method for keyID %s found", keyID));
     }
 
-    if (JWKVerificationMethod.isInstance(verificationMethod)) {
-      final JWKVerificationMethod method = new JWKVerificationMethod(verificationMethod);
-      JWSVerifier verifier = getVerifier(jwt.getHeader(), method.getJwk());
-      return jwt.verify(verifier);
-    } else if (Ed25519VerificationMethod.isInstance(verificationMethod)) {
-      final Ed25519VerificationMethod method = new Ed25519VerificationMethod(verificationMethod);
-      return jwt.verify(new Ed25519Verifier(method.getOctetKeyPair()));
+    try {
+      if (JWKVerificationMethod.isInstance(verificationMethod)) {
+        final JWKVerificationMethod method = new JWKVerificationMethod(verificationMethod);
+        JWSVerifier verifier = getVerifier(jwt.getHeader(), method.getJwk());
+        return jwt.verify(verifier);
+      } else if (Ed25519VerificationMethod.isInstance(verificationMethod)) {
+        final Ed25519VerificationMethod method = new Ed25519VerificationMethod(verificationMethod);
+        return jwt.verify(new Ed25519Verifier(method.getOctetKeyPair()));
+      }
+    } catch (JOSEException e) {
+      throw new SignatureVerificationException(e.getMessage());
     }
 
     return false;

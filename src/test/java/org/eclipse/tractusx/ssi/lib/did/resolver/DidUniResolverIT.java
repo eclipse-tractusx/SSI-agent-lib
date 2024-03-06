@@ -27,6 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
@@ -62,7 +64,7 @@ public class DidUniResolverIT {
    */
   @Container
   public static GenericContainer<?> uniResolver =
-      new GenericContainer<>("universalresolver/driver-did-key:latest")
+      new GenericContainer<>("universalresolver/driver-did-key:0.2.0-f98a04a")
           .withExposedPorts(8080)
           .waitingFor(new HostPortWaitStrategy());
 
@@ -84,9 +86,10 @@ public class DidUniResolverIT {
    * Should resolve valid did.
    *
    * @throws DidResolverException the did resolver exception
+   * @throws DidParseException
    */
   @Test
-  public void shouldResolveValidDid() throws DidResolverException {
+  public void shouldResolveValidDid() throws DidResolverException, DidParseException {
     Did validDidWeb =
         new Did(
             new DidMethod("key"),

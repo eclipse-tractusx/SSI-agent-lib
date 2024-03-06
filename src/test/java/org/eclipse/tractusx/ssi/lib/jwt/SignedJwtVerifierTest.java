@@ -1,6 +1,6 @@
 package org.eclipse.tractusx.ssi.lib.jwt;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -20,8 +20,10 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import org.eclipse.tractusx.ssi.lib.crypt.ec.ECPrivateKeyWrapper;
 import org.eclipse.tractusx.ssi.lib.crypt.ec.ECPublicKeyWrapper;
-import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
-import org.eclipse.tractusx.ssi.lib.exception.JwtException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestDidResolver;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityFactory;
@@ -34,7 +36,8 @@ class SignedJwtVerifierTest {
   @Test
   void verifyEcSignature()
       throws JOSEException, InvalidAlgorithmParameterException, NoSuchAlgorithmException,
-          ParseException, DidDocumentResolverNotRegisteredException, JwtException {
+          ParseException, SignatureParseException, DidParseException,
+          SignatureVerificationException, DidResolverException {
     TestIdentity testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp256r1", Curve.P_256);
     String keyId =
         testIdentity

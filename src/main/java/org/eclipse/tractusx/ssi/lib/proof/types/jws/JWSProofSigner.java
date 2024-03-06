@@ -1,5 +1,6 @@
-/********************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+/*
+ * ******************************************************************************
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -39,8 +40,8 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.SsiException;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
 import org.eclipse.tractusx.ssi.lib.proof.ISigner;
 import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
@@ -60,13 +61,13 @@ public class JWSProofSigner implements ISigner {
 
   @Override
   public byte[] sign(HashedLinkedData hashedLinkedData, IPrivateKey privateKey)
-      throws InvalidePrivateKeyFormat {
+      throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException {
 
     JWSSigner signer;
     try {
       signer = getSigner(signatureType, privateKey);
     } catch (JOSEException e) {
-      throw new SsiException(e.getMessage());
+      throw new InvalidPrivateKeyFormatException(e.getMessage());
     }
 
     var header = new JWSHeader.Builder(new JWSAlgorithm(signatureType.algorithm)).build();
@@ -76,14 +77,14 @@ public class JWSProofSigner implements ISigner {
     try {
       jwsObject.sign(signer);
     } catch (JOSEException e) {
-      throw new SsiException(e.getMessage());
+      throw new SignatureGenerateFailedException(e.getMessage());
     }
 
     return jwsObject.serialize(true).getBytes();
   }
 
   private JWSSigner getSigner(SignatureType type, IPrivateKey privateKey)
-      throws InvalidePrivateKeyFormat, JOSEException {
+      throws JOSEException, SignatureGenerateFailedException, InvalidPrivateKeyFormatException {
     switch (type) {
       case JWS:
         return getEDSigner(privateKey);
@@ -131,20 +132,21 @@ public class JWSProofSigner implements ISigner {
     }
   }
 
-  private JWSSigner getEDSigner(IPrivateKey privateKey) throws InvalidePrivateKeyFormat {
+  private JWSSigner getEDSigner(IPrivateKey privateKey)
+      throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException {
     OctetKeyPairFactory octetKeyPairFactory = new OctetKeyPairFactory();
     OctetKeyPair keyPair;
     try {
       keyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
     } catch (IOException e) {
-      throw new InvalidePrivateKeyFormat(e.getCause());
+      throw new InvalidPrivateKeyFormatException(e.getCause());
     }
 
     JWSSigner signer;
     try {
       signer = new Ed25519Signer(keyPair);
     } catch (JOSEException e) {
-      throw new SsiException(e.getMessage());
+      throw new SignatureGenerateFailedException(e.getMessage());
     }
 
     return signer;

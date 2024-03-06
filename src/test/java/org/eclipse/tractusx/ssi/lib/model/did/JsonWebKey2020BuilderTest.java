@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -32,8 +32,8 @@ import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PrivateKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.x25519PrivateKey;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.x25519PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
 import org.junit.jupiter.api.Test;
 
@@ -49,8 +49,8 @@ class JsonWebKey2020BuilderTest {
     OctetKeyPair octetKeyPair =
         new OctetKeyPairGenerator(Curve.Ed25519).keyID(keyId).keyUse(KeyUse.SIGNATURE).generate();
 
-    IPrivateKey privateKey = new x21559PrivateKey(octetKeyPair.getDecodedD());
-    IPublicKey publicKey = new x21559PublicKey(octetKeyPair.getDecodedX());
+    IPrivateKey privateKey = new x25519PrivateKey(octetKeyPair.getDecodedD());
+    IPublicKey publicKey = new x25519PublicKey(octetKeyPair.getDecodedX());
 
     // JWK
     JsonWebKey jwk = new JsonWebKey(keyId, publicKey, privateKey);
