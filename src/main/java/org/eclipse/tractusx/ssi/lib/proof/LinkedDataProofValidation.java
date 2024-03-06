@@ -122,7 +122,7 @@ public class LinkedDataProofValidation {
     final HashedLinkedData hashedData = hasher.hash(transformedData);
 
     try {
-      jsonLdValidator.validate(verifiable);
+      jsonLdValidator.validate(verifiableWithoutProofSignature);
       return verifier.verify(hashedData, verifiable) && validateVerificationMethodOfVC(verifiable);
     } catch (InvalidJsonLdException e) {
       LOG.severe("Could not valiate " + verifiable.getId());
