@@ -21,6 +21,7 @@
 
 package org.eclipse.tractusx.ssi.lib.serialization;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.util.LinkedHashMap;
@@ -37,7 +38,15 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePres
 /** The type Serialize util. */
 public final class SerializeUtil {
 
+  private SerializeUtil() {
+    // static class
+  }
+
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+  static {
+    OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+  }
 
   /**
    * Specify oder of properties while creating JSON string from object like VerifiableCredential,

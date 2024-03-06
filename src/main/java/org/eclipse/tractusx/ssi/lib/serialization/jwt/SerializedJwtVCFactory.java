@@ -1,6 +1,7 @@
 package org.eclipse.tractusx.ssi.lib.serialization.jwt;
 
 import com.nimbusds.jwt.SignedJWT;
+import java.net.URI;
 import java.util.Date;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
@@ -8,6 +9,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 
 public interface SerializedJwtVCFactory {
   SignedJWT createVCJwt(
+      URI id,
       Did issuer,
       Did holder,
       Date expDate,

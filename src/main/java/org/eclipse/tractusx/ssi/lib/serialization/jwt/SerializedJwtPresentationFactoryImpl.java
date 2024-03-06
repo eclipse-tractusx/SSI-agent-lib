@@ -38,7 +38,9 @@ import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdSerializer;
 public class SerializedJwtPresentationFactoryImpl implements SerializedJwtPresentationFactory {
 
   private final SignedJwtFactory signedJwtFactory;
+
   private final JsonLdSerializer jsonLdSerializer;
+
   private final Did agentDid;
 
   @Override
@@ -48,6 +50,40 @@ public class SerializedJwtPresentationFactoryImpl implements SerializedJwtPresen
       String audience,
       IPrivateKey privateKey,
       String keyId) {
+
+    SerializationData serializationData = buildSerializedPresentation(credentials);
+
+    return signedJwtFactory.create(
+        serializationData.id,
+        issuer,
+        audience,
+        serializationData.serializedVerifiablePresentation,
+        privateKey,
+        keyId);
+  }
+
+  @Override
+  public SignedJWT createPresentation(
+      Did issuer,
+      List<VerifiableCredential> credentials,
+      String audience,
+      IPrivateKey privateKey,
+      String keyId,
+      JwtConfig config) {
+
+    SerializationData serializationData = buildSerializedPresentation(credentials);
+
+    return signedJwtFactory.create(
+        serializationData.id,
+        issuer,
+        audience,
+        serializationData.serializedVerifiablePresentation,
+        privateKey,
+        keyId,
+        config);
+  }
+
+  private SerializationData buildSerializedPresentation(List<VerifiableCredential> credentials) {
     final VerifiablePresentationBuilder verifiablePresentationBuilder =
         new VerifiablePresentationBuilder();
     final VerifiablePresentation verifiablePresentation =
@@ -61,14 +97,16 @@ public class SerializedJwtPresentationFactoryImpl implements SerializedJwtPresen
             .verifiableCredentials(credentials)
             .build();
 
-    final SerializedVerifiablePresentation serializedVerifiablePresentation =
-        jsonLdSerializer.serializePresentation(verifiablePresentation);
-    return signedJwtFactory.create(
+    return new SerializationData(
         verifiablePresentation.getId(),
-        issuer,
-        audience,
-        serializedVerifiablePresentation,
-        privateKey,
-        keyId);
+        jsonLdSerializer.serializePresentation(verifiablePresentation));
+  }
+
+  @RequiredArgsConstructor
+  private class SerializationData {
+
+    final URI id;
+
+    final SerializedVerifiablePresentation serializedVerifiablePresentation;
   }
 }

@@ -23,7 +23,7 @@ SPDX-License-Identifier: Apache-2.0
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.eclipse.tractusx.ssi</groupId>
-    <version>0.0.24</version>
+    <version>0.0.27</version>
     <packaging>jar</packaging>
 
 
@@ -36,6 +36,13 @@ SPDX-License-Identifier: Apache-2.0
         <delombokSourceDirectory>${project.build.directory}/delombok</delombokSourceDirectory>
         <com.diffplug.spotless.maven.plugin.version>2.28.0</com.diffplug.spotless.maven.plugin.version>
         <org.eclipse.dash.license.tool.plugin.version>0.0.1-SNAPSHOT</org.eclipse.dash.license.tool.plugin.version>
+        <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
+
+         <!-- Sonar Cloud properties -->
+        <sonar.organization>cofinity-x</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.projectName>SSI-agent-lib</sonar.projectName>
+        <sonar.java.source>17</sonar.java.source>
     </properties>
 
     <dependencies>
@@ -320,6 +327,11 @@ SPDX-License-Identifier: Apache-2.0
                         <goals>
                             <goal>report</goal>
                         </goals>
+                         <configuration>
+                            <formats>
+                                <format>XML</format>
+                            </formats>
+                        </configuration>
                     </execution>
                 </executions>
                 <configuration>
@@ -328,6 +340,11 @@ SPDX-License-Identifier: Apache-2.0
                 </excludes>
                 </configuration>
             </plugin>
+             <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${sonar-maven-plugin.version}</version>
+         </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
