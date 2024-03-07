@@ -33,6 +33,7 @@ import org.eclipse.tractusx.ssi.lib.exception.json.TransformJsonLdException;
 import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedVerificationMethodException;
@@ -65,8 +66,22 @@ public class Verification {
 
     jwtVerifier.verify(jwt);
   }
-
-  public static boolean verifyED21559LD(VerifiableCredential verifiableCredential)
+/**
+   * Verify ed25519 signed ld.
+   *
+   * @param verifiableCredential the verifiable credential
+   * @return the boolean
+   * @throws DidDocumentResolverNotRegisteredException
+   * @throws TransformJsonLdException
+   * @throws NoVerificationKeyFoundException
+   * @throws SignatureVerificationException
+   * @throws InvalidPublicKeyFormatException
+   * @throws DidParseException
+   * @throws SignatureParseException
+   * @throws UnsupportedSignatureTypeException
+   * @throws SignatureVerificationFailedException
+   */
+  public static boolean verifyED25519LD(VerifiableCredential verifiableCredential)
       throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
           InvalidPublicKeyFormatException, SignatureVerificationFailedException,
           NoVerificationKeyFoundException, TransformJsonLdException, InvalidJsonLdException {
