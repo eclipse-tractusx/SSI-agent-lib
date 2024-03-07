@@ -42,6 +42,9 @@ import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 
 /** This is example class to demonstrate how create Verifiable Credentials */
 public class VC {
+  private VC(){
+    // static
+  }
   /**
    * Create verifiable credential without proof
    *
@@ -58,8 +61,7 @@ public class VC {
         new VerifiableCredentialSubject(Map.of("test", "test"));
 
     // Using Builder
-    final VerifiableCredential credentialWithoutProof =
-        verifiableCredentialBuilder
+    return verifiableCredentialBuilder
             .id(URI.create("did:test:id"))
             .type(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
             .issuer(URI.create("did:test:isser"))
@@ -67,8 +69,6 @@ public class VC {
             .issuanceDate(Instant.now())
             .credentialSubject(verifiableCredentialSubject)
             .build();
-
-    return credentialWithoutProof;
   }
 
   /**

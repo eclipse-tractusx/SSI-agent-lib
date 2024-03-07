@@ -52,9 +52,13 @@ import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
  */
 public class Verification {
 
+  private Verification(){
+    // static
+  }
+
   public static void verifyJWT(SignedJWT jwt)
-      throws DidParseException, SignatureException, DidResolverException,
-          SignatureVerificationException, UnsupportedVerificationMethodException,
+      throws DidParseException,  DidResolverException,
+          SignatureVerificationException,
           SignatureParseException {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
@@ -83,25 +87,7 @@ public class Verification {
    * @throws SignatureVerificationFailedException
    */
   public static boolean verifyED25519LD(VerifiableCredential verifiableCredential)
-      throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
-          InvalidPublicKeyFormatException, SignatureVerificationException,
-          NoVerificationKeyFoundException, TransformJsonLdException,
-          SignatureVerificationFailedException {
-    // DID Resolver constructor params
-    DidWebParser didParser = new DidWebParser();
-    var httpClient = HttpClient.newHttpClient();
-    var enforceHttps = false;
-    var didResolver = new DidWebResolver(httpClient, didParser, enforceHttps);
-
-    LinkedDataProofValidation proofValidation = LinkedDataProofValidation.newInstance(didResolver);
-    return proofValidation.verify(verifiableCredential);
-  }
-
-  public static boolean verifyJWSLD(VerifiableCredential verifiableCredential)
-      throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
-          InvalidPublicKeyFormatException, SignatureVerificationException,
-          NoVerificationKeyFoundException, TransformJsonLdException,
-          SignatureVerificationFailedException {
+     {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();

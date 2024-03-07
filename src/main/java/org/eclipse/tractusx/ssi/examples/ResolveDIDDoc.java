@@ -32,6 +32,11 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 
 /** This is an example class to demonstrate did document resolve from given did web url */
 public class ResolveDIDDoc {
+
+  private ResolveDIDDoc(){
+    // static
+  }
+
   /**
    * Resolve did document.
    *
@@ -41,7 +46,7 @@ public class ResolveDIDDoc {
    * @throws DidDocumentResolverNotRegisteredException the did document resolver not registered
    *     exception
    */
-  public static DidDocument ResovleDocument(String didUrl)
+  public static DidDocument resovleDocument(String didUrl)
       throws DidParseException, DidResolverException {
 
     // DID Resolver Constracture params
