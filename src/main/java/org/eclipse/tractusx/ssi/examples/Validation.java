@@ -30,7 +30,7 @@ import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtValidator;
 /** This is example class to demonstrate how to validate JWT expiry date and audience */
 public class Validation {
 
-  private Validation(){
+  private Validation() {
     // static
   }
   /**
@@ -42,7 +42,7 @@ public class Validation {
    * @throws JwtExpiredException the jwt expired exception
    */
   public static void validateJWTDate(SignedJWT signedJWT)
-      throws  JwtExpiredException, SignatureParseException {
+      throws JwtExpiredException, SignatureParseException {
     SignedJwtValidator jwtValidator = new SignedJwtValidator();
     jwtValidator.validateDate(signedJWT);
   }

@@ -42,7 +42,7 @@ import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 
 /** This is example class to demonstrate how create Verifiable Credentials */
 public class VC {
-  private VC(){
+  private VC() {
     // static
   }
   /**
@@ -62,13 +62,13 @@ public class VC {
 
     // Using Builder
     return verifiableCredentialBuilder
-            .id(URI.create("did:test:id"))
-            .type(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
-            .issuer(URI.create("did:test:isser"))
-            .expirationDate(Instant.now().plusSeconds(3600))
-            .issuanceDate(Instant.now())
-            .credentialSubject(verifiableCredentialSubject)
-            .build();
+        .id(URI.create("did:test:id"))
+        .type(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
+        .issuer(URI.create("did:test:isser"))
+        .expirationDate(Instant.now().plusSeconds(3600))
+        .issuanceDate(Instant.now())
+        .credentialSubject(verifiableCredentialSubject)
+        .build();
   }
 
   /**

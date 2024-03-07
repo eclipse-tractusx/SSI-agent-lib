@@ -52,13 +52,12 @@ import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
  */
 public class Verification {
 
-  private Verification(){
+  private Verification() {
     // static
   }
 
   public static void verifyJWT(SignedJWT jwt)
-      throws DidParseException,  DidResolverException,
-          SignatureVerificationException,
+      throws DidParseException, DidResolverException, SignatureVerificationException,
           SignatureParseException {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
@@ -86,8 +85,7 @@ public class Verification {
    * @throws UnsupportedSignatureTypeException
    * @throws SignatureVerificationFailedException
    */
-  public static boolean verifyED25519LD(VerifiableCredential verifiableCredential)
-     {
+  public static boolean verifyED25519LD(VerifiableCredential verifiableCredential) {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();

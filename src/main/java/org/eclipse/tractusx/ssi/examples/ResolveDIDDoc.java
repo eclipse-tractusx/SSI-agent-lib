@@ -33,7 +33,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 /** This is an example class to demonstrate did document resolve from given did web url */
 public class ResolveDIDDoc {
 
-  private ResolveDIDDoc(){
+  private ResolveDIDDoc() {
     // static
   }
 
