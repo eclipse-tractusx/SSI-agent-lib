@@ -34,6 +34,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import lombok.SneakyThrows;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
@@ -178,5 +179,15 @@ class CompositeDidResolverTest {
     resolver.resolve(DID);
     verify(resolver1, times(1)).resolve(any());
     verify(resolver2, times(1)).resolve(any());
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldThrow() {
+    when(resolver1.isResolvable(any())).thenReturn(true);
+    when(resolver1.resolve(any())).thenThrow(new DidParseException("sdf"));
+
+    CompositeDidResolver resolver = new CompositeDidResolver(resolver1);
+    assertThrows(DidResolverException.class, () -> resolver.resolve(DID));
   }
 }
