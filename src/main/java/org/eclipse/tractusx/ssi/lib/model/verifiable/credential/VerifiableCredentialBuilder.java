@@ -28,7 +28,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import lombok.NoArgsConstructor;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 
@@ -179,7 +178,7 @@ public class VerifiableCredentialBuilder {
     if (expirationDate != null) {
       map.put(VerifiableCredential.EXPIRATION_DATE, formatter.format(expirationDate));
     }
-    if (!Objects.isNull(credentialStatus)) {
+    if (credentialStatus != null) {
       map.put(VerifiableCredential.CREDENTIAL_STATUS, credentialStatus);
     }
     if (proof != null) {
