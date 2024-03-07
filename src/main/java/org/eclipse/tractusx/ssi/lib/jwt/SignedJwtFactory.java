@@ -28,13 +28,15 @@ import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import java.net.URI;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.crypt.util.SignerUtil;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.JwtConfig;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresentation;
@@ -45,13 +47,10 @@ import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresen
  */
 public class SignedJwtFactory {
 
-  private OctetKeyPairFactory octetKeyPairFactory;
-
   private final SignatureType signatureType;
 
   public SignedJwtFactory(OctetKeyPairFactory octetKeyPairFactory) {
     this.signatureType = SignatureType.JWS; // EdDSA
-    this.octetKeyPairFactory = Objects.requireNonNull(octetKeyPairFactory);
   }
 
   public SignedJwtFactory(SignatureType signatureType) {
@@ -133,13 +132,13 @@ public class SignedJwtFactory {
       Did didIssuer,
       Did holderIssuer,
       Date expDate,
-      LinkedHashMap<String, Object> vc,
+      Map<String, Object> vc,
       IPrivateKey privateKey,
       String keyId) {
     final String issuer = didIssuer.toString();
     final String subject = holderIssuer.toString();
 
-    vc.remove(VerifiableCredential.PROOF);
+    vc.remove(Verifiable.PROOF);
 
     var claimsSet =
         new JWTClaimsSet.Builder()
@@ -170,7 +169,7 @@ public class SignedJwtFactory {
       vc.sign(signer);
       return vc;
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      throw new IllegalStateException(e);
     }
   }
 }

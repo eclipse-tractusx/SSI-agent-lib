@@ -14,7 +14,7 @@ import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.KeyPair;
 import org.eclipse.tractusx.ssi.lib.crypt.ec.ECKeyGenerator;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
-import org.eclipse.tractusx.ssi.lib.crypt.x25519.x25519Generator;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519Generator;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethodIdentifier;
@@ -28,7 +28,7 @@ class SignedJwtFactoryTest {
   void shouldCreateSignedJwt() {
     SignedJwtFactory signedJwtFactory = new SignedJwtFactory(new OctetKeyPairFactory());
 
-    x25519Generator g = new x25519Generator();
+    X25519Generator g = new X25519Generator();
     KeyPair keyPair = g.generateKey();
 
     SignedJWT signedJWT =

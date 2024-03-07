@@ -52,7 +52,7 @@ import org.eclipse.tractusx.ssi.lib.crypt.ec.ECPrivateKeyWrapper;
 import org.eclipse.tractusx.ssi.lib.crypt.ec.ECPublicKeyWrapper;
 import org.eclipse.tractusx.ssi.lib.crypt.rsa.RSAPrivateKeyWrapper;
 import org.eclipse.tractusx.ssi.lib.crypt.rsa.RSAPublicKeyWrapper;
-import org.eclipse.tractusx.ssi.lib.crypt.x25519.x25519Generator;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519Generator;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
@@ -78,7 +78,7 @@ public class TestIdentityFactory {
 
     final Did did = TestDidFactory.createRandom();
 
-    IKeyGenerator keyGenerator = new x25519Generator();
+    IKeyGenerator keyGenerator = new X25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
     IPublicKey publicKey = keyPair.getPublicKey();
     IPrivateKey privateKey = keyPair.getPrivateKey();
@@ -117,7 +117,7 @@ public class TestIdentityFactory {
 
     final Did did = TestDidFactory.createRandom();
 
-    IKeyGenerator keyGenerator = new x25519Generator();
+    IKeyGenerator keyGenerator = new X25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
     IPublicKey publicKey = keyPair.getPublicKey();
     IPrivateKey privateKey = keyPair.getPrivateKey();

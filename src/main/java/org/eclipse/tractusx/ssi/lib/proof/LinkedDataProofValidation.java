@@ -21,8 +21,6 @@
 package org.eclipse.tractusx.ssi.lib.proof;
 
 import java.util.logging.Logger;
-// import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidator;
-// import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidatorImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -44,6 +42,7 @@ import org.eclipse.tractusx.ssi.lib.validation.JsonLdValidatorImpl;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class LinkedDataProofValidation {
+
   static final Logger LOG = Logger.getLogger(LinkedDataProofValidation.class.getName());
 
   public static LinkedDataProofValidation newInstance(DidResolver didResolver) {
@@ -60,8 +59,11 @@ public class LinkedDataProofValidation {
   }
 
   private final LinkedDataHasher hasher;
+
   private final LinkedDataTransformer transformer;
+
   private final DidResolver didResolver;
+
   private final JsonLdValidator jsonLdValidator;
 
   /**
@@ -125,10 +127,7 @@ public class LinkedDataProofValidation {
     final String issuer = vc.getIssuer().toString();
     final String verficationMethod = getVerificationMethod(verifiable);
     final String[] splitVerificationMethod = verficationMethod.split("#");
-    if (splitVerificationMethod[0].equals(issuer)) {
-      return true;
-    }
-    return false;
+    return splitVerificationMethod[0].equals(issuer);
   }
 
   /**

@@ -42,6 +42,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.ArrayUtils;
 import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
@@ -364,7 +365,11 @@ class SignAndVerifyTest {
 
     var signature = signer.sign(new HashedLinkedData(value), testIdentity.getPrivateKey());
     var isSigned =
-        verifier.verify(new HashedLinkedData(value), signature, testIdentity.getPublicKey(), type);
+        verifier.verify(
+            new HashedLinkedData(value),
+            ArrayUtils.toObject(signature),
+            testIdentity.getPublicKey(),
+            type);
 
     Assertions.assertTrue(isSigned);
   }

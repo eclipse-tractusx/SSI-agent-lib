@@ -51,6 +51,5 @@ public interface IVerifier {
    */
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable verifiable)
       throws SignatureParseException, DidParseException, InvalidPublicKeyFormatException,
-          SignatureVerificationException, UnsupportedSignatureTypeException,
-          NoVerificationKeyFoundException;
+          SignatureVerificationException;
 }

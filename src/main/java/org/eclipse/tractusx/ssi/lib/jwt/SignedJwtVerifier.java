@@ -75,7 +75,7 @@ public class SignedJwtVerifier {
    */
   public boolean verify(SignedJWT jwt)
       throws DidParseException, DidResolverException, SignatureVerificationException,
-          UnsupportedVerificationMethodException, SignatureParseException {
+          SignatureParseException {
 
     JWTClaimsSet jwtClaimsSet;
     try {

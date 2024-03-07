@@ -22,6 +22,7 @@
 package org.eclipse.tractusx.ssi.lib.did.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -84,7 +85,11 @@ public class DidWebResolver implements DidResolver {
 
       return new DidDocument(json);
 
-    } catch (Exception e) {
+    } catch (IOException e) {
+      throw new DidResolverException(
+          String.format("Unexpected exception: %s", e.getClass().getName()), e);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
       throw new DidResolverException(
           String.format("Unexpected exception: %s", e.getClass().getName()), e);
     }

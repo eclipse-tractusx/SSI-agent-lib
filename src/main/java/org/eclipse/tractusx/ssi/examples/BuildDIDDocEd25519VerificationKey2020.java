@@ -27,7 +27,7 @@ import java.util.List;
 import org.eclipse.tractusx.ssi.lib.crypt.IKeyGenerator;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.KeyPair;
-import org.eclipse.tractusx.ssi.lib.crypt.x25519.x25519Generator;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519Generator;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
 import org.eclipse.tractusx.ssi.lib.exception.key.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
@@ -57,7 +57,7 @@ public class BuildDIDDocEd25519VerificationKey2020 {
     final Did did = DidWebFactory.fromHostname(hostName);
 
     // Extracting keys
-    IKeyGenerator keyGenerator = new x25519Generator();
+    IKeyGenerator keyGenerator = new X25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
     IPublicKey publicKey = keyPair.getPublicKey();
 

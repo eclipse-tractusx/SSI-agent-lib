@@ -39,7 +39,6 @@ import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.proc.JWSVerifierFactory;
-import com.nimbusds.jose.util.Base64URL;
 import java.net.URI;
 import java.text.ParseException;
 import java.util.List;
@@ -47,10 +46,11 @@ import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.ArrayUtils;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.ec.ECPublicKeyWrapper;
 import org.eclipse.tractusx.ssi.lib.crypt.rsa.RSAPublicKeyWrapper;
-import org.eclipse.tractusx.ssi.lib.crypt.x25519.x25519PublicKey;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
@@ -253,13 +253,13 @@ public class JWSProofVerifier implements IVerifier {
   @SneakyThrows
   public boolean verify(
       HashedLinkedData hashedLinkedData,
-      byte[] signature,
+      Byte[] signature,
       IPublicKey publicKey,
       SignatureType type) {
     JWK jwk = null;
     switch (type) {
       case JWS:
-        jwk = ((x25519PublicKey) publicKey).toJwk();
+        jwk = ((X25519PublicKey) publicKey).toJwk();
         break;
       case JWS_P256:
       case JWS_P384:
@@ -279,19 +279,14 @@ public class JWSProofVerifier implements IVerifier {
     Payload payload = new Payload(hashedLinkedData.getValue());
     JWSObject jws;
     try {
-
-      jws = JWSObject.parse(new String(signature), payload);
+      jws = JWSObject.parse(new String(ArrayUtils.toPrimitive(signature)), payload);
     } catch (ParseException e) {
-      throw new SignatureParseException(String.format("Error while parsing JWS %s", signature));
+      throw new SignatureParseException("Error while parsing JWS");
     }
     try {
       return jws.verify(verifier);
     } catch (JOSEException e) {
       throw new SignatureVerificationException(e.getMessage());
     }
-  }
-
-  private OctetKeyPair getOctet(byte[] keyBytes) {
-    return new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(keyBytes)).build();
   }
 }
