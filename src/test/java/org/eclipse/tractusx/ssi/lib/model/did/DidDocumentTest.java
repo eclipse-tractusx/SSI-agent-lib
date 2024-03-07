@@ -21,6 +21,8 @@
 
 package org.eclipse.tractusx.ssi.lib.model.did;
 
+import static org.junit.Assert.assertThrows;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.util.List;
@@ -85,5 +87,13 @@ public class DidDocumentTest {
       var docFromJson = DidDocument.fromJson(json);
       Assertions.assertEquals(docFromJson.get(DidDocument.ID), docFromMap.get(DidDocument.ID));
     }
+  }
+
+  @Test
+  void shouldThrowWhenRequiredAttributeNull() {
+    IllegalArgumentException illegalArgumentException =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new DidDocument(Map.of("@context", URI.create("did:localhost"))));
   }
 }

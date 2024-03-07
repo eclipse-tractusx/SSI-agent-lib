@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IKeyGenerator;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
@@ -73,7 +74,7 @@ public class TestIdentityFactory {
    * @return the test identity
    */
   @SneakyThrows
-  public static TestIdentity newIdentityWithED25519Keys() {
+  public static TestIdentity newIdentityWithEDVerificationMethod() {
 
     final Did did = TestDidFactory.createRandom();
 
@@ -85,7 +86,7 @@ public class TestIdentityFactory {
     OctetKeyPair.Builder builder =
         (new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey.asByte())))
             .d(Base64URL.encode(privateKey.asByte()))
-            .keyID("key-2");
+            .keyID("key-1");
 
     MultibaseString multibaseString = MultibaseFactory.create(publicKey.asByte());
     final Ed25519VerificationMethodBuilder ed25519VerificationKey2020Builder =
@@ -93,7 +94,7 @@ public class TestIdentityFactory {
 
     final Ed25519VerificationMethod ed25519VerificationMethod =
         ed25519VerificationKey2020Builder
-            .id(URI.create(did + "#key-2"))
+            .id(URI.create(did + "#key-1"))
             .controller(URI.create(did + "#controller"))
             .publicKeyMultiBase(multibaseString)
             .build();
@@ -106,6 +107,34 @@ public class TestIdentityFactory {
         didDocumentBuilder
             .id(did.toUri())
             .verificationMethods(List.of(ed25519VerificationMethod, jwkVerificationMethod))
+            .build();
+
+    return new TestIdentity(did, didDocument, publicKey, privateKey);
+  }
+
+  @SneakyThrows
+  public static TestIdentity newIdentityWithEDKeys() {
+
+    final Did did = TestDidFactory.createRandom();
+
+    IKeyGenerator keyGenerator = new x25519Generator();
+    KeyPair keyPair = keyGenerator.generateKey();
+    IPublicKey publicKey = keyPair.getPublicKey();
+    IPrivateKey privateKey = keyPair.getPrivateKey();
+
+    OctetKeyPair.Builder builder =
+        (new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey.asByte())))
+            .d(Base64URL.encode(privateKey.asByte()))
+            .keyID("key-1");
+
+    final JWKVerificationMethod jwkVerificationMethod =
+        new JWKVerificationMethodBuilder().did(did).jwk(builder.build()).build();
+
+    final DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();
+    final DidDocument didDocument =
+        didDocumentBuilder
+            .id(did.toUri())
+            .verificationMethods(List.of(jwkVerificationMethod))
             .build();
 
     return new TestIdentity(did, didDocument, publicKey, privateKey);
@@ -249,7 +278,7 @@ public class TestIdentityFactory {
     return builder.build();
   }
 
-  private static VerificationMethodConfig generateVerificationMethod(Curve crv, String alg, Did did)
+  public static VerificationMethodConfig generateVerificationMethod(Curve crv, String alg, Did did)
       throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
     KeyPairGenerator kpg = KeyPairGenerator.getInstance("EC", new BouncyCastleProvider());
     ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec(alg);
@@ -271,7 +300,8 @@ public class TestIdentityFactory {
   }
 
   @AllArgsConstructor
-  private static class VerificationMethodConfig {
+  @Getter
+  public static class VerificationMethodConfig {
 
     IPrivateKey privateKey;
 

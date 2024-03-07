@@ -84,7 +84,7 @@ public class SignAndVerifyTest {
   public void testSignAndVerify_ED201559() {
     final TestDidResolver didResolver = new TestDidResolver();
 
-    var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys();
+    var testIdentity = TestIdentityFactory.newIdentityWithEDVerificationMethod();
 
     didResolver.register(testIdentity);
 
@@ -112,7 +112,7 @@ public class SignAndVerifyTest {
   public void testSignAndVerify_JWS_ED()
       throws IOException, NoSuchAlgorithmException, SignatureGenerateFailedException,
           InvalidPrivateKeyFormatException {
-    var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys();
+    var testIdentity = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     verifyJws(testIdentity, SignatureType.JWS);
   }
 

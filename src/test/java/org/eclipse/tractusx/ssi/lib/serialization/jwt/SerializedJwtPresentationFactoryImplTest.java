@@ -5,6 +5,7 @@ import com.nimbusds.jwt.SignedJWT;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
@@ -23,7 +24,9 @@ import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityFactory;
 import org.eclipse.tractusx.ssi.lib.util.vc.TestVerifiableFactory;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /** The type Serialized jwt presentation factory impl test. */
 class SerializedJwtPresentationFactoryImplTest {
@@ -35,14 +38,22 @@ class SerializedJwtPresentationFactoryImplTest {
 
   private SignedJwtVerifier jwtVerifier;
 
+  @SneakyThrows
+  private static Stream<Arguments> testConfigs() {
+    JwtConfig conf = JwtConfig.builder().expirationTime(99).build();
+    JwtConfig confNoTime = JwtConfig.builder().build();
+    return Stream.of(Arguments.of(confNoTime), Arguments.of(conf));
+  }
+
   /** Test jwt serialization. */
   @SneakyThrows
-  @Test
-  public void testJwtSerialization() {
+  @ParameterizedTest
+  @MethodSource("testConfigs")
+  public void testJwtSerialization(JwtConfig conf) {
     SsiLibrary.initialize();
     this.didResolver = new TestDidResolver();
 
-    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
+    credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);
     jwtVerifier = new SignedJwtVerifier(didResolver);
 
@@ -74,14 +85,30 @@ class SerializedJwtPresentationFactoryImplTest {
             credentialIssuer.getDid());
 
     // Build JWT
-    SignedJWT presentation =
-        presentationFactory.createPresentation(
-            credentialIssuer.getDid(),
-            List.of(credentialWithProof),
-            "test-audience",
-            credentialIssuer.getPrivateKey(),
-            "key-2");
+    SignedJWT presentation;
+    if (conf.getExpirationTime() == 0) {
+      presentation =
+          presentationFactory.createPresentation(
+              credentialIssuer.getDid(),
+              List.of(credentialWithProof),
+              "test-audience",
+              credentialIssuer.getPrivateKey(),
+              "key-1");
+    } else {
+      presentation =
+          presentationFactory.createPresentation(
+              credentialIssuer.getDid(),
+              List.of(credentialWithProof),
+              "test-audience",
+              credentialIssuer.getPrivateKey(),
+              "key-1",
+              conf);
+    }
+    assertResult(presentation);
+  }
 
+  @SneakyThrows
+  private void assertResult(SignedJWT presentation) {
     Assertions.assertNotNull(presentation);
     Assertions.assertDoesNotThrow(() -> jwtVerifier.verify(presentation));
     JWTClaimsSet jwtClaimsSet = presentation.getJWTClaimsSet();

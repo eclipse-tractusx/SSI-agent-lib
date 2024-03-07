@@ -60,7 +60,7 @@ public class LinkedDataProofValidationComponentTest {
   @Test
   @SneakyThrows
   public void testVCProofFailureOnManipulatedCredential() {
-    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
+    credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);
 
     // Generator
@@ -98,7 +98,7 @@ public class LinkedDataProofValidationComponentTest {
   @SneakyThrows
   public void testVCEd25519ProofGenerationAndVerification() {
 
-    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
+    credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);
 
     // Generator
@@ -130,7 +130,7 @@ public class LinkedDataProofValidationComponentTest {
   @SneakyThrows
   public void testVCJWSProofGenerationAndVerification() {
 
-    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
+    credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);
 
     // Generator
@@ -163,7 +163,7 @@ public class LinkedDataProofValidationComponentTest {
   @SneakyThrows
   public void testVPEd25519ProofGenerationAndVerification() {
 
-    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
+    credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);
 
     // Generator
@@ -204,7 +204,7 @@ public class LinkedDataProofValidationComponentTest {
   @SneakyThrows
   public void testVPJWSProofGenerationAndVerification() {
 
-    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
+    credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);
 
     // Generator
@@ -247,7 +247,7 @@ public class LinkedDataProofValidationComponentTest {
   @SneakyThrows
   public void testVerificationMethodOfVC() {
 
-    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
+    credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);
 
     // Generator

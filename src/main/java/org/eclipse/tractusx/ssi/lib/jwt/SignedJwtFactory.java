@@ -25,18 +25,17 @@ import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSSigner;
-import com.nimbusds.jose.crypto.Ed25519Signer;
-import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import java.net.URI;
 import java.util.*;
-import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
+import org.eclipse.tractusx.ssi.lib.crypt.util.SignerUtil;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.JwtConfig;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresentation;
 
@@ -46,10 +45,17 @@ import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresen
  */
 public class SignedJwtFactory {
 
-  private final OctetKeyPairFactory octetKeyPairFactory;
+  private OctetKeyPairFactory octetKeyPairFactory;
+
+  private final SignatureType signatureType;
 
   public SignedJwtFactory(OctetKeyPairFactory octetKeyPairFactory) {
+    this.signatureType = SignatureType.JWS; // EdDSA
     this.octetKeyPairFactory = Objects.requireNonNull(octetKeyPairFactory);
+  }
+
+  public SignedJwtFactory(SignatureType signatureType) {
+    this.signatureType = signatureType;
   }
 
   /**
@@ -118,8 +124,7 @@ public class SignedJwtFactory {
             .jwtID(id.toString())
             .build();
 
-    final OctetKeyPair octetKeyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
-    return createSignedES256Jwt(octetKeyPair, claimsSet, issuer, keyId);
+    return createSignedES256Jwt(privateKey, claimsSet, issuer, keyId);
   }
 
   @SneakyThrows
@@ -145,28 +150,21 @@ public class SignedJwtFactory {
             .jwtID(id.toString())
             .build();
 
-    final OctetKeyPair octetKeyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
-    return createSignedES256Jwt(octetKeyPair, claimsSet, issuer, keyId);
+    return createSignedES256Jwt(privateKey, claimsSet, issuer, keyId);
   }
 
   public SignedJWT createSignedES256Jwt(
-      OctetKeyPair privateKey, JWTClaimsSet claimsSet, String issuer, String keyId) {
-    JWSSigner signer;
+      IPrivateKey privateKey, JWTClaimsSet claimsSet, String issuer, String keyId) {
+
     try {
-
-      signer = new Ed25519Signer(privateKey);
-      if (!signer.supportedJWSAlgorithms().contains(JWSAlgorithm.EdDSA)) {
-        throw new RuntimeException(
-            String.format(
-                "Invalid signing method. Supported signing methods: %s",
-                signer.supportedJWSAlgorithms().stream()
-                    .map(JWSAlgorithm::getName)
-                    .collect(Collectors.joining(", "))));
-      }
-
-      var algorithm = JWSAlgorithm.EdDSA;
+      JWSSigner signer = SignerUtil.getSigner(signatureType, privateKey);
       var type = JOSEObjectType.JWT;
-      var header = new JWSHeader.Builder(algorithm).type(type).keyID(issuer + "#" + keyId).build();
+      var header =
+          new JWSHeader.Builder(new JWSAlgorithm(signatureType.algorithm))
+              .type(type)
+              .keyID(issuer + "#" + keyId)
+              .build();
+
       var vc = new SignedJWT(header, claimsSet);
 
       vc.sign(signer);

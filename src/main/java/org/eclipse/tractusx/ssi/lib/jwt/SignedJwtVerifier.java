@@ -122,35 +122,6 @@ public class SignedJwtVerifier {
     return result;
   }
 
-  //  // FIXME this will break SignedJwtVerifierTest.verifyEcSignature(), as now a concrete
-  //  private List<VerifiableCredential> fromClaimSet(JWTClaimsSet jwtClaimsSet) {
-  //    Object verifiableCredentialObject = jwtClaimsSet.getClaim("vp");
-  //    if (verifiableCredentialObject instanceof Map) {
-  //      Map<String, Object> m = convertToMap(verifiableCredentialObject);
-  //      Object object = m.get("verifiableCredential");
-  //      if (object instanceof List) {
-  //        List<?> rawList = (List<?>) object;
-  //
-  //        return rawList.stream()
-  //            .map(this::convertToMap)
-  //            .map(VerifiableCredential::new)
-  //            .collect(Collectors.toList());
-  //      }
-  //      throw new IllegalArgumentException("verifiableCredential is not a list");
-  //    }
-  //    throw new IllegalArgumentException("vp is not a json object");
-  //  }
-
-  private Map<String, Object> convertToMap(Object o) {
-    if (o instanceof Map) {
-      Map<String, Object> result = new HashMap<>();
-      Map<?, ?> rawMap = (Map<?, ?>) o;
-      rawMap.forEach((k, v) -> result.put((String) k, v));
-      return result;
-    }
-    throw new IllegalArgumentException("object is not a map");
-  }
-
   private JWSVerifier getVerifier(JWSHeader header, JWK key) throws JOSEException {
     if (EdDSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm())) {
       return new Ed25519Verifier(((OctetKeyPair) key).toPublicJWK());
