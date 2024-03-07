@@ -66,7 +66,7 @@ public class Verification {
 
     jwtVerifier.verify(jwt);
   }
-/**
+  /**
    * Verify ed25519 signed ld.
    *
    * @param verifiableCredential the verifiable credential
