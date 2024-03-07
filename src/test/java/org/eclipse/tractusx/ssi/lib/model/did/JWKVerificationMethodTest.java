@@ -172,33 +172,29 @@ class JWKVerificationMethodTest {
 
   @Test
   void shouldThrowWhenIllegalType() {
-    assertThrows(
-        IllegalArgumentException.class,
-        () ->
-            new JWKVerificationMethod(
-                Map.of(
-                    "type",
-                    "Ed25519VerificationKey2069",
-                    "id",
-                    UUID.randomUUID().toString(),
-                    "controller",
-                    UUID.randomUUID().toString())));
+    Map<String, Object> map =
+        Map.of(
+            "type",
+            "Ed25519VerificationKey2069",
+            "id",
+            UUID.randomUUID().toString(),
+            "controller",
+            UUID.randomUUID().toString());
+    assertThrows(IllegalArgumentException.class, () -> new JWKVerificationMethod(map));
   }
 
   @Test
   void shouldThrowWhenInvalidPublicKeyJWK() {
-    assertThrows(
-        IllegalArgumentException.class,
-        () ->
-            new JWKVerificationMethod(
-                Map.of(
-                    "type",
-                    JWKVerificationMethod.DEFAULT_TYPE,
-                    "id",
-                    UUID.randomUUID().toString(),
-                    "controller",
-                    UUID.randomUUID().toString(),
-                    JWKVerificationMethod.PUBLIC_KEY_JWK,
-                    42)));
+    Map<String, Object> map =
+        Map.of(
+            "type",
+            JWKVerificationMethod.DEFAULT_TYPE,
+            "id",
+            UUID.randomUUID().toString(),
+            "controller",
+            UUID.randomUUID().toString(),
+            JWKVerificationMethod.PUBLIC_KEY_JWK,
+            42);
+    assertThrows(IllegalArgumentException.class, () -> new JWKVerificationMethod(map));
   }
 }

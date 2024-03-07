@@ -39,7 +39,7 @@ import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.junit.jupiter.api.Test;
 
 /** The type Ed 25519 key test. */
-public class ed25519KeyTest {
+class ED25519KeyTest {
 
   /**
    * Test ed 25519 key generation.
@@ -47,7 +47,7 @@ public class ed25519KeyTest {
    * @throws KeyGenerationException the key generation exception
    */
   @Test
-  public void testED25519KeyGeneration() throws KeyGenerationException {
+void testED25519KeyGeneration() throws KeyGenerationException {
     IKeyGenerator keyGenerator = new x25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
     assertNotNull(keyPair.getPrivateKey());
@@ -62,7 +62,7 @@ public class ed25519KeyTest {
    */
   @Test
   @SneakyThrows
-  public void testED25519KeySerliztion() throws KeyGenerationException, IOException {
+void testED25519KeySerialization() throws KeyGenerationException, IOException {
     IKeyGenerator keyGenerator = new x25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
 
@@ -85,7 +85,7 @@ public class ed25519KeyTest {
    */
   @Test
   @SneakyThrows
-  public void testED25519KeyDeserliztion()
+void testED25519KeyDeserliztion()
       throws KeyGenerationException, IOException, InvalidPrivateKeyFormatException,
           InvalidPublicKeyFormatException {
     IKeyGenerator keyGenerator = new x25519Generator();

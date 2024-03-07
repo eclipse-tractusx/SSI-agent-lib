@@ -10,9 +10,7 @@ import org.junit.jupiter.api.Test;
 class ServiceTest {
   @Test
   void shouldThrowWhenRequiredAttributeNull() {
-    IllegalArgumentException illegalArgumentException =
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> new Service(Map.of("@context", URI.create("did:localhost"))));
+    Map<String, Object> map = Map.of("@context", URI.create("did:localhost"));
+    assertThrows(IllegalArgumentException.class, () -> new Service(map));
   }
 }

@@ -35,7 +35,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 /** The type Did web parser test. */
-public class DidWebParserTest {
+ class DidWebParserTest {
 
   private final DidWebParser parser = new DidWebParser();
 
@@ -55,7 +55,7 @@ public class DidWebParserTest {
     "some-host%3A9090:path1:path2, https://some-host:9090/path1/path2/did.json"
   })
   @SneakyThrows
-  public void testResolveUriFromDid(String methodIdentifier, String expectedUri) {
+   void testResolveUriFromDid(String methodIdentifier, String expectedUri) {
 
     final Did did = new Did(new DidMethod("web"), new DidMethodIdentifier(methodIdentifier), null);
     final URI uri = parser.parse(did);

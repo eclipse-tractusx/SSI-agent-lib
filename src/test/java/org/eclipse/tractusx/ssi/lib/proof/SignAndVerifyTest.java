@@ -71,7 +71,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 /** The type Sign and verify test. */
-public class SignAndVerifyTest {
+class SignAndVerifyTest {
 
   /**
    * Test sign and verify ed 201559.
@@ -81,7 +81,7 @@ public class SignAndVerifyTest {
    * @throws InvalidPrivateKeyFormatException the invalide public key format
    */
   @Test
-  public void testSignAndVerify_ED201559() {
+void testSignAndVerify_ED201559() {
     final TestDidResolver didResolver = new TestDidResolver();
 
     var testIdentity = TestIdentityFactory.newIdentityWithEDVerificationMethod();
@@ -109,7 +109,7 @@ public class SignAndVerifyTest {
    * @throws InvalidPrivateKeyFormatException the invalide public key format
    */
   @Test
-  public void testSignAndVerify_JWS_ED()
+void testSignAndVerify_JWS_ED()
       throws IOException, NoSuchAlgorithmException, SignatureGenerateFailedException,
           InvalidPrivateKeyFormatException {
     var testIdentity = TestIdentityFactory.newIdentityWithEDVerificationMethod();
@@ -117,7 +117,7 @@ public class SignAndVerifyTest {
   }
 
   @Test
-  public void testSignAndVerify_JWS_RSA()
+void testSignAndVerify_JWS_RSA()
       throws NoSuchAlgorithmException, InvalidPrivateKeyFormatException,
           SignatureGenerateFailedException {
     var testIdentity = TestIdentityFactory.newIdentityWithRSAKeys();
@@ -125,7 +125,7 @@ public class SignAndVerifyTest {
   }
 
   @Test
-  public void testSignAndVerify_JWS_EC_P256()
+ void testSignAndVerify_JWS_EC_P256()
       throws NoSuchAlgorithmException, InvalidPrivateKeyFormatException,
           InvalidAlgorithmParameterException, SignatureGenerateFailedException {
     var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp256r1", Curve.P_256);
@@ -133,7 +133,7 @@ public class SignAndVerifyTest {
   }
 
   @Test
-  public void testSignAndVerify_JWS_EC_P384()
+void testSignAndVerify_JWS_EC_P384()
       throws NoSuchAlgorithmException, InvalidPrivateKeyFormatException,
           InvalidAlgorithmParameterException, SignatureGenerateFailedException {
     var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp384r1", Curve.P_384);
@@ -141,7 +141,7 @@ public class SignAndVerifyTest {
   }
 
   @Test
-  public void testSignAndVerify_JWS_EC_256K1()
+void testSignAndVerify_JWS_EC_256K1()
       throws NoSuchAlgorithmException, InvalidPrivateKeyFormatException,
           InvalidAlgorithmParameterException, SignatureGenerateFailedException {
     var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp256k1", Curve.SECP256K1);

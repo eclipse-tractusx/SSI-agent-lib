@@ -25,11 +25,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
 import lombok.SneakyThrows;
@@ -40,6 +43,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethodIdentifier;
 import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,7 +52,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 /** The type Did web resolver test. */
 @ExtendWith(MockitoExtension.class)
-public class DidWebResolverTest {
+class DidWebResolverTest {
 
   @Mock private HttpClient httpClient;
   @Mock private HttpResponse<Object> response;
@@ -72,7 +76,7 @@ public class DidWebResolverTest {
    */
   @Test
   @SneakyThrows
-  public void shouldResolveValidWebDid() {
+  void shouldResolveValidWebDid() {
     Did validDidWeb = new Did(new DidMethod("web"), new DidMethodIdentifier("localhost"), null);
     assertTrue(resolver.isResolvable(validDidWeb));
     when(httpClient.send(any(), any())).thenReturn(response);
@@ -91,7 +95,7 @@ public class DidWebResolverTest {
    */
   @Test
   @SneakyThrows
-  public void shouldNotResolveNonWebDid() {
+  void shouldNotResolveNonWebDid() {
     Did validDidKey =
         new Did(
             new DidMethod("key"),

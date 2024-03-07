@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /** The type Verifiable credential test. */
-public class VerifiableCredentialTest {
+class VerifiableCredentialTest {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -43,7 +43,7 @@ public class VerifiableCredentialTest {
    */
   @Test
   @SneakyThrows
-  public void canSerializeVC() {
+void canSerializeVC() {
     final Map<String, Object> vpFromMap = TestResourceUtil.getAlumniVerifiableCredential();
     var vp = new VerifiableCredential(vpFromMap);
     var json = vp.toJson();
@@ -54,7 +54,7 @@ public class VerifiableCredentialTest {
 
   /** Should load cached context. */
   @Test
-  public void shouldLoadCachedContext() {
+void shouldLoadCachedContext() {
     var vcFromMap = TestResourceUtil.getAlumniVerifiableCredential();
     var vc = new VerifiableCredential(vcFromMap);
 

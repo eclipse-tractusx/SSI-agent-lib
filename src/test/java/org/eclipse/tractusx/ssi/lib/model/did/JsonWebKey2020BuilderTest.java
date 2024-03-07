@@ -43,7 +43,7 @@ class JsonWebKey2020BuilderTest {
   /** Test json web key 2020 verification method. */
   @SneakyThrows
   @Test
-  public void testJsonWebKey2020VerificationMethod() {
+void testJsonWebKey2020VerificationMethod() {
     final Did did = DidWebFactory.fromHostname("localhost");
     String keyId = "1";
     OctetKeyPair octetKeyPair =
@@ -60,14 +60,14 @@ class JsonWebKey2020BuilderTest {
         builder.did(did).jwk(octetKeyPair).build();
 
     assertNotNull(jwk2020VerificationMethod);
-    assertEquals(jwk2020VerificationMethod.getType(), "JsonWebKey2020");
+    assertEquals("JsonWebKey2020", jwk2020VerificationMethod.getType());
     assertEquals(jwk2020VerificationMethod.getId().toString(), "did:web:localhost#" + keyId);
-    assertEquals(jwk2020VerificationMethod.getController().toString(), "did:web:localhost");
+    assertEquals("did:web:localhost", jwk2020VerificationMethod.getController().toString());
 
     assertEquals(
-        ((OctetKeyPair) jwk2020VerificationMethod.getJwk()).getKeyType().getValue(), "OKP");
+            "OKP", ((OctetKeyPair) jwk2020VerificationMethod.getJwk()).getKeyType().getValue());
     assertEquals(
-        ((OctetKeyPair) jwk2020VerificationMethod.getJwk()).getCurve().getName(), "Ed25519");
+            "Ed25519", ((OctetKeyPair) jwk2020VerificationMethod.getJwk()).getCurve().getName());
     assertNotNull(((OctetKeyPair) jwk2020VerificationMethod.getJwk()).getX());
   }
 }

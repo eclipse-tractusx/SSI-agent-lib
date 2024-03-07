@@ -41,11 +41,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /** The type Serialize util test. */
-public class SerializeUtilTest {
+class SerializeUtilTest {
 
   /** Should serialize vc context first. */
   @Test
-  public void shouldSerializeVcContextFirst() {
+void shouldSerializeVcContextFirst() {
     VerifiableCredential vc = TestResourceUtil.getAlumniVerifiableCredential();
     String serializedVc = SerializeUtil.toJson(vc);
 
@@ -55,7 +55,7 @@ public class SerializeUtilTest {
 
   /** Should serialize vp context first. */
   @Test
-  public void shouldSerializeVpContextFirst() {
+void shouldSerializeVpContextFirst() {
     VerifiablePresentation vp = TestResourceUtil.getAlumniVerifiablePresentation();
     String serializedVc = SerializeUtil.toJson(vp);
 

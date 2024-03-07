@@ -16,48 +16,44 @@ class Ed25519VerificationMethodTest {
 
   @Test
   void shouldThrowWhenIllegalType() {
-    assertThrows(
-        IllegalArgumentException.class,
-        () ->
-            new Ed25519VerificationMethod(
-                Map.of(
-                    "type",
-                    "Ed25519VerificationKey2069",
-                    "id",
-                    UUID.randomUUID().toString(),
-                    "controller",
-                    UUID.randomUUID().toString())));
+    Map<String, Object> type =
+        Map.of(
+            "type",
+            "Ed25519VerificationKey2069",
+            "id",
+            UUID.randomUUID().toString(),
+            "controller",
+            UUID.randomUUID().toString());
+    assertThrows(IllegalArgumentException.class, () -> new Ed25519VerificationMethod(type));
   }
 
   @Test
   void shouldThrowWhenPublicKeyBase58IsNull() {
-    assertThrows(
-        IllegalArgumentException.class,
-        () ->
-            new Ed25519VerificationMethod(
-                Map.of(
-                    "type",
-                    Ed25519VerificationMethod.DEFAULT_TYPE,
-                    "id",
-                    UUID.randomUUID().toString(),
-                    "controller",
-                    UUID.randomUUID().toString())));
+    Map<String, Object> type =
+        Map.of(
+            "type",
+            Ed25519VerificationMethod.DEFAULT_TYPE,
+            "id",
+            UUID.randomUUID().toString(),
+            "controller",
+            UUID.randomUUID().toString());
+    assertThrows(IllegalArgumentException.class, () -> new Ed25519VerificationMethod(type));
   }
 
   @Test
   @SneakyThrows
   void shouldRetrieveOctetKeyPair() {
-    Ed25519VerificationMethod type =
-        new Ed25519VerificationMethod(
-            Map.of(
-                "type",
-                Ed25519VerificationMethod.DEFAULT_TYPE,
-                Ed25519VerificationMethod.PUBLIC_KEY_BASE_58,
-                "zdbDmZLTWuEYYZNHFLKLoRkEX4sZykkSLNQLXvMUyMB1",
-                "id",
-                UUID.randomUUID().toString(),
-                "controller",
-                UUID.randomUUID().toString()));
+    Map<String, Object> map =
+        Map.of(
+            "type",
+            Ed25519VerificationMethod.DEFAULT_TYPE,
+            Ed25519VerificationMethod.PUBLIC_KEY_BASE_58,
+            "zdbDmZLTWuEYYZNHFLKLoRkEX4sZykkSLNQLXvMUyMB1",
+            "id",
+            UUID.randomUUID().toString(),
+            "controller",
+            UUID.randomUUID().toString());
+    Ed25519VerificationMethod type = new Ed25519VerificationMethod(map);
 
     OctetKeyPair octetKeyPair = assertDoesNotThrow(type::getOctetKeyPair);
     assertNotNull(octetKeyPair);

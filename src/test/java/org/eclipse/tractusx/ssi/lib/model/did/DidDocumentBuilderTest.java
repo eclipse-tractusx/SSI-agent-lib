@@ -45,15 +45,16 @@ class DidDocumentBuilderTest {
 
   @Test
   void shouldThrowWhenProofPurposeListEmpty() {
+    DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();
     assertThrows(
         IllegalArgumentException.class,
-        () -> new DidDocumentBuilder().assertionMethod(Collections.EMPTY_LIST));
+        () -> didDocumentBuilder.assertionMethod(Collections.EMPTY_LIST));
   }
 
   @Test
   void shouldThrowWhenProofPurposeListDoesNotContainUriOrVerificationMethodType() {
-    assertThrows(
-        IllegalArgumentException.class,
-        () -> new DidDocumentBuilder().assertionMethod(List.of("yada")));
+    DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();
+    List<Object> list = List.of("yada");
+    assertThrows(IllegalArgumentException.class, () -> didDocumentBuilder.assertionMethod(list));
   }
 }

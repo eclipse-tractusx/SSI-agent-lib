@@ -41,7 +41,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /** The type Linked data proof validation component test. */
-public class LinkedDataProofValidationComponentTest {
+class LinkedDataProofValidationComponentTest {
 
   private LinkedDataProofValidation linkedDataProofValidation;
   private LinkedDataProofGenerator linkedDataProofGenerator;
@@ -59,7 +59,7 @@ public class LinkedDataProofValidationComponentTest {
   /** Test vc proof failure on manipulated credential. */
   @Test
   @SneakyThrows
-  public void testVCProofFailureOnManipulatedCredential() {
+void testVCProofFailureOnManipulatedCredential() {
     credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);
 
@@ -96,7 +96,7 @@ public class LinkedDataProofValidationComponentTest {
   /** Test vc ed 25519 proof generation and verification. */
   @Test
   @SneakyThrows
-  public void testVCEd25519ProofGenerationAndVerification() {
+  void testVCEd25519ProofGenerationAndVerification() {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);
@@ -128,7 +128,7 @@ public class LinkedDataProofValidationComponentTest {
   /** Test vcjws proof generation and verification. */
   @Test
   @SneakyThrows
-  public void testVCJWSProofGenerationAndVerification() {
+ void testVCJWSProofGenerationAndVerification() {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);
@@ -161,7 +161,7 @@ public class LinkedDataProofValidationComponentTest {
   /** Test vp ed 25519 proof generation and verification. */
   @Test
   @SneakyThrows
-  public void testVPEd25519ProofGenerationAndVerification() {
+void testVPEd25519ProofGenerationAndVerification() {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);
@@ -202,7 +202,7 @@ public class LinkedDataProofValidationComponentTest {
   /** Test vpjws proof generation and verification. */
   @Test
   @SneakyThrows
-  public void testVPJWSProofGenerationAndVerification() {
+void testVPJWSProofGenerationAndVerification() {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);
@@ -245,7 +245,7 @@ public class LinkedDataProofValidationComponentTest {
   /** Test verification method. */
   @Test
   @SneakyThrows
-  public void testVerificationMethodOfVC() {
+  void testVerificationMethodOfVC() {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);

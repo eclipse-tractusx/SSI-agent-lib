@@ -49,7 +49,7 @@ class SerializedJwtPresentationFactoryImplTest {
   @SneakyThrows
   @ParameterizedTest
   @MethodSource("testConfigs")
-  public void testJwtSerialization(JwtConfig conf) {
+void testJwtSerialization(JwtConfig conf) {
     SsiLibrary.initialize();
     this.didResolver = new TestDidResolver();
 
