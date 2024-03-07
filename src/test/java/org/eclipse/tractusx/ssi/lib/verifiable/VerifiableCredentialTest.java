@@ -43,7 +43,7 @@ class VerifiableCredentialTest {
    */
   @Test
   @SneakyThrows
-void canSerializeVC() {
+  void canSerializeVC() {
     final Map<String, Object> vpFromMap = TestResourceUtil.getAlumniVerifiableCredential();
     var vp = new VerifiableCredential(vpFromMap);
     var json = vp.toJson();
@@ -54,7 +54,7 @@ void canSerializeVC() {
 
   /** Should load cached context. */
   @Test
-void shouldLoadCachedContext() {
+  void shouldLoadCachedContext() {
     var vcFromMap = TestResourceUtil.getAlumniVerifiableCredential();
     var vc = new VerifiableCredential(vcFromMap);
 

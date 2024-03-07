@@ -30,7 +30,7 @@ class VerifiableCredentialTest {
 
   /** Equals success. */
   @Test
-void equalsSuccess() {
+  void equalsSuccess() {
     final VerifiableCredential vc1 = TestResourceUtil.getAlumniVerifiableCredential();
     final VerifiableCredential vc2 = TestResourceUtil.getAlumniVerifiableCredential();
     Assertions.assertEquals(vc1.toString(), vc2.toString());
@@ -38,7 +38,7 @@ void equalsSuccess() {
 
   /** Equals failure. */
   @Test
-void equalsFailure() {
+  void equalsFailure() {
     final VerifiableCredential vc1 = TestResourceUtil.getBPNVerifiableCredential();
     final VerifiableCredential vc2 = TestResourceUtil.getAlumniVerifiableCredential();
 
@@ -47,7 +47,7 @@ void equalsFailure() {
 
   /** Credential id must be valid uri. */
   @Test
-void credentialIdMustBeValidURI() {
+  void credentialIdMustBeValidURI() {
     final VerifiableCredential vc = TestResourceUtil.getAlumniVerifiableCredential();
     vc.put(VerifiableCredential.ID, "b9d94fd6-d7e8-4acf-a222-6e84fca87b68");
 

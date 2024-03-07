@@ -59,7 +59,7 @@ class LinkedDataProofValidationComponentTest {
   /** Test vc proof failure on manipulated credential. */
   @Test
   @SneakyThrows
-void testVCProofFailureOnManipulatedCredential() {
+  void testVCProofFailureOnManipulatedCredential() {
     credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);
 
@@ -128,7 +128,7 @@ void testVCProofFailureOnManipulatedCredential() {
   /** Test vcjws proof generation and verification. */
   @Test
   @SneakyThrows
- void testVCJWSProofGenerationAndVerification() {
+  void testVCJWSProofGenerationAndVerification() {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);
@@ -161,7 +161,7 @@ void testVCProofFailureOnManipulatedCredential() {
   /** Test vp ed 25519 proof generation and verification. */
   @Test
   @SneakyThrows
-void testVPEd25519ProofGenerationAndVerification() {
+  void testVPEd25519ProofGenerationAndVerification() {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);
@@ -202,7 +202,7 @@ void testVPEd25519ProofGenerationAndVerification() {
   /** Test vpjws proof generation and verification. */
   @Test
   @SneakyThrows
-void testVPJWSProofGenerationAndVerification() {
+  void testVPJWSProofGenerationAndVerification() {
 
     credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);

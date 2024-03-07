@@ -27,7 +27,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 /** The type Did web factory test. */
- class DidWebFactoryTest {
+class DidWebFactoryTest {
 
   /**
    * Test create did from hostname.
@@ -41,7 +41,7 @@ import org.junit.jupiter.params.provider.CsvSource;
     "localhost:8080, did:web:localhost%3A8080",
     "some-host, did:web:some-host",
   })
-   void testCreateDidFromHostname(String hostname, String expectedDid) {
+  void testCreateDidFromHostname(String hostname, String expectedDid) {
     final Did did = DidWebFactory.fromHostname(hostname);
 
     Assertions.assertEquals(expectedDid, did.toString());
@@ -62,7 +62,7 @@ import org.junit.jupiter.params.provider.CsvSource;
     "some-host, /path1/path2, did:web:some-host:path1:path2",
     "some-host:9090, path1/path2, did:web:some-host%3A9090:path1:path2",
   })
-   void testCreateDidFromHostnameAndPath(String hostname, String path, String expectedDid) {
+  void testCreateDidFromHostnameAndPath(String hostname, String path, String expectedDid) {
     final Did did = DidWebFactory.fromHostnameAndPath(hostname, path);
 
     Assertions.assertEquals(expectedDid, did.toString());

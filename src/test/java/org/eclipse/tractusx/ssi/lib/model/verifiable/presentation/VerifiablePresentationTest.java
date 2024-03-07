@@ -30,7 +30,7 @@ class VerifiablePresentationTest {
 
   /** Equals success. */
   @Test
-void equalsSuccess() {
+  void equalsSuccess() {
     final VerifiablePresentation vp1 = TestResourceUtil.getAlumniVerifiablePresentation();
     final VerifiablePresentation vp2 = TestResourceUtil.getAlumniVerifiablePresentation();
 
@@ -39,7 +39,7 @@ void equalsSuccess() {
 
   /** Equals failure. */
   @Test
-void equalsFailure() {
+  void equalsFailure() {
     final VerifiablePresentation vp1 = TestResourceUtil.getAlumniVerifiablePresentation();
     final VerifiablePresentation vp2 = TestResourceUtil.getAlumniVerifiablePresentation();
     vp2.put(VerifiablePresentation.ID, "foo");

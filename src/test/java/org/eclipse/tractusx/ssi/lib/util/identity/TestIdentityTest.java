@@ -37,7 +37,7 @@ class TestIdentityTest {
   /** Test public private key. */
   @Test
   @SneakyThrows
-void testPublicPrivateKey() {
+  void testPublicPrivateKey() {
 
     byte[] message = "Json String".getBytes(StandardCharsets.UTF_8);
 

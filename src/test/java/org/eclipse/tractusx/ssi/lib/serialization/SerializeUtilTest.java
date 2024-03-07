@@ -45,7 +45,7 @@ class SerializeUtilTest {
 
   /** Should serialize vc context first. */
   @Test
-void shouldSerializeVcContextFirst() {
+  void shouldSerializeVcContextFirst() {
     VerifiableCredential vc = TestResourceUtil.getAlumniVerifiableCredential();
     String serializedVc = SerializeUtil.toJson(vc);
 
@@ -55,7 +55,7 @@ void shouldSerializeVcContextFirst() {
 
   /** Should serialize vp context first. */
   @Test
-void shouldSerializeVpContextFirst() {
+  void shouldSerializeVpContextFirst() {
     VerifiablePresentation vp = TestResourceUtil.getAlumniVerifiablePresentation();
     String serializedVc = SerializeUtil.toJson(vp);
 

@@ -41,7 +41,7 @@ class JsonLdValidatorTest {
 
   /** Validate test success. */
   @Test
-void validateTestSuccess() {
+  void validateTestSuccess() {
     final VerifiableCredential toTest = loadValidjsonLDObject();
     Assertions.assertDoesNotThrow(() -> validator.validate(toTest));
   }

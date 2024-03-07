@@ -44,7 +44,7 @@ class LinkedDataTransformerTest {
   /** Test linked data transformer. */
   @Test
   @SneakyThrows
-void testLinkedDataTransformer() {
+  void testLinkedDataTransformer() {
     final VerifiableCredentialBuilder verifiableCredentialBuilder =
         new VerifiableCredentialBuilder();
 

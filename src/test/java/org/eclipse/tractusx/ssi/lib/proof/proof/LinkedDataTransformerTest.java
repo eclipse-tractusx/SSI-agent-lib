@@ -74,7 +74,7 @@ class LinkedDataTransformerTest {
   /** Test two transformations equal. */
   @Test
   @SneakyThrows
-void testTwoTransformationsEqual() {
+  void testTwoTransformationsEqual() {
     final VerifiableCredential credential1 = deserializeCredential(SummaryVerifiableCredential);
     final var data1 = transformer.transform(credential1);
     final var data2 = transformer.transform(credential1);
@@ -94,7 +94,7 @@ void testTwoTransformationsEqual() {
         "issuer\": \"did:web:localhost%3A8080:BPNOPERATOR, issuer\": \"did:web:localhost%3A8080:BPNATTACKER"
       })
   @SneakyThrows
-void testTwoTransformationDifference(String original, String replace) {
+  void testTwoTransformationDifference(String original, String replace) {
     final VerifiableCredential credential1 = deserializeCredential(SummaryVerifiableCredential);
     final VerifiableCredential credential2 =
         deserializeCredential(SummaryVerifiableCredential.replace(original, replace));

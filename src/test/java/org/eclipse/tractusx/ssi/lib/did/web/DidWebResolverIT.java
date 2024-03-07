@@ -70,7 +70,7 @@ public class DidWebResolverIT {
    */
   @Test
   @SneakyThrows
-void shouldResolveValidWebDid() {
+  void shouldResolveValidWebDid() {
     Did validDidWeb =
         new Did(
             new DidMethod("web"),
@@ -88,7 +88,7 @@ void shouldResolveValidWebDid() {
    */
   @Test
   @SneakyThrows
-void shouldResolveValidExternalWebDid() {
+  void shouldResolveValidExternalWebDid() {
     final String didIdentifier = "did.actor:alice";
     Did validDidWeb = new Did(new DidMethod("web"), new DidMethodIdentifier(didIdentifier), null);
     assertTrue(httpsResolver.isResolvable(validDidWeb));

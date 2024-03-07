@@ -47,7 +47,7 @@ class ED25519KeyTest {
    * @throws KeyGenerationException the key generation exception
    */
   @Test
-void testED25519KeyGeneration() throws KeyGenerationException {
+  void testED25519KeyGeneration() throws KeyGenerationException {
     IKeyGenerator keyGenerator = new x25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
     assertNotNull(keyPair.getPrivateKey());
@@ -62,7 +62,7 @@ void testED25519KeyGeneration() throws KeyGenerationException {
    */
   @Test
   @SneakyThrows
-void testED25519KeySerialization() throws KeyGenerationException, IOException {
+  void testED25519KeySerialization() throws KeyGenerationException, IOException {
     IKeyGenerator keyGenerator = new x25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
 
@@ -85,7 +85,7 @@ void testED25519KeySerialization() throws KeyGenerationException, IOException {
    */
   @Test
   @SneakyThrows
-void testED25519KeyDeserliztion()
+  void testED25519KeyDeserliztion()
       throws KeyGenerationException, IOException, InvalidPrivateKeyFormatException,
           InvalidPublicKeyFormatException {
     IKeyGenerator keyGenerator = new x25519Generator();

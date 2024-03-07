@@ -37,7 +37,7 @@ class VerifiablePresentationTest {
   /** Can serialize vp. */
   @Test
   @SneakyThrows
-void canSerializeVP() {
+  void canSerializeVP() {
     final Map<String, Object> vpFromMap = TestResourceUtil.getAlumniVerifiablePresentation();
     var vp = new VerifiablePresentation(vpFromMap);
     var json = vp.toJson();
@@ -50,7 +50,7 @@ void canSerializeVP() {
   /** Can serialize v pwith credential not as list. */
   @Test
   @SneakyThrows
-void canSerializeVPwithCredentialNotAsList() {
+  void canSerializeVPwithCredentialNotAsList() {
     final Map<String, Object> vpFromMap = TestResourceUtil.getAlumniVerifiablePresentation();
     var vp = new VerifiablePresentation(vpFromMap);
     vp.put("verifiableCredential", vp.getVerifiableCredentials().get(0));

@@ -48,7 +48,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 /** The type Composite did resolver test. */
 @ExtendWith(MockitoExtension.class)
- class CompositeDidResolverTest {
+class CompositeDidResolverTest {
   @Mock private DidResolver resolver1;
   @Mock private DidResolver resolver2;
 
@@ -59,7 +59,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
   /** Reset mocks. */
   @BeforeEach
-   public void resetMocks() {
+  public void resetMocks() {
     reset(resolver1);
     reset(resolver2);
   }
@@ -71,7 +71,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
    */
   @Test
   @SneakyThrows
-   void shouldResolveWithOneResolver() {
+  void shouldResolveWithOneResolver() {
     when(resolver1.isResolvable(any())).thenReturn(true);
     when(resolver1.resolve(any())).thenReturn(RESOLVED_DID_DOC);
     CompositeDidResolver resolver = new CompositeDidResolver(resolver1);
@@ -86,7 +86,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
    */
   @Test
   @SneakyThrows
-   void shouldResolveWithFirstResolver() {
+  void shouldResolveWithFirstResolver() {
     when(resolver1.isResolvable(any())).thenReturn(true);
     when(resolver1.resolve(any())).thenReturn(RESOLVED_DID_DOC);
 
@@ -104,7 +104,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
    */
   @Test
   @SneakyThrows
-   void shouldResolveWithSecondResolver() {
+  void shouldResolveWithSecondResolver() {
     when(resolver1.isResolvable(any())).thenReturn(false);
     when(resolver2.isResolvable(any())).thenReturn(true);
     when(resolver2.resolve(any())).thenReturn(RESOLVED_DID_DOC);
@@ -122,7 +122,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
    */
   @Test
   @SneakyThrows
-   void mustNotResolveOnFalse() {
+  void mustNotResolveOnFalse() {
     when(resolver1.isResolvable(any())).thenReturn(false);
     when(resolver2.isResolvable(any())).thenReturn(false);
 
@@ -140,7 +140,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
    */
   @Test
   @SneakyThrows
-   void mustNotResolveOnException() {
+  void mustNotResolveOnException() {
     when(resolver1.isResolvable(any())).thenReturn(true);
     when(resolver1.resolve(any())).thenThrow(DidResolverException.class);
     when(resolver1.isResolvable(any())).thenReturn(true);
@@ -162,7 +162,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
    */
   @Test
   @SneakyThrows
-   void shouldConstructCompositeResolverUsingStaticMethod() {
+  void shouldConstructCompositeResolverUsingStaticMethod() {
     when(resolver1.isResolvable(any())).thenReturn(true);
     when(resolver1.resolve(any())).thenReturn(RESOLVED_DID_DOC);
 

@@ -35,14 +35,14 @@ class Base64Test {
 
   /** Test encoding. */
   @Test
-void testEncoding() {
+  void testEncoding() {
     var multibase = Base64.create(DECODED);
     Assertions.assertEquals(ENCODED, multibase.getEncoded());
   }
 
   /** Test decoding. */
   @Test
- void testDecoding() {
+  void testDecoding() {
     var multibase = Base64.create(ENCODED);
     Assertions.assertEquals(new String(DECODED), new String(multibase.getDecoded()));
   }

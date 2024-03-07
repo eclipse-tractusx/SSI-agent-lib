@@ -38,14 +38,14 @@ class Base58BitcoinTest implements Serializable {
 
   /** Test encoding. */
   @Test
-void testEncoding() {
+  void testEncoding() {
     var multibase = Base58Bitcoin.create(DECODED);
     Assertions.assertEquals(ENCODED, multibase.getEncoded());
   }
 
   /** Test decoding. */
   @Test
-void testDecoding() {
+  void testDecoding() {
     var multibase = Base58Bitcoin.create(ENCODED);
     Assertions.assertEquals(new String(DECODED), new String(multibase.getDecoded()));
   }
