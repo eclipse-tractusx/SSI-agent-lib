@@ -81,7 +81,7 @@ class SignedJwtValidatorTest {
   @SneakyThrows
   private SignedJWT create(TestIdentity testIdentity, String audience, JwtConfig conf) {
 
-    SignedJwtFactory fac = new SignedJwtFactory(new OctetKeyPairFactory());
+    SignedJwtFactory fac = new SignedJwtFactory();
     return fac.create(
         URI.create("id"),
         new Did(new DidMethod("web"), new DidMethodIdentifier("issuer"), null),

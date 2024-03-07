@@ -80,7 +80,7 @@ class SerializedJwtPresentationFactoryImplTest {
 
     SerializedJwtPresentationFactory presentationFactory =
         new SerializedJwtPresentationFactoryImpl(
-            new SignedJwtFactory(new OctetKeyPairFactory()),
+            new SignedJwtFactory(),
             new JsonLdSerializerImpl(),
             credentialIssuer.getDid());
 

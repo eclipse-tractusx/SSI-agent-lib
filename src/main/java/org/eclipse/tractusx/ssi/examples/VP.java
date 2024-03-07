@@ -68,7 +68,6 @@ class VP {
    * @param credentials the credentials
    * @param audience the audience
    * @param privateKey the private key
-   * @param publicKey the public key
    * @return the signed jwt
    * @throws IOException the io exception
    */
@@ -76,17 +75,13 @@ class VP {
       Did issuer,
       List<VerifiableCredential> credentials,
       String audience,
-      IPrivateKey privateKey,
-      IPublicKey publicKey)
+      IPrivateKey privateKey)
       throws IOException {
 
-    // Extracting keys
-    // final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
-    // final Ed25519Key signingKey = Ed25519Key.asPrivateKey(keySet.getPrivateKey());
 
     final SerializedJwtPresentationFactory presentationFactory =
         new SerializedJwtPresentationFactoryImpl(
-            new SignedJwtFactory(new OctetKeyPairFactory()), new JsonLdSerializerImpl(), issuer);
+            new SignedJwtFactory(), new JsonLdSerializerImpl(), issuer);
 
     return presentationFactory.createPresentation(
         issuer, credentials, audience, privateKey, "keyId");

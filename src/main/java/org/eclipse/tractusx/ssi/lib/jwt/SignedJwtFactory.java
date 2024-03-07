@@ -49,7 +49,7 @@ public class SignedJwtFactory {
 
   private final SignatureType signatureType;
 
-  public SignedJwtFactory(OctetKeyPairFactory octetKeyPairFactory) {
+  public SignedJwtFactory() {
     this.signatureType = SignatureType.JWS; // EdDSA
   }
 

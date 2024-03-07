@@ -26,7 +26,7 @@ class SignedJwtFactoryTest {
   @Test
   @SneakyThrows
   void shouldCreateSignedJwt() {
-    SignedJwtFactory signedJwtFactory = new SignedJwtFactory(new OctetKeyPairFactory());
+    SignedJwtFactory signedJwtFactory = new SignedJwtFactory();
 
     X25519Generator g = new X25519Generator();
     KeyPair keyPair = g.generateKey();
