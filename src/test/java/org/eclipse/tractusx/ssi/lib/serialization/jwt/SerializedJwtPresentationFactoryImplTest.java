@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
-import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtVerifier;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
@@ -80,9 +79,7 @@ class SerializedJwtPresentationFactoryImplTest {
 
     SerializedJwtPresentationFactory presentationFactory =
         new SerializedJwtPresentationFactoryImpl(
-            new SignedJwtFactory(),
-            new JsonLdSerializerImpl(),
-            credentialIssuer.getDid());
+            new SignedJwtFactory(), new JsonLdSerializerImpl(), credentialIssuer.getDid());
 
     // Build JWT
     SignedJWT presentation;

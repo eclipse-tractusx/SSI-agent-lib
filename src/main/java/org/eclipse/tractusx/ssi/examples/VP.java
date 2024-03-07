@@ -23,8 +23,6 @@ import com.nimbusds.jwt.SignedJWT;
 import java.io.IOException;
 import java.util.List;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
-import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -72,12 +70,8 @@ class VP {
    * @throws IOException the io exception
    */
   public static SignedJWT createVPAsJWT(
-      Did issuer,
-      List<VerifiableCredential> credentials,
-      String audience,
-      IPrivateKey privateKey)
+      Did issuer, List<VerifiableCredential> credentials, String audience, IPrivateKey privateKey)
       throws IOException {
-
 
     final SerializedJwtPresentationFactory presentationFactory =
         new SerializedJwtPresentationFactoryImpl(

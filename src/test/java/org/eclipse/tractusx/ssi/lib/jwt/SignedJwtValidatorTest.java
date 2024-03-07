@@ -9,7 +9,6 @@ import java.text.ParseException;
 import java.util.Map;
 import java.util.UUID;
 import lombok.SneakyThrows;
-import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.exception.proof.JwtAudienceCheckException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.JwtExpiredException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
