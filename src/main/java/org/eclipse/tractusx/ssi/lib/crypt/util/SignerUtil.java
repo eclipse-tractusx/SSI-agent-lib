@@ -7,7 +7,6 @@ import com.nimbusds.jose.crypto.Ed25519Signer;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.crypto.bc.BouncyCastleProviderSingleton;
 import com.nimbusds.jose.jwk.OctetKeyPair;
-import java.io.IOException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.ECPrivateKey;
@@ -76,14 +75,9 @@ public class SignerUtil {
   }
 
   public static JWSSigner getEDSigner(IPrivateKey privateKey)
-      throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException {
+      throws SignatureGenerateFailedException {
     OctetKeyPairFactory octetKeyPairFactory = new OctetKeyPairFactory();
-    OctetKeyPair keyPair;
-    try {
-      keyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
-    } catch (IOException e) {
-      throw new InvalidPrivateKeyFormatException(e.getCause());
-    }
+    OctetKeyPair keyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
 
     JWSSigner signer;
     try {
