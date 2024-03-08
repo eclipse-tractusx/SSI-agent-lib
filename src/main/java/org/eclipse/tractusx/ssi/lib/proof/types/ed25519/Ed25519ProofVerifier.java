@@ -94,7 +94,7 @@ public class Ed25519ProofVerifier implements IVerifier {
 
     IPublicKey publicKey;
     try {
-      publicKey = (IPublicKey) new X25519PublicKey(key.getPublicKeyBase58().getEncoded(), false);
+      publicKey = new X25519PublicKey(key.getPublicKeyBase58().getEncoded(), false);
     } catch (IOException e) {
       throw new InvalidPublicKeyFormatException(e.getCause());
     }

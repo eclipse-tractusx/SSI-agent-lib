@@ -49,13 +49,27 @@ public class RemoteDocumentLoader implements DocumentLoader {
 
   public static final String CANNOT_LOAD_CONTEXT = "Cannot load context: %s";
 
-  private static DocumentLoader DEFAULT_HTTP_LOADER;
+  /**
+   * -- SETTER --
+   *  Sets default http loader.
+   *
+   * @param loader the default http loader
+   */
+  @Setter
+  private static DocumentLoader defaultHttpLoader;
 
-  private static DocumentLoader DEFAULT_FILE_LOADER;
+  /**
+   * -- SETTER --
+   *  Sets default file loader.
+   *
+   * @param loader the default file loader
+   */
+  @Setter
+  private static DocumentLoader defaultFileLoader;
 
-  @Getter private DocumentLoader httpLoader;
+  @Getter private static DocumentLoader httpLoader;
 
-  @Getter private DocumentLoader fileLoader;
+  @Getter private static DocumentLoader fileLoader;
 
   @Getter @Setter private boolean enableLocalCache = true;
 
@@ -86,10 +100,10 @@ public class RemoteDocumentLoader implements DocumentLoader {
    * @return the default http loader
    */
   public static DocumentLoader getDefaultHttpLoader() {
-    if (DEFAULT_HTTP_LOADER == null) {
-      DEFAULT_HTTP_LOADER = new HttpLoader(DefaultHttpClient.defaultInstance());
+    if (defaultHttpLoader == null) {
+      defaultHttpLoader = new HttpLoader(DefaultHttpClient.defaultInstance());
     }
-    return DEFAULT_HTTP_LOADER;
+    return defaultHttpLoader;
   }
 
   /**
@@ -98,28 +112,10 @@ public class RemoteDocumentLoader implements DocumentLoader {
    * @return the default file loader
    */
   public static DocumentLoader getDefaultFileLoader() {
-    if (DEFAULT_FILE_LOADER == null) {
-      DEFAULT_FILE_LOADER = new FileLoader();
+    if (defaultFileLoader == null) {
+      defaultFileLoader = new FileLoader();
     }
-    return DEFAULT_FILE_LOADER;
-  }
-
-  /**
-   * Sets default http loader.
-   *
-   * @param defaultHttpLoader the default http loader
-   */
-  public static void setDefaultHttpLoader(DocumentLoader defaultHttpLoader) {
-    DEFAULT_HTTP_LOADER = defaultHttpLoader;
-  }
-
-  /**
-   * Sets default file loader.
-   *
-   * @param defaultFileLoader the default file loader
-   */
-  public static void setDefaultFileLoader(DocumentLoader defaultFileLoader) {
-    DEFAULT_FILE_LOADER = defaultFileLoader;
+    return defaultFileLoader;
   }
 
   RemoteDocumentLoader() {}

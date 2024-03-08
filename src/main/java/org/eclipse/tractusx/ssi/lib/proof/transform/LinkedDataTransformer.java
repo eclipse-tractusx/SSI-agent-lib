@@ -72,7 +72,7 @@ public class LinkedDataTransformer {
     }
   }
 
-  private RdfDataset toDataset(JsonLdObject jsonLdObject) throws RuntimeException {
+  private RdfDataset toDataset(JsonLdObject jsonLdObject) {
 
     var documentLoader = RemoteDocumentLoader.getInstance();
     documentLoader.setEnableHttps(true);
@@ -88,7 +88,7 @@ public class LinkedDataTransformer {
     try {
       return toRdfApi.get();
     } catch (JsonLdError ex) {
-      throw new RuntimeException(ex);
+      throw new IllegalStateException(ex);
     }
   }
 }

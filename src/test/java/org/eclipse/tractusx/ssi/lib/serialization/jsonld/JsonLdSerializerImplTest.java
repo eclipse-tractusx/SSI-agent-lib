@@ -1,4 +1,4 @@
-package org.eclipse.tractusx.ssi.lib.serialization.jsonLd;
+package org.eclipse.tractusx.ssi.lib.serialization.jsonld;
 
 import static org.junit.jupiter.api.Assertions.*;
 

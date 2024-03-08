@@ -29,6 +29,9 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidMethodIdentifier;
 /** The type Did web factory. */
 public class DidWebFactory {
 
+  private DidWebFactory(){
+    // static
+  }
   /**
    * From hostname did.
    *
@@ -56,7 +59,7 @@ public class DidWebFactory {
 
     String cleanedPath = path;
     if (!cleanedPath.startsWith("/")) {
-      cleanedPath = "/" + cleanedPath;
+      cleanedPath = String.format("/%s",cleanedPath);
     }
     if (cleanedPath.endsWith("/")) {
       cleanedPath = cleanedPath.substring(0, cleanedPath.length() - 1);
@@ -69,7 +72,7 @@ public class DidWebFactory {
     final DidMethod didMethod = new DidMethod("web");
     final DidMethodIdentifier methodIdentifier =
         new DidMethodIdentifier(
-            hostName.concat(cleanedPath).replaceAll(":", "%3A").replaceAll("/", ":"));
+            hostName.concat(cleanedPath).replace(":", "%3A").replace("/", ":"));
 
     return new Did(didMethod, methodIdentifier, null);
   }

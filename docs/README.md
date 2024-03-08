@@ -282,6 +282,7 @@ public static VerifiablePresentation createVP( Did issuer, List<VerifiableCreden
 ```
 
 7. To Generate Signed Verifiable Presentation:
+
 ```java
 import java.util.List;
 
@@ -289,30 +290,33 @@ import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
 import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519KeySet;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentationBuilder;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentationType;
 import org.eclipse.tractusx.ssi.lib.resolver.OctetKeyPairFactory;
-import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdSerializerImpl;
+import org.eclipse.tractusx.ssi.lib.serialization.jsonld.JsonLdSerializerImpl;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationFactory;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationFactoryImpl;
 
 import com.nimbusds.jwt.SignedJWT;
 
 
- public static SignedJWT createVPAsJWT(Did issuer,List<VerifiableCredential> credentials, String audience,byte[] privateKey,byte[] publicKey){
- 
+public static SignedJWT createVPAsJWT(
+        Did issuer,
+        List<VerifiableCredential> credentials,
+        String audience,
+        byte[] privateKey,
+        byte[] publicKey
+) {
+
     //Extracting keys 
     final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
-    final Ed25519Key signingKey = new Ed25519Key(keySet.getPrivateKey()); 
-    
+    final Ed25519Key signingKey = new Ed25519Key(keySet.getPrivateKey());
+
     //JWT Factory
     final SerializedJwtPresentationFactory presentationFactory = new SerializedJwtPresentationFactoryImpl(
             new SignedJwtFactory(new OctetKeyPairFactory()), new JsonLdSerializerImpl(), issuer);
 
     //Build JWT
     return presentationFactory.createPresentation(
-        issuer, credentials, audience, signingKey);
+            issuer, credentials, audience, signingKey);
 
 
 }

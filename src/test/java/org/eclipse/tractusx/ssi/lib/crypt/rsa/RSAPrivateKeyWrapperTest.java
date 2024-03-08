@@ -27,7 +27,7 @@ class RSAPrivateKeyWrapperTest {
 
     assertTrue(wrapper.getKeyLength() > 0);
     assertFalse(wrapper.asStringForStoring().isBlank());
-    assertNull(wrapper.asStringForExchange(EncodeType.Base58));
+    assertNull(wrapper.asStringForExchange(EncodeType.BASE58));
     assertTrue(wrapper.asByte().length > 0);
     assertNotNull(wrapper.getPrivateKey());
   }

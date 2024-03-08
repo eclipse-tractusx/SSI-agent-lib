@@ -73,6 +73,8 @@ import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 @RequiredArgsConstructor
 public class JWSProofVerifier implements IVerifier {
 
+  public static final String ALGORITHM_IS_NOT_SUPPORTED = "algorithm %s is not supported";
+
   private final DidResolver didResolver;
 
   @SneakyThrows({DidResolverException.class})
@@ -117,7 +119,7 @@ public class JWSProofVerifier implements IVerifier {
         return discoverECKey(signature);
     }
     throw new IllegalArgumentException(
-        String.format("algorithm %s is not supported", header.getAlgorithm().getName()));
+        String.format(ALGORITHM_IS_NOT_SUPPORTED, header.getAlgorithm().getName()));
   }
 
   private JWSVerifier getVerifier(JWSHeader header, JWK jwk) throws JOSEException {
@@ -138,7 +140,7 @@ public class JWSProofVerifier implements IVerifier {
       }
     }
     throw new IllegalArgumentException(
-        String.format("algorithm %s is not supported", header.getAlgorithm().getName()));
+        String.format(ALGORITHM_IS_NOT_SUPPORTED, header.getAlgorithm().getName()));
   }
 
   private RSAKey discoverRSAKey(JWSSignature2020 signature)
@@ -271,7 +273,7 @@ public class JWSProofVerifier implements IVerifier {
         break;
       default:
         throw new IllegalArgumentException(
-            String.format("algorithm %s is not supported", type.algorithm));
+            String.format(ALGORITHM_IS_NOT_SUPPORTED, type.algorithm));
     }
 
     JWSVerifier verifier = getVerifier(new JWSHeader(new JWSAlgorithm(type.algorithm)), jwk);

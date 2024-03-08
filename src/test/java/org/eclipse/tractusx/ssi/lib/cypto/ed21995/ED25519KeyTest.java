@@ -68,11 +68,11 @@ class ED25519KeyTest {
 
     assertNotNull(keyPair.getPrivateKey().asStringForStoring());
 
-    assertNotNull(keyPair.getPrivateKey().asStringForExchange(EncodeType.Base64));
+    assertNotNull(keyPair.getPrivateKey().asStringForExchange(EncodeType.BASE64));
 
     assertNotNull(keyPair.getPublicKey().asStringForStoring());
 
-    assertNotNull(keyPair.getPublicKey().asStringForExchange(EncodeType.Base64));
+    assertNotNull(keyPair.getPublicKey().asStringForExchange(EncodeType.BASE64));
   }
 
   /**

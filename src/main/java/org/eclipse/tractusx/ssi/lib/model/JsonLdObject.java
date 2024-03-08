@@ -44,14 +44,14 @@ public abstract class JsonLdObject extends LinkedHashMap<String, Object> {
   public static final String CONTEXT = "@context";
 
   /** The {@link DocumentLoader} */
-  @ToString.Exclude @Getter private DocumentLoader documentLoader;
+  @ToString.Exclude @Getter private transient DocumentLoader documentLoader;
 
   /**
    * Instantiates a new Json ld object.
    *
    * @param json the json
    */
-  public JsonLdObject(Map<String, Object> json) {
+  protected JsonLdObject(Map<String, Object> json) {
     super(json);
 
     try {
