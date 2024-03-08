@@ -25,8 +25,8 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
 /** The type Constants. */
 public class Constants {
-  private Constants(){
-    //static
+  private Constants() {
+    // static
   }
 
   /** The constant DID_WEB_METHOD. */

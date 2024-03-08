@@ -130,12 +130,12 @@ public class DidDocumentBuilder {
 
     Map<String, Object> requiredEntries =
         Map.of(
-                JsonLdObject.CONTEXT,
-                DidDocument.DEFAULT_CONTEXT,
-                DidDocument.ID,
-                id.toString(),
-                DidDocument.VERIFICATION_METHOD,
-                verificationMethods);
+            JsonLdObject.CONTEXT,
+            DidDocument.DEFAULT_CONTEXT,
+            DidDocument.ID,
+            id.toString(),
+            DidDocument.VERIFICATION_METHOD,
+            verificationMethods);
 
     HashMap<String, Object> entries = new HashMap<>(requiredEntries);
     if (CollectionUtils.isNotEmpty(assertionMethod))

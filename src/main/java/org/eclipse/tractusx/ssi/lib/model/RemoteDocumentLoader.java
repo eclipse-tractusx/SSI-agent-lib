@@ -50,22 +50,18 @@ public class RemoteDocumentLoader implements DocumentLoader {
   public static final String CANNOT_LOAD_CONTEXT = "Cannot load context: %s";
 
   /**
-   * -- SETTER --
-   *  Sets default http loader.
+   * -- SETTER -- Sets default http loader.
    *
    * @param loader the default http loader
    */
-  @Setter
-  private static DocumentLoader defaultHttpLoader;
+  @Setter private static DocumentLoader defaultHttpLoader;
 
   /**
-   * -- SETTER --
-   *  Sets default file loader.
+   * -- SETTER -- Sets default file loader.
    *
    * @param loader the default file loader
    */
-  @Setter
-  private static DocumentLoader defaultFileLoader;
+  @Setter private static DocumentLoader defaultFileLoader;
 
   @Getter private static DocumentLoader httpLoader;
 

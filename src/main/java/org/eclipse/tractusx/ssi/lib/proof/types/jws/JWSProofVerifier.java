@@ -82,7 +82,8 @@ public class JWSProofVerifier implements IVerifier {
       throws SignatureParseException, DidParseException, InvalidPublicKeyFormatException,
           SignatureVerificationException {
 
-    final Proof proof = document.getProof();
+    final Proof proof =
+        document.getProof().orElseThrow(() -> new SignatureParseException("no proof found"));
     if (!proof.getType().equals(JWSSignature2020.JWS_VERIFICATION_KEY_2020)) {
       throw new SignatureParseException(
           String.format("Unsupported verification method: %s", proof.getType()));
@@ -159,7 +160,10 @@ public class JWSProofVerifier implements IVerifier {
       throws NoVerificationKeyFoundException, DidParseException, DidResolverException {
     final Did issuer = DidParser.parse(signature.getVerificationMethod());
 
-    final DidDocument document = this.didResolver.resolve(issuer);
+    final DidDocument document =
+        this.didResolver
+            .resolve(issuer)
+            .orElseThrow(() -> new IllegalStateException("diddocument culd not be resolved"));
 
     final URI verificationMethodId = signature.getVerificationMethod();
     List<Object> verificationRelationShip =

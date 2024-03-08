@@ -59,6 +59,6 @@ public class ResolveDIDDoc {
 
     var didResolver = new DidWebResolver(httpClient, didParser, enforceHttps);
 
-    return didResolver.resolve(did);
+    return didResolver.resolve(did).get();
   }
 }

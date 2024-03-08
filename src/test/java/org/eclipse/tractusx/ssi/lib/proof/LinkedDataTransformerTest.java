@@ -62,7 +62,7 @@ class LinkedDataTransformerTest {
             .build();
 
     // check status added in VC
-    Assertions.assertNotNull(credentialWithoutProof.getVerifiableCredentialStatus());
+    Assertions.assertTrue(credentialWithoutProof.getVerifiableCredentialStatus().isPresent());
 
     var transformedWithoutProof = linkedDataTransformer.transform(credentialWithoutProof);
 

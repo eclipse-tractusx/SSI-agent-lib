@@ -20,6 +20,7 @@
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.exception.json.InvalidJsonLdException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
+import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable.VerifiableType;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -73,14 +75,15 @@ public class LinkedDataProofValidation {
    */
   @SneakyThrows
   public boolean verify(Verifiable verifiable) {
-    if (verifiable.getProof() == null) {
+    Optional<Proof> proof = verifiable.getProof();
+    if (proof.isEmpty()) {
       throw new UnsupportedSignatureTypeException("Proof can't be empty");
     }
-    boolean isVerified = false;
-    IVerifier verifier = null;
+    boolean isVerified;
 
-    var type = verifiable.getProof().getType();
+    var type = proof.get().getType();
 
+    IVerifier verifier;
     if (type != null && !type.isBlank()) {
       if (type.equals(SignatureType.ED25519.type))
         verifier = new Ed25519ProofVerifier(this.didResolver);
@@ -139,10 +142,12 @@ public class LinkedDataProofValidation {
    */
   @SneakyThrows
   private String getVerificationMethod(Verifiable verifiable) {
-    try {
-      return (String) verifiable.getProof().get("verificationMethod");
-    } catch (Exception e) {
-      throw new UnsupportedSignatureTypeException("Signature type is not supported");
-    }
+
+    Proof proof =
+        verifiable
+            .getProof()
+            .orElseThrow(
+                () -> new UnsupportedSignatureTypeException("Signature type is not supported"));
+    return (String) proof.get("verificationMethod");
   }
 }

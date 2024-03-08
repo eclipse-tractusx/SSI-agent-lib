@@ -21,6 +21,7 @@
 
 package org.eclipse.tractusx.ssi.lib.did.resolver;
 
+import java.util.Optional;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
@@ -38,7 +39,7 @@ public interface DidResolver {
    * @throws DidResolverException if the DID is invalid or cannot be resolved to a DID document
    * @throws DidParseException
    */
-  DidDocument resolve(Did did) throws DidResolverException, DidParseException;
+  Optional<DidDocument> resolve(Did did) throws DidResolverException, DidParseException;
 
   /**
    * Indicates whether the resolver is capable of resolving the provided {@code did} to a DID

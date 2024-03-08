@@ -34,6 +34,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
+import java.util.Optional;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
@@ -82,8 +83,8 @@ class DidWebResolverTest {
     when(response.body()).thenReturn(TestResourceUtil.getPublishedDidDocumentAsString());
     when(parser.parse(any(), anyBoolean())).thenReturn(new URI("http://dummy.net/did.json"));
 
-    DidDocument actualDidDoc = resolver.resolve(validDidWeb);
-    assertEquals(new DidDocument(TestResourceUtil.getPublishedDidDocument()), actualDidDoc);
+    Optional<DidDocument> actualDidDoc = resolver.resolve(validDidWeb);
+    assertEquals(new DidDocument(TestResourceUtil.getPublishedDidDocument()), actualDidDoc.get());
   }
 
   /**

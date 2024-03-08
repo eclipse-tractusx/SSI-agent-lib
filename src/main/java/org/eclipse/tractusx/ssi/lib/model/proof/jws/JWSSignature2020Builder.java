@@ -94,16 +94,16 @@ public class JWSSignature2020Builder {
 
     Map<String, Object> standardEntries =
         Map.of(
-                Proof.TYPE,
-                JWSSignature2020.JWS_VERIFICATION_KEY_2020,
-                JWSSignature2020.JWS,
-                jws,
-                JWSSignature2020.VERIFICATION_METHOD,
-                verificationMethod.toString(),
-                JWSSignature2020.CREATED,
-                formatter.format(created),
-                JWSSignature2020.PROOF_PURPOSE,
-                proofPurpose);
+            Proof.TYPE,
+            JWSSignature2020.JWS_VERIFICATION_KEY_2020,
+            JWSSignature2020.JWS,
+            jws,
+            JWSSignature2020.VERIFICATION_METHOD,
+            verificationMethod.toString(),
+            JWSSignature2020.CREATED,
+            formatter.format(created),
+            JWSSignature2020.PROOF_PURPOSE,
+            proofPurpose);
 
     HashMap<String, Object> entries = new HashMap<>(standardEntries);
 

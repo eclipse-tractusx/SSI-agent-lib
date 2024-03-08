@@ -28,7 +28,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 /** The type SSI library. */
 public final class SsiLibrary {
 
-  private SsiLibrary(){
+  private SsiLibrary() {
     // static
   }
   /** Initialize. */

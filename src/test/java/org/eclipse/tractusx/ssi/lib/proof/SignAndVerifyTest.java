@@ -41,6 +41,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.ArrayUtils;
 import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatException;
@@ -243,7 +244,7 @@ class SignAndVerifyTest {
     when(proof.getType()).thenReturn(Ed25519Signature2020.ED25519_VERIFICATION_KEY_2018);
 
     Verifiable mockDoc = Mockito.mock(Verifiable.class);
-    when(mockDoc.getProof()).thenReturn(proof);
+    when(mockDoc.getProof()).thenReturn(Optional.of(proof));
 
     HashedLinkedData hashedLinkedData = Mockito.mock(HashedLinkedData.class);
 

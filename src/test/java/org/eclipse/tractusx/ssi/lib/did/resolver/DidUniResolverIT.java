@@ -21,12 +21,12 @@
 
 package org.eclipse.tractusx.ssi.lib.did.resolver;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
+import java.util.Optional;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
@@ -96,7 +96,7 @@ public class DidUniResolverIT {
             new DidMethodIdentifier("z6Mkfriq1MqLBoPWecGoDLjguo1sB9brj6wT3qZ5BxkKpuP6"),
             null);
     assertTrue(resolver.isResolvable(validDidWeb));
-    DidDocument actualDidDoc = resolver.resolve(validDidWeb);
-    assertNotNull(actualDidDoc);
+    Optional<DidDocument> actualDidDoc = resolver.resolve(validDidWeb);
+    assertTrue(actualDidDoc.isPresent());
   }
 }

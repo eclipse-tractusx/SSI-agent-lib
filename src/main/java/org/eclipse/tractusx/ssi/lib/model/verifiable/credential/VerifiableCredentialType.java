@@ -23,7 +23,7 @@ package org.eclipse.tractusx.ssi.lib.model.verifiable.credential;
 
 /** The type Verifiable credential type. */
 public class VerifiableCredentialType {
-  private VerifiableCredentialType(){
+  private VerifiableCredentialType() {
     // static
   }
   /** The constant VERIFIABLE_CREDENTIAL. */

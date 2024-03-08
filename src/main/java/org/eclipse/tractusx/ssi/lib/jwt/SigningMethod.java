@@ -23,13 +23,13 @@ package org.eclipse.tractusx.ssi.lib.jwt;
 
 /**
  * @deprecated since SignatureType
- *
-  */
+ */
 @Deprecated(forRemoval = true)
 public class SigningMethod {
   /** The constant SIGNING_METHOD_ES256. */
-  private SigningMethod(){
+  private SigningMethod() {
     // static
   }
+
   public static final String SIGNING_METHOD_ES256 = "ES256";
 }

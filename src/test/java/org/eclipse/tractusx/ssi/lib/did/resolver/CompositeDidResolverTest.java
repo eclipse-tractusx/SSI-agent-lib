@@ -21,11 +21,10 @@
 
 package org.eclipse.tractusx.ssi.lib.did.resolver;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
@@ -33,6 +32,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
@@ -74,10 +74,10 @@ class CompositeDidResolverTest {
   @SneakyThrows
   void shouldResolveWithOneResolver() {
     when(resolver1.isResolvable(any())).thenReturn(true);
-    when(resolver1.resolve(any())).thenReturn(RESOLVED_DID_DOC);
+    when(resolver1.resolve(any())).thenReturn(Optional.of(RESOLVED_DID_DOC));
     CompositeDidResolver resolver = new CompositeDidResolver(resolver1);
     assertTrue(resolver.isResolvable(DID));
-    assertEquals(RESOLVED_DID_DOC, resolver.resolve(DID));
+    assertEquals(Optional.of(RESOLVED_DID_DOC), resolver.resolve(DID));
   }
 
   /**
@@ -89,11 +89,11 @@ class CompositeDidResolverTest {
   @SneakyThrows
   void shouldResolveWithFirstResolver() {
     when(resolver1.isResolvable(any())).thenReturn(true);
-    when(resolver1.resolve(any())).thenReturn(RESOLVED_DID_DOC);
+    when(resolver1.resolve(any())).thenReturn(Optional.of(RESOLVED_DID_DOC));
 
     CompositeDidResolver resolver = new CompositeDidResolver(resolver1, resolver2);
     assertTrue(resolver.isResolvable(DID));
-    assertEquals(RESOLVED_DID_DOC, resolver.resolve(DID));
+    assertEquals(RESOLVED_DID_DOC, resolver.resolve(DID).get());
     verify(resolver2, never()).isResolvable(any());
     verify(resolver2, never()).resolve(any());
   }
@@ -108,11 +108,11 @@ class CompositeDidResolverTest {
   void shouldResolveWithSecondResolver() {
     when(resolver1.isResolvable(any())).thenReturn(false);
     when(resolver2.isResolvable(any())).thenReturn(true);
-    when(resolver2.resolve(any())).thenReturn(RESOLVED_DID_DOC);
+    when(resolver2.resolve(any())).thenReturn(Optional.of(RESOLVED_DID_DOC));
 
     CompositeDidResolver resolver = new CompositeDidResolver(resolver1, resolver2);
     assertTrue(resolver.isResolvable(DID));
-    assertEquals(RESOLVED_DID_DOC, resolver.resolve(DID));
+    assertEquals(RESOLVED_DID_DOC, resolver.resolve(DID).get());
     verify(resolver1, never()).resolve(any());
   }
 
@@ -129,7 +129,7 @@ class CompositeDidResolverTest {
 
     CompositeDidResolver resolver = new CompositeDidResolver(resolver1, resolver2);
     assertFalse(resolver.isResolvable(DID));
-    assertNull(resolver.resolve(DID));
+    assertFalse(resolver.resolve(DID).isPresent());
     verify(resolver1, never()).resolve(any());
     verify(resolver2, never()).resolve(any());
   }
@@ -165,7 +165,7 @@ class CompositeDidResolverTest {
   @SneakyThrows
   void shouldConstructCompositeResolverUsingStaticMethod() {
     when(resolver1.isResolvable(any())).thenReturn(true);
-    when(resolver1.resolve(any())).thenReturn(RESOLVED_DID_DOC);
+    when(resolver1.resolve(any())).thenReturn(Optional.of(RESOLVED_DID_DOC));
 
     DidResolver resolver = CompositeDidResolver.append(resolver1, resolver2);
     resolver.resolve(DID);
@@ -174,7 +174,7 @@ class CompositeDidResolverTest {
 
     when(resolver1.isResolvable(any())).thenReturn(false);
     when(resolver2.isResolvable(any())).thenReturn(true);
-    when(resolver2.resolve(any())).thenReturn(RESOLVED_DID_DOC);
+    when(resolver2.resolve(any())).thenReturn(Optional.of(RESOLVED_DID_DOC));
 
     resolver.resolve(DID);
     verify(resolver1, times(1)).resolve(any());

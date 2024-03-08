@@ -26,7 +26,7 @@ import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 /** The type Multibase factory. */
 public class MultibaseFactory {
 
-  private MultibaseFactory(){
+  private MultibaseFactory() {
     // static
   }
 

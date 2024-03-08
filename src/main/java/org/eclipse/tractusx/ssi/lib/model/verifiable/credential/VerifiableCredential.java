@@ -27,6 +27,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.NonNull;
 import lombok.ToString;
@@ -187,29 +188,30 @@ public class VerifiableCredential extends Verifiable {
    *
    * @return the verifiable credential status
    */
-  public VerifiableCredentialStatus getVerifiableCredentialStatus() {
+  public Optional<VerifiableCredentialStatus> getVerifiableCredentialStatus() {
     Object data = get(CREDENTIAL_STATUS);
     if (data == null) {
-      return null;
+      return Optional.empty();
     }
     Object type = ((Map<String, Object>) data).get(TYPE);
     if (Objects.isNull(type)) {
       throw new IllegalArgumentException("Status type not found");
     }
     if (type.toString().equals(VerifiableCredentialStatusList2021Entry.STATUS_LIST_2021_ENTRY)) {
-      return new VerifiableCredentialStatusList2021Entry((Map<String, Object>) data);
+      return Optional.of(new VerifiableCredentialStatusList2021Entry((Map<String, Object>) data));
     } else {
       Map<String, Object> map = (Map<String, Object>) data;
-      return new VerifiableCredentialStatus(map) {
-        @Override
-        public String getType() {
-          if (map.containsKey(TYPE)) {
-            return map.get(TYPE).toString();
-          } else {
-            throw new IllegalArgumentException("Status type not found");
-          }
-        }
-      };
+      return Optional.of(
+          new VerifiableCredentialStatus(map) {
+            @Override
+            public String getType() {
+              if (map.containsKey(TYPE)) {
+                return map.get(TYPE).toString();
+              } else {
+                throw new IllegalArgumentException("Status type not found");
+              }
+            }
+          });
     }
   }
 }

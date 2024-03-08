@@ -87,7 +87,10 @@ public class SignedJwtVerifier {
     final String issuer = jwtClaimsSet.getIssuer();
     final Did issuerDid = DidParser.parse(issuer);
 
-    final DidDocument issuerDidDocument = didResolver.resolve(issuerDid);
+    final DidDocument issuerDidDocument =
+        didResolver
+            .resolve(issuerDid)
+            .orElseThrow(() -> new IllegalStateException("document could not be resolved"));
     final List<VerificationMethod> verificationMethods = issuerDidDocument.getVerificationMethods();
 
     // verify JWT signature

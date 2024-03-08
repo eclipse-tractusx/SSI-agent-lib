@@ -58,7 +58,10 @@ public class Ed25519ProofVerifier implements IVerifier {
       throws UnsupportedSignatureTypeException, InvalidPublicKeyFormatException,
           NoVerificationKeyFoundException, DidParseException {
 
-    final Proof proof = verifiable.getProof();
+    final Proof proof =
+        verifiable
+            .getProof()
+            .orElseThrow(() -> new DidParseException("no proof found for verification"));
     final Ed25519Signature2020 ed25519Signature2020 = new Ed25519Signature2020(proof);
 
     if (!proof.getType().equals(Ed25519Signature2020.ED25519_VERIFICATION_KEY_2018)) {
@@ -78,7 +81,11 @@ public class Ed25519ProofVerifier implements IVerifier {
 
     final Did issuer = DidParser.parse(signature.getVerificationMethod());
 
-    final DidDocument document = this.didResolver.resolve(issuer);
+    final DidDocument document =
+        this.didResolver
+            .resolve(issuer)
+            .orElseThrow(() -> new IllegalStateException("document could not be resolved"));
+
     final URI verificationMethodId = signature.getVerificationMethod();
 
     final Ed25519VerificationMethod key =
