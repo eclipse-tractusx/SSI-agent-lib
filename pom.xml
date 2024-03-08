@@ -43,7 +43,6 @@ SPDX-License-Identifier: Apache-2.0
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.projectName>SSI-agent-lib</sonar.projectName>
         <sonar.java.source>17</sonar.java.source>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.coverage.exclusions>
             src/main/java/org/eclipse/tractusx/ssi/examples/** 
         </sonar.coverage.exclusions>
