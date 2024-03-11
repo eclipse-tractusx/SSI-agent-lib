@@ -133,7 +133,6 @@ public class SignedJwtFactory {
 
     final Date issueDate = Date.from(Instant.parse((String) vc.get("issuanceDate")));
 
-
     vc.remove(Verifiable.PROOF);
 
     var claimsSet =
