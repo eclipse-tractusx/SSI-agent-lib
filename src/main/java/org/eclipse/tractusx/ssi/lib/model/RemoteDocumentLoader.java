@@ -147,6 +147,11 @@ public class RemoteDocumentLoader implements DocumentLoader {
   @Override
   public Document loadDocument(URI url, DocumentLoaderOptions options) throws JsonLdError {
 
+    if (url.getScheme().equalsIgnoreCase("http") && !isEnableHttp()) {
+      throw new IllegalArgumentException(
+          String.format("http is disabled, and %s scheme is http", url));
+    }
+
     if (this.isEnableLocalCache() && this.getLocalCache().containsKey(url)) {
       return this.getLocalCache().get(url);
     }
