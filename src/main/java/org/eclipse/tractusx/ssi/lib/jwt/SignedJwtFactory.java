@@ -29,13 +29,14 @@ import com.nimbusds.jose.crypto.Ed25519Signer;
 import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.JwtConfig;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresentation;
 
@@ -130,7 +131,10 @@ public class SignedJwtFactory {
     final String issuer = didIssuer.toString();
     final String subject = holderIssuer.toString();
 
-    vc.remove(VerifiableCredential.PROOF);
+    final Date issueDate = Date.from(Instant.parse((String) vc.get("issuanceDate")));
+
+
+    vc.remove(Verifiable.PROOF);
 
     var claimsSet =
         new JWTClaimsSet.Builder()
@@ -138,7 +142,7 @@ public class SignedJwtFactory {
             .subject(subject)
             .claim("vc", vc)
             .expirationTime(expDate)
-            .jwtID(UUID.randomUUID().toString())
+            .issueTime(issueDate)
             .build();
 
     final OctetKeyPair octetKeyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
