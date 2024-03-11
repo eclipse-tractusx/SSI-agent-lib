@@ -130,12 +130,12 @@ public class RemoteDocumentLoader implements DocumentLoader {
     if ((this.isEnableHttp() || this.isEnableHttps())
         && ("http".equalsIgnoreCase(url.getScheme())
             || "https".equalsIgnoreCase(url.getScheme()))) {
-      loader = this.getHttpLoader();
+      loader = getHttpLoader();
       if (loader == null) {
         loader = getDefaultHttpLoader();
       }
     } else if (this.isEnableFile() && "file".equalsIgnoreCase(url.getScheme())) {
-      loader = this.getFileLoader();
+      loader = getFileLoader();
       if (loader == null) {
         loader = getDefaultFileLoader();
       }

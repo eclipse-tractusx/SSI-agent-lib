@@ -31,7 +31,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.Did;
 public class DidWebParser {
 
   private static final String WELL_KNOWN_DID_JSON = "/.well-known/did.json";
-  private static final String PATH_DID_JSON = "/did.json";
+  private static final String PATH_DID_JSON = String.format("/%s", "did.json");
 
   /**
    * Parse uri.

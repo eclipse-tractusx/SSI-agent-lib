@@ -40,9 +40,9 @@ class RemoteDocumentLoaderTest {
   private static final String TRUST_STORE_PATH;
   public static final String KEY_STORE_PASSWORD = "changeit";
 
-  private static HttpClient trustallClient;
+  private static final HttpClient trustallClient;
 
-  private static TrustManager[] trustAllCerts =
+  private static final TrustManager[] trustAllCerts =
       new TrustManager[] {
         new X509TrustManager() {
           public java.security.cert.X509Certificate[] getAcceptedIssuers() {
