@@ -24,10 +24,10 @@ package org.eclipse.tractusx.ssi.lib.serialization;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
@@ -152,7 +152,8 @@ public final class SerializeUtil {
    */
   public static List<String> asStringList(Object object) {
     if (object instanceof List) {
-      return (List<String>) object;
+      List<?> rawList = (List<?>) object;
+      return rawList.stream().map(String.class::cast).collect(Collectors.toList());
     }
     if (object instanceof String) {
       return List.of((String) object);
@@ -169,12 +170,7 @@ public final class SerializeUtil {
   public static <T> List<T> asList(Object object) {
     if (object instanceof List<?>) {
       List<?> rawList = (List<?>) object;
-      List<T> typedList = new ArrayList<>();
-      for (Object o : rawList) {
-        T typed = (T) o;
-        typedList.add(typed);
-      }
-      return typedList;
+      return rawList.stream().map(obj -> (T) obj).collect(Collectors.toList());
     } else {
       T typed = (T) object;
       return List.of(typed);
