@@ -15,7 +15,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
-import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
 import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 
@@ -26,7 +25,7 @@ public class SignerUtil {
   }
 
   public static JWSSigner getSigner(SignatureType type, IPrivateKey privateKey)
-      throws JOSEException, SignatureGenerateFailedException, InvalidPrivateKeyFormatException {
+      throws JOSEException, SignatureGenerateFailedException {
     switch (type) {
       case JWS:
         return SignerUtil.getEDSigner(privateKey);

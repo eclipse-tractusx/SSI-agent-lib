@@ -4,6 +4,7 @@ import com.nimbusds.jose.jwk.JWK;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Pascal Manaras <a href="mailto:manaras@xignsys.com">manaras@xignsys.com</a>
@@ -48,5 +49,22 @@ public class JWKVerificationMethod extends VerificationMethod {
 
   public static boolean isInstance(Map<String, Object> json) {
     return DEFAULT_TYPE.equals(json.get(TYPE));
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    if (!super.equals(o)) return false;
+    JWKVerificationMethod that = (JWKVerificationMethod) o;
+    return Objects.equals(jwk, that.jwk)
+        && this.getId().equals(that.getId())
+        && this.getType().equals(that.getType())
+        && this.getController().equals(that.getController());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), jwk);
   }
 }

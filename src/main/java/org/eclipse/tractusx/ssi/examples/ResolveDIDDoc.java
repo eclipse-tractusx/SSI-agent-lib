@@ -42,9 +42,8 @@ public class ResolveDIDDoc {
    *
    * @param didUrl the did url
    * @return the did document
-   * @throws org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException
-   * @throws DidDocumentResolverNotRegisteredException the did document resolver not registered
-   *     exception
+   * @throws DidResolverException when no document found or retrieving failed
+   * @throws DidParseException exception
    */
   public static DidDocument resovleDocument(String didUrl)
       throws DidParseException, DidResolverException {
@@ -59,6 +58,9 @@ public class ResolveDIDDoc {
 
     var didResolver = new DidWebResolver(httpClient, didParser, enforceHttps);
 
-    return didResolver.resolve(did).get();
+    return didResolver
+        .resolve(did)
+        .orElseThrow(
+            () -> new DidParseException(String.format("no did document found for %s", didUrl)));
   }
 }

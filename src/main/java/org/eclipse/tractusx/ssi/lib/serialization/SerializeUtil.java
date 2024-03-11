@@ -24,6 +24,7 @@ package org.eclipse.tractusx.ssi.lib.serialization;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +54,7 @@ public final class SerializeUtil {
    * Specify oder of properties while creating JSON string from object like VerifiableCredential,
    * DidDocument etc.
    */
-  public static final Map<Class, List<String>> ORDER_MAP_LIST =
+  public static final Map<Class<?>, List<String>> ORDER_MAP_LIST =
       Map.of(
           VerifiableCredential.class,
           List.of(
@@ -165,11 +166,18 @@ public final class SerializeUtil {
    * @param object the object
    * @return the list
    */
-  public static List asList(Object object) {
-    if (object instanceof List) {
-      return (List) object;
+  public static <T> List<T> asList(Object object) {
+    if (object instanceof List<?>) {
+      List<?> rawList = (List<?>) object;
+      List<T> typedList = new ArrayList<>();
+      for (Object o : rawList) {
+        T typed = (T) o;
+        typedList.add(typed);
+      }
+      return typedList;
     } else {
-      return List.of(object);
+      T typed = (T) object;
+      return List.of(typed);
     }
   }
 
