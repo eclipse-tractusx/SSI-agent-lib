@@ -11,6 +11,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 
 @RequiredArgsConstructor
 public class SerializedJwtVCFactoryImpl implements SerializedJwtVCFactory {
+
   private final SignedJwtFactory signedJwtFactory;
 
   @Override
