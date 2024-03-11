@@ -121,7 +121,7 @@ SPDX-License-Identifier: Apache-2.0
                 <groupId>com.apicatalog</groupId>
                 <artifactId>titanium-json-ld-jre8</artifactId>
               </exclusion>
-            </exclusions>
+            </exclusions>			
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/jakarta.json/jakarta.json-api -->
