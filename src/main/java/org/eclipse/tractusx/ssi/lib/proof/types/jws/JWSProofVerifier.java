@@ -261,15 +261,16 @@ public class JWSProofVerifier implements IVerifier {
       Byte[] signature,
       IPublicKey publicKey,
       SignatureType type) {
-    JWK jwk = switch (type) {
-        case JWS -> ((X25519PublicKey) publicKey).toJwk();
-        case JWS_P256, JWS_P384, JWS_SEC_P_256K1 -> ((ECPublicKeyWrapper) publicKey).toJwk();
-        case JWS_RSA -> ((RSAPublicKeyWrapper) publicKey).toJwk();
-        default -> throw new IllegalArgumentException(
-                String.format(ALGORITHM_IS_NOT_SUPPORTED, type.algorithm));
-    };
+    JWK jwk =
+        switch (type) {
+          case JWS -> ((X25519PublicKey) publicKey).toJwk();
+          case JWS_P256, JWS_P384, JWS_SEC_P_256K1 -> ((ECPublicKeyWrapper) publicKey).toJwk();
+          case JWS_RSA -> ((RSAPublicKeyWrapper) publicKey).toJwk();
+          default -> throw new IllegalArgumentException(
+              String.format(ALGORITHM_IS_NOT_SUPPORTED, type.algorithm));
+        };
 
-      JWSVerifier verifier = getVerifier(new JWSHeader(new JWSAlgorithm(type.algorithm)), jwk);
+    JWSVerifier verifier = getVerifier(new JWSHeader(new JWSAlgorithm(type.algorithm)), jwk);
 
     Payload payload = new Payload(hashedLinkedData.getValue());
     JWSObject jws;
