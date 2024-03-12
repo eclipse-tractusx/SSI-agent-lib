@@ -124,14 +124,23 @@ public class SignedJwtFactory {
   public SignedJWT create(
       Did didIssuer,
       Did holderIssuer,
-      Date expDate,
       LinkedHashMap<String, Object> vc,
       IPrivateKey privateKey,
       String keyId) {
     final String issuer = didIssuer.toString();
     final String subject = holderIssuer.toString();
 
-    final Date issueDate = Date.from(Instant.parse((String) vc.get("issuanceDate")));
+    // check if expirationDate is presented in VC then use it, otherwise null
+    final Date expireDateAsDate =
+        vc.containsKey("expirationDate")
+            ? Date.from(Instant.parse((String) vc.get("expirationDate")))
+            : null;
+
+    // check if issuanceDate is presented in VC then use it, otherwise null
+    final Date issueDate =
+        vc.containsKey("issuanceDate")
+            ? Date.from(Instant.parse((String) vc.get("issuanceDate")))
+            : null;
 
     vc.remove(Verifiable.PROOF);
 
@@ -140,7 +149,7 @@ public class SignedJwtFactory {
             .issuer(issuer)
             .subject(subject)
             .claim("vc", vc)
-            .expirationTime(expDate)
+            .expirationTime(expireDateAsDate)
             .issueTime(issueDate)
             .build();
 
