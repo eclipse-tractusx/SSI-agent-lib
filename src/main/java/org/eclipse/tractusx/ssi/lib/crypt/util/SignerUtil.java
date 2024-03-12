@@ -26,19 +26,13 @@ public class SignerUtil {
 
   public static JWSSigner getSigner(SignatureType type, IPrivateKey privateKey)
       throws JOSEException, SignatureGenerateFailedException {
-    switch (type) {
-      case JWS:
-        return SignerUtil.getEDSigner(privateKey);
-      case JWS_P256:
-      case JWS_P384:
-      case JWS_SEC_P_256K1:
-        return SignerUtil.getECSigner(privateKey);
-      case JWS_RSA:
-        return SignerUtil.getRSASigner(privateKey);
-      default:
-        throw new IllegalArgumentException(
-            String.format("algorithm %s is not supported", type.algorithm));
-    }
+      return switch (type) {
+          case JWS -> SignerUtil.getEDSigner(privateKey);
+          case JWS_P256, JWS_P384, JWS_SEC_P_256K1 -> SignerUtil.getECSigner(privateKey);
+          case JWS_RSA -> SignerUtil.getRSASigner(privateKey);
+          default -> throw new IllegalArgumentException(
+                  String.format("algorithm %s is not supported", type.algorithm));
+      };
   }
 
   public static JWSSigner getECSigner(IPrivateKey privateKey) throws JOSEException {

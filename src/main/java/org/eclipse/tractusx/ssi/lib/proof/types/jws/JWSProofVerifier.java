@@ -206,13 +206,12 @@ public class JWSProofVerifier implements IVerifier {
   private VerificationRelationShipResult validateVerificationRelationShip(
       List<Object> verificationRelationShip, URI verificationMethodId) {
     for (Object o : verificationRelationShip) {
-      if (o instanceof URI) {
-        URI relationShip = (URI) o;
+      if (o instanceof URI relationShip) {
         if (relationShip.equals(verificationMethodId)) {
           return new VerificationRelationShipResult(true);
         }
-      } else if (o instanceof String) {
-        URI relationShip = URI.create((String) o);
+      } else if (o instanceof String string) {
+        URI relationShip = URI.create(string);
         if (relationShip.equals(verificationMethodId)) {
           return new VerificationRelationShipResult(true);
         }
@@ -262,25 +261,15 @@ public class JWSProofVerifier implements IVerifier {
       Byte[] signature,
       IPublicKey publicKey,
       SignatureType type) {
-    JWK jwk = null;
-    switch (type) {
-      case JWS:
-        jwk = ((X25519PublicKey) publicKey).toJwk();
-        break;
-      case JWS_P256:
-      case JWS_P384:
-      case JWS_SEC_P_256K1:
-        jwk = ((ECPublicKeyWrapper) publicKey).toJwk();
-        break;
-      case JWS_RSA:
-        jwk = ((RSAPublicKeyWrapper) publicKey).toJwk();
-        break;
-      default:
-        throw new IllegalArgumentException(
-            String.format(ALGORITHM_IS_NOT_SUPPORTED, type.algorithm));
-    }
+    JWK jwk = switch (type) {
+        case JWS -> ((X25519PublicKey) publicKey).toJwk();
+        case JWS_P256, JWS_P384, JWS_SEC_P_256K1 -> ((ECPublicKeyWrapper) publicKey).toJwk();
+        case JWS_RSA -> ((RSAPublicKeyWrapper) publicKey).toJwk();
+        default -> throw new IllegalArgumentException(
+                String.format(ALGORITHM_IS_NOT_SUPPORTED, type.algorithm));
+    };
 
-    JWSVerifier verifier = getVerifier(new JWSHeader(new JWSAlgorithm(type.algorithm)), jwk);
+      JWSVerifier verifier = getVerifier(new JWSHeader(new JWSAlgorithm(type.algorithm)), jwk);
 
     Payload payload = new Payload(hashedLinkedData.getValue());
     JWSObject jws;

@@ -25,7 +25,6 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 
 /** The type Did parser. */
@@ -61,7 +60,7 @@ public class DidParser {
           "DID does not contain at least three parts split by ':'. URI: '" + did + "'");
     }
 
-    List<String> methodIdentifierParts = Arrays.stream(did).skip(2).collect(Collectors.toList());
+    List<String> methodIdentifierParts = Arrays.stream(did).skip(2).toList();
 
     return new Did(
         new DidMethod(did[1]),

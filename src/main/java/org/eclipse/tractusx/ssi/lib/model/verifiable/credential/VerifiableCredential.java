@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.NonNull;
 import lombok.ToString;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
@@ -172,7 +171,7 @@ public class VerifiableCredential extends Verifiable {
 
     if (subject instanceof List) {
       return ((List<Map<String, Object>>) subject)
-          .stream().map(VerifiableCredentialSubject::new).collect(Collectors.toList());
+          .stream().map(VerifiableCredentialSubject::new).toList();
     } else if (subject instanceof Map) {
       return List.of(new VerifiableCredentialSubject((Map<String, Object>) subject));
     } else {
