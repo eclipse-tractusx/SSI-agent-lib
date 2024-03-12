@@ -22,7 +22,6 @@
 package org.eclipse.tractusx.ssi.lib.serialization.jwt;
 
 import com.nimbusds.jwt.SignedJWT;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
@@ -38,12 +37,11 @@ public class SerializedJwtVCFactoryImpl implements SerializedJwtVCFactory {
   public SignedJWT createVCJwt(
       Did issuer,
       Did holder,
-      Date expDate,
       VerifiableCredential credentials,
       IPrivateKey privateKey,
       String keyId) {
     var clonedVC = new LinkedHashMap<String, Object>();
     clonedVC.putAll(credentials);
-    return signedJwtFactory.create(issuer, holder, expDate, clonedVC, privateKey, keyId);
+    return signedJwtFactory.create(issuer, holder, clonedVC, privateKey, keyId);
   }
 }
