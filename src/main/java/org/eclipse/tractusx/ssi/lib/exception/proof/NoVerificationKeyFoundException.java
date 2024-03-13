@@ -19,26 +19,46 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.exception.proof;
+ package org.eclipse.tractusx.ssi.lib.exception.proof;
 
-/** NoVerificationKeyFoundExcpetion */
-public class NoVerificationKeyFoundException extends SignatureVerificationException {
-  private static final long serialVersionUID = 1L;
-
-  public NoVerificationKeyFoundException(String message) {
-    super(message);
-  }
-
-  public NoVerificationKeyFoundException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  public NoVerificationKeyFoundException(Throwable cause) {
-    super(cause);
-  }
-
-  public NoVerificationKeyFoundException(
-      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-    super(message, cause, enableSuppression, writableStackTrace);
-  }
-}
+ /** NoVerificationKeyFoundExcpetion */
+ public class NoVerificationKeyFoundException extends SignatureVerificationException {
+   private static final long serialVersionUID = 1L;
+    /**
+     * Instantiates a new no verification key found exception.
+     *
+     * @param message the message
+     */
+   public NoVerificationKeyFoundException(String message) {
+     super(message);
+   }
+ /**
+     * Instantiates a new no verification key found exception.
+     *
+     * @param message the message
+     * @param cause the cause
+     */
+   public NoVerificationKeyFoundException(String message, Throwable cause) {
+     super(message, cause);
+   }
+/**
+     * Instantiates a new no verification key found exception.
+     *
+     * @param cause the cause
+     */ 
+   public NoVerificationKeyFoundException(Throwable cause) {
+     super(cause);
+   }
+/**
+     * Instantiates a new no verification key found exception.
+     *
+     * @param message the message
+     * @param cause the cause
+     * @param enableSuppression the enable suppression
+     * @param writableStackTrace the writable stack trace
+     */ 
+   public NoVerificationKeyFoundException(
+       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+     super(message, cause, enableSuppression, writableStackTrace);
+   }
+ }

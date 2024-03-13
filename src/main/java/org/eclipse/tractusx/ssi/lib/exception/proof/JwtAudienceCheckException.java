@@ -19,41 +19,60 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.exception.proof;
+ package org.eclipse.tractusx.ssi.lib.exception.proof;
 
-import java.util.List;
-
-/** The type Jwt audience check failed exception. */
-public class JwtAudienceCheckException extends SignatureValidationException {
-  private static final long serialVersionUID = 1L;
-  /**
-   * Instantiates a new Jwt audience check failed exception.
-   *
-   * @param expectedAudience the expected audience
-   * @param actualAudience the actual audience
-   */
-  public JwtAudienceCheckException(String expectedAudience, List<String> actualAudience) {
-    super(
-        "JWT audience check failed. Expected audience: "
-            + expectedAudience
-            + ", actual audience: "
-            + String.join(",  ", actualAudience));
-  }
-
-  public JwtAudienceCheckException(String message) {
-    super(message);
-  }
-
-  public JwtAudienceCheckException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  public JwtAudienceCheckException(Throwable cause) {
-    super(cause);
-  }
-
-  public JwtAudienceCheckException(
-      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-    super(message, cause, enableSuppression, writableStackTrace);
-  }
-}
+ import java.util.List;
+ 
+ /** The type Jwt audience check failed exception. */
+ public class JwtAudienceCheckException extends SignatureValidationException {
+   private static final long serialVersionUID = 1L;
+   /**
+    * Instantiates a new Jwt audience check failed exception.
+    *
+    * @param expectedAudience the expected audience
+    * @param actualAudience the actual audience
+    */
+   public JwtAudienceCheckException(String expectedAudience, List<String> actualAudience) {
+     super(
+         "JWT audience check failed. Expected audience: "
+             + expectedAudience
+             + ", actual audience: "
+             + String.join(",  ", actualAudience));
+   }
+   /**
+    * Instantiates a new Jwt audience check failed exception.
+    * @param message the message
+    */
+   public JwtAudienceCheckException(String message) {
+     super(message);
+   }
+   /**
+    * Instantiates a new jwt audience check failed exception.
+    *
+    * @param message the message
+    * @param cause the cause
+    */
+   public JwtAudienceCheckException(String message, Throwable cause) {
+     super(message, cause);
+   }
+   /**
+    * Instantiates a new jwt audience check failed exception.
+    *
+    * @param cause the cause
+    */
+   public JwtAudienceCheckException(Throwable cause) {
+     super(cause);
+   }
+   /**
+    * Instantiates a new jwt audience check failed exception.
+    *
+    * @param message the message
+    * @param cause the cause
+    * @param enableSuppression the enable suppression
+    * @param writableStackTrace the writable stack trace
+    */
+   public JwtAudienceCheckException(
+       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+     super(message, cause, enableSuppression, writableStackTrace);
+   }
+ }
