@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -19,31 +19,60 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.exception.proof;
+ package org.eclipse.tractusx.ssi.lib.exception.proof;
 
-import java.util.Date;
-import org.eclipse.tractusx.ssi.lib.exception.SSIException;
-
-public class JwtExpiredException extends SSIException {
-
-  public JwtExpiredException(Date expiryDate) {
-    super("JWT expired at " + expiryDate);
-  }
-
-  public JwtExpiredException(String message) {
-    super(message);
-  }
-
-  public JwtExpiredException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  public JwtExpiredException(Throwable cause) {
-    super(cause);
-  }
-
-  public JwtExpiredException(
-      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-    super(message, cause, enableSuppression, writableStackTrace);
-  }
-}
+ import java.util.Date;
+ 
+ /** The type Jwt expired exception. */
+ public class JwtExpiredException extends SignatureValidationException {
+   private static final long serialVersionUID = 1L;
+   /**
+    * Instantiates a new Jwt expired exception.
+    *
+    * @param expiryDate the expiry date
+    */
+   public JwtExpiredException(Date expiryDate) {
+     super("JWT expired at " + expiryDate);
+   }
+ 
+   /**
+    * Instantiates a new jwt expired exception.
+    *
+    * @param message the message
+    */
+   public JwtExpiredException(String message) {
+     super(message);
+   }
+ 
+   /**
+    * Instantiates a new jwt expired exception.
+    *
+    * @param message the message
+    * @param cause the cause
+    */
+   public JwtExpiredException(String message, Throwable cause) {
+     super(message, cause);
+   }
+ 
+   /**
+    * Instantiates a new jwt expired exception.
+    *
+    * @param cause the cause
+    */
+   public JwtExpiredException(Throwable cause) {
+     super(cause);
+   }
+ 
+   /**
+    * Instantiates a new jwt expired exception.
+    *
+    * @param message the message
+    * @param cause the cause
+    * @param enableSuppression the enable suppression
+    * @param writableStackTrace the writable stack trace
+    */
+   public JwtExpiredException(
+       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+     super(message, cause, enableSuppression, writableStackTrace);
+   }
+ }
