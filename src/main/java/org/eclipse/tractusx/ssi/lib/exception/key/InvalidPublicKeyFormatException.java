@@ -19,63 +19,63 @@
  * *******************************************************************************
  */
 
- package org.eclipse.tractusx.ssi.lib.exception.key;
+package org.eclipse.tractusx.ssi.lib.exception.key;
 
- /** The type Invalid public key format. */
- public class InvalidPublicKeyFormatException extends KeyGenerationException {
- 
-   private static final long serialVersionUID = 1L;
-   /**
-    * Instantiates a new Invalide public key format.
-    *
-    * @param correctLength the correct length
-    * @param providedLength the provided length
-    */
-   public InvalidPublicKeyFormatException(int correctLength, int providedLength) {
-     super(
-         String.format(
-             "Invalide Publice Key Format, this key should have '%s' as lenght but we got %s",
-             correctLength, providedLength));
-   }
- 
-   /**
-    * Instantiates a new invalide public key format exception.
-    *
-    * @param message the message
-    */
-   public InvalidPublicKeyFormatException(String message) {
-     super(message);
-   }
- 
-   /**
-    * Instantiates a new invalide public key format exception.
-    *
-    * @param message the message
-    * @param cause the cause
-    */
-   public InvalidPublicKeyFormatException(String message, Throwable cause) {
-     super(message, cause);
-   }
- 
-   /**
-    * Instantiates a new invalide public key format exception.
-    *
-    * @param cause the cause
-    */
-   public InvalidPublicKeyFormatException(Throwable cause) {
-     super(cause);
-   }
- 
-   /**
-    * Instantiates a new invalide public key format exception.
-    *
-    * @param message the message
-    * @param cause the cause
-    * @param enableSuppression the enable suppression
-    * @param writableStackTrace the writable stack trace
-    */
-   public InvalidPublicKeyFormatException(
-       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-     super(message, cause, enableSuppression, writableStackTrace);
-   }
- }
+/** The type Invalid public key format. */
+public class InvalidPublicKeyFormatException extends KeyGenerationException {
+
+  private static final long serialVersionUID = 1L;
+  /**
+   * Instantiates a new Invalide public key format.
+   *
+   * @param correctLength the correct length
+   * @param providedLength the provided length
+   */
+  public InvalidPublicKeyFormatException(int correctLength, int providedLength) {
+    super(
+        String.format(
+            "Invalide Publice Key Format, this key should have '%s' as lenght but we got %s",
+            correctLength, providedLength));
+  }
+
+  /**
+   * Instantiates a new invalide public key format exception.
+   *
+   * @param message the message
+   */
+  public InvalidPublicKeyFormatException(String message) {
+    super(message);
+  }
+
+  /**
+   * Instantiates a new invalide public key format exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   */
+  public InvalidPublicKeyFormatException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  /**
+   * Instantiates a new invalide public key format exception.
+   *
+   * @param cause the cause
+   */
+  public InvalidPublicKeyFormatException(Throwable cause) {
+    super(cause);
+  }
+
+  /**
+   * Instantiates a new invalide public key format exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   * @param enableSuppression the enable suppression
+   * @param writableStackTrace the writable stack trace
+   */
+  public InvalidPublicKeyFormatException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+  }
+}

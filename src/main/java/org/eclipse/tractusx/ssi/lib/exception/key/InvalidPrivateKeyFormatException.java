@@ -19,62 +19,62 @@
  * *******************************************************************************
  */
 
- package org.eclipse.tractusx.ssi.lib.exception.key;
+package org.eclipse.tractusx.ssi.lib.exception.key;
 
- /** The type Invalide private key format. */
- public class InvalidPrivateKeyFormatException extends KeyGenerationException {
-   private static final long serialVersionUID = 1L;
-   /**
-    * Instantiates a new Invalid private key format.
-    *
-    * @param correctLength the correct length
-    * @param providedLength the provided length
-    */
-   public InvalidPrivateKeyFormatException(int correctLength, int providedLength) {
-     super(
-         String.format(
-             "Invalide Private Key Format, this key should have '%s' as lenght but we got %s",
-             correctLength, providedLength));
-   }
- 
-   /**
-    * Instantiates a new Invalid private key format.
-    *
-    * @param message message
-    */
-   public InvalidPrivateKeyFormatException(String message) {
-     super(message);
-   }
- 
-   /**
-    * Instantiates a new Invalid private key format.
-    *
-    * @param message message
-    * @param cuase the cause
-    */
-   public InvalidPrivateKeyFormatException(String message, Throwable cause) {
-     super(message, cause);
-   }
- 
-   /**
-    * Instantiates a new Invalid private key format.
-    *
-    * @param cuase the cause
-    */
-   public InvalidPrivateKeyFormatException(Throwable cause) {
-     super(cause);
-   }
- 
-   /**
-    * Instantiates a new Invalid private key format.
-    *
-    * @param message the message
-    * @param cause the cause
-    * @param enableSuppression the enable suppression
-    * @param writableStackTrace the writable stack trace
-    */
-   public InvalidPrivateKeyFormatException(
-       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-     super(message, cause, enableSuppression, writableStackTrace);
-   }
- }
+/** The type Invalide private key format. */
+public class InvalidPrivateKeyFormatException extends KeyGenerationException {
+  private static final long serialVersionUID = 1L;
+  /**
+   * Instantiates a new Invalid private key format.
+   *
+   * @param correctLength the correct length
+   * @param providedLength the provided length
+   */
+  public InvalidPrivateKeyFormatException(int correctLength, int providedLength) {
+    super(
+        String.format(
+            "Invalide Private Key Format, this key should have '%s' as lenght but we got %s",
+            correctLength, providedLength));
+  }
+
+  /**
+   * Instantiates a new Invalid private key format.
+   *
+   * @param message message
+   */
+  public InvalidPrivateKeyFormatException(String message) {
+    super(message);
+  }
+
+  /**
+   * Instantiates a new Invalid private key format.
+   *
+   * @param message message
+   * @param cuase the cause
+   */
+  public InvalidPrivateKeyFormatException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  /**
+   * Instantiates a new Invalid private key format.
+   *
+   * @param cuase the cause
+   */
+  public InvalidPrivateKeyFormatException(Throwable cause) {
+    super(cause);
+  }
+
+  /**
+   * Instantiates a new Invalid private key format.
+   *
+   * @param message the message
+   * @param cause the cause
+   * @param enableSuppression the enable suppression
+   * @param writableStackTrace the writable stack trace
+   */
+  public InvalidPrivateKeyFormatException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+  }
+}

@@ -19,53 +19,53 @@
  * *******************************************************************************
  */
 
- package org.eclipse.tractusx.ssi.lib.exception.key;
+package org.eclipse.tractusx.ssi.lib.exception.key;
 
- import org.eclipse.tractusx.ssi.lib.exception.SSIException;
- 
- /** The type Key Generation Exception */
- public class KeyGenerationException extends SSIException {
- 
-   private static final long serialVersionUID = 1L;
- 
-   /**
-    * Instantiates a new key generation exception.
-    *
-    * @param message the message
-    */
-   public KeyGenerationException(String message) {
-     super(message);
-   }
- 
-   /**
-    * Instantiates a new key generation exception.
-    *
-    * @param message the message
-    * @param cause the cause
-    */
-   public KeyGenerationException(String message, Throwable cause) {
-     super(message, cause);
-   }
- 
-   /**
-    * Instantiates a new key generation exception.
-    *
-    * @param cause the cause
-    */
-   public KeyGenerationException(Throwable cause) {
-     super(cause);
-   }
- 
-   /**
-    * Instantiates a key generation exception.
-    *
-    * @param message the message
-    * @param cause the cause
-    * @param enableSuppression the enable suppression
-    * @param writableStackTrace the writable stack trace
-    */
-   public KeyGenerationException(
-       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-     super(message, cause, enableSuppression, writableStackTrace);
-   }
- }
+import org.eclipse.tractusx.ssi.lib.exception.SSIException;
+
+/** The type Key Generation Exception */
+public class KeyGenerationException extends SSIException {
+
+  private static final long serialVersionUID = 1L;
+
+  /**
+   * Instantiates a new key generation exception.
+   *
+   * @param message the message
+   */
+  public KeyGenerationException(String message) {
+    super(message);
+  }
+
+  /**
+   * Instantiates a new key generation exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   */
+  public KeyGenerationException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  /**
+   * Instantiates a new key generation exception.
+   *
+   * @param cause the cause
+   */
+  public KeyGenerationException(Throwable cause) {
+    super(cause);
+  }
+
+  /**
+   * Instantiates a key generation exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   * @param enableSuppression the enable suppression
+   * @param writableStackTrace the writable stack trace
+   */
+  public KeyGenerationException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+  }
+}
