@@ -19,51 +19,51 @@
  * *******************************************************************************
  */
 
- package org.eclipse.tractusx.ssi.lib.exception;
+package org.eclipse.tractusx.ssi.lib.exception;
 
- /** The type SSI exception. */
- public class SSIException extends Exception {
- 
-   private static final long serialVersionUID = 1L;
- 
-   /**
-    * Instantiates a new SSI exception.
-    *
-    * @param message the message
-    */
-   protected SSIException(String message) {
-     super(message);
-   }
- 
-   /**
-    * Instantiates a new SSI exception.
-    *
-    * @param message the message
-    * @param cause the cause
-    */
-   protected SSIException(String message, Throwable cause) {
-     super(message, cause);
-   }
- 
-   /**
-    * Instantiates a new SSI exception.
-    *
-    * @param cause the cause
-    */
-   protected SSIException(Throwable cause) {
-     super(cause);
-   }
- 
-   /**
-    * Instantiates a new SSI exception.
-    *
-    * @param message the message
-    * @param cause the cause
-    * @param enableSuppression the enable suppression
-    * @param writableStackTrace the writable stack trace
-    */
-   protected SSIException(
-       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-     super(message, cause, enableSuppression, writableStackTrace);
-   }
- }
+/** The type SSI exception. */
+public class SSIException extends Exception {
+
+  private static final long serialVersionUID = 1L;
+
+  /**
+   * Instantiates a new SSI exception.
+   *
+   * @param message the message
+   */
+  protected SSIException(String message) {
+    super(message);
+  }
+
+  /**
+   * Instantiates a new SSI exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   */
+  protected SSIException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  /**
+   * Instantiates a new SSI exception.
+   *
+   * @param cause the cause
+   */
+  protected SSIException(Throwable cause) {
+    super(cause);
+  }
+
+  /**
+   * Instantiates a new SSI exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   * @param enableSuppression the enable suppression
+   * @param writableStackTrace the writable stack trace
+   */
+  protected SSIException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+  }
+}

@@ -19,29 +19,29 @@
  * *******************************************************************************
  */
 
- package org.eclipse.tractusx.ssi.lib.exception.proof;
+package org.eclipse.tractusx.ssi.lib.exception.proof;
 
- import lombok.Getter;
- import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
- 
- /** The type Unsupported verification method exception. */
- public class UnsupportedVerificationMethodException extends SignatureVerificationException {
- 
-   private static final long serialVersionUID = 1L;
- 
-   /** The verification method */
-   @Getter private final VerificationMethod method;
- 
-   /**
-    * Instantiates a new Unsupported verification method exception.
-    *
-    * @param method the method
-    * @param message the message
-    */
-   public UnsupportedVerificationMethodException(VerificationMethod method, String message) {
-     super(
-         String.format(
-             "Unsupported verification method: %s. %s", method.getClass().getName(), message));
-     this.method = method;
-   }
- }
+import lombok.Getter;
+import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
+
+/** The type Unsupported verification method exception. */
+public class UnsupportedVerificationMethodException extends SignatureVerificationException {
+
+  private static final long serialVersionUID = 1L;
+
+  /** The verification method */
+  @Getter private final VerificationMethod method;
+
+  /**
+   * Instantiates a new Unsupported verification method exception.
+   *
+   * @param method the method
+   * @param message the message
+   */
+  public UnsupportedVerificationMethodException(VerificationMethod method, String message) {
+    super(
+        String.format(
+            "Unsupported verification method: %s. %s", method.getClass().getName(), message));
+    this.method = method;
+  }
+}

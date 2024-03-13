@@ -19,51 +19,51 @@
  * *******************************************************************************
  */
 
- package org.eclipse.tractusx.ssi.lib.exception.proof;
+package org.eclipse.tractusx.ssi.lib.exception.proof;
 
- /** The type Unsupported signature type exception. */
- public class UnsupportedSignatureTypeException extends SignatureVerificationException {
- 
-   private static final long serialVersionUID = 1L;
- 
-   /**
-    * Instantiates a new unsupported signature type exception.
-    *
-    * @param signatureType the signature type
-    */
-   public UnsupportedSignatureTypeException(String signatureType) {
-     super("Unsupported signature type: " + signatureType);
-   }
- 
-   /**
-    * Instantiates a unsupported signature type exception.
-    *
-    * @param message the message
-    * @param cause the cause
-    */
-   public UnsupportedSignatureTypeException(String message, Throwable cause) {
-     super(message, cause);
-   }
- 
-   /**
-    * Instantiates a unsupported signature type exception.
-    *
-    * @param cause the cause
-    */
-   public UnsupportedSignatureTypeException(Throwable cause) {
-     super(cause);
-   }
- 
-   /**
-    * Instantiates a unsupported signature type exception.
-    *
-    * @param message the message
-    * @param cause the cause
-    * @param enableSuppression the enable suppression
-    * @param writableStackTrace the writable stack trace
-    */
-   public UnsupportedSignatureTypeException(
-       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-     super(message, cause, enableSuppression, writableStackTrace);
-   }
- }
+/** The type Unsupported signature type exception. */
+public class UnsupportedSignatureTypeException extends SignatureVerificationException {
+
+  private static final long serialVersionUID = 1L;
+
+  /**
+   * Instantiates a new unsupported signature type exception.
+   *
+   * @param signatureType the signature type
+   */
+  public UnsupportedSignatureTypeException(String signatureType) {
+    super("Unsupported signature type: " + signatureType);
+  }
+
+  /**
+   * Instantiates a unsupported signature type exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   */
+  public UnsupportedSignatureTypeException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  /**
+   * Instantiates a unsupported signature type exception.
+   *
+   * @param cause the cause
+   */
+  public UnsupportedSignatureTypeException(Throwable cause) {
+    super(cause);
+  }
+
+  /**
+   * Instantiates a unsupported signature type exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   * @param enableSuppression the enable suppression
+   * @param writableStackTrace the writable stack trace
+   */
+  public UnsupportedSignatureTypeException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+  }
+}
