@@ -135,7 +135,7 @@ public abstract class Verifiable extends JsonLdObject {
     if (o == null || getClass() != o.getClass()) return false;
     if (!super.equals(o)) return false;
     Verifiable that = (Verifiable) o;
-    return getId() == that.getId()
+    return getId().equals(that.getId())
         && verifableType == that.verifableType
         && new HashSet<>(getTypes()).containsAll(that.getTypes());
   }
