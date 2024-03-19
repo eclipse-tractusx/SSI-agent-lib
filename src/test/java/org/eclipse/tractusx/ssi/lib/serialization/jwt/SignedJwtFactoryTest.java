@@ -24,8 +24,7 @@ public class SignedJwtFactoryTest {
   }
 
   @Test
-  @DisplayName(
-      "Should return a signed Jwt with the given Map of claims and the given private key.")
+  @DisplayName("Should return a signed Jwt with the given Map of claims and the given private key.")
   void shouldReturnSignedJWT() {
 
     LinkedHashMap<String, Object> claims = new LinkedHashMap<>();
