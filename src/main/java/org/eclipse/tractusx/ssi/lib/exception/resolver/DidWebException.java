@@ -25,6 +25,8 @@ import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
 public class DidWebException extends SSIException {
 
+  private static final long serialVersionUID = 1L;
+
   /**
    * Instantiates a new Did web exception.
    *
