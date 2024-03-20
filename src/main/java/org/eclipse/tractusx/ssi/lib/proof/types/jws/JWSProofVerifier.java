@@ -57,7 +57,7 @@ import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 public class JWSProofVerifier implements IVerifier {
 
   private final DidResolver didResolver;
-  
+
   /**
    * Verify Verifiable Document
    *
