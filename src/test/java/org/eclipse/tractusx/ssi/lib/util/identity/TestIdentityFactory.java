@@ -42,7 +42,11 @@ import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethodBuilder;
 
 /** The type Test identity factory. */
 public class TestIdentityFactory {
-
+  /**
+   * New identity with ed 25519 keys test identity.
+   *
+   * @return the test identity
+   */
   @SneakyThrows
   public static TestIdentity newIdentityWithED25519Keys() {
 

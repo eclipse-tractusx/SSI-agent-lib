@@ -30,6 +30,13 @@ import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 
 /** The type Did parser. */
 public class DidParser {
+  /**
+   * Parse did.
+   *
+   * @param uri the uri
+   * @return the did
+   * @throws DidParseException the did parse exception
+   */
   public static Did parse(URI uri) throws DidParseException {
     Objects.requireNonNull(uri);
 
@@ -57,7 +64,13 @@ public class DidParser {
         new DidMethodIdentifier(String.join(":", methodIdentifierParts)),
         fragment);
   }
-
+  /**
+   * Parse did.
+   *
+   * @param did the did
+   * @return the did
+   * @throws DidParseException the did parse exception
+   */
   public static Did parse(String did) throws DidParseException {
     Objects.requireNonNull(did);
 

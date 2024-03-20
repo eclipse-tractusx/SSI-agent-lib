@@ -57,7 +57,19 @@ import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 public class JWSProofVerifier implements IVerifier {
 
   private final DidResolver didResolver;
-
+  
+  /**
+   * Verify Verifiable Document
+   *
+   * @param hashedLinkedData the hashed linked data
+   * @param document the document
+   * @return the boolean
+   * @throws SignatureParseException the signature parse exception
+   * @throws DidParseException the did parse exception
+   * @throws InvalidPublicKeyFormatException the invalid public key format exception
+   * @throws SignatureVerificationFailedException the signature verification failed exception
+   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
+   */
   @SneakyThrows({DidResolverException.class})
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable document)
       throws SignatureParseException, DidParseException, InvalidPublicKeyFormatException,

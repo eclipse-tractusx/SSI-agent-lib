@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -38,7 +38,10 @@ import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.RemoteDocumentLoader;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 
-/** The type Linked data transformer. */
+
+/**
+ * The type Linked data transformer.
+ */
 public class LinkedDataTransformer {
 
   public TransformedLinkedData transform(Verifiable document) throws TransformJsonLdException {
@@ -48,7 +51,13 @@ public class LinkedDataTransformer {
 
     return this.canocliztion(document);
   }
-
+  /**
+   * Canocliztion transformed linked data.
+   *
+   * @param document the document
+   * @return the transformed linked data
+   * @throws TransformJsonLdException the transform json ld exception
+   */
   private TransformedLinkedData canocliztion(JsonLdObject document)
       throws TransformJsonLdException {
     try {
@@ -66,7 +75,13 @@ public class LinkedDataTransformer {
       throw new TransformJsonLdException(e.getMessage());
     }
   }
-
+/**
+   * To dataset rdf dataset.
+   *
+   * @param jsonLdObject the json ld object
+   * @return the rdf dataset
+   * @throws RuntimeException the runtime exception
+   */
   private RdfDataset toDataset(JsonLdObject jsonLdObject) throws RuntimeException {
 
     var documentLoader = RemoteDocumentLoader.getInstance();
