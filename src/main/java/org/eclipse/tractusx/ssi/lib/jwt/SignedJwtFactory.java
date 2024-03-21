@@ -27,10 +27,9 @@ import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import java.time.Instant;
+import java.util.*;
 import java.net.URI;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.util.SignerUtil;
@@ -137,6 +136,8 @@ public class SignedJwtFactory {
     final String issuer = didIssuer.toString();
     final String subject = holderIssuer.toString();
 
+    final Date issueDate = Date.from(Instant.parse((String) vc.get("issuanceDate")));
+
     vc.remove(Verifiable.PROOF);
 
     var claimsSet =
@@ -145,7 +146,7 @@ public class SignedJwtFactory {
             .subject(subject)
             .claim("vc", vc)
             .expirationTime(expDate)
-            .jwtID(id.toString())
+            .issueTime(issueDate)
             .build();
 
     return createSignedES256Jwt(privateKey, claimsSet, issuer, keyId);
