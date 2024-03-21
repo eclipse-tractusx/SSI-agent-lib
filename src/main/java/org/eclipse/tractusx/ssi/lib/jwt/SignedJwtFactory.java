@@ -136,7 +136,11 @@ public class SignedJwtFactory {
     final String issuer = didIssuer.toString();
     final String subject = holderIssuer.toString();
 
-    final Date issueDate = Date.from(Instant.parse((String) vc.get("issuanceDate")));
+    // check if issuanceDate is presented in VC then use it, otherwise null
+    final Date issueDate =
+        vc.containsKey("issuanceDate")
+            ? Date.from(Instant.parse((String) vc.get("issuanceDate")))
+            : null;
 
     vc.remove(Verifiable.PROOF);
 
