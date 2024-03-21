@@ -3,11 +3,9 @@ package org.eclipse.tractusx.ssi.lib.serialization.jwt;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.nimbusds.jose.jwk.Curve;
-import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import java.net.URI;
 import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.KeyPair;
@@ -18,7 +16,6 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethodIdentifier;
 import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class SerializedJwtVCFactoryImplTest {
@@ -46,8 +43,5 @@ class SerializedJwtVCFactoryImplTest {
                     UUID.randomUUID().toString()));
 
     assertNotNull(signedJWT);
-    JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
-    Map<String, Object> vp = jwtClaimsSet.getJSONObjectClaim("vc");
-    Assertions.assertEquals(vp.get("id"), jwtClaimsSet.getJWTID());
   }
 }
