@@ -117,11 +117,13 @@ public class VerifiableCredential extends Verifiable {
   }
 
   @NonNull
+  @Override
   public URI getId() {
     return SerializeUtil.asURI(get(ID));
   }
 
   @NonNull
+  @Override
   public List<String> getTypes() {
     return SerializeUtil.asStringList(get(TYPE));
   }

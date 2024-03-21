@@ -19,7 +19,7 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.serialization.jsonLd;
+package org.eclipse.tractusx.ssi.lib.serialization.jsonld;
 
 import org.eclipse.tractusx.ssi.lib.exception.json.InvalidJsonLdException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;

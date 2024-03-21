@@ -28,7 +28,6 @@ import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import java.security.SignatureException;
 import java.text.ParseException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -61,16 +60,15 @@ public class SignedJwtVerifier {
    *
    * @param jwt a {@link SignedJWT} that was sent by the claiming party.
    * @return true if verified, false otherwise
-   * @throws DidParseException
-   * @throws SignatureException
-   * @throws DidResolverException
-   * @throws SignatureVerificationException
-   * @throws UnsupportedVerificationMethodException
-   * @throws SignatureParseException
+   * @throws DidParseException the did parse error
+   * @throws DidResolverException the did resolve error
+   * @throws SignatureVerificationException the signature verification error
+   * @throws UnsupportedVerificationMethodException the unsupported verification error
+   * @throws SignatureParseException the signature parse error
    */
   public boolean verify(SignedJWT jwt)
       throws DidParseException, DidResolverException, SignatureVerificationException,
-          UnsupportedVerificationMethodException, SignatureParseException {
+          SignatureParseException {
 
     JWTClaimsSet jwtClaimsSet;
     try {

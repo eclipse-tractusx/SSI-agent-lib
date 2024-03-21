@@ -33,8 +33,8 @@ import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x25519.x25519PrivateKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x25519.x25519PublicKey;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519PrivateKey;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
 import org.junit.jupiter.api.Test;
 
@@ -44,14 +44,14 @@ class JsonWebKey2020BuilderTest {
   /** Test json web key 2020 verification method. */
   @SneakyThrows
   @Test
-  public void testJsonWebKey2020VerificationMethod() {
+  void testJsonWebKey2020VerificationMethod() {
     final Did did = DidWebFactory.fromHostname("localhost");
     String keyId = "1";
     OctetKeyPair octetKeyPair =
         new OctetKeyPairGenerator(Curve.Ed25519).keyID(keyId).keyUse(KeyUse.SIGNATURE).generate();
 
-    IPrivateKey privateKey = new x25519PrivateKey(octetKeyPair.getDecodedD());
-    IPublicKey publicKey = new x25519PublicKey(octetKeyPair.getDecodedX());
+    IPrivateKey privateKey = new X25519PrivateKey(octetKeyPair.getDecodedD());
+    IPublicKey publicKey = new X25519PublicKey(octetKeyPair.getDecodedX());
 
     // JWK
     JsonWebKey jwk = new JsonWebKey(keyId, publicKey, privateKey);
@@ -60,12 +60,12 @@ class JsonWebKey2020BuilderTest {
     final JWKVerificationMethod jwk2020VerificationMethod = builder.did(did).jwk(jwk).build();
 
     assertNotNull(jwk2020VerificationMethod);
-    assertEquals(jwk2020VerificationMethod.getType(), "JsonWebKey2020");
+    assertEquals("JsonWebKey2020", jwk2020VerificationMethod.getType());
     assertEquals(jwk2020VerificationMethod.getId().toString(), "did:web:localhost#" + keyId);
-    assertEquals(jwk2020VerificationMethod.getController().toString(), "did:web:localhost");
+    assertEquals("did:web:localhost", jwk2020VerificationMethod.getController().toString());
 
-    assertEquals(jwk2020VerificationMethod.getPublicKeyJwk().getKty(), "OKP");
-    assertEquals(jwk2020VerificationMethod.getPublicKeyJwk().getCrv(), "Ed25519");
+    assertEquals("OKP", jwk2020VerificationMethod.getPublicKeyJwk().getKty());
+    assertEquals("Ed25519", jwk2020VerificationMethod.getPublicKeyJwk().getCrv());
     assertFalse(jwk2020VerificationMethod.getPublicKeyJwk().getX().isEmpty());
   }
 }

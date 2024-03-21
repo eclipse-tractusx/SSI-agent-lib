@@ -29,7 +29,7 @@ import org.bouncycastle.crypto.Signer;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x25519.x25519PublicKey;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
@@ -73,8 +73,8 @@ public class Ed25519ProofVerifier implements IVerifier {
   }
 
   private IPublicKey discoverPublicKey(Ed25519Signature2020 signature)
-      throws UnsupportedSignatureTypeException, InvalidPublicKeyFormatException,
-          NoVerificationKeyFoundException, DidResolverException, DidParseException {
+      throws InvalidPublicKeyFormatException, NoVerificationKeyFoundException, DidResolverException,
+          DidParseException {
 
     final Did issuer = DidParser.parse(signature.getVerificationMethod());
 
@@ -94,7 +94,7 @@ public class Ed25519ProofVerifier implements IVerifier {
 
     IPublicKey publicKey;
     try {
-      publicKey = (IPublicKey) new x25519PublicKey(key.getPublicKeyBase58().getEncoded(), false);
+      publicKey = new X25519PublicKey(key.getPublicKeyBase58().getEncoded(), false);
     } catch (IOException e) {
       throw new InvalidPublicKeyFormatException(e.getCause());
     }

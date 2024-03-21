@@ -29,6 +29,7 @@ import java.util.Map;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialStatus;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialStatusList2021Entry;
@@ -39,6 +40,10 @@ public final class SerializeUtil {
 
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
+  private SerializeUtil() {
+    throw new IllegalStateException("Utility class");
+  }
+
   /**
    * Specify oder of properties while creating JSON string from object like VerifiableCredential,
    * DidDocument etc.
@@ -48,8 +53,8 @@ public final class SerializeUtil {
           VerifiableCredential.class,
           List.of(
               JsonLdObject.CONTEXT,
-              VerifiableCredential.ID,
-              VerifiableCredential.TYPE,
+              Verifiable.ID,
+              Verifiable.TYPE,
               VerifiableCredential.CREDENTIAL_SCHEMA,
               VerifiableCredential.ISSUER,
               VerifiableCredential.ISSUANCE_DATE,
@@ -60,7 +65,7 @@ public final class SerializeUtil {
               VerifiableCredential.TERMS_OF_USE,
               VerifiableCredential.REFRESH_SERVICE,
               VerifiableCredential.CREDENTIAL_STATUS,
-              VerifiableCredential.PROOF),
+              Verifiable.PROOF),
           DidDocument.class,
           List.of(
               JsonLdObject.CONTEXT,
@@ -78,10 +83,10 @@ public final class SerializeUtil {
           VerifiablePresentation.class,
           List.of(
               JsonLdObject.CONTEXT,
-              VerifiablePresentation.ID,
-              VerifiablePresentation.TYPE,
+              Verifiable.ID,
+              Verifiable.TYPE,
               VerifiablePresentation.VERIFIABLE_CREDENTIAL,
-              VerifiableCredential.PROOF));
+              Verifiable.PROOF));
 
   /**
    * To json string.

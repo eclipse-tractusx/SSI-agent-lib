@@ -30,7 +30,7 @@ public class DidParseException extends SSIException {
   /**
    * Instantiates a new Did parse exception.
    *
-   * @param message the message
+   * @param did the did
    */
   public DidParseException(String did) {
     super(String.format("Invalid DID URL: %s, not able to parse it", did));

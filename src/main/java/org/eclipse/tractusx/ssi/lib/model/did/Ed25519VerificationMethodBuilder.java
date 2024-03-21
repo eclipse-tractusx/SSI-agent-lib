@@ -74,9 +74,9 @@ public class Ed25519VerificationMethodBuilder {
   public Ed25519VerificationMethod build() {
     return new Ed25519VerificationMethod(
         Map.of(
-            Ed25519VerificationMethod.ID, id,
-            Ed25519VerificationMethod.TYPE, Ed25519VerificationMethod.DEFAULT_TYPE,
-            Ed25519VerificationMethod.CONTROLLER, controller,
+            VerificationMethod.ID, id,
+            VerificationMethod.TYPE, Ed25519VerificationMethod.DEFAULT_TYPE,
+            VerificationMethod.CONTROLLER, controller,
             Ed25519VerificationMethod.PUBLIC_KEY_BASE_58, publicKeyMultiBase));
   }
 }

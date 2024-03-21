@@ -80,8 +80,7 @@ public class Did {
    * @return the did
    */
   public Did excludeFragment() {
-    Did newDid = new Did(method, methodIdentifier, null);
-    return newDid;
+    return new Did(method, methodIdentifier, null);
   }
 
   /**

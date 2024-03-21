@@ -51,7 +51,7 @@ public abstract class JsonLdObject extends HashMap<String, Object> {
    *
    * @param json the json
    */
-  public JsonLdObject(Map<String, Object> json) {
+  protected JsonLdObject(Map<String, Object> json) {
     super(json);
 
     try {

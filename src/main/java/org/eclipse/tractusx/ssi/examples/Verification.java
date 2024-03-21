@@ -28,13 +28,8 @@ import org.eclipse.tractusx.ssi.lib.did.web.DidWebResolver;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
-import org.eclipse.tractusx.ssi.lib.exception.json.TransformJsonLdException;
-import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedVerificationMethodException;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtVerifier;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -52,9 +47,12 @@ import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
  */
 public class Verification {
 
+  private Verification() {
+    throw new IllegalStateException("Example class");
+  }
+
   public static void verifyJWT(SignedJWT jwt)
-      throws DidParseException, SignatureException, DidResolverException,
-          SignatureVerificationException, UnsupportedVerificationMethodException,
+      throws DidParseException, DidResolverException, SignatureVerificationException,
           SignatureParseException {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
@@ -68,40 +66,12 @@ public class Verification {
   }
 
   /**
-   * Verify ed25519 signed ld.
+   * Verify JWS signature
    *
    * @param verifiableCredential the verifiable credential
-   * @return the boolean
-   * @throws DidDocumentResolverNotRegisteredException
-   * @throws TransformJsonLdException
-   * @throws NoVerificationKeyFoundException
-   * @throws SignatureVerificationException
-   * @throws InvalidPublicKeyFormatException
-   * @throws DidParseException
-   * @throws SignatureParseException
-   * @throws UnsupportedSignatureTypeException
-   * @throws SignatureVerificationFailedException
+   * @return the verification result
    */
-  public static boolean verifyED25519LD(VerifiableCredential verifiableCredential)
-      throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
-          InvalidPublicKeyFormatException, SignatureVerificationException,
-          NoVerificationKeyFoundException, TransformJsonLdException,
-          SignatureVerificationFailedException {
-    // DID Resolver constructor params
-    DidWebParser didParser = new DidWebParser();
-    var httpClient = HttpClient.newHttpClient();
-    var enforceHttps = false;
-    var didResolver = new DidWebResolver(httpClient, didParser, enforceHttps);
-
-    LinkedDataProofValidation proofValidation = LinkedDataProofValidation.newInstance(didResolver);
-    return proofValidation.verify(verifiableCredential);
-  }
-
-  public static boolean verifyJWSLD(VerifiableCredential verifiableCredential)
-      throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
-          InvalidPublicKeyFormatException, SignatureVerificationException,
-          NoVerificationKeyFoundException, TransformJsonLdException,
-          SignatureVerificationFailedException {
+  public static boolean verifyJWSLD(VerifiableCredential verifiableCredential) {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();

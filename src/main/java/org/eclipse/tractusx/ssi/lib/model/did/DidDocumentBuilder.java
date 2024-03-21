@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import lombok.NoArgsConstructor;
+import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 
 /** The type Did document builder. */
 @NoArgsConstructor
@@ -74,7 +75,7 @@ public class DidDocumentBuilder {
   public DidDocument build() {
     return new DidDocument(
         Map.of(
-            DidDocument.CONTEXT,
+            JsonLdObject.CONTEXT,
             DidDocument.DEFAULT_CONTEXT,
             DidDocument.ID,
             id.toString(),
