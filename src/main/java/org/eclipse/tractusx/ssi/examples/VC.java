@@ -80,7 +80,7 @@ public class VC {
    * @return the verifiable credential
    * @throws UnsupportedSignatureTypeException the unsupported signature type exception
    * @throws SsiException the ssi exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws InvalidPrivateKeyFormatException the invalide private key format
    */
   public static VerifiableCredential createVCWithED25519Proof(
       VerifiableCredential credential, IPrivateKey privateKey, Did issuer)
@@ -120,7 +120,7 @@ public class VC {
    * @return the verifiable credential
    * @throws UnsupportedSignatureTypeException the unsupported signature type exception
    * @throws SsiException the ssi exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws InvalidPrivateKeyFormatException the invalide private key format
    */
   public static VerifiableCredential createVCWithJWSProof(
       VerifiableCredential credential, IPrivateKey privateKey, Did issuer)

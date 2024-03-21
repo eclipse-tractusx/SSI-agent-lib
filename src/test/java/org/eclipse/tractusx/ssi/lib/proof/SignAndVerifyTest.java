@@ -40,8 +40,8 @@ public class SignAndVerifyTest {
    * Test sign and verify ed 201559.
    *
    * @throws IOException the io exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
-   * @throws InvalidePublicKeyFormat the invalide public key format
+   * @throws InvalidPrivateKeyFormatException the invalide private key format
+   * @throws InvalidPublicKeyFormatException the invalide public key format
    * @throws KeyGenerationException the key generation exception
    */
   @Test
@@ -70,8 +70,8 @@ public class SignAndVerifyTest {
    * @throws IOException the io exception
    * @throws JOSEException the jose exception
    * @throws NoSuchAlgorithmException the no such algorithm exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
-   * @throws InvalidePublicKeyFormat the invalide public key format
+   * @throws InvalidPrivateKeyFormatException the invalide private key format
+   * @throws InvalidPublicKeyFormatException the invalide public key format
    * @throws KeyGenerationException the key generation exception
    */
   @Test

@@ -19,24 +19,18 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.proof;
+package org.eclipse.tractusx.ssi.lib.serialization.jwt;
 
+import com.nimbusds.jwt.SignedJWT;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
-import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
+import org.eclipse.tractusx.ssi.lib.model.did.Did;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 
-/** The interface Signer. */
-public interface ISigner {
-  /**
-   * Sign byte [ ].
-   *
-   * @param hashedLinkedData the hashed linked data
-   * @param privateKey the private key
-   * @return the byte [ ]
-   * @throws SsiException the ssi exception
-   * @throws InvalidPrivateKeyFormatException the invalide private key format
-   */
-  public byte[] sign(HashedLinkedData hashedLinkedData, IPrivateKey privateKey)
-      throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException;
+public interface SerializedJwtVCFactory {
+  SignedJWT createVCJwt(
+      Did issuer,
+      Did holder,
+      VerifiableCredential credentials,
+      IPrivateKey privateKey,
+      String keyId);
 }

@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -29,6 +29,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 
 /** The interface Serialized jwt presentation factory. */
 public interface SerializedJwtPresentationFactory {
+
   /**
    * Create presentation signed jwt.
    *
@@ -39,5 +40,17 @@ public interface SerializedJwtPresentationFactory {
    * @return the signed jwt
    */
   SignedJWT createPresentation(
-      Did issuer, List<VerifiableCredential> credentials, String audience, IPrivateKey privateKey);
+      Did issuer,
+      List<VerifiableCredential> credentials,
+      String audience,
+      IPrivateKey privateKey,
+      String keyId);
+
+  SignedJWT createPresentation(
+      Did issuer,
+      List<VerifiableCredential> credentials,
+      String audience,
+      IPrivateKey privateKey,
+      String keyId,
+      JwtConfig config);
 }

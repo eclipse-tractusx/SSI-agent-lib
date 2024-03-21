@@ -46,7 +46,7 @@ public class x25519PublicKey implements IPublicKey {
    * Instantiates a new X 25519 public key.
    *
    * @param publicKey the public key
-   * @throws InvalidePublicKeyFormat the invalide public key format
+   * @throws InvalidPublicKeyFormatException the invalide public key format
    */
   public x25519PublicKey(byte[] publicKey) throws InvalidPublicKeyFormatException {
     if (this.getKeyLength() != publicKey.length) {
@@ -60,7 +60,7 @@ public class x25519PublicKey implements IPublicKey {
    *
    * @param publicKey the public key
    * @param pemFormat the pe mformat
-   * @throws InvalidePublicKeyFormat the invalide public key format
+   * @throws InvalidPublicKeyFormatException the invalide public key format
    * @throws IOException the io exception
    */
   public x25519PublicKey(String publicKey, boolean PEMformat)
