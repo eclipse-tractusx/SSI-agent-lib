@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -32,7 +32,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 /** The type Linked data transformer test. */
-public class LinkedDataTransformerTest {
+class LinkedDataTransformerTest {
 
   private static final String SummaryVerifiableCredential =
       "{\n"
@@ -73,7 +73,8 @@ public class LinkedDataTransformerTest {
 
   /** Test two transformations equal. */
   @Test
-  public void testTwoTransformationsEqual() {
+  @SneakyThrows
+  void testTwoTransformationsEqual() {
     final VerifiableCredential credential1 = deserializeCredential(SummaryVerifiableCredential);
     final var data1 = transformer.transform(credential1);
     final var data2 = transformer.transform(credential1);
@@ -92,7 +93,8 @@ public class LinkedDataTransformerTest {
       value = {
         "issuer\": \"did:web:localhost%3A8080:BPNOPERATOR, issuer\": \"did:web:localhost%3A8080:BPNATTACKER"
       })
-  public void testTwoTransformationDifference(String original, String replace) {
+  @SneakyThrows
+  void testTwoTransformationDifference(String original, String replace) {
     final VerifiableCredential credential1 = deserializeCredential(SummaryVerifiableCredential);
     final VerifiableCredential credential2 =
         deserializeCredential(SummaryVerifiableCredential.replace(original, replace));

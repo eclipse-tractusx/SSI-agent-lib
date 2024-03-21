@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -25,8 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.http.HttpClient;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
+import java.util.Optional;
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
@@ -68,15 +70,16 @@ public class DidWebResolverIT {
    * @throws DidResolverException the did resolver exception
    */
   @Test
-  public void shouldResolveValidWebDid() throws DidResolverException {
+  @SneakyThrows
+  void shouldResolveValidWebDid() {
     Did validDidWeb =
         new Did(
             new DidMethod("web"),
             new DidMethodIdentifier(nginx.getHost() + "%3A" + nginx.getFirstMappedPort()),
             null);
     assertTrue(resolver.isResolvable(validDidWeb));
-    DidDocument actualDidDoc = resolver.resolve(validDidWeb);
-    assertEquals(new DidDocument(TestResourceUtil.getPublishedDidDocument()), actualDidDoc);
+    Optional<DidDocument> actualDidDoc = resolver.resolve(validDidWeb);
+    assertEquals(new DidDocument(TestResourceUtil.getPublishedDidDocument()), actualDidDoc.get());
   }
 
   /**
@@ -85,11 +88,12 @@ public class DidWebResolverIT {
    * @throws DidResolverException the did resolver exception
    */
   @Test
-  public void shouldResolveValidExternalWebDid() throws DidResolverException {
+  @SneakyThrows
+  void shouldResolveValidExternalWebDid() {
     final String didIdentifier = "did.actor:alice";
     Did validDidWeb = new Did(new DidMethod("web"), new DidMethodIdentifier(didIdentifier), null);
     assertTrue(httpsResolver.isResolvable(validDidWeb));
-    DidDocument actualDidDoc = httpsResolver.resolve(validDidWeb);
-    assertEquals("did:web:" + didIdentifier, actualDidDoc.get("id"));
+    Optional<DidDocument> actualDidDoc = httpsResolver.resolve(validDidWeb);
+    assertEquals("did:web:" + didIdentifier, actualDidDoc.get().get("id"));
   }
 }

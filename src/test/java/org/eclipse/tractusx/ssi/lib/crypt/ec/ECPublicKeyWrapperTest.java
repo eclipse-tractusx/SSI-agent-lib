@@ -30,7 +30,7 @@ class ECPublicKeyWrapperTest {
 
     assertTrue(wrapper.getKeyLength() > 0);
     assertFalse(wrapper.asStringForStoring().isBlank());
-    assertNotNull(wrapper.asStringForExchange(EncodeType.Base58));
+    assertNotNull(wrapper.asStringForExchange(EncodeType.BASE58));
     assertTrue(wrapper.asByte().length > 0);
     assertNotNull(wrapper.getPublicKey());
     assertNotNull(wrapper.toJwk());

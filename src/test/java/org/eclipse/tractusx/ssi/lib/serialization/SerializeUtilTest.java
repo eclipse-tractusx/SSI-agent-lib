@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -28,6 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -40,11 +41,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /** The type Serialize util test. */
-public class SerializeUtilTest {
+class SerializeUtilTest {
 
   /** Should serialize vc context first. */
   @Test
-  public void shouldSerializeVcContextFirst() {
+  void shouldSerializeVcContextFirst() {
     VerifiableCredential vc = TestResourceUtil.getAlumniVerifiableCredential();
     String serializedVc = SerializeUtil.toJson(vc);
 
@@ -54,7 +55,7 @@ public class SerializeUtilTest {
 
   /** Should serialize vp context first. */
   @Test
-  public void shouldSerializeVpContextFirst() {
+  void shouldSerializeVpContextFirst() {
     VerifiablePresentation vp = TestResourceUtil.getAlumniVerifiablePresentation();
     String serializedVc = SerializeUtil.toJson(vp);
 
@@ -69,7 +70,8 @@ public class SerializeUtilTest {
    */
   @Test
   @DisplayName("Test property order in json string for VC")
-  void testVCJsonPropertyOrder() throws JsonProcessingException {
+  @SneakyThrows
+  void testVCJsonPropertyOrder() {
     ObjectMapper objectMapper = new ObjectMapper();
 
     // test VC json
@@ -99,7 +101,8 @@ public class SerializeUtilTest {
    */
   @Test
   @DisplayName("Test property order in json string for did document")
-  void testDidDocumentJsonPropertyOrder() throws JsonProcessingException {
+  @SneakyThrows
+  void testDidDocumentJsonPropertyOrder() {
     ObjectMapper objectMapper = new ObjectMapper();
     // test did document json
     DidDocument didDocument =

@@ -86,7 +86,8 @@ class VerifiableCredentialStatusTest {
           vc.put(VerifiableCredential.CREDENTIAL_STATUS, statusMap);
 
           VerifiableCredentialStatusList2021Entry statusList2021Entry =
-              (VerifiableCredentialStatusList2021Entry) vc.getVerifiableCredentialStatus();
+              (VerifiableCredentialStatusList2021Entry)
+                  vc.getVerifiableCredentialStatus().orElseThrow();
           Assertions.assertEquals("revocation", statusList2021Entry.getStatusPurpose());
           Assertions.assertEquals(STATUS_LIST_2021_ENTRY, statusList2021Entry.getType());
           Assertions.assertEquals(

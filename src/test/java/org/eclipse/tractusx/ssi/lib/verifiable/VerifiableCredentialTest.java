@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -21,8 +21,6 @@
 
 package org.eclipse.tractusx.ssi.lib.verifiable;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import lombok.SneakyThrows;
@@ -33,7 +31,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /** The type Verifiable credential test. */
-public class VerifiableCredentialTest {
+class VerifiableCredentialTest {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -45,7 +43,7 @@ public class VerifiableCredentialTest {
    */
   @Test
   @SneakyThrows
-  public void canSerializeVC() throws JsonMappingException, JsonProcessingException {
+  void canSerializeVC() {
     final Map<String, Object> vpFromMap = TestResourceUtil.getAlumniVerifiableCredential();
     var vp = new VerifiableCredential(vpFromMap);
     var json = vp.toJson();
@@ -56,7 +54,7 @@ public class VerifiableCredentialTest {
 
   /** Should load cached context. */
   @Test
-  public void shouldLoadCachedContext() {
+  void shouldLoadCachedContext() {
     var vcFromMap = TestResourceUtil.getAlumniVerifiableCredential();
     var vc = new VerifiableCredential(vcFromMap);
 

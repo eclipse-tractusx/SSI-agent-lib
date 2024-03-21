@@ -1,6 +1,7 @@
 package org.eclipse.tractusx.ssi.lib.model.did;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.nimbusds.jose.jwk.ECKey;
 import com.nimbusds.jose.jwk.JWK;
@@ -9,6 +10,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.util.JSONObjectUtils;
 import java.text.ParseException;
 import java.util.Map;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -166,5 +168,33 @@ class JWKVerificationMethodTest {
     assertEquals("Ed25519", ((OctetKeyPair) jwk).getCurve().getName());
     assertEquals(
         "VCpo2LMLhn6iWku8MKvSLg2ZAoC-nlOyPVQaO3FxVeQ", ((OctetKeyPair) jwk).getX().toString());
+  }
+
+  @Test
+  void shouldThrowWhenIllegalType() {
+    Map<String, Object> map =
+        Map.of(
+            "type",
+            "Ed25519VerificationKey2069",
+            "id",
+            UUID.randomUUID().toString(),
+            "controller",
+            UUID.randomUUID().toString());
+    assertThrows(IllegalArgumentException.class, () -> new JWKVerificationMethod(map));
+  }
+
+  @Test
+  void shouldThrowWhenInvalidPublicKeyJWK() {
+    Map<String, Object> map =
+        Map.of(
+            "type",
+            JWKVerificationMethod.DEFAULT_TYPE,
+            "id",
+            UUID.randomUUID().toString(),
+            "controller",
+            UUID.randomUUID().toString(),
+            JWKVerificationMethod.PUBLIC_KEY_JWK,
+            42);
+    assertThrows(IllegalArgumentException.class, () -> new JWKVerificationMethod(map));
   }
 }

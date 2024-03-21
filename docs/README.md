@@ -184,7 +184,7 @@ public static VerifiableCredential createVCWithoutProof() {
 
 ```
 
-5. To Generate VerifiableCredential with ED21559/JWS proof:
+5. To Generate VerifiableCredential with ED25519/JWS proof:
 
 
 ```java
@@ -202,7 +202,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofGenerator;
 
 
- public static VerifiableCredential createVCWithED21559Proof(
+ public static VerifiableCredential createVCWithED25519Proof(
       VerifiableCredential credential, byte[] privateKey, Did issuer) {
 
     // VC Builder
@@ -217,7 +217,7 @@ import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofGenerator;
             .type(credential.getTypes());
 
     // Ed25519 Proof Builder
-    final LinkedDataProofGenerator generator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
+    final LinkedDataProofGenerator generator = LinkedDataProofGenerator.newInstance(SignatureType.ED25519);
     final Ed25519Signature2020 proof =
         (Ed25519Signature2020) generator.createProof(
         builder.build(), URI.create(issuer + "#key-1"), privateKey);
@@ -282,6 +282,7 @@ public static VerifiablePresentation createVP( Did issuer, List<VerifiableCreden
 ```
 
 7. To Generate Signed Verifiable Presentation:
+
 ```java
 import java.util.List;
 
@@ -289,30 +290,33 @@ import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
 import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519KeySet;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentationBuilder;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentationType;
 import org.eclipse.tractusx.ssi.lib.resolver.OctetKeyPairFactory;
-import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdSerializerImpl;
+import org.eclipse.tractusx.ssi.lib.serialization.jsonld.JsonLdSerializerImpl;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationFactory;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationFactoryImpl;
 
 import com.nimbusds.jwt.SignedJWT;
 
 
- public static SignedJWT createVPAsJWT(Did issuer,List<VerifiableCredential> credentials, String audience,byte[] privateKey,byte[] publicKey){
- 
+public static SignedJWT createVPAsJWT(
+        Did issuer,
+        List<VerifiableCredential> credentials,
+        String audience,
+        byte[] privateKey,
+        byte[] publicKey
+) {
+
     //Extracting keys 
     final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
-    final Ed25519Key signingKey = new Ed25519Key(keySet.getPrivateKey()); 
-    
+    final Ed25519Key signingKey = new Ed25519Key(keySet.getPrivateKey());
+
     //JWT Factory
     final SerializedJwtPresentationFactory presentationFactory = new SerializedJwtPresentationFactoryImpl(
             new SignedJwtFactory(new OctetKeyPairFactory()), new JsonLdSerializerImpl(), issuer);
 
     //Build JWT
     return presentationFactory.createPresentation(
-        issuer, credentials, audience, signingKey);
+            issuer, credentials, audience, signingKey);
 
 
 }
@@ -370,7 +374,7 @@ import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
 import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistryImpl;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 
- public static boolean verifyED21559LD(VerifiableCredential verifiableCredential) {
+ public static boolean verifyED25519LD(VerifiableCredential verifiableCredential) {
     // DID Resolver Constracture params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();
@@ -381,7 +385,7 @@ import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
         new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
 
     LinkedDataProofValidation proofValidation =
-        LinkedDataProofValidation.newInstance(SignatureType.ED21559,didDocumentResolverRegistry);
+        LinkedDataProofValidation.newInstance(SignatureType.ED25519,didDocumentResolverRegistry);
     return proofValidation.verify(verifiableCredential);
   }
 

@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -21,12 +21,13 @@
 
 package org.eclipse.tractusx.ssi.lib.did.web;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -34,8 +35,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
+import java.util.Optional;
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
@@ -44,12 +47,14 @@ import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /** The type Did web resolver test. */
 @ExtendWith(MockitoExtension.class)
-public class DidWebResolverTest {
+class DidWebResolverTest {
 
   @Mock private HttpClient httpClient;
   @Mock private HttpResponse<Object> response;
@@ -72,8 +77,8 @@ public class DidWebResolverTest {
    * @throws URISyntaxException the uri syntax exception
    */
   @Test
-  public void shouldResolveValidWebDid()
-      throws DidResolverException, IOException, InterruptedException, URISyntaxException {
+  @SneakyThrows
+  void shouldResolveValidWebDid() {
     Did validDidWeb = new Did(new DidMethod("web"), new DidMethodIdentifier("localhost"), null);
     assertTrue(resolver.isResolvable(validDidWeb));
     when(httpClient.send(any(), any())).thenReturn(response);
@@ -81,8 +86,8 @@ public class DidWebResolverTest {
     when(response.body()).thenReturn(TestResourceUtil.getPublishedDidDocumentAsString());
     when(parser.parse(any(), anyBoolean())).thenReturn(new URI("http://dummy.net/did.json"));
 
-    DidDocument actualDidDoc = resolver.resolve(validDidWeb);
-    assertEquals(new DidDocument(TestResourceUtil.getPublishedDidDocument()), actualDidDoc);
+    Optional<DidDocument> actualDidDoc = resolver.resolve(validDidWeb);
+    assertEquals(new DidDocument(TestResourceUtil.getPublishedDidDocument()), actualDidDoc.get());
   }
 
   /**
@@ -91,7 +96,8 @@ public class DidWebResolverTest {
    * @throws DidResolverException the did resolver exception
    */
   @Test
-  public void shouldNotResolveNonWebDid() throws DidResolverException {
+  @SneakyThrows
+  void shouldNotResolveNonWebDid() {
     Did validDidKey =
         new Did(
             new DidMethod("key"),
@@ -103,5 +109,51 @@ public class DidWebResolverTest {
         () -> {
           resolver.resolve(validDidKey);
         });
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = {199, 300})
+  @SneakyThrows
+  void shouldThrowWhenStatusCodeIsNot2XX(int code) {
+    Did validDidWeb = new Did(new DidMethod("web"), new DidMethodIdentifier("localhost"), null);
+    assertTrue(resolver.isResolvable(validDidWeb));
+    when(httpClient.send(any(), any())).thenReturn(response);
+    when(response.statusCode()).thenReturn(code);
+    when(parser.parse(any(), anyBoolean())).thenReturn(new URI("http://dummy.net/did.json"));
+
+    assertThrows(DidResolverException.class, () -> resolver.resolve(validDidWeb));
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldResolveWhenBodyIsNull() {
+    Did validDidWeb = new Did(new DidMethod("web"), new DidMethodIdentifier("localhost"), null);
+    assertTrue(resolver.isResolvable(validDidWeb));
+    when(httpClient.send(any(), any())).thenReturn(response);
+    when(response.statusCode()).thenReturn(200);
+    when(response.body()).thenReturn(null);
+    when(parser.parse(any(), anyBoolean())).thenReturn(new URI("http://dummy.net/did.json"));
+
+    assertThrows(DidResolverException.class, () -> resolver.resolve(validDidWeb));
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldResolveWhenInterrupted() {
+    Did validDidWeb = new Did(new DidMethod("web"), new DidMethodIdentifier("localhost"), null);
+    assertTrue(resolver.isResolvable(validDidWeb));
+    when(parser.parse(any(), anyBoolean())).thenReturn(new URI("http://dummy.net/did.json"));
+    doThrow(new InterruptedException()).when(httpClient).send(any(), any());
+    assertThrows(DidResolverException.class, () -> resolver.resolve(validDidWeb));
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldResolveWhenIOException() {
+    Did validDidWeb = new Did(new DidMethod("web"), new DidMethodIdentifier("localhost"), null);
+    assertTrue(resolver.isResolvable(validDidWeb));
+    when(parser.parse(any(), anyBoolean())).thenReturn(new URI("http://dummy.net/did.json"));
+    doThrow(new IOException()).when(httpClient).send(any(), any());
+    assertThrows(DidResolverException.class, () -> resolver.resolve(validDidWeb));
   }
 }

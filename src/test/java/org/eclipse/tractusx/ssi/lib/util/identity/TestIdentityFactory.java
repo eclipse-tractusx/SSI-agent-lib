@@ -1,5 +1,6 @@
-/********************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+/*
+ * ******************************************************************************
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -25,7 +26,6 @@ import com.nimbusds.jose.jwk.ECKey;
 import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.util.Base64URL;
-import java.io.IOException;
 import java.net.URI;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPairGenerator;
@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IKeyGenerator;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
@@ -51,8 +52,7 @@ import org.eclipse.tractusx.ssi.lib.crypt.ec.ECPrivateKeyWrapper;
 import org.eclipse.tractusx.ssi.lib.crypt.ec.ECPublicKeyWrapper;
 import org.eclipse.tractusx.ssi.lib.crypt.rsa.RSAPrivateKeyWrapper;
 import org.eclipse.tractusx.ssi.lib.crypt.rsa.RSAPublicKeyWrapper;
-import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559Generator;
-import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519Generator;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
@@ -72,15 +72,13 @@ public class TestIdentityFactory {
    * New identity with ed 25519 keys test identity.
    *
    * @return the test identity
-   * @throws IOException the io exception
-   * @throws KeyGenerationException the key generation exception
    */
-  public static TestIdentity newIdentityWithED25519Keys()
-      throws IOException, KeyGenerationException {
+  @SneakyThrows
+  public static TestIdentity newIdentityWithEDVerificationMethod() {
 
     final Did did = TestDidFactory.createRandom();
 
-    IKeyGenerator keyGenerator = new x21559Generator();
+    IKeyGenerator keyGenerator = new X25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
     IPublicKey publicKey = keyPair.getPublicKey();
     IPrivateKey privateKey = keyPair.getPrivateKey();
@@ -88,7 +86,7 @@ public class TestIdentityFactory {
     OctetKeyPair.Builder builder =
         (new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey.asByte())))
             .d(Base64URL.encode(privateKey.asByte()))
-            .keyID("key-2");
+            .keyID("key-1");
 
     MultibaseString multibaseString = MultibaseFactory.create(publicKey.asByte());
     final Ed25519VerificationMethodBuilder ed25519VerificationKey2020Builder =
@@ -96,7 +94,7 @@ public class TestIdentityFactory {
 
     final Ed25519VerificationMethod ed25519VerificationMethod =
         ed25519VerificationKey2020Builder
-            .id(URI.create(did + "#key-2"))
+            .id(URI.create(did + "#key-1"))
             .controller(URI.create(did + "#controller"))
             .publicKeyMultiBase(multibaseString)
             .build();
@@ -109,6 +107,34 @@ public class TestIdentityFactory {
         didDocumentBuilder
             .id(did.toUri())
             .verificationMethods(List.of(ed25519VerificationMethod, jwkVerificationMethod))
+            .build();
+
+    return new TestIdentity(did, didDocument, publicKey, privateKey);
+  }
+
+  @SneakyThrows
+  public static TestIdentity newIdentityWithEDKeys() {
+
+    final Did did = TestDidFactory.createRandom();
+
+    IKeyGenerator keyGenerator = new X25519Generator();
+    KeyPair keyPair = keyGenerator.generateKey();
+    IPublicKey publicKey = keyPair.getPublicKey();
+    IPrivateKey privateKey = keyPair.getPrivateKey();
+
+    OctetKeyPair.Builder builder =
+        (new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey.asByte())))
+            .d(Base64URL.encode(privateKey.asByte()))
+            .keyID("key-1");
+
+    final JWKVerificationMethod jwkVerificationMethod =
+        new JWKVerificationMethodBuilder().did(did).jwk(builder.build()).build();
+
+    final DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();
+    final DidDocument didDocument =
+        didDocumentBuilder
+            .id(did.toUri())
+            .verificationMethods(List.of(jwkVerificationMethod))
             .build();
 
     return new TestIdentity(did, didDocument, publicKey, privateKey);

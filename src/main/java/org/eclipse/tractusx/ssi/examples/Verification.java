@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -23,10 +23,19 @@ package org.eclipse.tractusx.ssi.examples;
 
 import com.nimbusds.jwt.SignedJWT;
 import java.net.http.HttpClient;
+import java.security.SignatureException;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebResolver;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
-import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
-import org.eclipse.tractusx.ssi.lib.exception.JwtException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
+import org.eclipse.tractusx.ssi.lib.exception.json.TransformJsonLdException;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedVerificationMethodException;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtVerifier;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
@@ -34,15 +43,22 @@ import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
 /**
  * This is example class to demonstrate how to verify @{@link SignedJWT} and {@link
  * VerifiableCredential}
+ *
+ * @throws DidParseException
+ * @throws SignatureException
+ * @throws DidResolverException
+ * @throws SignatureVerificationException
+ * @throws UnsupportedVerificationMethodException
  */
 public class Verification {
 
-  /**
-   * Verify jwt.
-   *
-   * @param jwt the jwt
-   */
-  public static void verifyJWT(SignedJWT jwt) {
+  private Verification() {
+    // static
+  }
+
+  public static void verifyJWT(SignedJWT jwt)
+      throws DidParseException, DidResolverException, SignatureVerificationException,
+          SignatureParseException {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();
@@ -50,39 +66,26 @@ public class Verification {
     var didResolver = new DidWebResolver(httpClient, didParser, enforceHttps);
 
     SignedJwtVerifier jwtVerifier = new SignedJwtVerifier(didResolver);
-    try {
-      jwtVerifier.verify(jwt);
-    } catch (JwtException | DidDocumentResolverNotRegisteredException e) {
-      // An exception will be thrown here in case JWT verification failed or DID
-      // Document Resolver not able to resolve.
-      e.printStackTrace();
-    }
+
+    jwtVerifier.verify(jwt);
   }
 
   /**
-   * Verify ed21559 signed ld.
+   * Verify ed25519 signed ld.
    *
    * @param verifiableCredential the verifiable credential
    * @return the boolean
+   * @throws DidDocumentResolverNotRegisteredException
+   * @throws TransformJsonLdException
+   * @throws NoVerificationKeyFoundException
+   * @throws SignatureVerificationException
+   * @throws InvalidPublicKeyFormatException
+   * @throws DidParseException
+   * @throws SignatureParseException
+   * @throws UnsupportedSignatureTypeException
+   * @throws SignatureVerificationFailedException
    */
-  public static boolean verifyED21559LD(VerifiableCredential verifiableCredential) {
-    // DID Resolver constructor params
-    DidWebParser didParser = new DidWebParser();
-    var httpClient = HttpClient.newHttpClient();
-    var enforceHttps = false;
-    var didResolver = new DidWebResolver(httpClient, didParser, enforceHttps);
-
-    LinkedDataProofValidation proofValidation = LinkedDataProofValidation.newInstance(didResolver);
-    return proofValidation.verify(verifiableCredential);
-  }
-
-  /**
-   * Verify jws signed ld.
-   *
-   * @param verifiableCredential the verifiable credential
-   * @return the boolean
-   */
-  public static boolean verifyJWSLD(VerifiableCredential verifiableCredential) {
+  public static boolean verifyED25519LD(VerifiableCredential verifiableCredential) {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();

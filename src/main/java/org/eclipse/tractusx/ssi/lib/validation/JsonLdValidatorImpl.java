@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -31,27 +31,42 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 import java.util.Map;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidJsonLdException;
+import java.util.logging.Logger;
+import org.eclipse.tractusx.ssi.lib.exception.json.InvalidJsonLdException;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.RemoteDocumentLoader;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 
 /** The type Json ld validator. */
 public class JsonLdValidatorImpl implements JsonLdValidator {
+  static final Logger LOG = Logger.getLogger(JsonLdValidatorImpl.class.getName());
   private static final String UNDEFINED_TERM_URI = "urn:UNDEFINEDTERM";
 
-  public void validate(VerifiablePresentation verifiablePresentation)
-      throws InvalidJsonLdException {
-    for (VerifiableCredential verifiableCredential :
-        verifiablePresentation.getVerifiableCredentials()) {
-      validate(verifiableCredential);
+  private static void findUndefinedTerms(JsonArray jsonArray) throws InvalidJsonLdException {
+    for (JsonValue entry : jsonArray) {
+      if (entry instanceof JsonObject jsonObject) {
+        findUndefinedTerms(jsonObject);
+      }
     }
   }
 
-  @Override
-  public void validate(VerifiableCredential verifiableCredential) throws InvalidJsonLdException {
-    validateJsonLd(verifiableCredential);
+  private static void findUndefinedTerms(JsonObject jsonObject) throws InvalidJsonLdException {
+    for (Map.Entry<String, JsonValue> entry : jsonObject.entrySet()) {
+      if (entry.getKey().startsWith(UNDEFINED_TERM_URI)) {
+
+        throw new InvalidJsonLdException(
+            "Undefined JSON-LD term: " + entry.getKey().substring(UNDEFINED_TERM_URI.length()));
+      }
+
+      if (entry.getValue() instanceof JsonArray jsonArray) {
+        findUndefinedTerms(jsonArray);
+      }
+      if (entry.getValue() instanceof JsonObject obj) {
+        findUndefinedTerms(obj);
+      }
+    }
   }
 
   private void validateJsonLd(JsonLdObject jsonLdObject) throws InvalidJsonLdException {
@@ -60,6 +75,7 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
       var documentLoader = RemoteDocumentLoader.getInstance();
       documentLoader.setEnableHttps(true);
       documentLoader.setHttpsContexts(jsonLdObject.getContext());
+      documentLoader.setEnableFile(true);
 
       final JsonObject expandContext =
           Json.createObjectBuilder().add("@vocab", Json.createValue(UNDEFINED_TERM_URI)).build();
@@ -83,28 +99,19 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
     }
   }
 
-  private static void findUndefinedTerms(JsonArray jsonArray) {
-    for (JsonValue entry : jsonArray) {
-      if (entry instanceof JsonObject) {
-        findUndefinedTerms((JsonObject) entry);
+  public void validate(Verifiable verifiable) throws InvalidJsonLdException {
+    if (verifiable instanceof VerifiableCredential) {
+      validateJsonLd(verifiable);
+    } else if (verifiable instanceof VerifiablePresentation verifiablePresentation) {
+      for (VerifiableCredential verifiableCredential :
+          verifiablePresentation.getVerifiableCredentials()) {
+        validate(verifiableCredential);
       }
-    }
-  }
-
-  private static void findUndefinedTerms(JsonObject jsonObject) {
-    for (Map.Entry<String, JsonValue> entry : jsonObject.entrySet()) {
-      if (entry.getKey().startsWith(UNDEFINED_TERM_URI)) {
-
-        throw new RuntimeException(
-            "Undefined JSON-LD term: " + entry.getKey().substring(UNDEFINED_TERM_URI.length()));
-      }
-
-      if (entry.getValue() instanceof JsonArray) {
-        findUndefinedTerms((JsonArray) entry.getValue());
-      }
-      if (entry.getValue() instanceof JsonObject) {
-        findUndefinedTerms((JsonObject) entry.getValue());
-      }
+    } else {
+      LOG.warning("Unsupported Verifiable type: " + verifiable.getClass().getName());
+      throw new InvalidJsonLdException(
+          String.format(
+              "Verifiable type %s is not supported", verifiable.getClass().getSimpleName()));
     }
   }
 }

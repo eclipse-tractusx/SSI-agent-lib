@@ -25,10 +25,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /** The type Did test. */
-public class DidTest {
+class DidTest {
   /** Test did equals. */
   @Test
-  public void testDidEquals() {
+  void testDidEquals() {
 
     Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));
     Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));

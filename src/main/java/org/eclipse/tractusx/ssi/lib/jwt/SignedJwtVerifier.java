@@ -1,5 +1,6 @@
-/********************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+/*
+ * ******************************************************************************
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -32,16 +33,18 @@ import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.proc.JWSVerifierFactory;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import java.security.SignatureException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
-import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
-import org.eclipse.tractusx.ssi.lib.exception.JwtException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedVerificationMethodException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
@@ -63,25 +66,31 @@ public class SignedJwtVerifier {
    *
    * @param jwt a {@link SignedJWT} that was sent by the claiming party.
    * @return true if verified, false otherwise
-   * @throws JwtException the jwt exception
-   * @throws DidDocumentResolverNotRegisteredException the did document resolver not registered
-   *     exception
+   * @throws DidParseException
+   * @throws SignatureException
+   * @throws DidResolverException
+   * @throws SignatureVerificationException
+   * @throws UnsupportedVerificationMethodException
+   * @throws SignatureParseException
    */
-  @SneakyThrows({JOSEException.class, DidResolverException.class})
   public boolean verify(SignedJWT jwt)
-      throws JwtException, DidDocumentResolverNotRegisteredException {
+      throws DidParseException, DidResolverException, SignatureVerificationException,
+          SignatureParseException {
 
     JWTClaimsSet jwtClaimsSet;
     try {
       jwtClaimsSet = jwt.getJWTClaimsSet();
     } catch (ParseException e) {
-      throw new JwtException(e);
+      throw new SignatureParseException(e.getMessage());
     }
 
     final String issuer = jwtClaimsSet.getIssuer();
     final Did issuerDid = DidParser.parse(issuer);
 
-    final DidDocument issuerDidDocument = didResolver.resolve(issuerDid);
+    final DidDocument issuerDidDocument =
+        didResolver
+            .resolve(issuerDid)
+            .orElseThrow(() -> new IllegalStateException("document could not be resolved"));
     final List<VerificationMethod> verificationMethods = issuerDidDocument.getVerificationMethods();
 
     // verify JWT signature
@@ -94,13 +103,17 @@ public class SignedJwtVerifier {
           String.format("no verification method for keyID %s found", keyID));
     }
 
-    if (JWKVerificationMethod.isInstance(verificationMethod)) {
-      final JWKVerificationMethod method = new JWKVerificationMethod(verificationMethod);
-      JWSVerifier verifier = getVerifier(jwt.getHeader(), method.getJwk());
-      return jwt.verify(verifier);
-    } else if (Ed25519VerificationMethod.isInstance(verificationMethod)) {
-      final Ed25519VerificationMethod method = new Ed25519VerificationMethod(verificationMethod);
-      return jwt.verify(new Ed25519Verifier(method.getOctetKeyPair()));
+    try {
+      if (JWKVerificationMethod.isInstance(verificationMethod)) {
+        final JWKVerificationMethod method = new JWKVerificationMethod(verificationMethod);
+        JWSVerifier verifier = getVerifier(jwt.getHeader(), method.getJwk());
+        return jwt.verify(verifier);
+      } else if (Ed25519VerificationMethod.isInstance(verificationMethod)) {
+        final Ed25519VerificationMethod method = new Ed25519VerificationMethod(verificationMethod);
+        return jwt.verify(new Ed25519Verifier(method.getOctetKeyPair()));
+      }
+    } catch (JOSEException e) {
+      throw new SignatureVerificationException(e.getMessage());
     }
 
     return false;
@@ -110,35 +123,6 @@ public class SignedJwtVerifier {
     Map<String, VerificationMethod> result = new HashMap<>();
     l.forEach(v -> result.put(v.getId().toString(), v));
     return result;
-  }
-
-  //  // FIXME this will break SignedJwtVerifierTest.verifyEcSignature(), as now a concrete
-  //  private List<VerifiableCredential> fromClaimSet(JWTClaimsSet jwtClaimsSet) {
-  //    Object verifiableCredentialObject = jwtClaimsSet.getClaim("vp");
-  //    if (verifiableCredentialObject instanceof Map) {
-  //      Map<String, Object> m = convertToMap(verifiableCredentialObject);
-  //      Object object = m.get("verifiableCredential");
-  //      if (object instanceof List) {
-  //        List<?> rawList = (List<?>) object;
-  //
-  //        return rawList.stream()
-  //            .map(this::convertToMap)
-  //            .map(VerifiableCredential::new)
-  //            .collect(Collectors.toList());
-  //      }
-  //      throw new IllegalArgumentException("verifiableCredential is not a list");
-  //    }
-  //    throw new IllegalArgumentException("vp is not a json object");
-  //  }
-
-  private Map<String, Object> convertToMap(Object o) {
-    if (o instanceof Map) {
-      Map<String, Object> result = new HashMap<>();
-      Map<?, ?> rawMap = (Map<?, ?>) o;
-      rawMap.forEach((k, v) -> result.put((String) k, v));
-      return result;
-    }
-    throw new IllegalArgumentException("object is not a map");
   }
 
   private JWSVerifier getVerifier(JWSHeader header, JWK key) throws JOSEException {

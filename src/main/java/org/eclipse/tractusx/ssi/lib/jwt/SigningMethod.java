@@ -21,8 +21,15 @@
 
 package org.eclipse.tractusx.ssi.lib.jwt;
 
-/** The type Signing method. */
+/**
+ * @deprecated since SignatureType
+ */
+@Deprecated(forRemoval = true)
 public class SigningMethod {
   /** The constant SIGNING_METHOD_ES256. */
+  private SigningMethod() {
+    // static
+  }
+
   public static final String SIGNING_METHOD_ES256 = "ES256";
 }

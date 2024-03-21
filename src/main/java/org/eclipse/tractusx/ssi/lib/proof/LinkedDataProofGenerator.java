@@ -1,5 +1,6 @@
-/********************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+/*
+ * ******************************************************************************
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -24,14 +25,15 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.SsiException;
-import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
+import org.eclipse.tractusx.ssi.lib.exception.json.TransformJsonLdException;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.ProofPurpose;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
-import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020Builder;
+import org.eclipse.tractusx.ssi.lib.model.proof.ed25519.Ed25519Signature2020Builder;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020Builder;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
@@ -54,7 +56,7 @@ public class LinkedDataProofGenerator {
    */
   public static LinkedDataProofGenerator newInstance(SignatureType type)
       throws UnsupportedSignatureTypeException {
-    if (type == SignatureType.ED21559) {
+    if (type == SignatureType.ED25519) {
       return new LinkedDataProofGenerator(
           type, new LinkedDataHasher(), new LinkedDataTransformer(), new Ed25519ProofSigner());
     } else {
@@ -79,7 +81,8 @@ public class LinkedDataProofGenerator {
    * @throws InvalidePrivateKeyFormat the invalide private key format
    */
   public Proof createProof(Verifiable document, URI verificationMethodId, IPrivateKey privateKey)
-      throws SsiException, InvalidePrivateKeyFormat {
+      throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException,
+          TransformJsonLdException {
 
     return createProof(document, verificationMethodId, privateKey, ProofPurpose.ASSERTION_METHOD);
   }
@@ -89,14 +92,15 @@ public class LinkedDataProofGenerator {
       URI verificationMethodId,
       IPrivateKey privateKey,
       ProofPurpose proofPurpose)
-      throws SsiException, InvalidePrivateKeyFormat {
+      throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException,
+          TransformJsonLdException {
 
     final TransformedLinkedData transformedData = transformer.transform(document);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
     byte[] signature;
     signature = signer.sign(new HashedLinkedData(hashedData.getValue()), privateKey);
 
-    if (type == SignatureType.ED21559) {
+    if (type == SignatureType.ED25519) {
 
       final MultibaseString multibaseString = MultibaseFactory.create(signature);
       return new Ed25519Signature2020Builder()

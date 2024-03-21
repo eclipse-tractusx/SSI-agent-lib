@@ -37,14 +37,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /** The type Linked data transformer test. */
-public class LinkedDataTransformerTest {
+class LinkedDataTransformerTest {
 
   private final LinkedDataTransformer linkedDataTransformer = new LinkedDataTransformer();
 
   /** Test linked data transformer. */
   @Test
   @SneakyThrows
-  public void testLinkedDataTransformer() {
+  void testLinkedDataTransformer() {
     final VerifiableCredentialBuilder verifiableCredentialBuilder =
         new VerifiableCredentialBuilder();
 
@@ -62,7 +62,7 @@ public class LinkedDataTransformerTest {
             .build();
 
     // check status added in VC
-    Assertions.assertNotNull(credentialWithoutProof.getVerifiableCredentialStatus());
+    Assertions.assertTrue(credentialWithoutProof.getVerifiableCredentialStatus().isPresent());
 
     var transformedWithoutProof = linkedDataTransformer.transform(credentialWithoutProof);
 

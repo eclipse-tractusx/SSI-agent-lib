@@ -1,5 +1,6 @@
-/********************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+/*
+ * ******************************************************************************
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -22,7 +23,7 @@ package org.eclipse.tractusx.ssi.lib.proof;
 import com.nimbusds.jose.JWSAlgorithm;
 
 public enum SignatureType {
-  ED21559("Ed25519Signature2020", ""),
+  ED25519("Ed25519Signature2020", ""),
   JWS(Constants.JSON_WEB_SIGNATURE_2020, JWSAlgorithm.EdDSA.getName()),
   JWS_SEC_P_256K1(Constants.JSON_WEB_SIGNATURE_2020, JWSAlgorithm.ES256K.getName()),
   JWS_P256(Constants.JSON_WEB_SIGNATURE_2020, JWSAlgorithm.ES256.getName()),

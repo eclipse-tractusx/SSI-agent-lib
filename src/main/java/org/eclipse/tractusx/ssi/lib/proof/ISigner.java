@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -22,8 +22,8 @@
 package org.eclipse.tractusx.ssi.lib.proof;
 
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.SsiException;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
 /** The interface Signer. */
@@ -38,5 +38,5 @@ public interface ISigner {
    * @throws InvalidePrivateKeyFormat the invalide private key format
    */
   public byte[] sign(HashedLinkedData hashedLinkedData, IPrivateKey privateKey)
-      throws SsiException, InvalidePrivateKeyFormat;
+      throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException;
 }

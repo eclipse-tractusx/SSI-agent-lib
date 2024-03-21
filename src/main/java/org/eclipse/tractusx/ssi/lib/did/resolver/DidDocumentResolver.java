@@ -26,10 +26,10 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
 /** The interface Did document resolver. */
-@Deprecated
 /**
  * @deprecated replaced by {@link DidResolver}
  */
+@Deprecated(since = "DidResolver is used")
 public interface DidDocumentResolver {
 
   /**

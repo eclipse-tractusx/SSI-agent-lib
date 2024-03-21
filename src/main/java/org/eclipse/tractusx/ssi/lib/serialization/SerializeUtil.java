@@ -30,6 +30,7 @@ import java.util.Map;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialStatus;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialStatusList2021Entry;
@@ -52,13 +53,13 @@ public final class SerializeUtil {
    * Specify oder of properties while creating JSON string from object like VerifiableCredential,
    * DidDocument etc.
    */
-  public static final Map<Class, List<String>> ORDER_MAP_LIST =
+  public static final Map<Class<?>, List<String>> ORDER_MAP_LIST =
       Map.of(
           VerifiableCredential.class,
           List.of(
               JsonLdObject.CONTEXT,
-              VerifiableCredential.ID,
-              VerifiableCredential.TYPE,
+              Verifiable.ID,
+              Verifiable.TYPE,
               VerifiableCredential.CREDENTIAL_SCHEMA,
               VerifiableCredential.ISSUER,
               VerifiableCredential.ISSUANCE_DATE,
@@ -69,11 +70,12 @@ public final class SerializeUtil {
               VerifiableCredential.TERMS_OF_USE,
               VerifiableCredential.REFRESH_SERVICE,
               VerifiableCredential.CREDENTIAL_STATUS,
-              VerifiableCredential.PROOF),
+              Verifiable.PROOF),
           DidDocument.class,
           List.of(
               JsonLdObject.CONTEXT,
               DidDocument.ID,
+              DidDocument.SERVICE,
               DidDocument.VERIFICATION_METHOD,
               DidDocument.AUTHENTICATION),
           VerifiableCredentialStatusList2021Entry.class,
@@ -86,10 +88,10 @@ public final class SerializeUtil {
           VerifiablePresentation.class,
           List.of(
               JsonLdObject.CONTEXT,
-              VerifiablePresentation.ID,
-              VerifiablePresentation.TYPE,
+              Verifiable.ID,
+              Verifiable.TYPE,
               VerifiablePresentation.VERIFIABLE_CREDENTIAL,
-              VerifiableCredential.PROOF));
+              Verifiable.PROOF));
 
   /**
    * To json string.
@@ -132,11 +134,11 @@ public final class SerializeUtil {
    * @return URI uri
    */
   public static URI asURI(Object object) {
-    if (object instanceof URI) {
-      return (URI) object;
+    if (object instanceof URI uri) {
+      return uri;
     }
-    if (object instanceof String) {
-      return URI.create((String) object);
+    if (object instanceof String uriString) {
+      return URI.create(uriString);
     }
     throw new IllegalArgumentException("Unsupported type: " + object.getClass());
   }
@@ -148,11 +150,11 @@ public final class SerializeUtil {
    * @return the list
    */
   public static List<String> asStringList(Object object) {
-    if (object instanceof List) {
-      return (List<String>) object;
+    if (object instanceof List<?> rawList) {
+      return rawList.stream().map(String.class::cast).toList();
     }
-    if (object instanceof String) {
-      return List.of((String) object);
+    if (object instanceof String string) {
+      return List.of(string);
     }
     throw new IllegalArgumentException("Unsupported type: " + object.getClass());
   }
@@ -163,11 +165,12 @@ public final class SerializeUtil {
    * @param object the object
    * @return the list
    */
-  public static List asList(Object object) {
-    if (object instanceof List) {
-      return (List) object;
+  public static <T> List<T> asList(Object object) {
+    if (object instanceof List<?> rawList) {
+      return rawList.stream().map(obj -> (T) obj).toList();
     } else {
-      return List.of(object);
+      T typed = (T) object;
+      return List.of(typed);
     }
   }
 

@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -21,10 +21,13 @@
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
-import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.NoVerificationKeyFoundExcpetion;
-import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
@@ -36,15 +39,17 @@ public interface IVerifier {
    * model to get the public key of issuer.
    *
    * @param hashedLinkedData the hashed linked data
-   * @param verifiable the verifiable
-   * @return the boolean
-   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
-   * @throws DidDocumentResolverNotRegisteredException the did document resolver not registered
-   *     exception
-   * @throws InvalidePublicKeyFormat the invalide public key format
-   * @throws NoVerificationKeyFoundExcpetion the no verification key found excpetion
+   * @param document {@link VerifiableCredential} the verifiable
+   * @return boolean if verified or not
+   * @throws UnsupportedSignatureTypeException
+   * @throws SignatureParseException
+   * @throws InvalidPublicKeyFormatException
+   * @throws SignatureGenerateFailedException
+   * @throws SignatureVerificationException
+   * @throws DidParseException
+   * @throws NoVerificationKeyFoundException
    */
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable verifiable)
-      throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException,
-          InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion;
+      throws SignatureParseException, DidParseException, InvalidPublicKeyFormatException,
+          SignatureVerificationException;
 }

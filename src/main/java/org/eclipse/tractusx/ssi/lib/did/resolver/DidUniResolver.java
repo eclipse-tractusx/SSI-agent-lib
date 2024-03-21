@@ -27,6 +27,9 @@ import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Optional;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 
@@ -40,7 +43,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 public class DidUniResolver implements DidResolver {
   private final HttpClient client;
   private final URI uniResolverEndpoint;
-  private static final String uniResolverResolvePath = "./1.0/identifiers/";
+  private static final String UNI_RESOLVER_RESOLVE_PATH = "./1.0/identifiers/";
 
   /**
    * Instantiates a new Did uni resolver.
@@ -70,9 +73,9 @@ public class DidUniResolver implements DidResolver {
   }
 
   @Override
-  public DidDocument resolve(Did did) throws DidResolverException {
+  public Optional<DidDocument> resolve(Did did) throws DidResolverException, DidParseException {
     URI requestUri =
-        uniResolverEndpoint.resolve(uniResolverResolvePath).resolve("./" + did.toString());
+        uniResolverEndpoint.resolve(UNI_RESOLVER_RESOLVE_PATH).resolve("./" + did.toString());
     final HttpRequest request = HttpRequest.newBuilder().uri(requestUri).GET().build();
 
     try {
@@ -89,7 +92,7 @@ public class DidUniResolver implements DidResolver {
         throw new DidResolverException("Empty response body");
       }
 
-      return DidDocument.fromJson(response.body());
+      return Optional.of(DidDocument.fromJson(response.body()));
     } catch (DidResolverException e) {
       throw e;
     } catch (InterruptedException e) {

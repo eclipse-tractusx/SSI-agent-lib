@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Objects;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
+import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.ProofPurpose;
 
 /** The type Did document builder. */
@@ -129,7 +130,7 @@ public class DidDocumentBuilder {
 
     Map<String, Object> requiredEntries =
         Map.of(
-            DidDocument.CONTEXT,
+            JsonLdObject.CONTEXT,
             DidDocument.DEFAULT_CONTEXT,
             DidDocument.ID,
             id.toString(),

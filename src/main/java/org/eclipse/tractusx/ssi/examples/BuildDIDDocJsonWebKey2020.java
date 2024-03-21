@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -41,6 +41,10 @@ import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethodBuilder;
 import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 
 public class BuildDIDDocJsonWebKey2020 {
+
+  private BuildDIDDocJsonWebKey2020() {
+    // static
+  }
 
   @SneakyThrows
   public static DidDocument buildDidDocumentWithEDJWKVerificationMethod(String hostName) {

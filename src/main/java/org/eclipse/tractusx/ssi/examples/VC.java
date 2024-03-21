@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -26,11 +26,12 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.SsiException;
-import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
+import org.eclipse.tractusx.ssi.lib.exception.json.TransformJsonLdException;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
+import org.eclipse.tractusx.ssi.lib.model.proof.ed25519.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
@@ -41,6 +42,9 @@ import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 
 /** This is example class to demonstrate how create Verifiable Credentials */
 public class VC {
+  private VC() {
+    // static
+  }
   /**
    * Create verifiable credential without proof
    *
@@ -57,21 +61,18 @@ public class VC {
         new VerifiableCredentialSubject(Map.of("test", "test"));
 
     // Using Builder
-    final VerifiableCredential credentialWithoutProof =
-        verifiableCredentialBuilder
-            .id(URI.create("did:test:id"))
-            .type(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
-            .issuer(URI.create("did:test:isser"))
-            .expirationDate(Instant.now().plusSeconds(3600))
-            .issuanceDate(Instant.now())
-            .credentialSubject(verifiableCredentialSubject)
-            .build();
-
-    return credentialWithoutProof;
+    return verifiableCredentialBuilder
+        .id(URI.create("did:test:id"))
+        .type(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
+        .issuer(URI.create("did:test:isser"))
+        .expirationDate(Instant.now().plusSeconds(3600))
+        .issuanceDate(Instant.now())
+        .credentialSubject(verifiableCredentialSubject)
+        .build();
   }
 
   /**
-   * Create verifiable credential with ED21559 proof
+   * Create verifiable credential with ED25519 proof
    *
    * @param credential the credential
    * @param privateKey the private key
@@ -81,9 +82,10 @@ public class VC {
    * @throws SsiException the ssi exception
    * @throws InvalidePrivateKeyFormat the invalide private key format
    */
-  public static VerifiableCredential createVCWithED21559Proof(
+  public static VerifiableCredential createVCWithED25519Proof(
       VerifiableCredential credential, IPrivateKey privateKey, Did issuer)
-      throws UnsupportedSignatureTypeException, SsiException, InvalidePrivateKeyFormat {
+      throws UnsupportedSignatureTypeException, InvalidPrivateKeyFormatException,
+          SignatureGenerateFailedException, TransformJsonLdException {
 
     // VC Builder
     final VerifiableCredentialBuilder builder =
@@ -98,7 +100,7 @@ public class VC {
 
     // Ed25519 Proof Builder
     final LinkedDataProofGenerator generator =
-        LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
+        LinkedDataProofGenerator.newInstance(SignatureType.ED25519);
     final Ed25519Signature2020 proof =
         (Ed25519Signature2020)
             generator.createProof(builder.build(), URI.create(issuer + "#key-1"), privateKey);
@@ -122,7 +124,8 @@ public class VC {
    */
   public static VerifiableCredential createVCWithJWSProof(
       VerifiableCredential credential, IPrivateKey privateKey, Did issuer)
-      throws UnsupportedSignatureTypeException, SsiException, InvalidePrivateKeyFormat {
+      throws UnsupportedSignatureTypeException, InvalidPrivateKeyFormatException,
+          SignatureGenerateFailedException, TransformJsonLdException {
 
     // VC Builder
     final VerifiableCredentialBuilder builder =
@@ -136,9 +139,10 @@ public class VC {
             .type(credential.getTypes());
 
     // JWS Proof Builder
-    final LinkedDataProofGenerator generator =
-        LinkedDataProofGenerator.newInstance(SignatureType.JWS);
-    final JWSSignature2020 proof =
+    LinkedDataProofGenerator generator = LinkedDataProofGenerator.newInstance(SignatureType.JWS);
+
+    JWSSignature2020 proof = null;
+    proof =
         (JWSSignature2020)
             generator.createProof(builder.build(), URI.create(issuer + "#key-1"), privateKey);
 

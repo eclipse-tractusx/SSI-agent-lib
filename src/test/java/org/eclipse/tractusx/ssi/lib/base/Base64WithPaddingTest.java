@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /** The type Base 64 with padding test. */
-public class Base64WithPaddingTest {
+class Base64WithPaddingTest {
 
   private static final byte[] DECODED =
       "Multibase is awesome! \\o/".getBytes(StandardCharsets.UTF_8);
@@ -35,14 +35,14 @@ public class Base64WithPaddingTest {
 
   /** Test encoding. */
   @Test
-  public void testEncoding() {
+  void testEncoding() {
     var multibase = Base64WithPadding.create(DECODED);
     Assertions.assertEquals(ENCODED, multibase.getEncoded());
   }
 
   /** Test decoding. */
   @Test
-  public void testDecoding() {
+  void testDecoding() {
     var multibase = Base64WithPadding.create(ENCODED);
     Assertions.assertEquals(new String(DECODED), new String(multibase.getDecoded()));
   }

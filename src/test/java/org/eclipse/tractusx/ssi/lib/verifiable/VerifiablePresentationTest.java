@@ -30,14 +30,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /** The type Verifiable presentation test. */
-public class VerifiablePresentationTest {
+class VerifiablePresentationTest {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
   /** Can serialize vp. */
   @Test
   @SneakyThrows
-  public void canSerializeVP() {
+  void canSerializeVP() {
     final Map<String, Object> vpFromMap = TestResourceUtil.getAlumniVerifiablePresentation();
     var vp = new VerifiablePresentation(vpFromMap);
     var json = vp.toJson();
@@ -50,7 +50,7 @@ public class VerifiablePresentationTest {
   /** Can serialize v pwith credential not as list. */
   @Test
   @SneakyThrows
-  public void canSerializeVPwithCredentialNotAsList() {
+  void canSerializeVPwithCredentialNotAsList() {
     final Map<String, Object> vpFromMap = TestResourceUtil.getAlumniVerifiablePresentation();
     var vp = new VerifiablePresentation(vpFromMap);
     vp.put("verifiableCredential", vp.getVerifiableCredentials().get(0));

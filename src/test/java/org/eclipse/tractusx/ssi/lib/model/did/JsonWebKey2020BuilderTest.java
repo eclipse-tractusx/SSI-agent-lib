@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -32,8 +32,8 @@ import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PrivateKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519PrivateKey;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
 import org.junit.jupiter.api.Test;
 
@@ -43,14 +43,14 @@ class JsonWebKey2020BuilderTest {
   /** Test json web key 2020 verification method. */
   @SneakyThrows
   @Test
-  public void testJsonWebKey2020VerificationMethod() {
+  void testJsonWebKey2020VerificationMethod() {
     final Did did = DidWebFactory.fromHostname("localhost");
     String keyId = "1";
     OctetKeyPair octetKeyPair =
         new OctetKeyPairGenerator(Curve.Ed25519).keyID(keyId).keyUse(KeyUse.SIGNATURE).generate();
 
-    IPrivateKey privateKey = new x21559PrivateKey(octetKeyPair.getDecodedD());
-    IPublicKey publicKey = new x21559PublicKey(octetKeyPair.getDecodedX());
+    IPrivateKey privateKey = new X25519PrivateKey(octetKeyPair.getDecodedD());
+    IPublicKey publicKey = new X25519PublicKey(octetKeyPair.getDecodedX());
 
     // JWK
     JsonWebKey jwk = new JsonWebKey(keyId, publicKey, privateKey);
@@ -60,14 +60,14 @@ class JsonWebKey2020BuilderTest {
         builder.did(did).jwk(octetKeyPair).build();
 
     assertNotNull(jwk2020VerificationMethod);
-    assertEquals(jwk2020VerificationMethod.getType(), "JsonWebKey2020");
+    assertEquals("JsonWebKey2020", jwk2020VerificationMethod.getType());
     assertEquals(jwk2020VerificationMethod.getId().toString(), "did:web:localhost#" + keyId);
-    assertEquals(jwk2020VerificationMethod.getController().toString(), "did:web:localhost");
+    assertEquals("did:web:localhost", jwk2020VerificationMethod.getController().toString());
 
     assertEquals(
-        ((OctetKeyPair) jwk2020VerificationMethod.getJwk()).getKeyType().getValue(), "OKP");
+        "OKP", ((OctetKeyPair) jwk2020VerificationMethod.getJwk()).getKeyType().getValue());
     assertEquals(
-        ((OctetKeyPair) jwk2020VerificationMethod.getJwk()).getCurve().getName(), "Ed25519");
+        "Ed25519", ((OctetKeyPair) jwk2020VerificationMethod.getJwk()).getCurve().getName());
     assertNotNull(((OctetKeyPair) jwk2020VerificationMethod.getJwk()).getX());
   }
 }

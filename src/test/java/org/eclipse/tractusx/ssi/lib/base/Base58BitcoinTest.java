@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -21,13 +21,16 @@
 
 package org.eclipse.tractusx.ssi.lib.base;
 
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import org.eclipse.tractusx.ssi.lib.model.base.Base58Bitcoin;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /** The type Base 58 bitcoin test. */
-public class Base58BitcoinTest {
+class Base58BitcoinTest implements Serializable {
+
+  static final long serialVersionUID = 6034044314589513430L;
 
   private static final byte[] DECODED =
       "Multibase is awesome! \\o/".getBytes(StandardCharsets.UTF_8);
@@ -35,14 +38,14 @@ public class Base58BitcoinTest {
 
   /** Test encoding. */
   @Test
-  public void testEncoding() {
+  void testEncoding() {
     var multibase = Base58Bitcoin.create(DECODED);
     Assertions.assertEquals(ENCODED, multibase.getEncoded());
   }
 
   /** Test decoding. */
   @Test
-  public void testDecoding() {
+  void testDecoding() {
     var multibase = Base58Bitcoin.create(ENCODED);
     Assertions.assertEquals(new String(DECODED), new String(multibase.getDecoded()));
   }

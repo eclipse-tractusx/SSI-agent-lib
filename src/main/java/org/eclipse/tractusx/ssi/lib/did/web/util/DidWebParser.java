@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -22,10 +22,8 @@
 package org.eclipse.tractusx.ssi.lib.did.web.util;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import org.eclipse.tractusx.ssi.lib.exception.DidParseException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 
 /** The type Did web parser. */
@@ -33,7 +31,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.Did;
 public class DidWebParser {
 
   private static final String WELL_KNOWN_DID_JSON = "/.well-known/did.json";
-  private static final String PATH_DID_JSON = "/did.json";
+  private static final String PATH_DID_JSON = String.format("/%s", "did.json");
 
   /**
    * Parse uri.
@@ -41,7 +39,7 @@ public class DidWebParser {
    * @param did the did
    * @return the uri
    */
-  public URI parse(Did did) {
+  public URI parse(Did did) throws DidParseException {
     return parse(did, true);
   }
 
@@ -52,8 +50,7 @@ public class DidWebParser {
    * @param enforceHttps the enforce https
    * @return the uri
    */
-  @SneakyThrows({URISyntaxException.class})
-  public URI parse(Did did, boolean enforceHttps) {
+  public URI parse(Did did, boolean enforceHttps) throws DidParseException {
     if (!did.getMethod().equals(Constants.DID_WEB_METHOD)) {
       throw new DidParseException(
           "Did Method not allowed: " + did.getMethod() + ". Expected did:web");
@@ -75,6 +72,6 @@ public class DidWebParser {
       didUrl = didUrl + WELL_KNOWN_DID_JSON;
     }
 
-    return new URI(didUrl);
+    return URI.create(didUrl);
   }
 }

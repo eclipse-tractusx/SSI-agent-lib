@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -45,31 +45,50 @@ import lombok.Setter;
 /** The type Remote document loader. */
 public class RemoteDocumentLoader implements DocumentLoader {
 
-  private static DocumentLoader DEFAULT_HTTP_LOADER;
-  private static DocumentLoader DEFAULT_FILE_LOADER;
-  @Getter private DocumentLoader httpLoader;
-  @Getter private DocumentLoader fileLoader;
+  private static final int CACHE_PERIOD_IN_DAYS = 1;
+
+  public static final String CANNOT_LOAD_CONTEXT = "Cannot load context: %s";
+
+  /**
+   * -- SETTER -- Sets default http loader.
+   *
+   * @param loader the default http loader
+   */
+  @Setter private static DocumentLoader defaultHttpLoader;
+
+  /**
+   * -- SETTER -- Sets default file loader.
+   *
+   * @param loader the default file loader
+   */
+  @Setter private static DocumentLoader defaultFileLoader;
+
+  @Getter private static DocumentLoader httpLoader;
+
+  @Getter private static DocumentLoader fileLoader;
 
   @Getter @Setter private boolean enableLocalCache = true;
+
   @Getter @Setter private boolean enableHttp = false;
+
   @Getter @Setter private boolean enableHttps = false;
+
   @Getter @Setter private boolean enableFile = false;
-  @Getter @Setter private Map<URI, JsonDocument> localCache = new HashMap<URI, JsonDocument>();
+
+  @Getter @Setter private Map<URI, JsonDocument> localCache = new HashMap<>();
 
   @Getter @Setter
   private Cache<URI, Document> remoteCache =
-      Caffeine.newBuilder().expireAfterWrite(Duration.ofDays(1)).build();
+      Caffeine.newBuilder().expireAfterWrite(Duration.ofDays(CACHE_PERIOD_IN_DAYS)).build();
 
-  @Getter @Setter private List<URI> httpContexts = new ArrayList<URI>();
-  @Getter @Setter private List<URI> httpsContexts = new ArrayList<URI>();
-  @Getter @Setter private List<URI> fileContexts = new ArrayList<URI>();
+  @Getter @Setter private List<URI> httpContexts = new ArrayList<>();
+
+  @Getter @Setter private List<URI> httpsContexts = new ArrayList<>();
+
+  @Getter @Setter private List<URI> fileContexts = new ArrayList<>();
 
   /** The constant DOCUMENT_LOADER. */
-  public static final RemoteDocumentLoader DOCUMENT_LOADER;
-
-  static {
-    DOCUMENT_LOADER = new RemoteDocumentLoader();
-  }
+  public static final RemoteDocumentLoader DOCUMENT_LOADER = new RemoteDocumentLoader();
 
   /**
    * Gets default http loader.
@@ -77,10 +96,10 @@ public class RemoteDocumentLoader implements DocumentLoader {
    * @return the default http loader
    */
   public static DocumentLoader getDefaultHttpLoader() {
-    if (DEFAULT_HTTP_LOADER == null) {
-      DEFAULT_HTTP_LOADER = new HttpLoader(DefaultHttpClient.defaultInstance());
+    if (defaultHttpLoader == null) {
+      defaultHttpLoader = new HttpLoader(DefaultHttpClient.defaultInstance());
     }
-    return DEFAULT_HTTP_LOADER;
+    return defaultHttpLoader;
   }
 
   /**
@@ -89,31 +108,13 @@ public class RemoteDocumentLoader implements DocumentLoader {
    * @return the default file loader
    */
   public static DocumentLoader getDefaultFileLoader() {
-    if (DEFAULT_FILE_LOADER == null) {
-      DEFAULT_FILE_LOADER = new FileLoader();
+    if (defaultFileLoader == null) {
+      defaultFileLoader = new FileLoader();
     }
-    return DEFAULT_FILE_LOADER;
+    return defaultFileLoader;
   }
 
-  /**
-   * Sets default http loader.
-   *
-   * @param defaultHttpLoader the default http loader
-   */
-  public static void setDefaultHttpLoader(DocumentLoader defaultHttpLoader) {
-    DEFAULT_HTTP_LOADER = defaultHttpLoader;
-  }
-
-  /**
-   * Sets default file loader.
-   *
-   * @param defaultFileLoader the default file loader
-   */
-  public static void setDefaultFileLoader(DocumentLoader defaultFileLoader) {
-    DEFAULT_FILE_LOADER = defaultFileLoader;
-  }
-
-  private RemoteDocumentLoader() {}
+  RemoteDocumentLoader() {}
 
   /**
    * Gets instance.
@@ -124,74 +125,52 @@ public class RemoteDocumentLoader implements DocumentLoader {
     return DOCUMENT_LOADER;
   }
 
+  private DocumentLoader getLoader(URI url) {
+    DocumentLoader loader = null;
+    if ((this.isEnableHttp() || this.isEnableHttps())
+        && ("http".equalsIgnoreCase(url.getScheme())
+            || "https".equalsIgnoreCase(url.getScheme()))) {
+      loader = getHttpLoader();
+      if (loader == null) {
+        loader = getDefaultHttpLoader();
+      }
+    } else if (this.isEnableFile() && "file".equalsIgnoreCase(url.getScheme())) {
+      loader = getFileLoader();
+      if (loader == null) {
+        loader = getDefaultFileLoader();
+      }
+    }
+
+    return loader;
+  }
+
   @Override
   public Document loadDocument(URI url, DocumentLoaderOptions options) throws JsonLdError {
+
+    if (url.getScheme().equalsIgnoreCase("http") && !isEnableHttp()) {
+      throw new IllegalArgumentException(
+          String.format("http is disabled, and %s scheme is http", url));
+    }
 
     if (this.isEnableLocalCache() && this.getLocalCache().containsKey(url)) {
       return this.getLocalCache().get(url);
     }
-    if (this.isEnableHttp() && "http".equalsIgnoreCase(url.getScheme())) {
 
-      DocumentLoader httpLoader = this.getHttpLoader();
-      if (httpLoader == null) {
-        httpLoader = getDefaultHttpLoader();
+    DocumentLoader documentLoader = getLoader(url);
+    Document document =
+        this.getRemoteCache() == null ? null : this.getRemoteCache().getIfPresent(url);
+    if (document == null) {
+      try {
+        document = documentLoader.loadDocument(url, options);
+      } catch (JsonLdError e) {
+        Logger.getLogger(this.getClass().getName())
+            .log(Level.SEVERE, String.format(CANNOT_LOAD_CONTEXT, url));
+        throw e;
       }
-      Document document =
-          this.getRemoteCache() == null ? null : this.getRemoteCache().getIfPresent(url);
-      if (document == null) {
-        try {
-          document = httpLoader.loadDocument(url, options);
-        } catch (JsonLdError e) {
-          Logger.getLogger(this.getClass().getName())
-              .log(Level.SEVERE, String.format("Cannot load context: %s", url));
-          throw e;
-        }
-        if (this.getRemoteCache() != null) {
-          this.getRemoteCache().put(url, document);
-        }
+      if (this.getRemoteCache() != null) {
+        this.getRemoteCache().put(url, document);
       }
-      return document;
     }
-    if (this.isEnableHttps() && "https".equalsIgnoreCase(url.getScheme())) {
-
-      DocumentLoader httpLoader = this.getHttpLoader();
-      if (httpLoader == null) {
-        httpLoader = getDefaultHttpLoader();
-      }
-      Document document =
-          this.getRemoteCache() == null ? null : this.getRemoteCache().getIfPresent(url);
-      if (document == null) {
-        try {
-          document = httpLoader.loadDocument(url, options);
-        } catch (JsonLdError e) {
-          Logger.getLogger(this.getClass().getName())
-              .log(Level.SEVERE, String.format("Cannot load context: %s", url));
-          throw e;
-        }
-        if (this.getRemoteCache() != null) {
-          this.getRemoteCache().put(url, document);
-        }
-      }
-      return document;
-    }
-    if (this.isEnableFile() && "file".equalsIgnoreCase(url.getScheme())) {
-
-      DocumentLoader fileLoader = this.getFileLoader();
-      if (fileLoader == null) {
-        fileLoader = getDefaultFileLoader();
-      }
-      Document document =
-          this.getRemoteCache() == null ? null : this.getRemoteCache().getIfPresent(url);
-      if (document == null) {
-        document = fileLoader.loadDocument(url, options);
-        if (this.getRemoteCache() != null) {
-          this.getRemoteCache().put(url, document);
-        }
-      }
-      return document;
-    }
-
-    Logger.getLogger(this.getClass().getName()).warning("Cannot load context: " + url);
-    return null;
+    return document;
   }
 }

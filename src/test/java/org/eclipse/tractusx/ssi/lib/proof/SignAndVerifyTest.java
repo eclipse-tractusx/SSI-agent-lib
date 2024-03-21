@@ -1,5 +1,6 @@
-/********************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+/*
+ * ******************************************************************************
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -40,16 +41,16 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
-import org.eclipse.tractusx.ssi.lib.exception.NoVerificationKeyFoundExcpetion;
-import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
+import java.util.Optional;
+import lombok.SneakyThrows;
+import org.apache.commons.lang3.ArrayUtils;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
 import org.eclipse.tractusx.ssi.lib.model.ProofPurpose;
 import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
-import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
+import org.eclipse.tractusx.ssi.lib.model.proof.ed25519.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -72,21 +73,20 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 /** The type Sign and verify test. */
-public class SignAndVerifyTest {
+class SignAndVerifyTest {
 
   /**
    * Test sign and verify ed 201559.
    *
    * @throws IOException the io exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
-   * @throws InvalidePublicKeyFormat the invalide public key format
-   * @throws KeyGenerationException the key generation exception
+   * @throws InvalidPrivateKeyFormatException the invalide private key format
+   * @throws InvalidPrivateKeyFormatException the invalide public key format
    */
   @Test
-  public void testSignAndVerify_ED201559() throws IOException, KeyGenerationException {
+  void testSignAndVerify_ED201559() {
     final TestDidResolver didResolver = new TestDidResolver();
 
-    var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys();
+    var testIdentity = TestIdentityFactory.newIdentityWithEDVerificationMethod();
 
     didResolver.register(testIdentity);
 
@@ -107,54 +107,51 @@ public class SignAndVerifyTest {
    * @throws IOException the io exception
    * @throws JOSEException the jose exception
    * @throws NoSuchAlgorithmException the no such algorithm exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
-   * @throws InvalidePublicKeyFormat the invalide public key format
-   * @throws KeyGenerationException the key generation exception
+   * @throws InvalidPrivateKeyFormatException the invalide private key format
+   * @throws InvalidPrivateKeyFormatException the invalide public key format
    */
   @Test
-  public void testSignAndVerify_JWS_ED()
-      throws IOException, NoSuchAlgorithmException, InvalidePrivateKeyFormat,
-          KeyGenerationException {
-    var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys();
+  void testSignAndVerify_JWS_ED()
+      throws IOException, NoSuchAlgorithmException, SignatureGenerateFailedException,
+          InvalidPrivateKeyFormatException {
+    var testIdentity = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     verifyJws(testIdentity, SignatureType.JWS);
   }
 
   @Test
-  public void testSignAndVerify_JWS_RSA()
-      throws NoSuchAlgorithmException, InvalidePrivateKeyFormat {
+  void testSignAndVerify_JWS_RSA()
+      throws NoSuchAlgorithmException, InvalidPrivateKeyFormatException,
+          SignatureGenerateFailedException {
     var testIdentity = TestIdentityFactory.newIdentityWithRSAKeys();
     verifyJws(testIdentity, SignatureType.JWS_RSA);
   }
 
   @Test
-  public void testSignAndVerify_JWS_EC_P256()
-      throws NoSuchAlgorithmException, InvalidePrivateKeyFormat,
-          InvalidAlgorithmParameterException {
+  void testSignAndVerify_JWS_EC_P256()
+      throws NoSuchAlgorithmException, InvalidPrivateKeyFormatException,
+          InvalidAlgorithmParameterException, SignatureGenerateFailedException {
     var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp256r1", Curve.P_256);
     verifyJws(testIdentity, SignatureType.JWS_P256);
   }
 
   @Test
-  public void testSignAndVerify_JWS_EC_P384()
-      throws NoSuchAlgorithmException, InvalidePrivateKeyFormat,
-          InvalidAlgorithmParameterException {
+  void testSignAndVerify_JWS_EC_P384()
+      throws NoSuchAlgorithmException, InvalidPrivateKeyFormatException,
+          InvalidAlgorithmParameterException, SignatureGenerateFailedException {
     var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp384r1", Curve.P_384);
     verifyJws(testIdentity, SignatureType.JWS_P384);
   }
 
   @Test
-  public void testSignAndVerify_JWS_EC_256K1()
-      throws NoSuchAlgorithmException, InvalidePrivateKeyFormat,
-          InvalidAlgorithmParameterException {
+  void testSignAndVerify_JWS_EC_256K1()
+      throws NoSuchAlgorithmException, InvalidPrivateKeyFormatException,
+          InvalidAlgorithmParameterException, SignatureGenerateFailedException {
     var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp256k1", Curve.SECP256K1);
     verifyJws(testIdentity, SignatureType.JWS_SEC_P_256K1);
   }
 
   @Test
-  void verifyCredential_JWS_RSA()
-      throws UnsupportedSignatureTypeException, InvalidePrivateKeyFormat, JsonProcessingException,
-          NoSuchAlgorithmException, DidDocumentResolverNotRegisteredException,
-          NoVerificationKeyFoundExcpetion, InvalidePublicKeyFormat {
+  void verifyCredential_JWS_RSA() throws NoSuchAlgorithmException {
     TestIdentity testIdentity = TestIdentityFactory.newIdentityWithRSAKeys();
 
     var credentialCreationConfig =
@@ -168,10 +165,7 @@ public class SignAndVerifyTest {
 
   @Test
   void verifyCredential_JWS_P256()
-      throws UnsupportedSignatureTypeException, InvalidePrivateKeyFormat, JsonProcessingException,
-          NoSuchAlgorithmException, DidDocumentResolverNotRegisteredException,
-          NoVerificationKeyFoundExcpetion, InvalidePublicKeyFormat,
-          InvalidAlgorithmParameterException {
+      throws InvalidAlgorithmParameterException, NoSuchAlgorithmException {
     var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp256r1", Curve.P_256);
     var credentialCreationConfig =
         new CredentialCreationConfig(
@@ -185,10 +179,7 @@ public class SignAndVerifyTest {
 
   @Test
   void verifyCredential_JWS_P384()
-      throws UnsupportedSignatureTypeException, InvalidePrivateKeyFormat, JsonProcessingException,
-          NoSuchAlgorithmException, DidDocumentResolverNotRegisteredException,
-          NoVerificationKeyFoundExcpetion, InvalidePublicKeyFormat,
-          InvalidAlgorithmParameterException {
+      throws InvalidAlgorithmParameterException, NoSuchAlgorithmException {
     var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp384r1", Curve.P_384);
     var credentialCreationConfig =
         new CredentialCreationConfig(
@@ -202,10 +193,7 @@ public class SignAndVerifyTest {
 
   @Test
   void verifyCredential_JWS_SECP_256K1()
-      throws UnsupportedSignatureTypeException, InvalidePrivateKeyFormat, JsonProcessingException,
-          NoSuchAlgorithmException, DidDocumentResolverNotRegisteredException,
-          NoVerificationKeyFoundExcpetion, InvalidePublicKeyFormat,
-          InvalidAlgorithmParameterException {
+      throws InvalidAlgorithmParameterException, NoSuchAlgorithmException {
     var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp256k1", Curve.SECP256K1);
     var credentialCreationConfig =
         new CredentialCreationConfig(
@@ -219,10 +207,7 @@ public class SignAndVerifyTest {
 
   @Test
   void verifyCredentialWithRelation()
-      throws UnsupportedSignatureTypeException, InvalidePrivateKeyFormat, JsonProcessingException,
-          NoSuchAlgorithmException, DidDocumentResolverNotRegisteredException,
-          NoVerificationKeyFoundExcpetion, InvalidePublicKeyFormat,
-          InvalidAlgorithmParameterException {
+      throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, JsonProcessingException {
     var testIdentityConfig =
         TestIdentityFactory.newIdentityWithECKeys("secp256k1", Curve.SECP256K1, true, true, false);
 
@@ -239,10 +224,7 @@ public class SignAndVerifyTest {
 
   @Test
   void verifyCredentialWithRelationEmbedded()
-      throws UnsupportedSignatureTypeException, InvalidePrivateKeyFormat, JsonProcessingException,
-          NoSuchAlgorithmException, DidDocumentResolverNotRegisteredException,
-          NoVerificationKeyFoundExcpetion, InvalidePublicKeyFormat,
-          InvalidAlgorithmParameterException {
+      throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, JsonProcessingException {
     var testIdentityConfig =
         TestIdentityFactory.newIdentityWithECKeys("secp256k1", Curve.SECP256K1, true, true, true);
 
@@ -262,13 +244,12 @@ public class SignAndVerifyTest {
     when(proof.getType()).thenReturn(Ed25519Signature2020.ED25519_VERIFICATION_KEY_2018);
 
     Verifiable mockDoc = Mockito.mock(Verifiable.class);
-    when(mockDoc.getProof()).thenReturn(proof);
+    when(mockDoc.getProof()).thenReturn(Optional.of(proof));
 
     HashedLinkedData hashedLinkedData = Mockito.mock(HashedLinkedData.class);
 
     JWSProofVerifier verifier = new JWSProofVerifier(new TestDidResolver());
-    assertThrows(
-        UnsupportedSignatureTypeException.class, () -> verifier.verify(hashedLinkedData, mockDoc));
+    assertThrows(SignatureParseException.class, () -> verifier.verify(hashedLinkedData, mockDoc));
   }
 
   @Test
@@ -320,10 +301,8 @@ public class SignAndVerifyTest {
     assertInstanceOf(IllegalArgumentException.class, invocationTargetException.getCause());
   }
 
-  void verifyCredential(CredentialCreationConfig creationConfig, TestIdentity testIdentity)
-      throws UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
-          DidDocumentResolverNotRegisteredException, NoVerificationKeyFoundExcpetion,
-          InvalidePublicKeyFormat {
+  @SneakyThrows
+  void verifyCredential(CredentialCreationConfig creationConfig, TestIdentity testIdentity) {
     final TestDidResolver didResolver = new TestDidResolver();
     didResolver.register(testIdentity);
 
@@ -374,7 +353,8 @@ public class SignAndVerifyTest {
   }
 
   void verifyJws(TestIdentity testIdentity, SignatureType type)
-      throws NoSuchAlgorithmException, InvalidePrivateKeyFormat {
+      throws NoSuchAlgorithmException, SignatureGenerateFailedException,
+          InvalidPrivateKeyFormatException {
     final TestDidResolver didResolver = new TestDidResolver();
     didResolver.register(testIdentity);
     var data = "Hello World".getBytes();
@@ -386,7 +366,11 @@ public class SignAndVerifyTest {
 
     var signature = signer.sign(new HashedLinkedData(value), testIdentity.getPrivateKey());
     var isSigned =
-        verifier.verify(new HashedLinkedData(value), signature, testIdentity.getPublicKey(), type);
+        verifier.verify(
+            new HashedLinkedData(value),
+            ArrayUtils.toObject(signature),
+            testIdentity.getPublicKey(),
+            type);
 
     Assertions.assertTrue(isSigned);
   }

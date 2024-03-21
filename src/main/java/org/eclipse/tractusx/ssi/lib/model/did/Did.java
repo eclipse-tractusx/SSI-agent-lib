@@ -58,9 +58,7 @@ public class Did {
    * @param didMethodIdentifier the did method identifier
    */
   public Did(DidMethod method, DidMethodIdentifier didMethodIdentifier) {
-    this.method = method;
-    this.methodIdentifier = didMethodIdentifier;
-    new Did(this.method, this.methodIdentifier, null);
+    this(method, didMethodIdentifier, null);
   }
 
   /**
@@ -69,8 +67,7 @@ public class Did {
    * @return the did
    */
   public Did excludeFragment() {
-    Did newDid = new Did(method, methodIdentifier, null);
-    return newDid;
+    return new Did(method, methodIdentifier, null);
   }
 
   /**

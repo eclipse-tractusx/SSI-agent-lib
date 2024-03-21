@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -21,14 +21,19 @@
 
 package org.eclipse.tractusx.ssi.lib.did.web.util;
 
+import java.io.IOException;
 import java.io.StringReader;
-import lombok.SneakyThrows;
 import org.bouncycastle.util.io.pem.PemReader;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
 /** The type Ed 25519 public key parser. */
 public class Ed25519PublicKeyParser {
+
+  private Ed25519PublicKeyParser() {
+    // static
+  }
 
   /**
    * Parses public key in format -----BEGIN PUBLIC KEY-----
@@ -36,16 +41,24 @@ public class Ed25519PublicKeyParser {
    *
    * @param publicKey the public key
    * @return public key as multibase string
+   * @throws InvalidPublicKeyFormatException
    */
-  public static MultibaseString parsePublicKey(String publicKey) {
-    final byte[] publicKey64 = readPublicKey(publicKey);
+  public static MultibaseString parsePublicKey(String publicKey)
+      throws InvalidPublicKeyFormatException {
+    byte[] publicKey64 = null;
+
+    publicKey64 = readPublicKey(publicKey);
+
     return MultibaseFactory.create(publicKey64);
   }
 
-  @SneakyThrows
-  private static byte[] readPublicKey(String publicKey) {
+  private static byte[] readPublicKey(String publicKey) throws InvalidPublicKeyFormatException {
 
     PemReader pemReader = new PemReader(new StringReader(publicKey));
-    return pemReader.readPemObject().getContent();
+    try {
+      return pemReader.readPemObject().getContent();
+    } catch (IOException e) {
+      throw new InvalidPublicKeyFormatException(e.getMessage());
+    }
   }
 }

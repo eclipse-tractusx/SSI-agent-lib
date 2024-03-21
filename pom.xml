@@ -23,7 +23,7 @@ SPDX-License-Identifier: Apache-2.0
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.eclipse.tractusx.ssi</groupId>
-    <version>0.0.27</version>
+    <version>0.0.28</version>
     <packaging>jar</packaging>
 
 
@@ -31,8 +31,8 @@ SPDX-License-Identifier: Apache-2.0
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <delombokSourceDirectory>${project.build.directory}/delombok</delombokSourceDirectory>
         <com.diffplug.spotless.maven.plugin.version>2.28.0</com.diffplug.spotless.maven.plugin.version>
         <org.eclipse.dash.license.tool.plugin.version>0.0.1-SNAPSHOT</org.eclipse.dash.license.tool.plugin.version>
@@ -214,6 +214,12 @@ SPDX-License-Identifier: Apache-2.0
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.wiremock</groupId>
+            <artifactId>wiremock-standalone</artifactId>
+            <version>3.4.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>1.18.3</version>
@@ -333,6 +339,7 @@ SPDX-License-Identifier: Apache-2.0
                          <configuration>
                             <formats>
                                 <format>XML</format>
+                                <format>HTML</format>
                             </formats>
                         </configuration>
                     </execution>

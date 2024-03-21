@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -29,20 +29,20 @@ import org.bouncycastle.crypto.Signer;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
+import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
-import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.NoVerificationKeyFoundExcpetion;
-import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
-import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
+import org.eclipse.tractusx.ssi.lib.model.proof.ed25519.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.proof.IVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
@@ -55,10 +55,13 @@ public class Ed25519ProofVerifier implements IVerifier {
 
   @SneakyThrows({DidResolverException.class})
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable verifiable)
-      throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException,
-          InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion {
+      throws UnsupportedSignatureTypeException, InvalidPublicKeyFormatException,
+          NoVerificationKeyFoundException, DidParseException {
 
-    final Proof proof = verifiable.getProof();
+    final Proof proof =
+        verifiable
+            .getProof()
+            .orElseThrow(() -> new DidParseException("no proof found for verification"));
     final Ed25519Signature2020 ed25519Signature2020 = new Ed25519Signature2020(proof);
 
     if (!proof.getType().equals(Ed25519Signature2020.ED25519_VERIFICATION_KEY_2018)) {
@@ -73,12 +76,16 @@ public class Ed25519ProofVerifier implements IVerifier {
   }
 
   private IPublicKey discoverPublicKey(Ed25519Signature2020 signature)
-      throws DidDocumentResolverNotRegisteredException, UnsupportedSignatureTypeException,
-          InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion, DidResolverException {
+      throws InvalidPublicKeyFormatException, NoVerificationKeyFoundException, DidResolverException,
+          DidParseException {
 
     final Did issuer = DidParser.parse(signature.getVerificationMethod());
 
-    final DidDocument document = this.didResolver.resolve(issuer);
+    final DidDocument document =
+        this.didResolver
+            .resolve(issuer)
+            .orElseThrow(() -> new IllegalStateException("document could not be resolved"));
+
     final URI verificationMethodId = signature.getVerificationMethod();
 
     final Ed25519VerificationMethod key =
@@ -89,14 +96,14 @@ public class Ed25519ProofVerifier implements IVerifier {
             .findFirst()
             .orElseThrow(
                 () ->
-                    new NoVerificationKeyFoundExcpetion(
+                    new NoVerificationKeyFoundException(
                         "No Ed25519 verification key found in DID Document"));
 
     IPublicKey publicKey;
     try {
-      publicKey = (IPublicKey) new x21559PublicKey(key.getPublicKeyBase58().getEncoded(), false);
+      publicKey = new X25519PublicKey(key.getPublicKeyBase58().getEncoded(), false);
     } catch (IOException e) {
-      throw new InvalidePublicKeyFormat(e.getCause());
+      throw new InvalidPublicKeyFormatException(e.getCause());
     }
 
     return publicKey;
