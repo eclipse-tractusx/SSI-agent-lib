@@ -57,6 +57,7 @@ class LinkedDataTransformerTest {
             .issuer(URI.create("did:test:isser"))
             .expirationDate(Instant.now().plusSeconds(3600))
             .issuanceDate(Instant.now())
+            .verifiableCredentialStatus(TestResourceUtil.getStatusListEntry())
             .credentialSubject(verifiableCredentialSubject)
             .verifiableCredentialStatus(TestResourceUtil.getStatusListEntry())
             .build();

@@ -1,5 +1,12 @@
 {
 	"id": "did:test:localhost:BPNL000000000000",
+  "service": [
+    {
+      "id": "did:test:localhost:BPNL000000000000",
+      "type": "CredentialService",
+      "serviceEndpoint": "https://cs.example.com"
+    }
+  ],
 	"verificationMethod": [
 		{
 			"publicKeyMultibase": "zEHDkzHqUZipBCTJ7ysJ57zk2hKwuYjD47RhuM7qYNvQA",
