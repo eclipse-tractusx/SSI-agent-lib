@@ -32,6 +32,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialType;
 import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
+import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -56,8 +57,12 @@ public class LinkedDataTransformerTest {
             .issuer(URI.create("did:test:isser"))
             .expirationDate(Instant.now().plusSeconds(3600))
             .issuanceDate(Instant.now())
+            .verifiableCredentialStatus(TestResourceUtil.getStatusListEntry())
             .credentialSubject(verifiableCredentialSubject)
             .build();
+
+    // check status added in VC
+    Assertions.assertNotNull(credentialWithoutProof.getVerifiableCredentialStatus());
 
     var transformedWithoutProof = linkedDataTransformer.transform(credentialWithoutProof);
 
