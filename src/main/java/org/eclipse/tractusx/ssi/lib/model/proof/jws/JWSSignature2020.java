@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -21,12 +21,8 @@
 
 package org.eclipse.tractusx.ssi.lib.model.proof.jws;
 
-import java.net.URI;
-import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
-import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
-import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 /**
  * The type of Ed25519Signature2020
@@ -36,23 +32,10 @@ import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
  * "proofPurpose": "assertionMethod", "verificationMethod":
  * "https://example.com/issuer/123#ovsDKYBjFemIy8DVhc-w2LSi8CvXMw2AYDzHj04yxkc"}
  */
-public class JWSSignature2020 extends Proof {
+public class JWSSignature2020 extends JWSProofConfiguration {
 
-  /** The constant JWS_VERIFICATION_KEY_2020. */
-  public static final String JWS_VERIFICATION_KEY_2020 = "JsonWebSignature2020";
-  /** The constant TIME_FORMAT. */
-  public static final String TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-
-  /** The constant ASSERTION_METHOD. */
-  public static final String ASSERTION_METHOD = "assertionMethod";
-  /** The constant PROOF_PURPOSE. */
-  public static final String PROOF_PURPOSE = "proofPurpose";
   /** The constant JWS. */
   public static final String JWS = "jws";
-  /** The constant CREATED. */
-  public static final String CREATED = "created";
-  /** The constant VERIFICATION_METHOD. */
-  public static final String VERIFICATION_METHOD = "verificationMethod";
 
   /**
    * Instantiates a new Jws signature 2020.
@@ -62,28 +45,12 @@ public class JWSSignature2020 extends Proof {
   public JWSSignature2020(Map<String, Object> json) {
     super(json);
 
-    if (!JWS_VERIFICATION_KEY_2020.equals(json.get(TYPE))) {
-      throw new IllegalArgumentException("Invalid JsonWebSignature2020 Type: " + json);
-    }
-
     try {
       // verify getters
-      Objects.requireNonNull(this.getProofPurpose());
       Objects.requireNonNull(this.getJws());
-      Objects.requireNonNull(this.getVerificationMethod());
-      Objects.requireNonNull(this.getCreated());
     } catch (Exception e) {
       throw new IllegalArgumentException("Invalid JsonWebSignature2020", e);
     }
-  }
-
-  /**
-   * Gets proof purpose.
-   *
-   * @return the proof purpose
-   */
-  public String getProofPurpose() {
-    return (String) this.get(PROOF_PURPOSE);
   }
 
   /**
@@ -93,23 +60,5 @@ public class JWSSignature2020 extends Proof {
    */
   public String getJws() {
     return (String) this.get(JWS);
-  }
-
-  /**
-   * Gets verification method.
-   *
-   * @return the verification method
-   */
-  public URI getVerificationMethod() {
-    return SerializeUtil.asURI(this.get(VERIFICATION_METHOD));
-  }
-
-  /**
-   * Gets created.
-   *
-   * @return the created
-   */
-  public Instant getCreated() {
-    return Instant.parse((String) this.get(CREATED));
   }
 }

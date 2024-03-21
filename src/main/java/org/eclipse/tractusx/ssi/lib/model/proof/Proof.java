@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -24,6 +24,8 @@ package org.eclipse.tractusx.ssi.lib.model.proof;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.eclipse.tractusx.ssi.lib.model.proof.ed25519.Ed25519Signature2020;
+import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 
 /** The type Proof. */
 public class Proof extends HashMap<String, Object> {
@@ -54,5 +56,27 @@ public class Proof extends HashMap<String, Object> {
    */
   public String getType() {
     return (String) this.get(TYPE);
+  }
+
+  /**
+   * Check if this Proof is Configuration or Signature
+   *
+   * @return true if Configuation or false if Signature
+   */
+  public boolean isConfiguration() {
+    if (this instanceof Ed25519Signature2020 || this instanceof JWSSignature2020) return false;
+
+    return true;
+  }
+
+  /**
+   * Transform Proof Object to Configuration Object by removing any Proof Signature value
+   *
+   * @return Proof
+   */
+  public Proof toConfiguration() {
+    this.remove(Ed25519Signature2020.PROOF_VALUE);
+    this.remove(JWSSignature2020.JWS);
+    return this;
   }
 }
