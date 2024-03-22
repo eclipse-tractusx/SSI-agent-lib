@@ -222,7 +222,7 @@ SPDX-License-Identifier: Apache-2.0
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>1.18.3</version>
+            <version>1.19.7</version>
             <scope>test</scope>
         </dependency>
         <dependency>
