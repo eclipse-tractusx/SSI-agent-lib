@@ -79,7 +79,9 @@ public class JWSProofVerifier implements IVerifier {
 
   @SneakyThrows({DidResolverException.class})
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable document)
-      throws SignatureParseException, DidParseException, InvalidPublicKeyFormatException,
+      throws SignatureParseException,
+          DidParseException,
+          InvalidPublicKeyFormatException,
           SignatureVerificationException {
 
     final Proof proof =
@@ -266,8 +268,9 @@ public class JWSProofVerifier implements IVerifier {
           case JWS -> ((X25519PublicKey) publicKey).toJwk();
           case JWS_P256, JWS_P384, JWS_SEC_P_256K1 -> ((ECPublicKeyWrapper) publicKey).toJwk();
           case JWS_RSA -> ((RSAPublicKeyWrapper) publicKey).toJwk();
-          default -> throw new IllegalArgumentException(
-              String.format(ALGORITHM_IS_NOT_SUPPORTED, type.algorithm));
+          default ->
+              throw new IllegalArgumentException(
+                  String.format(ALGORITHM_IS_NOT_SUPPORTED, type.algorithm));
         };
 
     JWSVerifier verifier = getVerifier(new JWSHeader(new JWSAlgorithm(type.algorithm)), jwk);

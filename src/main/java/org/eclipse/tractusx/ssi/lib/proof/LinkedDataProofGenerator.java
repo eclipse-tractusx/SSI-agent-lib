@@ -81,7 +81,8 @@ public class LinkedDataProofGenerator {
    * @throws InvalidePrivateKeyFormat the invalide private key format
    */
   public Proof createProof(Verifiable document, URI verificationMethodId, IPrivateKey privateKey)
-      throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException,
+      throws InvalidPrivateKeyFormatException,
+          SignatureGenerateFailedException,
           TransformJsonLdException {
 
     return createProof(document, verificationMethodId, privateKey, ProofPurpose.ASSERTION_METHOD);
@@ -92,7 +93,8 @@ public class LinkedDataProofGenerator {
       URI verificationMethodId,
       IPrivateKey privateKey,
       ProofPurpose proofPurpose)
-      throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException,
+      throws InvalidPrivateKeyFormatException,
+          SignatureGenerateFailedException,
           TransformJsonLdException {
 
     final TransformedLinkedData transformedData = transformer.transform(document);

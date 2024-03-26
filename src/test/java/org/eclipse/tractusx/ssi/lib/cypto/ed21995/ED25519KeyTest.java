@@ -86,7 +86,9 @@ class ED25519KeyTest {
   @Test
   @SneakyThrows
   void testED25519KeyDeserliztion()
-      throws KeyGenerationException, IOException, InvalidPrivateKeyFormatException,
+      throws KeyGenerationException,
+          IOException,
+          InvalidPrivateKeyFormatException,
           InvalidPublicKeyFormatException {
     IKeyGenerator keyGenerator = new X25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();

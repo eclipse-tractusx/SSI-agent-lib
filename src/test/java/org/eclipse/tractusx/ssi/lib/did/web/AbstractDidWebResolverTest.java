@@ -31,10 +31,13 @@ import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
 public abstract class AbstractDidWebResolverTest {
   /** The Did web doc. */
   protected DidDocument didWebDoc;
+
   /** The Valid did web. */
   protected Did validDidWeb;
+
   /** The Resolver. */
   protected DidWebResolver resolver;
+
   /** The constant VALID_DID_KEY. */
   protected static Did VALID_DID_KEY =
       new Did(

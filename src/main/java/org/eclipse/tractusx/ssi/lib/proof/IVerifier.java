@@ -50,6 +50,8 @@ public interface IVerifier {
    * @throws NoVerificationKeyFoundException
    */
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable verifiable)
-      throws SignatureParseException, DidParseException, InvalidPublicKeyFormatException,
+      throws SignatureParseException,
+          DidParseException,
+          InvalidPublicKeyFormatException,
           SignatureVerificationException;
 }

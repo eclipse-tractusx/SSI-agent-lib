@@ -32,6 +32,7 @@ public class DidWebFactory {
   private DidWebFactory() {
     // static
   }
+
   /**
    * From hostname did.
    *

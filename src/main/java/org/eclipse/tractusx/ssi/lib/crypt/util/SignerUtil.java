@@ -51,8 +51,9 @@ public class SignerUtil {
       case JWS -> SignerUtil.getEDSigner(privateKey);
       case JWS_P256, JWS_P384, JWS_SEC_P_256K1 -> SignerUtil.getECSigner(privateKey);
       case JWS_RSA -> SignerUtil.getRSASigner(privateKey);
-      default -> throw new IllegalArgumentException(
-          String.format("algorithm %s is not supported", type.algorithm));
+      default ->
+          throw new IllegalArgumentException(
+              String.format("algorithm %s is not supported", type.algorithm));
     };
   }
 

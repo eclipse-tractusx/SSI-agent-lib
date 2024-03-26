@@ -31,6 +31,7 @@ public final class SsiLibrary {
   private SsiLibrary() {
     // static
   }
+
   /** Initialize. */
   public static void initialize() {
     Security.addProvider(new EdDSASecurityProvider());

@@ -57,7 +57,9 @@ public class Verification {
   }
 
   public static void verifyJWT(SignedJWT jwt)
-      throws DidParseException, DidResolverException, SignatureVerificationException,
+      throws DidParseException,
+          DidResolverException,
+          SignatureVerificationException,
           SignatureParseException {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();

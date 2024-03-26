@@ -34,7 +34,7 @@ SPDX-License-Identifier: Apache-2.0
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <delombokSourceDirectory>${project.build.directory}/delombok</delombokSourceDirectory>
-        <com.diffplug.spotless.maven.plugin.version>2.28.0</com.diffplug.spotless.maven.plugin.version>
+        <com.diffplug.spotless.maven.plugin.version>2.43.0</com.diffplug.spotless.maven.plugin.version>
         <org.eclipse.dash.license.tool.plugin.version>0.0.1-SNAPSHOT</org.eclipse.dash.license.tool.plugin.version>
         <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
 
@@ -44,7 +44,7 @@ SPDX-License-Identifier: Apache-2.0
         <sonar.projectName>SSI-agent-lib</sonar.projectName>
         <sonar.java.source>17</sonar.java.source>
         <sonar.coverage.exclusions>
-            src/main/java/org/eclipse/tractusx/ssi/examples/** 
+            src/main/java/org/eclipse/tractusx/ssi/examples/**
         </sonar.coverage.exclusions>
     </properties>
 
@@ -188,7 +188,7 @@ SPDX-License-Identifier: Apache-2.0
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.9.3</version>
+            <version>5.10.2</version>
             <scope>test</scope>
         </dependency>
 
@@ -291,7 +291,7 @@ SPDX-License-Identifier: Apache-2.0
                 <configuration>
                     <java>
                         <googleJavaFormat>
-                            <version>1.15.0</version>
+                            <version>1.21.0</version>
                             <style>GOOGLE</style>
                         </googleJavaFormat>
                     </java>

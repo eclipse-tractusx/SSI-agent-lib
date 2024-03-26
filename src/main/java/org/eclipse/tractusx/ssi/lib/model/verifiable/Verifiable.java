@@ -37,8 +37,10 @@ public abstract class Verifiable extends JsonLdObject {
 
   /** The constant ID. */
   public static final String ID = "id";
+
   /** The constant TYPE. */
   public static final String TYPE = "type";
+
   /** The constant PROOF. */
   public static final String PROOF = "proof";
 

@@ -55,8 +55,10 @@ public class Ed25519ProofVerifier implements IVerifier {
 
   @SneakyThrows({DidResolverException.class})
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable verifiable)
-      throws UnsupportedSignatureTypeException, InvalidPublicKeyFormatException,
-          NoVerificationKeyFoundException, DidParseException {
+      throws UnsupportedSignatureTypeException,
+          InvalidPublicKeyFormatException,
+          NoVerificationKeyFoundException,
+          DidParseException {
 
     final Proof proof =
         verifiable
@@ -76,7 +78,9 @@ public class Ed25519ProofVerifier implements IVerifier {
   }
 
   private IPublicKey discoverPublicKey(Ed25519Signature2020 signature)
-      throws InvalidPublicKeyFormatException, NoVerificationKeyFoundException, DidResolverException,
+      throws InvalidPublicKeyFormatException,
+          NoVerificationKeyFoundException,
+          DidResolverException,
           DidParseException {
 
     final Did issuer = DidParser.parse(signature.getVerificationMethod());
