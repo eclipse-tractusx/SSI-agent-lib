@@ -65,6 +65,7 @@ public class SignedJwtVerifier {
    * @throws UnsupportedVerificationMethodException the unsupported verification method exception
    * @throws SignatureVerificationFailedException the signature verification failed exception exception
 */
+
   public boolean verify(SignedJWT jwt)
       throws DidParseException,DidResolverException, SignatureException, UnsupportedVerificationMethodException, SignatureVerificationFailedException {
 

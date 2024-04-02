@@ -54,15 +54,12 @@ public class VC {
    */
   public static VerifiableCredential createVCWithoutProof() {
 
-    // VC Builder
     final VerifiableCredentialBuilder verifiableCredentialBuilder =
         new VerifiableCredentialBuilder();
 
-    // VC Subject
     final VerifiableCredentialSubject verifiableCredentialSubject =
         new VerifiableCredentialSubject(Map.of("test", "test"));
 
-    // Using Builder
     return verifiableCredentialBuilder
         .id(URI.create("did:test:id"))
         .type(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
