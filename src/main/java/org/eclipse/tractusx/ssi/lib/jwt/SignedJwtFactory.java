@@ -33,6 +33,7 @@ import com.nimbusds.jwt.SignedJWT;
 import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -116,10 +117,16 @@ public class SignedJwtFactory {
 
       var algorithm = JWSAlgorithm.EdDSA;
       var type = JOSEObjectType.JWT;
+
+      // https://w3c.github.io/vc-jws-2020/#json-web-signature-2020
+      var crit = new HashSet<String>();
+      crit.add("b64");
+
       var header =
           new JWSHeader(
-              algorithm, type, null, null, null, null, null, null, null, null, issuer, true, null,
+              algorithm, type, null, crit, null, null, null, null, null, null, issuer, false, null,
               null);
+
       var vc = new SignedJWT(header, claimsSet);
 
       vc.sign(signer);
