@@ -27,6 +27,7 @@ import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 public class TransformJsonLdException extends SSIException {
 
   private static final long serialVersionUID = 1L;
+
   /**
    * Instantiates a new tranform json LD exception.
    *

@@ -25,6 +25,7 @@ package org.eclipse.tractusx.ssi.lib.model.verifiable.credential;
 public class VerifiableCredentialType {
   /** The constant VERIFIABLE_CREDENTIAL. */
   public static final String VERIFIABLE_CREDENTIAL = "VerifiableCredential";
+
   /** The constant MEMBERSHIP_CREDENTIAL. */
   public static final String MEMBERSHIP_CREDENTIAL = "MembershipCredential";
 }

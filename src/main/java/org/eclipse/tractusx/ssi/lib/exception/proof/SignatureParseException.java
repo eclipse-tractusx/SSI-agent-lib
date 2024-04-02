@@ -26,6 +26,7 @@ import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 /** The type signature parse exception. */
 public class SignatureParseException extends SSIException {
   private static final long serialVersionUID = 1L;
+
   /**
    * Instantiates a new signature parse exception.
    *

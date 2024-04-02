@@ -112,7 +112,9 @@ class SignAndVerifyTest {
    */
   @Test
   void testSignAndVerify_JWS_ED()
-      throws IOException, NoSuchAlgorithmException, SignatureGenerateFailedException,
+      throws IOException,
+          NoSuchAlgorithmException,
+          SignatureGenerateFailedException,
           InvalidPrivateKeyFormatException {
     var testIdentity = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     verifyJws(testIdentity, SignatureType.JWS);
@@ -120,7 +122,8 @@ class SignAndVerifyTest {
 
   @Test
   void testSignAndVerify_JWS_RSA()
-      throws NoSuchAlgorithmException, InvalidPrivateKeyFormatException,
+      throws NoSuchAlgorithmException,
+          InvalidPrivateKeyFormatException,
           SignatureGenerateFailedException {
     var testIdentity = TestIdentityFactory.newIdentityWithRSAKeys();
     verifyJws(testIdentity, SignatureType.JWS_RSA);
@@ -128,24 +131,30 @@ class SignAndVerifyTest {
 
   @Test
   void testSignAndVerify_JWS_EC_P256()
-      throws NoSuchAlgorithmException, InvalidPrivateKeyFormatException,
-          InvalidAlgorithmParameterException, SignatureGenerateFailedException {
+      throws NoSuchAlgorithmException,
+          InvalidPrivateKeyFormatException,
+          InvalidAlgorithmParameterException,
+          SignatureGenerateFailedException {
     var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp256r1", Curve.P_256);
     verifyJws(testIdentity, SignatureType.JWS_P256);
   }
 
   @Test
   void testSignAndVerify_JWS_EC_P384()
-      throws NoSuchAlgorithmException, InvalidPrivateKeyFormatException,
-          InvalidAlgorithmParameterException, SignatureGenerateFailedException {
+      throws NoSuchAlgorithmException,
+          InvalidPrivateKeyFormatException,
+          InvalidAlgorithmParameterException,
+          SignatureGenerateFailedException {
     var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp384r1", Curve.P_384);
     verifyJws(testIdentity, SignatureType.JWS_P384);
   }
 
   @Test
   void testSignAndVerify_JWS_EC_256K1()
-      throws NoSuchAlgorithmException, InvalidPrivateKeyFormatException,
-          InvalidAlgorithmParameterException, SignatureGenerateFailedException {
+      throws NoSuchAlgorithmException,
+          InvalidPrivateKeyFormatException,
+          InvalidAlgorithmParameterException,
+          SignatureGenerateFailedException {
     var testIdentity = TestIdentityFactory.newIdentityWithECKeys("secp256k1", Curve.SECP256K1);
     verifyJws(testIdentity, SignatureType.JWS_SEC_P_256K1);
   }
@@ -353,7 +362,8 @@ class SignAndVerifyTest {
   }
 
   void verifyJws(TestIdentity testIdentity, SignatureType type)
-      throws NoSuchAlgorithmException, SignatureGenerateFailedException,
+      throws NoSuchAlgorithmException,
+          SignatureGenerateFailedException,
           InvalidPrivateKeyFormatException {
     final TestDidResolver didResolver = new TestDidResolver();
     didResolver.register(testIdentity);

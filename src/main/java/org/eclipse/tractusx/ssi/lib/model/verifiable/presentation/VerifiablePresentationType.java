@@ -26,6 +26,7 @@ public class VerifiablePresentationType {
   private VerifiablePresentationType() {
     // static
   }
+
   /** The constant VERIFIABLE_PRESENTATION. */
   public static final String VERIFIABLE_PRESENTATION = "VerifiablePresentation";
 }

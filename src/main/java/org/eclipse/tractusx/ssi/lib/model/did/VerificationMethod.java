@@ -36,8 +36,10 @@ import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 public class VerificationMethod extends HashMap<String, Object> {
   /** The constant ID. */
   public static final String ID = "id";
+
   /** The constant TYPE. */
   public static final String TYPE = "type";
+
   /** The constant CONTROLLER. */
   public static final String CONTROLLER = "controller";
 
