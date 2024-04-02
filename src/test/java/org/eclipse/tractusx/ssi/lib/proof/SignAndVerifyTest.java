@@ -42,7 +42,7 @@ class SignAndVerifyTest {
    */
   @Test
   @SneakyThrows
-  void testSignAndVerify_ED201559() {
+  void testSignAndVerify_ED25519() {
     final TestDidResolver didResolver = new TestDidResolver();
 
     var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys();
