@@ -54,5 +54,6 @@ public interface IVerifier {
           InvalidPublicKeyFormatException,
           SignatureVerificationFailedException,
           UnsupportedSignatureTypeException,
-          NoVerificationKeyFoundException;
+      NoVerificationKeyFoundException;
+
 }
