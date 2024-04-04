@@ -22,8 +22,6 @@
 package org.eclipse.tractusx.ssi.lib.proof;
 
 import java.util.logging.Logger;
-// import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidator;
-// import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidatorImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

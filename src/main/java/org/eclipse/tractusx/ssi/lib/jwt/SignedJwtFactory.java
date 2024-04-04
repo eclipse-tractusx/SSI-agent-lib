@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -116,10 +116,13 @@ public class SignedJwtFactory {
 
       var algorithm = JWSAlgorithm.EdDSA;
       var type = JOSEObjectType.JWT;
-      var header =
-          new JWSHeader(
-              algorithm, type, null, null, null, null, null, null, null, null, issuer, true, null,
-              null);
+
+      JWSHeader.Builder jwsHeaderBuilder = new JWSHeader.Builder(algorithm);
+      jwsHeaderBuilder.type(type);
+      jwsHeaderBuilder.keyID(issuer);
+      jwsHeaderBuilder.base64URLEncodePayload(true);
+
+      var header = jwsHeaderBuilder.build();
       var vc = new SignedJWT(header, claimsSet);
 
       vc.sign(signer);
