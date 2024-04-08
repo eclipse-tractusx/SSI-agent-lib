@@ -168,7 +168,7 @@ SPDX-License-Identifier: Apache-2.0
         <dependency>
             <groupId>com.google.crypto.tink</groupId>
             <artifactId>tink</artifactId>
-            <version>1.10.0</version>
+            <version>1.13.0</version>
         </dependency>
         <!-- Net Crypto EDDSA -->
         <!-- Required for the EDSA Security Provider -->
