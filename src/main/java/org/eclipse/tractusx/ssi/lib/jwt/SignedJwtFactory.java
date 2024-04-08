@@ -117,10 +117,8 @@ public class SignedJwtFactory {
       var algorithm = JWSAlgorithm.EdDSA;
       var type = JOSEObjectType.JWT;
 
-      JWSHeader.Builder jwsHeaderBuilder = new JWSHeader.Builder(algorithm);
-      jwsHeaderBuilder.type(type);
-      jwsHeaderBuilder.keyID(issuer);
-      jwsHeaderBuilder.base64URLEncodePayload(true);
+      JWSHeader.Builder jwsHeaderBuilder =
+          new JWSHeader.Builder(algorithm).type(type).keyID(issuer).base64URLEncodePayload(true);
 
       var header = jwsHeaderBuilder.build();
       var vc = new SignedJWT(header, claimsSet);

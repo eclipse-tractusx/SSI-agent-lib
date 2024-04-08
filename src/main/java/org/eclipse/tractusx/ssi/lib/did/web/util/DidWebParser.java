@@ -34,10 +34,25 @@ public class DidWebParser {
   private static final String WELL_KNOWN_DID_JSON = "/.well-known/did.json";
   private static final String PATH_DID_JSON = "/did.json";
 
+  /**
+   * Parse uri.
+   *
+   * @param did the did
+   * @return the uri
+   * @throws DidParseException the did parse exception
+   */
   public URI parse(Did did) throws DidParseException {
     return parse(did, true);
   }
 
+  /**
+   * Parse uri.
+   *
+   * @param did the did
+   * @param enforceHttps the enforce https
+   * @return the uri
+   * @throws DidParseException the did parse exception
+   */
   public URI parse(Did did, boolean enforceHttps) throws DidParseException {
     if (!did.getMethod().equals(Constants.DID_WEB_METHOD)) {
       throw new DidParseException(

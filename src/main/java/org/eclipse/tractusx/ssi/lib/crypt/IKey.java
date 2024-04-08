@@ -33,8 +33,21 @@ public interface IKey {
    */
   int getKeyLength();
 
+  /**
+   * As string for storing purpose.
+   *
+   * @return the string
+   * @throws KeyTransformationException the key transformation exception
+   */
   String asStringForStoring() throws KeyTransformationException;
 
+  /**
+   * As string for exchange purpose.
+   *
+   * @param encodeType the encode type
+   * @return the string
+   * @throws KeyTransformationException the key transformation exception
+   */
   String asStringForExchange(EncodeType encodeType) throws KeyTransformationException;
 
   /**
