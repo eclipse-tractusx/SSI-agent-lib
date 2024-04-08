@@ -55,7 +55,7 @@ SPDX-License-Identifier: Apache-2.0
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
-            <version>1.18.30</version>
+            <version>1.18.32</version>
         </dependency>
 
         <!-- Multibase -->
