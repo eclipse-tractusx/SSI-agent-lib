@@ -22,13 +22,17 @@
 package org.eclipse.tractusx.ssi.lib.proof;
 
 import java.util.logging.Logger;
-// import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidator;
-// import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdValidatorImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.json.InvalidJsonLdException;
+import org.eclipse.tractusx.ssi.lib.exception.json.TransformJsonLdException;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable.VerifiableType;
@@ -77,14 +81,21 @@ public class LinkedDataProofValidation {
    * depending on Verification Method to resolve the DID Document and fetching the required Public
    * Key
    *
-   * @param verifiable the verifiable
-   * @return the boolean
+   * @throws UnsupportedSignatureTypeException
+   * @throws DidDocumentResolverNotRegisteredException
+   * @throws NoVerificationKeyFoundException
+   * @throws SignatureVerificationFailedException
+   * @throws InvalidPublicKeyFormatException
+   * @throws DidParseException
+   * @throws SignatureParseException
+   * @throws TransformJsonLdException
+   * @throws InvalidJsonLdException
    */
-  @SneakyThrows
-  public boolean verify(Verifiable verifiable) {
-    if (verifiable.getProof() == null) {
-      throw new UnsupportedSignatureTypeException("Proof can't be empty");
-    }
+  public boolean verify(Verifiable verifiable)
+      throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
+          InvalidPublicKeyFormatException, SignatureVerificationFailedException,
+          NoVerificationKeyFoundException, TransformJsonLdException {
+
     var type = verifiable.getProof().getType();
     IVerifier verifier = null;
 
@@ -101,11 +112,15 @@ public class LinkedDataProofValidation {
       throw new UnsupportedSignatureTypeException("Proof type can't be empty");
     }
 
-    final TransformedLinkedData transformedData = transformer.transform(verifiable);
+    // We need to make a deep copy to keep the original Verifiable as it is for Verification step
+    var verifiableWithoutProofSignature = verifiable.deepClone().removeProofSignature();
+
+    final TransformedLinkedData transformedData =
+        transformer.transform(verifiableWithoutProofSignature);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
 
     try {
-      jsonLdValidator.validate(verifiable);
+      jsonLdValidator.validate(verifiableWithoutProofSignature);
       return verifier.verify(hashedData, verifiable) && validateVerificationMethodOfVC(verifiable);
     } catch (InvalidJsonLdException e) {
       LOG.severe("Could not valiate " + verifiable.getId());
@@ -141,10 +156,11 @@ public class LinkedDataProofValidation {
    * @return
    * @throws UnsupportedSignatureTypeException
    */
-  @SneakyThrows
-  private String getVerificationMethod(Verifiable verifiable) {
+  private String getVerificationMethod(Verifiable verifiable)
+      throws UnsupportedSignatureTypeException {
+    final String VERIFICATION_METHOD = "verificationMethod";
     try {
-      return (String) verifiable.getProof().get("verificationMethod");
+      return (String) verifiable.getProof().get(VERIFICATION_METHOD);
     } catch (Exception e) {
       throw new UnsupportedSignatureTypeException("Signature type is not supported");
     }

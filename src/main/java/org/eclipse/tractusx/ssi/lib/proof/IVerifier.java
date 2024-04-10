@@ -21,12 +21,13 @@
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
+import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -38,19 +39,20 @@ public interface IVerifier {
    * {@link VerifiableCredential} verification method, This method depends on Issuer in VC data
    * model to get the public key of issuer.
    *
-   * @param hashedLinkedData the hashed linked data
-   * @param document {@link VerifiableCredential} the verifiable
-   * @return boolean if verified or not
+   * @param hashedLinkedData
+   * @param document {@link VerifiableCredential}
    * @throws UnsupportedSignatureTypeException
    * @throws SignatureParseException
    * @throws InvalidPublicKeyFormatException
    * @throws SignatureGenerateFailedException
-   * @throws SignatureVerificationException
+   * @throws SignatureVerificationFailedException
    * @throws DidParseException
+   * @throws DidDocumentResolverNotRegisteredException
    * @throws NoVerificationKeyFoundException
+   * @throws SSIException
    */
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable verifiable)
       throws SignatureParseException, DidParseException, InvalidPublicKeyFormatException,
-          SignatureVerificationException, UnsupportedSignatureTypeException,
+          SignatureVerificationFailedException, UnsupportedSignatureTypeException,
           NoVerificationKeyFoundException;
 }

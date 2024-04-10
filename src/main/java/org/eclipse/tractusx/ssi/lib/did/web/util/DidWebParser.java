@@ -39,6 +39,7 @@ public class DidWebParser {
    *
    * @param did the did
    * @return the uri
+   * @throws DidParseException the did parse exception
    */
   public URI parse(Did did) throws DidParseException {
     return parse(did, true);
@@ -50,6 +51,7 @@ public class DidWebParser {
    * @param did the did
    * @param enforceHttps the enforce https
    * @return the uri
+   * @throws DidParseException the did parse exception
    */
   public URI parse(Did did, boolean enforceHttps) throws DidParseException {
     if (!did.getMethod().equals(Constants.DID_WEB_METHOD)) {

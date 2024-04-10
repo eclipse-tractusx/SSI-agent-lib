@@ -39,19 +39,39 @@ public class JwtAudienceCheckException extends SignatureValidationException {
             + ", actual audience: "
             + String.join(",  ", actualAudience));
   }
-
+  /**
+   * Instantiates a new Jwt audience check failed exception.
+   *
+   * @param message the message
+   */
   public JwtAudienceCheckException(String message) {
     super(message);
   }
-
+  /**
+   * Instantiates a new jwt audience check failed exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   */
   public JwtAudienceCheckException(String message, Throwable cause) {
     super(message, cause);
   }
-
+  /**
+   * Instantiates a new jwt audience check failed exception.
+   *
+   * @param cause the cause
+   */
   public JwtAudienceCheckException(Throwable cause) {
     super(cause);
   }
-
+  /**
+   * Instantiates a new jwt audience check failed exception.
+   *
+   * @param message the message
+   * @param cause the cause
+   * @param enableSuppression the enable suppression
+   * @param writableStackTrace the writable stack trace
+   */
   public JwtAudienceCheckException(
       String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
     super(message, cause, enableSuppression, writableStackTrace);

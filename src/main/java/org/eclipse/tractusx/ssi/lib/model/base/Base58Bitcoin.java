@@ -21,7 +21,9 @@
 
 package org.eclipse.tractusx.ssi.lib.model.base;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.ipfs.multibase.Multibase;
+import java.io.Serializable;
 import java.util.Objects;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -31,7 +33,7 @@ import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 /** The type Base 58 bitcoin. */
 @Value
 @EqualsAndHashCode
-public class Base58Bitcoin implements MultibaseString {
+public class Base58Bitcoin implements MultibaseString, Serializable {
 
   /**
    * Checks if a string can be decoded.
@@ -75,6 +77,12 @@ public class Base58Bitcoin implements MultibaseString {
     return new Base58Bitcoin(decoded, encoded);
   }
 
-  byte @NonNull [] decoded;
+  @JsonIgnore byte @NonNull [] decoded;
+
   @NonNull String encoded;
+
+  @Override
+  public String toString() {
+    return encoded;
+  }
 }

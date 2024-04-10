@@ -46,7 +46,7 @@ public class SignedJwtValidator {
   }
 
   public void validateAudiences(SignedJWT jwt, String expectedAudience)
-      throws SignatureParseException, JwtAudienceCheckException {
+      throws JwtAudienceCheckException, SignatureParseException, JwtAudienceCheckException {
     List<String> audiences;
     try {
       audiences = jwt.getJWTClaimsSet().getAudience();

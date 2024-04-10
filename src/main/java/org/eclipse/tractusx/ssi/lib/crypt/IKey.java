@@ -34,19 +34,19 @@ public interface IKey {
   int getKeyLength();
 
   /**
-   * Convert the key to a string for storing
+   * As string for storing purpose.
    *
    * @return the string
-   * @throws IOException the io exception
+   * @throws KeyTransformationException the key transformation exception
    */
   String asStringForStoring() throws KeyTransformationException;
 
   /**
-   * Convert the key to a string for exchange.
+   * As string for exchange purpose.
    *
    * @param encodeType the encode type
    * @return the string
-   * @throws IOException the io exception
+   * @throws KeyTransformationException the key transformation exception
    */
   String asStringForExchange(EncodeType encodeType) throws KeyTransformationException;
 

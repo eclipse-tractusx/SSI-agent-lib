@@ -39,7 +39,15 @@ import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
 /** The type Jws proof signer. */
 public class JWSProofSigner implements ISigner {
-
+  /**
+   * Sign HashedLinkedData .
+   *
+   * @param hashedLinkedData the hashed linked data
+   * @param privateKey the private key
+   * @return the byte [ ]
+   * @throws InvalidPrivateKeyFormatException the invalid private key format exception
+   * @throws SignatureGenerateFailedException the signature generate failed exception
+   */
   @Override
   public byte[] sign(HashedLinkedData hashedLinkedData, IPrivateKey privateKey)
       throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException {
