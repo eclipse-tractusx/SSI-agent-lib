@@ -49,11 +49,7 @@ public interface IVerifier {
    * @throws NoVerificationKeyFoundException the no verification key found exception
    */
   boolean verify(HashedLinkedData hashedLinkedData, Verifiable verifiable)
-      throws SignatureParseException,
-          DidParseException,
-          InvalidPublicKeyFormatException,
-          SignatureVerificationFailedException,
-          UnsupportedSignatureTypeException,
-      NoVerificationKeyFoundException;
-
+      throws SignatureParseException, DidParseException, InvalidPublicKeyFormatException,
+          SignatureVerificationFailedException, UnsupportedSignatureTypeException,
+          NoVerificationKeyFoundException;
 }

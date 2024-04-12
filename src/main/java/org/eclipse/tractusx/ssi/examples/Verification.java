@@ -61,12 +61,8 @@ public class Verification {
    * @throws SignatureException the signature exception
    */
   public static void verifyJWT(SignedJWT jwt)
-      throws DidParseException,
-          DidResolverException,
-          SignatureVerificationFailedException,
-          SignatureVerificationException,
-          SignatureParseException,
-          SignatureException {
+      throws DidParseException, DidResolverException, SignatureVerificationFailedException,
+          SignatureVerificationException, SignatureParseException, SignatureException {
     {
       // DID Resolver constructor params
       DidWebParser didParser = new DidWebParser();
@@ -94,13 +90,9 @@ public class Verification {
    * @throws SignatureVerificationFailedException the signature verification failed exception
    */
   public static boolean verifyJWSLD(VerifiableCredential verifiableCredential)
-      throws TransformJsonLdException,
-          NoVerificationKeyFoundException,
-          UnsupportedSignatureTypeException,
-          InvalidPublicKeyFormatException,
-          SignatureParseException,
-          DidParseException,
-          SignatureVerificationFailedException {
+      throws TransformJsonLdException, NoVerificationKeyFoundException,
+          UnsupportedSignatureTypeException, InvalidPublicKeyFormatException,
+          SignatureParseException, DidParseException, SignatureVerificationFailedException {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();

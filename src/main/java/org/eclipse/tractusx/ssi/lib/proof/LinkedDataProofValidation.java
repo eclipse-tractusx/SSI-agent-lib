@@ -92,13 +92,9 @@ public class LinkedDataProofValidation {
    * @throws InvalidJsonLdException
    */
   public boolean verify(Verifiable verifiable)
-      throws UnsupportedSignatureTypeException,
-          SignatureParseException,
-          DidParseException,
-          InvalidPublicKeyFormatException,
-          SignatureVerificationFailedException,
-          NoVerificationKeyFoundException,
-          TransformJsonLdException {
+      throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
+          InvalidPublicKeyFormatException, SignatureVerificationFailedException,
+          NoVerificationKeyFoundException, TransformJsonLdException {
 
     var type = verifiable.getProof().getType();
     IVerifier verifier = null;

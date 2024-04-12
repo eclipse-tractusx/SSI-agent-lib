@@ -86,8 +86,7 @@ public class LinkedDataProofGenerator {
    * @throws InvalidPrivateKeyFormatException the invalide private key format
    */
   public Proof createProof(Verifiable verifiable, URI verificationMethodId, IPrivateKey privateKey)
-      throws InvalidPrivateKeyFormatException,
-          SignatureGenerateFailedException,
+      throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException,
           TransformJsonLdException {
 
     Proof proof = null;

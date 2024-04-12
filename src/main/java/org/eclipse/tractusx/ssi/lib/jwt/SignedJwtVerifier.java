@@ -70,12 +70,8 @@ public class SignedJwtVerifier {
    * @throws SignatureVerificationFailedException the signature verification failed exception
    */
   public boolean verify(SignedJWT jwt)
-      throws DidParseException,
-          DidResolverException,
-          SignatureVerificationException,
-          SignatureParseException,
-          SignatureException,
-          SignatureVerificationFailedException {
+      throws DidParseException, DidResolverException, SignatureVerificationException,
+          SignatureParseException, SignatureException, SignatureVerificationFailedException {
 
     JWTClaimsSet jwtClaimsSet;
     try {
