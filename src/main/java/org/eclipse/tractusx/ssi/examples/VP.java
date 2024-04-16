@@ -21,9 +21,9 @@
 
 package org.eclipse.tractusx.ssi.examples;
 
+import com.nimbusds.jwt.SignedJWT;
 import java.io.IOException;
 import java.util.List;
-
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
@@ -36,8 +36,6 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePres
 import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdSerializerImpl;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationFactory;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationFactoryImpl;
-
-import com.nimbusds.jwt.SignedJWT;
 
 /**
  * This is an example class to demonstrate how to create a Verifiable Presentation in JSON-LD and
@@ -64,7 +62,7 @@ class VP {
     return verifiablePresentation;
   }
 
-    /**
+  /**
    * Create vp as a signed jwt.
    *
    * @param issuer the issuer
@@ -93,7 +91,6 @@ class VP {
         new SerializedJwtPresentationFactoryImpl(
             new SignedJwtFactory(new OctetKeyPairFactory()), new JsonLdSerializerImpl(), issuer);
 
-    return presentationFactory.createPresentation(
-        issuer, credentials, audience, privateKey, keyId);
+    return presentationFactory.createPresentation(issuer, credentials, audience, privateKey, keyId);
   }
 }
