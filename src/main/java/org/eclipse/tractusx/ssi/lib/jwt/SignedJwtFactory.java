@@ -135,12 +135,12 @@ public class SignedJwtFactory {
   @SneakyThrows
   public SignedJWT create(
       Did didIssuer,
-      Did holderIssuer,
+      Did holderDid,
       LinkedHashMap<String, Object> vc,
       IPrivateKey privateKey,
       String keyId) {
     final String issuer = didIssuer.toString();
-    final String subject = holderIssuer.toString();
+    final String subject = holderDid.toString();
 
     // check if expirationDate is presented in VC then use it, otherwise null
     final Date expireDateAsDate =

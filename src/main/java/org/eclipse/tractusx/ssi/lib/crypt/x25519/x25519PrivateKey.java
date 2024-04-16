@@ -61,7 +61,6 @@ public class x25519PrivateKey implements IPrivateKey {
    * @param privateKey the private key
    * @param pemFormat the pem format
    * @throws InvalidPrivateKeyFormatException the invalide private key format
-   * @throws IOException the io exception
    */
   public x25519PrivateKey(String privateKey, boolean PEMFormat)
       throws InvalidPrivateKeyFormatException {
