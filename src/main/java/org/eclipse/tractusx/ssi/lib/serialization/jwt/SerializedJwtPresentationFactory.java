@@ -37,6 +37,7 @@ public interface SerializedJwtPresentationFactory {
    * @param credentials the credentials
    * @param audience the audience
    * @param privateKey the private key
+   * @param keyId the key id
    * @return the signed jwt
    */
   SignedJWT createPresentation(
@@ -46,6 +47,17 @@ public interface SerializedJwtPresentationFactory {
       IPrivateKey privateKey,
       String keyId);
 
+  /**
+   * Create presentation signed jwt.
+   *
+   * @param issuer the issuer
+   * @param credentials the credentials
+   * @param audience the audience
+   * @param privateKey the private key
+   * @param keyId the key id
+   * @param config jwt config
+   * @return the signed jwt
+   */
   SignedJWT createPresentation(
       Did issuer,
       List<VerifiableCredential> credentials,

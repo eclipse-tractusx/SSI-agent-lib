@@ -41,8 +41,8 @@ import org.eclipse.tractusx.ssi.lib.serialization.jwt.JwtConfig;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresentation;
 
 /**
- * Convenience/helper class to generate * Convenience/helper class to generate and verify Signed
- * JSON Web Tokens (JWTs) for communicating between connector instances.
+ * Convenience/helper class to generate and verify Signed JSON Web Tokens (JWTs) for communicating
+ * between connector instances.
  */
 public class SignedJwtFactory {
 
@@ -53,14 +53,15 @@ public class SignedJwtFactory {
   }
 
   /**
-   * Creates a signed JWT {@link SignedJWT} that contains a set of claims and an issuer. Although
-   * all private key types are possible, in the context of Distributed Identity using an Elliptic
-   * Curve key ({@code P-256}) is advisable.
+   * Creates a signed JWT {@link SignedJWT} that contains a set of claims and an issuer with a
+   * default configuration (60 second expiration time) {@link JwtConfig} for VP
    *
-   * @param audience the value of the token audience claim, e.g. the IDS Webhook address.
-   * @param keyId the id of the key, the kid of the jws-header will be constructed via
-   *     <issuer>+"#"+<keyId>
-   * @return a {@code SignedJWT} that is signed with the private key and contains all claims listed.
+   * @param didIssuer
+   * @param audience
+   * @param serializedPresentation
+   * @param privateKey
+   * @param keyId
+   * @return
    */
   @SneakyThrows
   public SignedJWT create(
@@ -74,15 +75,16 @@ public class SignedJwtFactory {
   }
 
   /**
-   * Creates a signed JWT {@link SignedJWT} that contains a set of claims and an issuer. Although
-   * all private key types are possible, in the context of Distributed Identity using an Elliptic
-   * Curve key ({@code P-256}) is advisable.
+   * Creates a signed JWT {@link SignedJWT} that contains a set of claims and an issuer with a
+   * specific configuration {@link JwtConfig} for VP
    *
-   * @param audience the value of the token audience claim, e.g. the IDS Webhook address.
-   * @param keyId the id of the key, the kid of the jws-header will be constructed via
-   *     <issuer>+"#"+<keyId>
-   * @param config the custom configuration for the JWT to create, e.g. custom expiration time (exp)
-   * @return a {@code SignedJWT} that is signed with the private key and contains all claims listed.
+   * @param didIssuer
+   * @param audience
+   * @param serializedPresentation
+   * @param privateKey
+   * @param keyId
+   * @param config
+   * @return
    */
   @SneakyThrows
   public SignedJWT create(
@@ -120,6 +122,16 @@ public class SignedJwtFactory {
     return createSignedES256Jwt(octetKeyPair, claimsSet, issuer, keyId);
   }
 
+  /**
+   * Creates a signed JWT {@link SignedJWT} from a Verifiable Credential
+   *
+   * @param didIssuer
+   * @param holderIssuer
+   * @param vc
+   * @param privateKey
+   * @param keyId
+   * @return
+   */
   @SneakyThrows
   public SignedJWT create(
       Did didIssuer,
@@ -157,6 +169,15 @@ public class SignedJwtFactory {
     return createSignedES256Jwt(octetKeyPair, claimsSet, issuer, keyId);
   }
 
+  /**
+   * Create a signedJwt for ES256 JWT {@link SignedJWT} with a set of claims
+   *
+   * @param privateKey
+   * @param claimsSet
+   * @param issuer
+   * @param keyId
+   * @return
+   */
   public SignedJWT createSignedES256Jwt(
       OctetKeyPair privateKey, JWTClaimsSet claimsSet, String issuer, String keyId) {
     JWSSigner signer;

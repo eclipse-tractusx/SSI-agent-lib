@@ -21,9 +21,9 @@
 
 package org.eclipse.tractusx.ssi.examples;
 
-import com.nimbusds.jwt.SignedJWT;
 import java.io.IOException;
 import java.util.List;
+
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
@@ -37,12 +37,13 @@ import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdSerializerImpl;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationFactory;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationFactoryImpl;
 
+import com.nimbusds.jwt.SignedJWT;
+
 /**
  * This is an example class to demonstrate how to create a Verifiable Presentation in JSON-LD and
  * JWT format
  */
 class VP {
-
   /**
    * Create a verifiable presentation.
    *
@@ -63,7 +64,7 @@ class VP {
     return verifiablePresentation;
   }
 
-  /**
+    /**
    * Create vp as a signed jwt.
    *
    * @param issuer the issuer
@@ -71,6 +72,7 @@ class VP {
    * @param audience the audience
    * @param privateKey the private key
    * @param publicKey the public key
+   * @param keyId the key id
    * @return the signed jwt
    * @throws IOException the io exception
    */
@@ -79,7 +81,8 @@ class VP {
       List<VerifiableCredential> credentials,
       String audience,
       IPrivateKey privateKey,
-      IPublicKey publicKey)
+      IPublicKey publicKey,
+      String keyId)
       throws IOException {
 
     // Extracting keys
@@ -91,6 +94,6 @@ class VP {
             new SignedJwtFactory(new OctetKeyPairFactory()), new JsonLdSerializerImpl(), issuer);
 
     return presentationFactory.createPresentation(
-        issuer, credentials, audience, privateKey, "keyId");
+        issuer, credentials, audience, privateKey, keyId);
   }
 }
