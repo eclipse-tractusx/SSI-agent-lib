@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -42,7 +42,6 @@ import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationF
  * JWT format
  */
 class VP {
-
   /**
    * Create a verifiable presentation.
    *
@@ -71,6 +70,7 @@ class VP {
    * @param audience the audience
    * @param privateKey the private key
    * @param publicKey the public key
+   * @param keyId the key id
    * @return the signed jwt
    * @throws IOException the io exception
    */
@@ -79,7 +79,8 @@ class VP {
       List<VerifiableCredential> credentials,
       String audience,
       IPrivateKey privateKey,
-      IPublicKey publicKey)
+      IPublicKey publicKey,
+      String keyId)
       throws IOException {
 
     // Extracting keys
@@ -90,6 +91,6 @@ class VP {
         new SerializedJwtPresentationFactoryImpl(
             new SignedJwtFactory(new OctetKeyPairFactory()), new JsonLdSerializerImpl(), issuer);
 
-    return presentationFactory.createPresentation(issuer, credentials, audience, privateKey);
+    return presentationFactory.createPresentation(issuer, credentials, audience, privateKey, keyId);
   }
 }

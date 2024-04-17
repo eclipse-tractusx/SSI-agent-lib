@@ -21,7 +21,7 @@
 
 package org.eclipse.tractusx.ssi.lib.exception.proof;
 
-/** NoVerificationKeyFoundExcpetion */
+/** NoVerificationKeyFoundException */
 public class NoVerificationKeyFoundException extends SignatureVerificationException {
   private static final long serialVersionUID = 1L;
   /**

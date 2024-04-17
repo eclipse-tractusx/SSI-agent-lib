@@ -19,24 +19,29 @@
  * *******************************************************************************
  */
 
-package org.eclipse.tractusx.ssi.lib.proof;
+package org.eclipse.tractusx.ssi.lib.serialization.jwt;
 
+import com.nimbusds.jwt.SignedJWT;
+import java.util.LinkedHashMap;
+import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
-import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
+import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
+import org.eclipse.tractusx.ssi.lib.model.did.Did;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 
-/** The interface Signer. */
-public interface ISigner {
-  /**
-   * Sign byte [ ].
-   *
-   * @param hashedLinkedData the hashed linked data
-   * @param privateKey the private key
-   * @return the byte [ ]
-   * @throws SsiException the ssi exception
-   * @throws InvalidPrivateKeyFormatException the invalide private key format
-   */
-  public byte[] sign(HashedLinkedData hashedLinkedData, IPrivateKey privateKey)
-      throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException;
+@RequiredArgsConstructor
+public class SerializedJwtVCFactoryImpl implements SerializedJwtVCFactory {
+  private final SignedJwtFactory signedJwtFactory;
+
+  @Override
+  public SignedJWT createVCJwt(
+      Did issuer,
+      Did holder,
+      VerifiableCredential credentials,
+      IPrivateKey privateKey,
+      String keyId) {
+    var clonedVC = new LinkedHashMap<String, Object>();
+    clonedVC.putAll(credentials);
+    return signedJwtFactory.create(issuer, holder, clonedVC, privateKey, keyId);
+  }
 }
