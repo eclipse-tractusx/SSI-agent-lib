@@ -36,10 +36,7 @@ import org.junit.jupiter.api.Test;
 /** The type Sign and verify test. */
 class SignAndVerifyTest {
 
-
-  /**
-   * Test sign and verify ed 25519.
-   */
+  /** Test sign and verify ed 25519. */
   @Test
   @SneakyThrows
   void testSignAndVerify_ED25519() {

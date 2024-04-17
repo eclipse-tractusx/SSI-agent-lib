@@ -106,7 +106,7 @@ class SerializedJwtPresentationFactoryImplTest {
     Assertions.assertEquals(
         DEFAULT_EXPIRATION_TIME,
         (presentation.getJWTClaimsSet().getExpirationTime().getTime()
-            - presentation.getJWTClaimsSet().getIssueTime().getTime())
+                - presentation.getJWTClaimsSet().getIssueTime().getTime())
             / 1000);
   }
 
@@ -139,7 +139,7 @@ class SerializedJwtPresentationFactoryImplTest {
     Assertions.assertEquals(
         CUSTOM_EXPIRATION_TIME,
         (presentation.getJWTClaimsSet().getExpirationTime().getTime()
-            - presentation.getJWTClaimsSet().getIssueTime().getTime())
+                - presentation.getJWTClaimsSet().getIssueTime().getTime())
             / 1000);
   }
 
