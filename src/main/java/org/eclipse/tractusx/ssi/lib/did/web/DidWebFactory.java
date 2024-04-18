@@ -29,6 +29,10 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidMethodIdentifier;
 /** The type Did web factory. */
 public class DidWebFactory {
 
+  private DidWebFactory() {
+    throw new IllegalStateException("Factory class");
+  }
+
   /**
    * From hostname did.
    *

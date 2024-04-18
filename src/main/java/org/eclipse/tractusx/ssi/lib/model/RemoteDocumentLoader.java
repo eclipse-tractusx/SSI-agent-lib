@@ -44,9 +44,9 @@ import lombok.Setter;
 /** The type Remote document loader. */
 public class RemoteDocumentLoader implements DocumentLoader {
 
-  private static int CACHE_PERIOD_IN_DAYS = 1;
-  private static DocumentLoader DEFAULT_HTTP_LOADER;
-  private static DocumentLoader DEFAULT_FILE_LOADER;
+  private static final int CACHE_PERIOD_IN_DAYS = 1;
+  private static DocumentLoader defaultHttpLoader;
+  private static DocumentLoader defaultFileLoader;
   @Getter private DocumentLoader httpLoader;
   @Getter private DocumentLoader fileLoader;
 
@@ -54,15 +54,15 @@ public class RemoteDocumentLoader implements DocumentLoader {
   @Getter @Setter private boolean enableHttp = false;
   @Getter @Setter private boolean enableHttps = false;
   @Getter @Setter private boolean enableFile = false;
-  @Getter @Setter private Map<URI, JsonDocument> localCache = new HashMap<URI, JsonDocument>();
+  @Getter @Setter private Map<URI, JsonDocument> localCache = new HashMap<>();
 
   @Getter @Setter
   private Cache<URI, Document> remoteCache =
       Caffeine.newBuilder().expireAfterWrite(Duration.ofDays(CACHE_PERIOD_IN_DAYS)).build();
 
-  @Getter @Setter private List<URI> httpContexts = new ArrayList<URI>();
-  @Getter @Setter private List<URI> httpsContexts = new ArrayList<URI>();
-  @Getter @Setter private List<URI> fileContexts = new ArrayList<URI>();
+  @Getter @Setter private List<URI> httpContexts = new ArrayList<>();
+  @Getter @Setter private List<URI> httpsContexts = new ArrayList<>();
+  @Getter @Setter private List<URI> fileContexts = new ArrayList<>();
 
   /** The constant DOCUMENT_LOADER. */
   public static final RemoteDocumentLoader DOCUMENT_LOADER;
@@ -77,10 +77,10 @@ public class RemoteDocumentLoader implements DocumentLoader {
    * @return the default http loader
    */
   public static DocumentLoader getDefaultHttpLoader() {
-    if (DEFAULT_HTTP_LOADER == null) {
-      DEFAULT_HTTP_LOADER = new HttpLoader(DefaultHttpClient.defaultInstance());
+    if (defaultHttpLoader == null) {
+      defaultHttpLoader = new HttpLoader(DefaultHttpClient.defaultInstance());
     }
-    return DEFAULT_HTTP_LOADER;
+    return defaultHttpLoader;
   }
 
   /**
@@ -89,10 +89,10 @@ public class RemoteDocumentLoader implements DocumentLoader {
    * @return the default file loader
    */
   public static DocumentLoader getDefaultFileLoader() {
-    if (DEFAULT_FILE_LOADER == null) {
-      DEFAULT_FILE_LOADER = new FileLoader();
+    if (defaultFileLoader == null) {
+      defaultFileLoader = new FileLoader();
     }
-    return DEFAULT_FILE_LOADER;
+    return defaultFileLoader;
   }
 
   /**
@@ -101,7 +101,7 @@ public class RemoteDocumentLoader implements DocumentLoader {
    * @param defaultHttpLoader the default http loader
    */
   public static void setDefaultHttpLoader(DocumentLoader defaultHttpLoader) {
-    DEFAULT_HTTP_LOADER = defaultHttpLoader;
+    RemoteDocumentLoader.defaultHttpLoader = defaultHttpLoader;
   }
 
   /**
@@ -110,7 +110,7 @@ public class RemoteDocumentLoader implements DocumentLoader {
    * @param defaultFileLoader the default file loader
    */
   public static void setDefaultFileLoader(DocumentLoader defaultFileLoader) {
-    DEFAULT_FILE_LOADER = defaultFileLoader;
+    RemoteDocumentLoader.defaultFileLoader = defaultFileLoader;
   }
 
   private RemoteDocumentLoader() {}

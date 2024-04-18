@@ -26,8 +26,9 @@ import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 public class KeyTransformationException extends SSIException {
 
   private static final long serialVersionUID = 1L;
+
   /**
-   * Instantiates a new key trnasformation exception.
+   * Instantiates a new key transformation exception.
    *
    * @param message the message
    */
@@ -36,7 +37,7 @@ public class KeyTransformationException extends SSIException {
   }
 
   /**
-   * Instantiates a new key trnasformation exception.
+   * Instantiates a new key transformation exception.
    *
    * @param message the message
    * @param cause the cause
@@ -46,7 +47,7 @@ public class KeyTransformationException extends SSIException {
   }
 
   /**
-   * Instantiates a new key trnasformation exception.
+   * Instantiates a new key transformation exception.
    *
    * @param cause the cause
    */
@@ -55,7 +56,7 @@ public class KeyTransformationException extends SSIException {
   }
 
   /**
-   * Instantiates a new key trnasformation exception.
+   * Instantiates a new key transformation exception.
    *
    * @param message the message
    * @param cause the cause

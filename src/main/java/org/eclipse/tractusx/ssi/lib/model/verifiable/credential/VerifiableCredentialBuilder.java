@@ -29,7 +29,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.NoArgsConstructor;
+import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 
 /** The type Verifiable credential builder. */
 @NoArgsConstructor
@@ -169,9 +171,9 @@ public class VerifiableCredentialBuilder {
 
     // Map.of does not work, as proof can be null
     Map<String, Object> map = new HashMap<>();
-    map.put(VerifiableCredential.CONTEXT, context);
-    map.put(VerifiableCredential.ID, id.toString());
-    map.put(VerifiableCredential.TYPE, types);
+    map.put(JsonLdObject.CONTEXT, context);
+    map.put(Verifiable.ID, id.toString());
+    map.put(Verifiable.TYPE, types);
     map.put(VerifiableCredential.ISSUER, issuer.toString());
     map.put(VerifiableCredential.CREDENTIAL_SUBJECT, credentialSubject);
     map.put(VerifiableCredential.ISSUANCE_DATE, formatter.format(issuanceDate));
@@ -182,7 +184,7 @@ public class VerifiableCredentialBuilder {
       map.put(VerifiableCredential.CREDENTIAL_STATUS, credentialStatus);
     }
     if (proof != null) {
-      map.put(VerifiableCredential.PROOF, proof);
+      map.put(Verifiable.PROOF, proof);
     }
 
     return new VerifiableCredential(map);

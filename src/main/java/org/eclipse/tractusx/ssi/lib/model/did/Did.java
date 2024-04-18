@@ -33,8 +33,10 @@ public class Did {
 
   /** The Method. */
   @EqualsAndHashCode.Include @Setter @Getter @NonNull DidMethod method;
+
   /** The Method identifier. */
   @EqualsAndHashCode.Include @Setter @Getter @NonNull DidMethodIdentifier methodIdentifier;
+
   /** The Fragment. */
   @EqualsAndHashCode.Include @Getter String fragment;
 
@@ -80,8 +82,7 @@ public class Did {
    * @return the did
    */
   public Did excludeFragment() {
-    Did newDid = new Did(method, methodIdentifier, null);
-    return newDid;
+    return new Did(method, methodIdentifier, null);
   }
 
   /**

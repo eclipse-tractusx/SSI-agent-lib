@@ -39,15 +39,19 @@ public class Ed25519ProofConfiguration extends Proof {
 
   /** The constant ED25519_VERIFICATION_KEY_2018. */
   public static final String ED25519_VERIFICATION_KEY_2018 = "Ed25519Signature2020";
+
   /** The constant TIME_FORMAT. */
   public static final String TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
   /** The constant ASSERTION_METHOD. */
   public static final String ASSERTION_METHOD = "assertionMethod";
+
   /** The constant PROOF_PURPOSE. */
   public static final String PROOF_PURPOSE = "proofPurpose";
+
   /** The constant CREATED. */
   public static final String CREATED = "created";
+
   /** The constant VERIFICATION_METHOD. */
   public static final String VERIFICATION_METHOD = "verificationMethod";
 

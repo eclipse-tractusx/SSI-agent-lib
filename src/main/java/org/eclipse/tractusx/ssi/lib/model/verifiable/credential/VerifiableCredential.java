@@ -56,16 +56,22 @@ public class VerifiableCredential extends Verifiable {
 
   /** The constant DEFAULT_CONTEXT. */
   public static final URI DEFAULT_CONTEXT = URI.create("https://www.w3.org/2018/credentials/v1");
+
   /** The constant TIME_FORMAT. */
   public static final String TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+
   /** The constant ISSUER. */
   public static final String ISSUER = "issuer";
+
   /** The constant ISSUANCE_DATE. */
   public static final String ISSUANCE_DATE = "issuanceDate";
+
   /** The constant EXPIRATION_DATE. */
   public static final String EXPIRATION_DATE = "expirationDate";
+
   /** The constant CREDENTIAL_SUBJECT. */
   public static final String CREDENTIAL_SUBJECT = "credentialSubject";
+
   /** The constant CREDENTIAL_STATUS. */
   public static final String CREDENTIAL_STATUS = "credentialStatus";
 
@@ -117,11 +123,13 @@ public class VerifiableCredential extends Verifiable {
   }
 
   @NonNull
+  @Override
   public URI getId() {
     return SerializeUtil.asURI(get(ID));
   }
 
   @NonNull
+  @Override
   public List<String> getTypes() {
     return SerializeUtil.asStringList(get(TYPE));
   }

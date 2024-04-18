@@ -32,8 +32,10 @@ import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 public class Service extends HashMap<String, Object> {
   /** The constant ID. */
   public static final String ID = "id";
+
   /** The constant TYPE. */
   public static final String TYPE = "type";
+
   /** The constant SERVICE_ENDPOINT. */
   public static final String SERVICE_ENDPOINT = "serviceEndpoint";
 

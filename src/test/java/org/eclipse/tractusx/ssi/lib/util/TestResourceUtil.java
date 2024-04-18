@@ -31,12 +31,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.RandomUtils;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialStatusList2021Entry;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
-import org.testcontainers.shaded.org.apache.commons.lang3.RandomUtils;
 
 /** The type Test resource util. */
 public class TestResourceUtil {

@@ -26,6 +26,7 @@ import java.util.Date;
 /** The type Jwt expired exception. */
 public class JwtExpiredException extends SignatureValidationException {
   private static final long serialVersionUID = 1L;
+
   /**
    * Instantiates a new Jwt expired exception.
    *

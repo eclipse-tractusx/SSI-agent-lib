@@ -34,7 +34,7 @@ import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatExceptio
 import org.eclipse.tractusx.ssi.lib.exception.key.KeyGenerationException;
 
 /** X25519 key generator. */
-public class x25519Generator implements IKeyGenerator {
+public class X25519Generator implements IKeyGenerator {
 
   @Override
   public KeyPair generateKey() throws KeyGenerationException {
@@ -48,15 +48,15 @@ public class x25519Generator implements IKeyGenerator {
     Ed25519PrivateKeyParameters privateKey = (Ed25519PrivateKeyParameters) keyPair.getPrivate();
     Ed25519PublicKeyParameters publicKey = (Ed25519PublicKeyParameters) keyPair.getPublic();
 
-    x25519PrivateKey x25519PrivateKey;
+    X25519PrivateKey x25519PrivateKey;
     try {
-      x25519PrivateKey = new x25519PrivateKey(privateKey.getEncoded());
+      x25519PrivateKey = new X25519PrivateKey(privateKey.getEncoded());
     } catch (InvalidPrivateKeyFormatException e) {
       throw new KeyGenerationException(e.getCause());
     }
-    x25519PublicKey x25519PublicKey;
+    X25519PublicKey x25519PublicKey;
     try {
-      x25519PublicKey = new x25519PublicKey(publicKey.getEncoded());
+      x25519PublicKey = new X25519PublicKey(publicKey.getEncoded());
     } catch (InvalidPublicKeyFormatException e) {
       throw new KeyGenerationException(e.getCause());
     }

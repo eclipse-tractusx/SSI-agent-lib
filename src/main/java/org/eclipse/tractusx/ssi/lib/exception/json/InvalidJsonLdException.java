@@ -26,6 +26,7 @@ import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 /** The type Invalid json ld exception. */
 public class InvalidJsonLdException extends SSIException {
   private static final long serialVersionUID = 1L;
+
   /**
    * Instantiates a new Invalid json ld exception.
    *

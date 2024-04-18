@@ -23,6 +23,11 @@ package org.eclipse.tractusx.ssi.lib.model.verifiable.presentation;
 
 /** The type Verifiable presentation type. */
 public class VerifiablePresentationType {
+
+  private VerifiablePresentationType() {
+    throw new IllegalStateException("Constant class");
+  }
+
   /** The constant VERIFIABLE_PRESENTATION. */
   public static final String VERIFIABLE_PRESENTATION = "VerifiablePresentation";
 }

@@ -27,6 +27,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import lombok.NoArgsConstructor;
+import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 
 /** The type Jws proof builder. */
 @NoArgsConstructor
@@ -92,7 +93,7 @@ public class JWSProofBuilder {
 
     Map<String, Object> map =
         Map.of(
-            JWSSignature2020.TYPE,
+            Proof.TYPE,
             JWSSignature2020.JWS_VERIFICATION_KEY_2020,
             JWSSignature2020.PROOF_PURPOSE,
             proofPurpose,

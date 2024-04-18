@@ -36,12 +36,16 @@ public class DidDocument extends JsonLdObject {
 
   /** The constant DEFAULT_CONTEXT. */
   public static final String DEFAULT_CONTEXT = "https://www.w3.org/ns/did/v1";
+
   /** The constant ID. */
   public static final String ID = "id";
+
   /** The constant VERIFICATION_METHOD. */
   public static final String VERIFICATION_METHOD = "verificationMethod";
+
   /** The constant SERVICE. */
   public static final String SERVICE = "service";
+
   /** The constant AUTHENTICATION. */
   public static final String AUTHENTICATION = "authentication";
 

@@ -62,11 +62,11 @@ public class JWKVerificationMethodBuilder {
   public JWKVerificationMethod build() {
     return new JWKVerificationMethod(
         Map.of(
-            JWKVerificationMethod.ID,
+            VerificationMethod.ID,
             URI.create(did.toUri() + "#" + jwk.getKeyID()),
-            JWKVerificationMethod.TYPE,
+            VerificationMethod.TYPE,
             JWKVerificationMethod.DEFAULT_TYPE,
-            JWKVerificationMethod.CONTROLLER,
+            VerificationMethod.CONTROLLER,
             this.did.toUri(),
             JWKVerificationMethod.PUBLIC_KEY_JWK,
             Map.of(
