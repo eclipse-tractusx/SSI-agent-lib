@@ -11,6 +11,7 @@ import com.nimbusds.jose.util.JSONObjectUtils;
 import java.text.ParseException;
 import java.util.Map;
 import java.util.UUID;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -157,6 +158,19 @@ class JWKVerificationMethodTest {
     assertEquals(
         "ANIbFeRdPHf1WYMCUjcPz-ZhecZFybOqLIJjVOlLETH7uPlyG0gEoMWnIZXhQVypPy_HtUiUzdnSEPAylYhHBTX2",
         ((ECKey) jwk).getY().toString());
+  }
+
+  @SneakyThrows
+  @Test
+  void testEqualsAndHasCode() {
+    Map<String, Object> parsed = JSONObjectUtils.parse(ED_JWK_STRING);
+    JWKVerificationMethod abstractJWKVerificationMethod1 = new JWKVerificationMethod(parsed);
+    JWKVerificationMethod abstractJWKVerificationMethod2 = new JWKVerificationMethod(parsed);
+
+    assertEquals(abstractJWKVerificationMethod1, abstractJWKVerificationMethod2);
+
+    assertEquals(
+        abstractJWKVerificationMethod1.hashCode(), abstractJWKVerificationMethod2.hashCode());
   }
 
   @Test
