@@ -96,7 +96,7 @@ class SerializedJwtPresentationFactoryImplTest {
             List.of(credentialWithProof),
             "test-audience",
             credentialIssuer.getPrivateKey(),
-            "key-2");
+            "key-1");
 
     Assertions.assertNotNull(presentation);
     Assertions.assertDoesNotThrow(() -> jwtVerifier.verify(presentation));
@@ -126,7 +126,7 @@ class SerializedJwtPresentationFactoryImplTest {
             List.of(credentialWithProof),
             "test-audience",
             credentialIssuer.getPrivateKey(),
-            "key-2",
+            "key-1",
             jwtConfig);
 
     Assertions.assertNotNull(presentation);
