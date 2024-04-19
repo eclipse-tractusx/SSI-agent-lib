@@ -121,7 +121,7 @@ public class JWSProofBuilder {
 
     Map<String, Object> map =
         Map.of(
-            JWSSignature2020.TYPE,
+            Proof.TYPE,
             JWSSignature2020.JWS_VERIFICATION_KEY_2020,
             JWSSignature2020.PROOF_PURPOSE,
             proofPurpose,

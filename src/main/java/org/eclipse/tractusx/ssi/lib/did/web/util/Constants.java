@@ -26,6 +26,9 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 /** The type Constants. */
 public class Constants {
 
+  public static final String ISSUANCE_DATE = "issuanceDate";
+  public static final String EXPIRATION_DATE = "expirationDate";
+
   private Constants() {
     throw new IllegalStateException("Constant class");
   }

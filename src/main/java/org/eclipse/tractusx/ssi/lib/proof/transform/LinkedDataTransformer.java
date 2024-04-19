@@ -42,10 +42,6 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 public class LinkedDataTransformer {
 
   public TransformedLinkedData transform(Verifiable document) throws TransformJsonLdException {
-
-    // We need Deep Clone to keep the original
-    // Verifiable vrCopy = document.deepClone().removeProofSignature();
-
     return this.canocliztion(document);
   }
 

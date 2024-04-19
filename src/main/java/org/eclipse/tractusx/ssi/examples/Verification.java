@@ -21,7 +21,6 @@
 
 package org.eclipse.tractusx.ssi.examples;
 
-import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
 import java.net.http.HttpClient;
 import java.security.SignatureException;
@@ -64,22 +63,17 @@ public class Verification {
   public static void verifyJWT(SignedJWT jwt)
       throws DidParseException,
           DidResolverException,
-          SignatureVerificationFailedException,
           SignatureVerificationException,
-          SignatureParseException,
-          SignatureException,
-          JOSEException {
-    {
-      // DID Resolver constructor params
-      DidWebParser didParser = new DidWebParser();
-      var httpClient = HttpClient.newHttpClient();
-      var enforceHttps = false;
-      var didResolver = new DidWebResolver(httpClient, didParser, enforceHttps);
+          SignatureParseException {
+    // DID Resolver constructor params
+    DidWebParser didParser = new DidWebParser();
+    var httpClient = HttpClient.newHttpClient();
+    var enforceHttps = false;
+    var didResolver = new DidWebResolver(httpClient, didParser, enforceHttps);
 
-      SignedJwtVerifier jwtVerifier = new SignedJwtVerifier(didResolver);
+    SignedJwtVerifier jwtVerifier = new SignedJwtVerifier(didResolver);
 
-      jwtVerifier.verify(jwt);
-    }
+    jwtVerifier.verify(jwt);
   }
 
   /**

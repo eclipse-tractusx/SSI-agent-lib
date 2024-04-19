@@ -143,8 +143,7 @@ public abstract class Verifiable extends JsonLdObject {
    * @return new deep copy
    */
   public Verifiable deepClone() {
-    var copy = (Verifiable) SerializationUtils.clone(this);
-    return copy;
+    return SerializationUtils.clone(this);
   }
 
   /**
@@ -174,7 +173,7 @@ public abstract class Verifiable extends JsonLdObject {
       for (Iterator<VerifiableCredential> iterator = vp.getVerifiableCredentials().iterator();
           iterator.hasNext(); ) {
 
-        VerifiableCredential vc = (VerifiableCredential) iterator.next();
+        VerifiableCredential vc = iterator.next();
         proof =
             vc.getProof()
                 .orElseThrow(() -> new DidParseException("no proof found for verification"));

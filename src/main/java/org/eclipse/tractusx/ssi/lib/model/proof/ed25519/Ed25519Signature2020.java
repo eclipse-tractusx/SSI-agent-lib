@@ -83,6 +83,6 @@ public class Ed25519Signature2020 extends Ed25519ProofConfiguration {
    * @return the proof value
    */
   public MultibaseString getProofValue() {
-    return MultibaseFactory.create((String) this.get(PROOF_VALUE).toString());
+    return MultibaseFactory.create(this.get(PROOF_VALUE).toString());
   }
 }

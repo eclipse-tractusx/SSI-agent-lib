@@ -27,6 +27,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import lombok.NoArgsConstructor;
+import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 
 /** The type Ed 25519 signature 2020 builder. */
 @NoArgsConstructor
@@ -92,7 +93,7 @@ public class Ed25519ProofBuilder {
 
     Map<String, Object> map =
         Map.of(
-            Ed25519Signature2020.TYPE,
+            Proof.TYPE,
             Ed25519Signature2020.ED25519_VERIFICATION_KEY_2018,
             Ed25519Signature2020.PROOF_PURPOSE,
             proofPurpose,
@@ -117,7 +118,7 @@ public class Ed25519ProofBuilder {
 
     Map<String, Object> map =
         Map.of(
-            Ed25519Signature2020.TYPE,
+            Proof.TYPE,
             Ed25519Signature2020.ED25519_VERIFICATION_KEY_2018,
             Ed25519Signature2020.PROOF_PURPOSE,
             proofPurpose,

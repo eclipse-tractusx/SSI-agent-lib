@@ -31,12 +31,12 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.util.SignerUtil;
+import org.eclipse.tractusx.ssi.lib.did.web.util.Constants;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
@@ -113,8 +113,8 @@ public class SignedJwtFactory {
 
     // check if issuanceDate is presented in VC then use it, otherwise null
     final Date issueDate =
-        vc.containsKey("issuanceDate")
-            ? Date.from(Instant.parse((String) vc.get("issuanceDate")))
+        vc.containsKey(Constants.ISSUANCE_DATE)
+            ? Date.from(Instant.parse((String) vc.get(Constants.ISSUANCE_DATE)))
             : null;
 
     vc.remove(Verifiable.PROOF);
@@ -190,24 +190,20 @@ public class SignedJwtFactory {
    */
   @SneakyThrows
   public SignedJWT create(
-      Did didIssuer,
-      Did holderDid,
-      LinkedHashMap<String, Object> vc,
-      IPrivateKey privateKey,
-      String keyId) {
+      Did didIssuer, Did holderDid, Map<String, Object> vc, IPrivateKey privateKey, String keyId) {
     final String issuer = didIssuer.toString();
     final String subject = holderDid.toString();
 
     // check if expirationDate is presented in VC then use it, otherwise null
     final Date expireDateAsDate =
-        vc.containsKey("expirationDate")
-            ? Date.from(Instant.parse((String) vc.get("expirationDate")))
+        vc.containsKey(Constants.EXPIRATION_DATE)
+            ? Date.from(Instant.parse((String) vc.get(Constants.EXPIRATION_DATE)))
             : null;
 
     // check if issuanceDate is presented in VC then use it, otherwise null
     final Date issueDate =
-        vc.containsKey("issuanceDate")
-            ? Date.from(Instant.parse((String) vc.get("issuanceDate")))
+        vc.containsKey(Constants.ISSUANCE_DATE)
+            ? Date.from(Instant.parse((String) vc.get(Constants.ISSUANCE_DATE)))
             : null;
 
     vc.remove(Verifiable.PROOF);
