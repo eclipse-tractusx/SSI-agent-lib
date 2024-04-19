@@ -5,8 +5,6 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
 /**
  * @author Pascal Manaras <a href="mailto:manaras@xignsys.com">manaras@xignsys.com</a>
@@ -18,15 +16,6 @@ public class JWKVerificationMethod extends VerificationMethod {
 
   /** The constant PUBLIC_KEY_JWK. */
   public static final String PUBLIC_KEY_JWK = "publicKeyJwk";
-
-  /** The constant JWK_KEK_TYPE. */
-  public static final String JWK_KEK_TYPE = "kty";
-
-  /** The constant JWK_CURVE. */
-  public static final String JWK_CURVE = "crv";
-
-  /** The constant JWK_X. */
-  public static final String JWK_X = "x";
 
   private final JWK jwk;
 
@@ -85,15 +74,5 @@ public class JWKVerificationMethod extends VerificationMethod {
   @Override
   public int hashCode() {
     return Objects.hash(super.hashCode(), jwk);
-  }
-
-  /** The type Public key jwk. */
-  @Data
-  @AllArgsConstructor
-  public static class PublicKeyJwk {
-
-    private String kty;
-    private String crv;
-    private String x;
   }
 }
