@@ -21,12 +21,11 @@
 
 package org.eclipse.tractusx.ssi.lib.model.verifiable.credential;
 
-/** The type Verifiable credential type. */
-public class VerifiableCredentialType {
+import lombok.experimental.UtilityClass;
 
-  private VerifiableCredentialType() {
-    throw new IllegalStateException("Constant class");
-  }
+/** The type Verifiable credential type. */
+@UtilityClass
+public class VerifiableCredentialType {
 
   /** The constant VERIFIABLE_CREDENTIAL. */
   public static final String VERIFIABLE_CREDENTIAL = "VerifiableCredential";

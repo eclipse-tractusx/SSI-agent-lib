@@ -21,14 +21,12 @@
 
 package org.eclipse.tractusx.ssi.lib.model.base;
 
+import lombok.experimental.UtilityClass;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 
 /** The type Multibase factory. */
+@UtilityClass
 public class MultibaseFactory {
-
-  private MultibaseFactory() {
-    throw new IllegalStateException("Factory class");
-  }
 
   /**
    * Create multibase string.

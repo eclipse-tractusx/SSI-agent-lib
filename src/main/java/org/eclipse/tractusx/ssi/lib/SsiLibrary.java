@@ -22,15 +22,13 @@
 package org.eclipse.tractusx.ssi.lib;
 
 import java.security.Security;
+import lombok.experimental.UtilityClass;
 import net.i2p.crypto.eddsa.EdDSASecurityProvider;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /** The type SSI library. */
+@UtilityClass
 public final class SsiLibrary {
-
-  private SsiLibrary() {
-    throw new IllegalStateException("Utility class");
-  }
 
   /** Initialize. */
   public static void initialize() {

@@ -25,14 +25,12 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import lombok.experimental.UtilityClass;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 
 /** The type Did parser. */
+@UtilityClass
 public class DidParser {
-
-  private DidParser() {
-    throw new IllegalStateException("Utility class");
-  }
 
   /**
    * Parse did.

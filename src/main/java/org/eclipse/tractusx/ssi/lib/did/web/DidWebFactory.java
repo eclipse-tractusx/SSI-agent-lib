@@ -22,16 +22,14 @@
 package org.eclipse.tractusx.ssi.lib.did.web;
 
 import java.util.Objects;
+import lombok.experimental.UtilityClass;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethodIdentifier;
 
 /** The type Did web factory. */
+@UtilityClass
 public class DidWebFactory {
-
-  private DidWebFactory() {
-    throw new IllegalStateException("Factory class");
-  }
 
   /**
    * From hostname did.
