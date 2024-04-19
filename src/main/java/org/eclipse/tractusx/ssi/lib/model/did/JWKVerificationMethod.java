@@ -13,29 +13,19 @@ import lombok.Data;
  */
 public class JWKVerificationMethod extends VerificationMethod {
 
-  /**
-   * The constant DEFAULT_TYPE.
-   */
+  /** The constant DEFAULT_TYPE. */
   public static final String DEFAULT_TYPE = "JsonWebKey2020";
 
-  /**
-   * The constant PUBLIC_KEY_JWK.
-   */
+  /** The constant PUBLIC_KEY_JWK. */
   public static final String PUBLIC_KEY_JWK = "publicKeyJwk";
 
-  /**
-   * The constant JWK_KEK_TYPE.
-   */
+  /** The constant JWK_KEK_TYPE. */
   public static final String JWK_KEK_TYPE = "kty";
 
-  /**
-   * The constant JWK_CURVE.
-   */
+  /** The constant JWK_CURVE. */
   public static final String JWK_CURVE = "crv";
 
-  /**
-   * The constant JWK_X.
-   */
+  /** The constant JWK_X. */
   public static final String JWK_X = "x";
 
   private final JWK jwk;
@@ -74,7 +64,6 @@ public class JWKVerificationMethod extends VerificationMethod {
     return DEFAULT_TYPE.equals(json.get(TYPE));
   }
 
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -98,9 +87,7 @@ public class JWKVerificationMethod extends VerificationMethod {
     return Objects.hash(super.hashCode(), jwk);
   }
 
-  /**
-   * The type Public key jwk.
-   */
+  /** The type Public key jwk. */
   @Data
   @AllArgsConstructor
   public static class PublicKeyJwk {
@@ -108,6 +95,5 @@ public class JWKVerificationMethod extends VerificationMethod {
     private String kty;
     private String crv;
     private String x;
-
   }
 }

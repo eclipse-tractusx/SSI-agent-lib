@@ -37,9 +37,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialStatusList2021Entry;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 
-/**
- * The type Test resource util.
- */
+/** The type Test resource util. */
 public class TestResourceUtil {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -204,7 +202,6 @@ public class TestResourceUtil {
 
     return Objects.requireNonNull(inputStream, "Resource not found: " + resource);
   }
-
 
   public static VerifiableCredentialStatusList2021Entry getStatusListEntry() {
     return new VerifiableCredentialStatusList2021Entry(

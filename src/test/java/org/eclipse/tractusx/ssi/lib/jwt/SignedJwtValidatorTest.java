@@ -1,10 +1,10 @@
 package org.eclipse.tractusx.ssi.lib.jwt;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import com.nimbusds.jwt.SignedJWT;
-import java.net.URI;
 import java.text.ParseException;
 import java.util.Map;
 import java.util.UUID;
@@ -82,7 +82,6 @@ class SignedJwtValidatorTest {
 
     SignedJwtFactory fac = new SignedJwtFactory();
     return fac.create(
-        URI.create("id"),
         new Did(new DidMethod("web"), new DidMethodIdentifier("issuer"), null),
         audience,
         new SerializedVerifiablePresentation(

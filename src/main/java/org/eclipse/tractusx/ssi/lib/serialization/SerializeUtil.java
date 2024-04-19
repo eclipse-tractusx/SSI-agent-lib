@@ -36,9 +36,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialStatusList2021Entry;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 
-/**
- * The type Serialize util.
- */
+/** The type Serialize util. */
 public final class SerializeUtil {
 
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();

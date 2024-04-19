@@ -34,11 +34,8 @@ import org.eclipse.tractusx.ssi.lib.proof.ISigner;
 import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
-/**
- * The type Jws proof signer.
- */
+/** The type Jws proof signer. */
 public class JWSProofSigner implements ISigner {
-
 
   private final SignatureType signatureType;
 
@@ -61,7 +58,7 @@ public class JWSProofSigner implements ISigner {
       throw new InvalidPrivateKeyFormatException(e.getMessage());
     }
 
-    var header = new JWSHeader.Builder(new JWSAlgorithm(signatureType.algorithm)).build();
+    var header = new JWSHeader.Builder(new JWSAlgorithm(signatureType.getAlgorithm())).build();
     Payload payload = new Payload(hashedLinkedData.getValue());
     JWSObject jwsObject = new JWSObject(header, payload);
 

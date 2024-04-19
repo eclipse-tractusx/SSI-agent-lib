@@ -28,7 +28,6 @@ import java.net.http.HttpClient;
 import java.util.Optional;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
-import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;

@@ -31,9 +31,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
-/**
- * The interface Verifier.
- */
+/** The interface Verifier. */
 public interface IVerifier {
 
   /**
@@ -41,18 +39,20 @@ public interface IVerifier {
    * model to get the public key of issuer.
    *
    * @param hashedLinkedData the hashed linked data
-   * @param verifiable       the verifiable
+   * @param verifiable the verifiable
    * @return the boolean
-   * @throws SignatureParseException              the signature parse exception
-   * @throws DidParseException                    the did parse exception
-   * @throws InvalidPublicKeyFormatException      the invalid public key format exception
+   * @throws SignatureParseException the signature parse exception
+   * @throws DidParseException the did parse exception
+   * @throws InvalidPublicKeyFormatException the invalid public key format exception
    * @throws SignatureVerificationFailedException the signature verification failed exception
-   * @throws UnsupportedSignatureTypeException    the unsupported signature type exception
-   * @throws NoVerificationKeyFoundException      the no verification key found exception
+   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
+   * @throws NoVerificationKeyFoundException the no verification key found exception
    */
   boolean verify(HashedLinkedData hashedLinkedData, Verifiable verifiable)
-      throws SignatureParseException, DidParseException, InvalidPublicKeyFormatException,
-      SignatureVerificationFailedException, UnsupportedSignatureTypeException,
-      NoVerificationKeyFoundException;
-
+      throws SignatureParseException,
+          DidParseException,
+          InvalidPublicKeyFormatException,
+          SignatureVerificationFailedException,
+          UnsupportedSignatureTypeException,
+          NoVerificationKeyFoundException;
 }

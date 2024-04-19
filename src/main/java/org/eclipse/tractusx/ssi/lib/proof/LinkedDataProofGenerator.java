@@ -46,9 +46,7 @@ import org.eclipse.tractusx.ssi.lib.proof.transform.TransformedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed25519ProofSigner;
 import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofSigner;
 
-/**
- * The type Linked data proof generator.
- */
+/** The type Linked data proof generator. */
 @RequiredArgsConstructor
 public class LinkedDataProofGenerator {
 
@@ -80,16 +78,17 @@ public class LinkedDataProofGenerator {
   /**
    * Create proof.
    *
-   * @param verifiable           the document
+   * @param verifiable the document
    * @param verificationMethodId the verification method id
-   * @param privateKey           the private key
+   * @param privateKey the private key
    * @return the proof
-   * @throws SsiException                     the ssi exception
+   * @throws SsiException the ssi exception
    * @throws InvalidPrivateKeyFormatException the invalide private key format
    */
   public Proof createProof(Verifiable verifiable, URI verificationMethodId, IPrivateKey privateKey)
-      throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException,
-      TransformJsonLdException {
+      throws InvalidPrivateKeyFormatException,
+          SignatureGenerateFailedException,
+          TransformJsonLdException {
 
     Proof proof = null;
     if (type == SignatureType.ED25519) {

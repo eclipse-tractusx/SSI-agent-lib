@@ -46,7 +46,7 @@ class VP {
   /**
    * Create a verifiable presentation.
    *
-   * @param issuer      the issuer
+   * @param issuer the issuer
    * @param credentials the credentials
    * @return the verifiable presentation
    */
@@ -61,15 +61,16 @@ class VP {
         .build();
   }
 
-
   public static SignedJWT createVPAsJWT(
-      Did issuer, List<VerifiableCredential> credentials, String audience, IPrivateKey privateKey,
+      Did issuer,
+      List<VerifiableCredential> credentials,
+      String audience,
+      IPrivateKey privateKey,
       String keyId) {
 
     final SerializedJwtPresentationFactory presentationFactory =
         new SerializedJwtPresentationFactoryImpl(
             new SignedJwtFactory(), new JsonLdSerializerImpl(), issuer);
     return presentationFactory.createPresentation(issuer, credentials, audience, privateKey, keyId);
-
   }
 }

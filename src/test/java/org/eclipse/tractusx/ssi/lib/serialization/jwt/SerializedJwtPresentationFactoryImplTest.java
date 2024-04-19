@@ -26,7 +26,6 @@ import java.net.URI;
 import java.util.List;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
-import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtVerifier;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
@@ -45,9 +44,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-/**
- * The type Serialized jwt presentation factory impl test.
- */
+/** The type Serialized jwt presentation factory impl test. */
 class SerializedJwtPresentationFactoryImplTest {
 
   public static final int CUSTOM_EXPIRATION_TIME = 900;
@@ -69,7 +66,7 @@ class SerializedJwtPresentationFactoryImplTest {
 
     didResolver = new TestDidResolver();
 
-    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
+    credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);
     jwtVerifier = new SignedJwtVerifier(didResolver);
 
@@ -81,18 +78,14 @@ class SerializedJwtPresentationFactoryImplTest {
             new Ed25519ProofSigner());
   }
 
-  /**
-   * Test jwt serialization.
-   */
+  /** Test jwt serialization. */
   @SneakyThrows
   @Test
   void testJwtSerializationWithDefaultExpiration() {
 
     SerializedJwtPresentationFactory presentationFactory =
         new SerializedJwtPresentationFactoryImpl(
-            new SignedJwtFactory(new OctetKeyPairFactory()),
-            new JsonLdSerializerImpl(),
-            credentialIssuer.getDid());
+            new SignedJwtFactory(), new JsonLdSerializerImpl(), credentialIssuer.getDid());
 
     VerifiableCredential credentialWithProof = getCredential();
 
@@ -110,7 +103,7 @@ class SerializedJwtPresentationFactoryImplTest {
     Assertions.assertEquals(
         DEFAULT_EXPIRATION_TIME,
         (presentation.getJWTClaimsSet().getExpirationTime().getTime()
-            - presentation.getJWTClaimsSet().getIssueTime().getTime())
+                - presentation.getJWTClaimsSet().getIssueTime().getTime())
             / 1000);
   }
 
@@ -120,9 +113,7 @@ class SerializedJwtPresentationFactoryImplTest {
 
     SerializedJwtPresentationFactory presentationFactory =
         new SerializedJwtPresentationFactoryImpl(
-            new SignedJwtFactory(new OctetKeyPairFactory()),
-            new JsonLdSerializerImpl(),
-            credentialIssuer.getDid());
+            new SignedJwtFactory(), new JsonLdSerializerImpl(), credentialIssuer.getDid());
 
     VerifiableCredential credentialWithProof = getCredential();
 
@@ -143,7 +134,7 @@ class SerializedJwtPresentationFactoryImplTest {
     Assertions.assertEquals(
         CUSTOM_EXPIRATION_TIME,
         (presentation.getJWTClaimsSet().getExpirationTime().getTime()
-            - presentation.getJWTClaimsSet().getIssueTime().getTime())
+                - presentation.getJWTClaimsSet().getIssueTime().getTime())
             / 1000);
   }
 

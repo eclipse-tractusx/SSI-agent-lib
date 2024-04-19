@@ -34,40 +34,25 @@ import java.util.Objects;
  */
 public class JWSSignature2020 extends JWSProofConfiguration {
 
-  /**
-   * The constant JWS.
-   */
+  /** The constant JWS. */
   public static final String JWS = "jws";
 
-  /**
-   * The constant JWS_VERIFICATION_KEY_2020.
-   */
+  /** The constant JWS_VERIFICATION_KEY_2020. */
   public static final String JWS_VERIFICATION_KEY_2020 = "JsonWebSignature2020";
 
-  /**
-   * The constant TIME_FORMAT.
-   */
+  /** The constant TIME_FORMAT. */
   public static final String TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
-  /**
-   * The constant ASSERTION_METHOD.
-   */
+  /** The constant ASSERTION_METHOD. */
   public static final String ASSERTION_METHOD = "assertionMethod";
 
-  /**
-   * The constant PROOF_PURPOSE.
-   */
+  /** The constant PROOF_PURPOSE. */
   public static final String PROOF_PURPOSE = "proofPurpose";
 
-
-  /**
-   * The constant CREATED.
-   */
+  /** The constant CREATED. */
   public static final String CREATED = "created";
 
-  /**
-   * The constant VERIFICATION_METHOD.
-   */
+  /** The constant VERIFICATION_METHOD. */
   public static final String VERIFICATION_METHOD = "verificationMethod";
 
   /**

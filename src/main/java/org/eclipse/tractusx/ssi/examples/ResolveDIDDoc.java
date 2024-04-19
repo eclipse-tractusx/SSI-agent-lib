@@ -30,22 +30,19 @@ import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 
-/**
- * This is an example class to demonstrate did document resolve from given did web url
- */
+/** This is an example class to demonstrate did document resolve from given did web url */
 public class ResolveDIDDoc {
 
   private ResolveDIDDoc() {
     throw new IllegalStateException("Utility class");
   }
 
-
   /**
    * Resolve did document did document.
    *
    * @param didUrl the did url
    * @return the did document
-   * @throws DidParseException    the did parse exception
+   * @throws DidParseException the did parse exception
    * @throws DidResolverException the did resolver exception
    */
   public static DidDocument resolveDidDocument(String didUrl)

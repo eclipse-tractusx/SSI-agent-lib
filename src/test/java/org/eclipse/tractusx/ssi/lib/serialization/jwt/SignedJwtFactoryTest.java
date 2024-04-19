@@ -28,7 +28,6 @@ import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jwt.SignedJWT;
 import java.util.LinkedHashMap;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
-import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityFactory;
@@ -43,7 +42,7 @@ public class SignedJwtFactoryTest {
   @BeforeAll
   public static void beforeAll() {
     SsiLibrary.initialize();
-    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
+    credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
   }
 
   @Test
@@ -51,7 +50,7 @@ public class SignedJwtFactoryTest {
   void shouldReturnSignedJWT() {
 
     LinkedHashMap<String, Object> claims = new LinkedHashMap<>();
-    SignedJwtFactory signedJwtFactory = new SignedJwtFactory(new OctetKeyPairFactory());
+    SignedJwtFactory signedJwtFactory = new SignedJwtFactory();
     String keyId = "key-1";
     // When
 

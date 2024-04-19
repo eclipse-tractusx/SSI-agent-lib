@@ -21,26 +21,36 @@
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
-/**
- * The enum Signature type.
- */
+import com.nimbusds.jose.JWSAlgorithm;
+
+/** The enum Signature type. */
 public enum SignatureType {
-  /**
-   * The Ed 25519.
-   */
-  ED25519 {
-    @Override
-    public String toString() {
-      return "Ed25519Signature2020";
-    }
-  },
-  /**
-   * The Jws.
-   */
-  JWS {
-    @Override
-    public String toString() {
-      return "JsonWebSignature2020";
-    }
+  ED25519("Ed25519Signature2020", ""),
+  JWS(Constants.JSON_WEB_SIGNATURE_2020, JWSAlgorithm.EdDSA.getName()),
+  JWS_SEC_P_256K1(Constants.JSON_WEB_SIGNATURE_2020, JWSAlgorithm.ES256K.getName()),
+  JWS_P256(Constants.JSON_WEB_SIGNATURE_2020, JWSAlgorithm.ES256.getName()),
+  JWS_P384(Constants.JSON_WEB_SIGNATURE_2020, JWSAlgorithm.ES384.getName()),
+  JWS_RSA(Constants.JSON_WEB_SIGNATURE_2020, JWSAlgorithm.PS256.getName());
+
+  private final String type;
+
+  private final String algorithm;
+
+  private SignatureType(String type, String algorithm) {
+    this.type = type;
+    this.algorithm = algorithm;
+  }
+
+  public String getType() {
+    return this.type;
+  }
+
+  public String getAlgorithm() {
+    return this.algorithm;
+  }
+
+  private static class Constants {
+
+    public static final String JSON_WEB_SIGNATURE_2020 = "JsonWebSignature2020";
   }
 }

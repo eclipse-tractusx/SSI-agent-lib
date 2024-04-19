@@ -21,19 +21,19 @@
 
 package org.eclipse.tractusx.ssi.lib.model.did;
 
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.util.JSONObjectUtils;
 import java.net.URI;
 import java.util.Map;
 import lombok.NoArgsConstructor;
-import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
+import lombok.SneakyThrows;
 
-/**
- * The type Jwk verification method builder.
- */
+/** The type Jwk verification method builder. */
 @NoArgsConstructor
 public class JWKVerificationMethodBuilder {
 
   private Did did;
-  private JsonWebKey jwk;
+  private JWK jwk;
 
   /**
    * Did jwk verification method builder.
@@ -52,7 +52,7 @@ public class JWKVerificationMethodBuilder {
    * @param jwk the jwk
    * @return the jwk verification method builder
    */
-  public JWKVerificationMethodBuilder jwk(JsonWebKey jwk) {
+  public JWKVerificationMethodBuilder jwk(JWK jwk) {
     this.jwk = jwk;
     return this;
   }
@@ -62,6 +62,7 @@ public class JWKVerificationMethodBuilder {
    *
    * @return the jwk verification method
    */
+  @SneakyThrows
   public JWKVerificationMethod build() {
     return new JWKVerificationMethod(
         Map.of(
@@ -72,9 +73,6 @@ public class JWKVerificationMethodBuilder {
             VerificationMethod.CONTROLLER,
             this.did.toUri(),
             JWKVerificationMethod.PUBLIC_KEY_JWK,
-            Map.of(
-                JWKVerificationMethod.JWK_KEK_TYPE, jwk.getKeyType(),
-                JWKVerificationMethod.JWK_CURVE, jwk.getCurv(),
-                JWKVerificationMethod.JWK_X, jwk.getX())));
+            JSONObjectUtils.parse(jwk.toJSONString())));
   }
 }

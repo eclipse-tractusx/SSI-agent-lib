@@ -53,7 +53,7 @@ public class SignerUtil {
       case JWS_RSA -> SignerUtil.getRSASigner(privateKey);
       default ->
           throw new IllegalArgumentException(
-              String.format("algorithm %s is not supported", type.algorithm));
+              String.format("algorithm %s is not supported", type.getAlgorithm()));
     };
   }
 

@@ -33,9 +33,7 @@ import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 
-/**
- * The type Verifiable credential builder.
- */
+/** The type Verifiable credential builder. */
 @NoArgsConstructor
 public class VerifiableCredentialBuilder {
 

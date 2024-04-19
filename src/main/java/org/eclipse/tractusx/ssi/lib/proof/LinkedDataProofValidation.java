@@ -47,9 +47,7 @@ import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofVerifier;
 import org.eclipse.tractusx.ssi.lib.validation.JsonLdValidator;
 import org.eclipse.tractusx.ssi.lib.validation.JsonLdValidatorImpl;
 
-/**
- * The type Linked data proof validation.
- */
+/** The type Linked data proof validation. */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class LinkedDataProofValidation {
 
@@ -95,17 +93,25 @@ public class LinkedDataProofValidation {
    * @throws InvalidJsonLdException
    */
   public boolean verify(Verifiable verifiable)
-      throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
-      InvalidPublicKeyFormatException, SignatureVerificationFailedException,
-      NoVerificationKeyFoundException, TransformJsonLdException {
+      throws UnsupportedSignatureTypeException,
+          SignatureParseException,
+          DidParseException,
+          InvalidPublicKeyFormatException,
+          SignatureVerificationFailedException,
+          NoVerificationKeyFoundException,
+          TransformJsonLdException {
 
-    var type = verifiable.getProof().getType();
+    var type =
+        verifiable
+            .getProof()
+            .orElseThrow(() -> new DidParseException("no proof found for verification"))
+            .getType();
     IVerifier verifier = null;
 
     if (type != null && !type.isBlank()) {
-      if (type.equals(SignatureType.ED25519.toString())) {
+      if (type.equals(SignatureType.ED25519.getType())) {
         verifier = new Ed25519ProofVerifier(this.didResolver);
-      } else if (type.equals(SignatureType.JWS.toString())) {
+      } else if (type.equals(SignatureType.JWS.getType())) {
         verifier = new JWSProofVerifier(this.didResolver);
       } else {
         throw new UnsupportedSignatureTypeException(
@@ -162,7 +168,11 @@ public class LinkedDataProofValidation {
       throws UnsupportedSignatureTypeException {
     final String VERIFICATION_METHOD = "verificationMethod";
     try {
-      return (String) verifiable.getProof().get(VERIFICATION_METHOD);
+      return (String)
+          verifiable
+              .getProof()
+              .orElseThrow(() -> new DidParseException("no proof found for verification"))
+              .get(VERIFICATION_METHOD);
     } catch (Exception e) {
       throw new UnsupportedSignatureTypeException("Signature type is not supported");
     }

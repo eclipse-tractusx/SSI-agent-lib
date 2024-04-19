@@ -65,9 +65,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethodBuilder;
 import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 import org.testcontainers.shaded.org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-/**
- * The type Test identity factory.
- */
+/** The type Test identity factory. */
 public class TestIdentityFactory {
 
   /**

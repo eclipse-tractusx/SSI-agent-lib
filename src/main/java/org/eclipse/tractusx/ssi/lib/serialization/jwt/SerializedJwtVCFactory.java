@@ -35,7 +35,6 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 public interface SerializedJwtVCFactory {
 
   SignedJWT createVCJwt(
-
       URI id,
       Did issuer,
       Did holder,

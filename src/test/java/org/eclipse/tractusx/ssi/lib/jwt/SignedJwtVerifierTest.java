@@ -33,8 +33,6 @@ import org.eclipse.tractusx.ssi.lib.crypt.ec.ECPublicKeyWrapper;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.crypt.rsa.RSAPrivateKeyWrapper;
 import org.eclipse.tractusx.ssi.lib.crypt.rsa.RSAPublicKeyWrapper;
-import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
-import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
@@ -98,10 +96,7 @@ class SignedJwtVerifierTest {
         () -> {
           try {
             return v.verify(signedJWT);
-          } catch (DidParseException
-              | DidResolverException
-              | SignatureVerificationException
-              | SignatureParseException e) {
+          } catch (Exception e) {
             throw new RuntimeException(e);
           }
         });

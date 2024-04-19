@@ -38,9 +38,7 @@ import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.RemoteDocumentLoader;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 
-/**
- * The type Linked data transformer.
- */
+/** The type Linked data transformer. */
 public class LinkedDataTransformer {
 
   public TransformedLinkedData transform(Verifiable document) throws TransformJsonLdException {

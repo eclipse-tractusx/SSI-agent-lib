@@ -38,14 +38,11 @@ import org.eclipse.tractusx.ssi.lib.exception.key.KeyTransformationException;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
-/**
- * The type X 25519 public key.
- */
+/** The type X 25519 public key. */
 public class X25519PublicKey implements IPublicKey {
 
   private static final int KEY_LENGTH = 32;
   private final @NonNull byte[] originalKey;
-
 
   /**
    * Instantiates a new X 25519 public key.
@@ -60,14 +57,13 @@ public class X25519PublicKey implements IPublicKey {
     this.originalKey = publicKey;
   }
 
-
   /**
    * Instantiates a new X 25519 public key.
    *
    * @param publicKey the public key
    * @param pemFormat the pem format
    * @throws InvalidPublicKeyFormatException the invalid public key format exception
-   * @throws IOException                     the io exception
+   * @throws IOException the io exception
    */
   public X25519PublicKey(String publicKey, boolean pemFormat)
       throws InvalidPublicKeyFormatException, IOException {
@@ -124,7 +120,7 @@ public class X25519PublicKey implements IPublicKey {
         new Ed25519PublicKeyParameters(originalKey, 0);
 
     return new OctetKeyPair.Builder(
-        Curve.Ed25519, Base64URL.encode(publicKeyParameters.getEncoded()))
+            Curve.Ed25519, Base64URL.encode(publicKeyParameters.getEncoded()))
         .build();
   }
 }

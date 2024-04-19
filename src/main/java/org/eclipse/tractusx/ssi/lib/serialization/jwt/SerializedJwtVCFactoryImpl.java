@@ -42,7 +42,6 @@ public class SerializedJwtVCFactoryImpl implements SerializedJwtVCFactory {
 
   @Override
   public SignedJWT createVCJwt(
-
       URI id,
       Did issuer,
       Did holder,

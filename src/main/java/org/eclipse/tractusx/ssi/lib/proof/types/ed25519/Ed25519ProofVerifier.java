@@ -47,9 +47,7 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.proof.IVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
-/**
- * The type Ed 25519 proof verifier.
- */
+/** The type Ed 25519 proof verifier. */
 @RequiredArgsConstructor
 public class Ed25519ProofVerifier implements IVerifier {
 
@@ -58,9 +56,9 @@ public class Ed25519ProofVerifier implements IVerifier {
   @SneakyThrows({DidResolverException.class})
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable verifiable)
       throws UnsupportedSignatureTypeException,
-      InvalidPublicKeyFormatException,
-      NoVerificationKeyFoundException,
-      DidParseException {
+          InvalidPublicKeyFormatException,
+          NoVerificationKeyFoundException,
+          DidParseException {
 
     final Proof proof =
         verifiable
@@ -80,9 +78,10 @@ public class Ed25519ProofVerifier implements IVerifier {
   }
 
   private IPublicKey discoverPublicKey(Ed25519Signature2020 signature)
-      throws InvalidPublicKeyFormatException, NoVerificationKeyFoundException, DidResolverException,
-
-      DidParseException {
+      throws InvalidPublicKeyFormatException,
+          NoVerificationKeyFoundException,
+          DidResolverException,
+          DidParseException {
 
     final Did issuer = DidParser.parse(signature.getVerificationMethod());
 
@@ -118,8 +117,8 @@ public class Ed25519ProofVerifier implements IVerifier {
    * Verify hashedLinkedData.
    *
    * @param hashedLinkedData the hashed linked data
-   * @param signature        the signature
-   * @param publicKey        the public key
+   * @param signature the signature
+   * @param publicKey the public key
    * @return the boolean the verification result
    */
   @SneakyThrows

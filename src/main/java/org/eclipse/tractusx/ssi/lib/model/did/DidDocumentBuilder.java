@@ -32,9 +32,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.ProofPurpose;
 
-/**
- * The type Did document builder.
- */
+/** The type Did document builder. */
 @NoArgsConstructor
 public class DidDocumentBuilder {
 

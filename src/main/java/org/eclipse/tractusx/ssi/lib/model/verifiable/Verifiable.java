@@ -27,50 +27,37 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.SerializationUtils;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
-/**
- * The type Verifiable.
- */
+/** The type Verifiable. */
 public abstract class Verifiable extends JsonLdObject {
 
-  /**
-   * The constant ID.
-   */
+  /** The constant ID. */
   public static final String ID = "id";
 
-  /**
-   * The constant TYPE.
-   */
+  /** The constant TYPE. */
   public static final String TYPE = "type";
 
-  /**
-   * The constant PROOF.
-   */
+  /** The constant PROOF. */
   public static final String PROOF = "proof";
 
-  /**
-   * The verification type
-   */
+  /** The verification type */
   private VerifiableType verifableType;
 
-  /**
-   * The enum Verifiable type.
-   */
+  /** The enum Verifiable type. */
   public enum VerifiableType {
-    /**
-     * Vc verifiable type.
-     */
+    /** Vc verifiable type. */
     VC,
-    /**
-     * Vp verifiable type.
-     */
+    /** Vp verifiable type. */
     VP
   }
 
@@ -94,15 +81,15 @@ public abstract class Verifiable extends JsonLdObject {
    *
    * @return the proof
    */
-  public Proof getProof() {
+  public Optional<Proof> getProof() {
 
     final Object subject = this.get(PROOF);
 
     if (subject == null) {
-      return null;
+      return Optional.empty();
     }
 
-    return new Proof((Map<String, Object>) subject);
+    return Optional.of(new Proof((Map<String, Object>) subject));
   }
 
   /**
@@ -165,10 +152,12 @@ public abstract class Verifiable extends JsonLdObject {
    *
    * @return Verifiable
    */
+  @SneakyThrows
   public Verifiable removeProofSignature() {
 
     // Be careful, this function will return new object
-    Proof proof = this.getProof();
+    Proof proof =
+        this.getProof().orElseThrow(() -> new DidParseException("no proof found for verification"));
 
     if (proof != null) {
       var proofConfiguration = proof.toConfiguration();
@@ -186,7 +175,9 @@ public abstract class Verifiable extends JsonLdObject {
           iterator.hasNext(); ) {
 
         VerifiableCredential vc = (VerifiableCredential) iterator.next();
-        proof = vc.getProof();
+        proof =
+            vc.getProof()
+                .orElseThrow(() -> new DidParseException("no proof found for verification"));
 
         if (proof != null) {
           var proofConfiguration = proof.toConfiguration();
