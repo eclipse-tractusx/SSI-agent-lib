@@ -1,0 +1,40 @@
+---
+name: Manual Maven Deployment to GitHub Packages
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      # see https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Docker Build
+        uses: docker/setup-buildx-action@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+      - name: Package Lib with Maven
+        run: ./mvnw -s settings.xml  -B package --file ./pom.xml
+        env:
+          GITHUB_PACKAGE_USERNAME: ${{ github.actor }}
+          GITHUB_PACKAGE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run tests
+        run: ./mvnw -B test --file ./pom.xml
+
+      - name: Deploy Lib with Maven
+        run: ./mvnw -s settings.xml -Pdelombok -B deploy --file ./pom.xml
+        env:
+          GITHUB_PACKAGE_USERNAME: ${{ github.actor }}
+          GITHUB_PACKAGE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}

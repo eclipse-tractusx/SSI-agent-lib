@@ -47,9 +47,12 @@ import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofVerifier;
 import org.eclipse.tractusx.ssi.lib.validation.JsonLdValidator;
 import org.eclipse.tractusx.ssi.lib.validation.JsonLdValidatorImpl;
 
-/** The type Linked data proof validation. */
+/**
+ * The type Linked data proof validation.
+ */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class LinkedDataProofValidation {
+
   static final Logger LOG = Logger.getLogger(LinkedDataProofValidation.class.getName());
 
   /**
@@ -93,8 +96,8 @@ public class LinkedDataProofValidation {
    */
   public boolean verify(Verifiable verifiable)
       throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,
-          InvalidPublicKeyFormatException, SignatureVerificationFailedException,
-          NoVerificationKeyFoundException, TransformJsonLdException {
+      InvalidPublicKeyFormatException, SignatureVerificationFailedException,
+      NoVerificationKeyFoundException, TransformJsonLdException {
 
     var type = verifiable.getProof().getType();
     IVerifier verifier = null;

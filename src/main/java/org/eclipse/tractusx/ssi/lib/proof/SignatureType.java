@@ -21,16 +21,22 @@
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
-/** The enum Signature type. */
+/**
+ * The enum Signature type.
+ */
 public enum SignatureType {
-  /** The Ed 25519. */
+  /**
+   * The Ed 25519.
+   */
   ED25519 {
     @Override
     public String toString() {
       return "Ed25519Signature2020";
     }
   },
-  /** The Jws. */
+  /**
+   * The Jws.
+   */
   JWS {
     @Override
     public String toString() {

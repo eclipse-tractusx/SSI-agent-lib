@@ -35,26 +35,42 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
-/** The type Verifiable. */
+/**
+ * The type Verifiable.
+ */
 public abstract class Verifiable extends JsonLdObject {
 
-  /** The constant ID. */
+  /**
+   * The constant ID.
+   */
   public static final String ID = "id";
 
-  /** The constant TYPE. */
+  /**
+   * The constant TYPE.
+   */
   public static final String TYPE = "type";
 
-  /** The constant PROOF. */
+  /**
+   * The constant PROOF.
+   */
   public static final String PROOF = "proof";
 
-  /** The verification type */
+  /**
+   * The verification type
+   */
   private VerifiableType verifableType;
 
-  /** The enum Verifiable type. */
+  /**
+   * The enum Verifiable type.
+   */
   public enum VerifiableType {
-    /** Vc verifiable type. */
+    /**
+     * Vc verifiable type.
+     */
     VC,
-    /** Vp verifiable type. */
+    /**
+     * Vp verifiable type.
+     */
     VP
   }
 

@@ -33,10 +33,14 @@ import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-/** The type Sign and verify test. */
+/**
+ * The type Sign and verify test.
+ */
 class SignAndVerifyTest {
 
-  /** Test sign and verify ed 25519. */
+  /**
+   * Test sign and verify ed 25519.
+   */
   @Test
   @SneakyThrows
   void testSignAndVerify_ED25519() {
@@ -57,7 +61,9 @@ class SignAndVerifyTest {
     Assertions.assertTrue(isSigned);
   }
 
-  /** Test sign and verify jws. */
+  /**
+   * Test sign and verify jws.
+   */
   @Test
   @SneakyThrows
   void testSignAndVerify_JWS() {

@@ -27,6 +27,7 @@ import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Optional;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
@@ -72,7 +73,7 @@ public class DidUniResolver implements DidResolver {
   }
 
   @Override
-  public DidDocument resolve(Did did) throws DidResolverException, DidParseException {
+  public Optional<DidDocument> resolve(Did did) throws DidResolverException, DidParseException {
     URI requestUri =
         uniResolverEndpoint.resolve(UNI_RESOLVER_RESOLVE_PATH).resolve("./" + did.toString());
     final HttpRequest request = HttpRequest.newBuilder().uri(requestUri).GET().build();
@@ -91,9 +92,13 @@ public class DidUniResolver implements DidResolver {
         throw new DidResolverException("Empty response body");
       }
 
-      return DidDocument.fromJson(response.body());
+      return Optional.of(DidDocument.fromJson(response.body()));
     } catch (DidResolverException e) {
       throw e;
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new DidResolverException(
+          String.format("Unexpected exception: %s", e.getClass().getName()), e);
     } catch (Exception e) {
       throw new DidResolverException(
           String.format("Unexpected exception: %s", e.getClass().getName()), e);

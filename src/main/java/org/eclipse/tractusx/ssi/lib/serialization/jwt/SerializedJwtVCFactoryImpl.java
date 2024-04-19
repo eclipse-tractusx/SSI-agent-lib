@@ -1,6 +1,10 @@
 /*
  * ******************************************************************************
+<<<<<<< HEAD
  * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
+=======
+ * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+>>>>>>> main
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -22,6 +26,8 @@
 package org.eclipse.tractusx.ssi.lib.serialization.jwt;
 
 import com.nimbusds.jwt.SignedJWT;
+import java.net.URI;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
@@ -31,17 +37,22 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 
 @RequiredArgsConstructor
 public class SerializedJwtVCFactoryImpl implements SerializedJwtVCFactory {
+
   private final SignedJwtFactory signedJwtFactory;
 
   @Override
   public SignedJWT createVCJwt(
+
+      URI id,
       Did issuer,
       Did holder,
+      Date expDate,
       VerifiableCredential credentials,
       IPrivateKey privateKey,
       String keyId) {
     var clonedVC = new LinkedHashMap<String, Object>();
     clonedVC.putAll(credentials);
-    return signedJwtFactory.create(issuer, holder, clonedVC, privateKey, keyId);
+
+    return signedJwtFactory.create(id, issuer, holder, expDate, clonedVC, privateKey, keyId);
   }
 }

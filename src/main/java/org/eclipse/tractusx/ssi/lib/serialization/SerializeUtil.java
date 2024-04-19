@@ -21,6 +21,7 @@
 
 package org.eclipse.tractusx.ssi.lib.serialization;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.util.LinkedHashMap;
@@ -35,7 +36,9 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialStatusList2021Entry;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 
-/** The type Serialize util. */
+/**
+ * The type Serialize util.
+ */
 public final class SerializeUtil {
 
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -44,11 +47,15 @@ public final class SerializeUtil {
     throw new IllegalStateException("Utility class");
   }
 
+  static {
+    OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+  }
+
   /**
    * Specify oder of properties while creating JSON string from object like VerifiableCredential,
    * DidDocument etc.
    */
-  public static final Map<Class, List<String>> ORDER_MAP_LIST =
+  public static final Map<Class<?>, List<String>> ORDER_MAP_LIST =
       Map.of(
           VerifiableCredential.class,
           List.of(
@@ -129,11 +136,11 @@ public final class SerializeUtil {
    * @return URI uri
    */
   public static URI asURI(Object object) {
-    if (object instanceof URI) {
-      return (URI) object;
+    if (object instanceof URI uri) {
+      return uri;
     }
-    if (object instanceof String) {
-      return URI.create((String) object);
+    if (object instanceof String uriString) {
+      return URI.create(uriString);
     }
     throw new IllegalArgumentException("Unsupported type: " + object.getClass());
   }
@@ -145,11 +152,11 @@ public final class SerializeUtil {
    * @return the list
    */
   public static List<String> asStringList(Object object) {
-    if (object instanceof List) {
-      return (List<String>) object;
+    if (object instanceof List<?> rawList) {
+      return rawList.stream().map(String.class::cast).toList();
     }
-    if (object instanceof String) {
-      return List.of((String) object);
+    if (object instanceof String string) {
+      return List.of(string);
     }
     throw new IllegalArgumentException("Unsupported type: " + object.getClass());
   }
@@ -160,11 +167,12 @@ public final class SerializeUtil {
    * @param object the object
    * @return the list
    */
-  public static List asList(Object object) {
-    if (object instanceof List) {
-      return (List) object;
+  public static <T> List<T> asList(Object object) {
+    if (object instanceof List<?> rawList) {
+      return rawList.stream().map(obj -> (T) obj).toList();
     } else {
-      return List.of(object);
+      T typed = (T) object;
+      return List.of(typed);
     }
   }
 

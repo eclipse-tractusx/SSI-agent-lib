@@ -23,6 +23,7 @@ package org.eclipse.tractusx.ssi.lib.util.identity;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
@@ -38,7 +39,7 @@ public class TestDidResolver implements DidResolver {
   }
 
   @Override
-  public DidDocument resolve(Did did) {
+  public Optional<DidDocument> resolve(Did did) {
     // We don't need fragment when we are searching for DID document ID.
     Did didWithoutFragment = did.excludeFragment();
     if (!documents.containsKey(didWithoutFragment)) {
@@ -51,7 +52,7 @@ public class TestDidResolver implements DidResolver {
                   .collect(Collectors.joining(", "))));
     }
 
-    return documents.get(didWithoutFragment);
+    return Optional.of(documents.get(didWithoutFragment));
   }
 
   /**

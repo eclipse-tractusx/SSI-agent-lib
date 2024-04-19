@@ -24,7 +24,6 @@ package org.eclipse.tractusx.ssi.lib.crypt.octet;
 import com.nimbusds.jose.jwk.Curve;
 import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.util.Base64URL;
-import java.io.IOException;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 
@@ -36,9 +35,8 @@ public class OctetKeyPairFactory {
    *
    * @param privateKey the private key
    * @return the octet key pair
-   * @throws IOException the io exception
    */
-  public OctetKeyPair fromPrivateKey(IPrivateKey privateKey) throws IOException {
+  public OctetKeyPair fromPrivateKey(IPrivateKey privateKey) {
     return new OctetKeyPair.Builder(Curve.Ed25519, new Base64URL(""))
         .d(Base64URL.encode(privateKey.asByte()))
         .build();

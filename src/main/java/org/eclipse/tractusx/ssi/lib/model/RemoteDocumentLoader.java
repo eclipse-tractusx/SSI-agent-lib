@@ -41,30 +41,53 @@ import java.util.logging.Logger;
 import lombok.Getter;
 import lombok.Setter;
 
-/** The type Remote document loader. */
+/**
+ * The type Remote document loader.
+ */
 public class RemoteDocumentLoader implements DocumentLoader {
 
   private static final int CACHE_PERIOD_IN_DAYS = 1;
   private static DocumentLoader defaultHttpLoader;
   private static DocumentLoader defaultFileLoader;
-  @Getter private DocumentLoader httpLoader;
-  @Getter private DocumentLoader fileLoader;
+  @Getter
+  private DocumentLoader httpLoader;
+  @Getter
+  private DocumentLoader fileLoader;
 
-  @Getter @Setter private boolean enableLocalCache = true;
-  @Getter @Setter private boolean enableHttp = false;
-  @Getter @Setter private boolean enableHttps = false;
-  @Getter @Setter private boolean enableFile = false;
-  @Getter @Setter private Map<URI, JsonDocument> localCache = new HashMap<>();
+  @Getter
+  @Setter
+  private boolean enableLocalCache = true;
+  @Getter
+  @Setter
+  private boolean enableHttp = false;
+  @Getter
+  @Setter
+  private boolean enableHttps = false;
+  @Getter
+  @Setter
+  private boolean enableFile = false;
+  @Getter
+  @Setter
+  private Map<URI, JsonDocument> localCache = new HashMap<>();
 
-  @Getter @Setter
+  @Getter
+  @Setter
   private Cache<URI, Document> remoteCache =
       Caffeine.newBuilder().expireAfterWrite(Duration.ofDays(CACHE_PERIOD_IN_DAYS)).build();
 
-  @Getter @Setter private List<URI> httpContexts = new ArrayList<>();
-  @Getter @Setter private List<URI> httpsContexts = new ArrayList<>();
-  @Getter @Setter private List<URI> fileContexts = new ArrayList<>();
+  @Getter
+  @Setter
+  private List<URI> httpContexts = new ArrayList<>();
+  @Getter
+  @Setter
+  private List<URI> httpsContexts = new ArrayList<>();
+  @Getter
+  @Setter
+  private List<URI> fileContexts = new ArrayList<>();
 
-  /** The constant DOCUMENT_LOADER. */
+  /**
+   * The constant DOCUMENT_LOADER.
+   */
   public static final RemoteDocumentLoader DOCUMENT_LOADER;
 
   static {
@@ -113,7 +136,8 @@ public class RemoteDocumentLoader implements DocumentLoader {
     RemoteDocumentLoader.defaultFileLoader = defaultFileLoader;
   }
 
-  private RemoteDocumentLoader() {}
+  private RemoteDocumentLoader() {
+  }
 
   /**
    * Gets instance.

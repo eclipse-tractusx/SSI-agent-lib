@@ -45,7 +45,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-/** The type Serialized jwt presentation factory impl test. */
+/**
+ * The type Serialized jwt presentation factory impl test.
+ */
 class SerializedJwtPresentationFactoryImplTest {
 
   public static final int CUSTOM_EXPIRATION_TIME = 900;
@@ -79,7 +81,9 @@ class SerializedJwtPresentationFactoryImplTest {
             new Ed25519ProofSigner());
   }
 
-  /** Test jwt serialization. */
+  /**
+   * Test jwt serialization.
+   */
   @SneakyThrows
   @Test
   void testJwtSerializationWithDefaultExpiration() {
@@ -106,7 +110,7 @@ class SerializedJwtPresentationFactoryImplTest {
     Assertions.assertEquals(
         DEFAULT_EXPIRATION_TIME,
         (presentation.getJWTClaimsSet().getExpirationTime().getTime()
-                - presentation.getJWTClaimsSet().getIssueTime().getTime())
+            - presentation.getJWTClaimsSet().getIssueTime().getTime())
             / 1000);
   }
 
@@ -139,7 +143,7 @@ class SerializedJwtPresentationFactoryImplTest {
     Assertions.assertEquals(
         CUSTOM_EXPIRATION_TIME,
         (presentation.getJWTClaimsSet().getExpirationTime().getTime()
-                - presentation.getJWTClaimsSet().getIssueTime().getTime())
+            - presentation.getJWTClaimsSet().getIssueTime().getTime())
             / 1000);
   }
 

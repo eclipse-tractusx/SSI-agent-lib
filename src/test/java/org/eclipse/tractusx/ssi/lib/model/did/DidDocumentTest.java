@@ -21,6 +21,8 @@
 
 package org.eclipse.tractusx.ssi.lib.model.did;
 
+import static org.junit.Assert.assertThrows;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.util.List;
@@ -47,7 +49,7 @@ class DidDocumentTest {
 
   /** Can create did document with service. */
   @Test
-  public void canCreateDidDocumentWithService() {
+  void canCreateDidDocumentWithService() {
     final Map<String, Object> content = TestResourceUtil.getBPNDidDocument();
     final URI id = URI.create("did:test:localhost:BPNL000000000000");
     final String type = "CredentialService";
@@ -85,5 +87,11 @@ class DidDocumentTest {
       var docFromJson = DidDocument.fromJson(json);
       Assertions.assertEquals(docFromJson.get(DidDocument.ID), docFromMap.get(DidDocument.ID));
     }
+  }
+
+  @Test
+  void shouldThrowWhenRequiredAttributeNull() {
+    Map<String, Object> map = Map.of("@context", URI.create("did:localhost"));
+    assertThrows(IllegalArgumentException.class, () -> new DidDocument(map));
   }
 }

@@ -1,6 +1,10 @@
 /*
  * ******************************************************************************
+<<<<<<< HEAD
  * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
+=======
+ * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+>>>>>>> main
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -22,14 +26,20 @@
 package org.eclipse.tractusx.ssi.lib.serialization.jwt;
 
 import com.nimbusds.jwt.SignedJWT;
+import java.net.URI;
+import java.util.Date;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 
 public interface SerializedJwtVCFactory {
+
   SignedJWT createVCJwt(
+
+      URI id,
       Did issuer,
       Did holder,
+      Date expDate,
       VerifiableCredential credentials,
       IPrivateKey privateKey,
       String keyId);

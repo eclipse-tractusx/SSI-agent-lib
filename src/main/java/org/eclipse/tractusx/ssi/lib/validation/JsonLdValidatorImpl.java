@@ -46,8 +46,8 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
 
   private static void findUndefinedTerms(JsonArray jsonArray) throws InvalidJsonLdException {
     for (JsonValue entry : jsonArray) {
-      if (entry instanceof JsonObject) {
-        findUndefinedTerms((JsonObject) entry);
+      if (entry instanceof JsonObject jsonObject) {
+        findUndefinedTerms(jsonObject);
       }
     }
   }
@@ -60,11 +60,11 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
             "Undefined JSON-LD term: " + entry.getKey().substring(UNDEFINED_TERM_URI.length()));
       }
 
-      if (entry.getValue() instanceof JsonArray) {
-        findUndefinedTerms((JsonArray) entry.getValue());
+      if (entry.getValue() instanceof JsonArray jsonArray) {
+        findUndefinedTerms(jsonArray);
       }
-      if (entry.getValue() instanceof JsonObject) {
-        findUndefinedTerms((JsonObject) entry.getValue());
+      if (entry.getValue() instanceof JsonObject obj) {
+        findUndefinedTerms(obj);
       }
     }
   }
@@ -102,8 +102,7 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
   public void validate(Verifiable verifiable) throws InvalidJsonLdException {
     if (verifiable instanceof VerifiableCredential) {
       validateJsonLd(verifiable);
-    } else if (verifiable instanceof VerifiablePresentation) {
-      VerifiablePresentation verifiablePresentation = (VerifiablePresentation) verifiable;
+    } else if (verifiable instanceof VerifiablePresentation verifiablePresentation) {
       for (VerifiableCredential verifiableCredential :
           verifiablePresentation.getVerifiableCredentials()) {
         validate(verifiableCredential);

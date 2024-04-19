@@ -16,11 +16,13 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- * *******************************************************************************
- */
+ ********************************************************************************/
 
 package org.eclipse.tractusx.ssi.lib.crypt.x25519;
 
+import com.nimbusds.jose.jwk.Curve;
+import com.nimbusds.jose.jwk.OctetKeyPair;
+import com.nimbusds.jose.util.Base64URL;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -36,21 +38,20 @@ import org.eclipse.tractusx.ssi.lib.exception.key.KeyTransformationException;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
-/** The type X 25519 public key. */
+/**
+ * The type X 25519 public key.
+ */
 public class X25519PublicKey implements IPublicKey {
 
   private static final int KEY_LENGTH = 32;
   private final @NonNull byte[] originalKey;
 
+
   /**
    * Instantiates a new X 25519 public key.
    *
-   * @param publicKey the public key <<<<<<<
-   *     HEAD:src/main/java/org/eclipse/tractusx/ssi/lib/crypt/x25519/x25519PublicKey.java
-   * @throws InvalidPublicKeyFormatException the invalide public key format =======
-   * @throws InvalidPublicKeyFormatException the invalid public key format >>>>>>> 23fcfb3 (fix:
-   *     sonar
-   *     findings):src/main/java/org/eclipse/tractusx/ssi/lib/crypt/x25519/X25519PublicKey.java
+   * @param publicKey the public key
+   * @throws InvalidPublicKeyFormatException the invalid public key format exception
    */
   public X25519PublicKey(byte[] publicKey) throws InvalidPublicKeyFormatException {
     if (this.getKeyLength() != publicKey.length) {
@@ -59,13 +60,14 @@ public class X25519PublicKey implements IPublicKey {
     this.originalKey = publicKey;
   }
 
+
   /**
-   * Instantiates a new X25519 public key.
+   * Instantiates a new X 25519 public key.
    *
    * @param publicKey the public key
-   * @param pemFormat the pe mformat
-   * @throws InvalidPublicKeyFormatException the invalid public key format
-   * @throws IOException the io exception
+   * @param pemFormat the pem format
+   * @throws InvalidPublicKeyFormatException the invalid public key format exception
+   * @throws IOException                     the io exception
    */
   public X25519PublicKey(String publicKey, boolean pemFormat)
       throws InvalidPublicKeyFormatException, IOException {
@@ -115,5 +117,14 @@ public class X25519PublicKey implements IPublicKey {
   @Override
   public int getKeyLength() {
     return KEY_LENGTH;
+  }
+
+  public OctetKeyPair toJwk() {
+    final Ed25519PublicKeyParameters publicKeyParameters =
+        new Ed25519PublicKeyParameters(originalKey, 0);
+
+    return new OctetKeyPair.Builder(
+        Curve.Ed25519, Base64URL.encode(publicKeyParameters.getEncoded()))
+        .build();
   }
 }

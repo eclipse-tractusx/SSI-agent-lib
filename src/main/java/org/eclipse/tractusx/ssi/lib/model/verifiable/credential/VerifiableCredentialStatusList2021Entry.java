@@ -21,6 +21,7 @@
 
 package org.eclipse.tractusx.ssi.lib.model.verifiable.credential;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
@@ -53,6 +54,7 @@ public class VerifiableCredentialStatusList2021Entry extends VerifiableCredentia
    *
    * @param json the json
    */
+  @JsonCreator
   public VerifiableCredentialStatusList2021Entry(Map<String, Object> json) {
     super(json);
     try {

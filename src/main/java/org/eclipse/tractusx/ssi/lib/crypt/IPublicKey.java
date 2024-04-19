@@ -16,10 +16,12 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- * *******************************************************************************
- */
+ ********************************************************************************/
 
 package org.eclipse.tractusx.ssi.lib.crypt;
 
-/** The interface public key. */
-public interface IPublicKey extends IKey {}
+import com.nimbusds.jose.jwk.JWK;
+
+public interface IPublicKey extends IKey {
+  JWK toJwk();
+}

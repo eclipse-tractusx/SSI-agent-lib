@@ -22,12 +22,14 @@
 package org.eclipse.tractusx.ssi.lib.did.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.did.web.util.Constants;
@@ -52,7 +54,7 @@ public class DidWebResolver implements DidResolver {
 
   @SuppressWarnings("unchecked")
   @Override
-  public DidDocument resolve(Did did) throws DidResolverException, DidParseException {
+  public Optional<DidDocument> resolve(Did did) throws DidResolverException, DidParseException {
     if (!did.getMethod().equals(Constants.DID_WEB_METHOD)) {
       throw new DidResolverException(
           String.format(
@@ -82,9 +84,13 @@ public class DidWebResolver implements DidResolver {
       final ObjectMapper mapper = new ObjectMapper();
       final Map<String, Object> json = mapper.readValue(body, Map.class);
 
-      return new DidDocument(json);
+      return Optional.of(new DidDocument(json));
 
-    } catch (Exception e) {
+    } catch (IOException e) {
+      throw new DidResolverException(
+          String.format("Unexpected exception: %s", e.getClass().getName()), e);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
       throw new DidResolverException(
           String.format("Unexpected exception: %s", e.getClass().getName()), e);
     }

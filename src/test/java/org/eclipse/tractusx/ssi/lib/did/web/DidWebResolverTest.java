@@ -21,17 +21,21 @@
 
 package org.eclipse.tractusx.ssi.lib.did.web;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
+import java.util.Optional;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
@@ -43,6 +47,8 @@ import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -73,8 +79,8 @@ class DidWebResolverTest {
     when(response.body()).thenReturn(TestResourceUtil.getPublishedDidDocumentAsString());
     when(parser.parse(any(), anyBoolean())).thenReturn(new URI("http://dummy.net/did.json"));
 
-    DidDocument actualDidDoc = resolver.resolve(validDidWeb);
-    assertEquals(new DidDocument(TestResourceUtil.getPublishedDidDocument()), actualDidDoc);
+    Optional<DidDocument> actualDidDoc = resolver.resolve(validDidWeb);
+    assertEquals(new DidDocument(TestResourceUtil.getPublishedDidDocument()), actualDidDoc.get());
   }
 
   /** Should not resolve non web did. */
@@ -92,5 +98,51 @@ class DidWebResolverTest {
         () -> {
           resolver.resolve(validDidKey);
         });
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = {199, 300})
+  @SneakyThrows
+  void shouldThrowWhenStatusCodeIsNot2XX(int code) {
+    Did validDidWeb = new Did(new DidMethod("web"), new DidMethodIdentifier("localhost"), null);
+    assertTrue(resolver.isResolvable(validDidWeb));
+    when(httpClient.send(any(), any())).thenReturn(response);
+    when(response.statusCode()).thenReturn(code);
+    when(parser.parse(any(), anyBoolean())).thenReturn(new URI("http://dummy.net/did.json"));
+
+    assertThrows(DidResolverException.class, () -> resolver.resolve(validDidWeb));
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldResolveWhenBodyIsNull() {
+    Did validDidWeb = new Did(new DidMethod("web"), new DidMethodIdentifier("localhost"), null);
+    assertTrue(resolver.isResolvable(validDidWeb));
+    when(httpClient.send(any(), any())).thenReturn(response);
+    when(response.statusCode()).thenReturn(200);
+    when(response.body()).thenReturn(null);
+    when(parser.parse(any(), anyBoolean())).thenReturn(new URI("http://dummy.net/did.json"));
+
+    assertThrows(DidResolverException.class, () -> resolver.resolve(validDidWeb));
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldResolveWhenInterrupted() {
+    Did validDidWeb = new Did(new DidMethod("web"), new DidMethodIdentifier("localhost"), null);
+    assertTrue(resolver.isResolvable(validDidWeb));
+    when(parser.parse(any(), anyBoolean())).thenReturn(new URI("http://dummy.net/did.json"));
+    doThrow(new InterruptedException()).when(httpClient).send(any(), any());
+    assertThrows(DidResolverException.class, () -> resolver.resolve(validDidWeb));
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldResolveWhenIOException() {
+    Did validDidWeb = new Did(new DidMethod("web"), new DidMethodIdentifier("localhost"), null);
+    assertTrue(resolver.isResolvable(validDidWeb));
+    when(parser.parse(any(), anyBoolean())).thenReturn(new URI("http://dummy.net/did.json"));
+    doThrow(new IOException()).when(httpClient).send(any(), any());
+    assertThrows(DidResolverException.class, () -> resolver.resolve(validDidWeb));
   }
 }

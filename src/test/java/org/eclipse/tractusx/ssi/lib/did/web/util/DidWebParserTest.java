@@ -21,12 +21,16 @@
 
 package org.eclipse.tractusx.ssi.lib.did.web.util;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.net.URI;
 import lombok.SneakyThrows;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethodIdentifier;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -57,5 +61,11 @@ class DidWebParserTest {
     final URI uri = parser.parse(did);
 
     Assertions.assertEquals(expectedUri, uri.toString(), "Could not resolve URI from DID" + did);
+  }
+
+  @Test
+  void shouldThrowWhenNotDidWeb() {
+    final Did did = new Did(new DidMethod("iota"), new DidMethodIdentifier("localhost"), null);
+    assertThrows(DidParseException.class, () -> parser.parse(did, false));
   }
 }

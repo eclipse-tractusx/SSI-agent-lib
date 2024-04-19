@@ -35,7 +35,9 @@ import org.eclipse.tractusx.ssi.lib.exception.key.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.junit.jupiter.api.Test;
 
-/** The type Ed 25519 key test. */
+/**
+ * The type Ed 25519 key test.
+ */
 class ED25519KeyTest {
 
   /**
@@ -51,10 +53,13 @@ class ED25519KeyTest {
     assertNotNull(keyPair.getPublicKey());
   }
 
-  /** Test ed 25519 key serliztion. */
+  /**
+   * Test ed 25519 key serliztion.
+   */
   @Test
   @SneakyThrows
   void testED25519KeySerliztion() {
+
     IKeyGenerator keyGenerator = new X25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
 
@@ -65,12 +70,16 @@ class ED25519KeyTest {
     assertNotNull(keyPair.getPublicKey().asStringForStoring());
 
     assertNotNull(keyPair.getPublicKey().asStringForExchange(EncodeType.BASE_64));
+
   }
 
-  /** Test ed 25519 key deserliztion. */
+  /**
+   * Test ed 25519 key deserliztion.
+   */
   @Test
   @SneakyThrows
   void testED25519KeyDeserliztion() {
+
     IKeyGenerator keyGenerator = new X25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
 

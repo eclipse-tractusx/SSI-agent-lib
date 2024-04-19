@@ -22,7 +22,6 @@
 package org.eclipse.tractusx.ssi.lib.model.did;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.nimbusds.jose.jwk.Curve;
@@ -38,10 +37,14 @@ import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebFactory;
 import org.junit.jupiter.api.Test;
 
-/** The type Json web key 2020 builder test. */
+/**
+ * The type Json web key 2020 builder test.
+ */
 class JsonWebKey2020BuilderTest {
 
-  /** Test json web key 2020 verification method. */
+  /**
+   * Test json web key 2020 verification method.
+   */
   @SneakyThrows
   @Test
   void testJsonWebKey2020VerificationMethod() {
@@ -57,15 +60,18 @@ class JsonWebKey2020BuilderTest {
     JsonWebKey jwk = new JsonWebKey(keyId, publicKey, privateKey);
 
     final JWKVerificationMethodBuilder builder = new JWKVerificationMethodBuilder();
-    final JWKVerificationMethod jwk2020VerificationMethod = builder.did(did).jwk(jwk).build();
+    final JWKVerificationMethod jwk2020VerificationMethod =
+        builder.did(did).jwk(octetKeyPair).build();
 
     assertNotNull(jwk2020VerificationMethod);
     assertEquals("JsonWebKey2020", jwk2020VerificationMethod.getType());
     assertEquals(jwk2020VerificationMethod.getId().toString(), "did:web:localhost#" + keyId);
     assertEquals("did:web:localhost", jwk2020VerificationMethod.getController().toString());
 
-    assertEquals("OKP", jwk2020VerificationMethod.getPublicKeyJwk().getKty());
-    assertEquals("Ed25519", jwk2020VerificationMethod.getPublicKeyJwk().getCrv());
-    assertFalse(jwk2020VerificationMethod.getPublicKeyJwk().getX().isEmpty());
+    assertEquals(
+        "OKP", ((OctetKeyPair) jwk2020VerificationMethod.getJwk()).getKeyType().getValue());
+    assertEquals(
+        "Ed25519", ((OctetKeyPair) jwk2020VerificationMethod.getJwk()).getCurve().getName());
+    assertNotNull(((OctetKeyPair) jwk2020VerificationMethod.getJwk()).getX());
   }
 }

@@ -30,7 +30,12 @@ import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import java.time.Instant;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
@@ -99,7 +104,8 @@ public class SignedJwtFactory {
     final String subject = didIssuer.toString();
 
     TypeReference<HashMap<String, Object>> typeRef =
-        new TypeReference<HashMap<String, Object>>() {};
+        new TypeReference<HashMap<String, Object>>() {
+        };
 
     // make on object out of it so that it can get serialized again
     Map<String, Object> vp =

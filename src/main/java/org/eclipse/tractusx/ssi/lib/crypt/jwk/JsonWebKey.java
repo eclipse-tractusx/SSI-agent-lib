@@ -29,6 +29,7 @@ import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 
 /** The type JsonWebKey. */
+@Deprecated(forRemoval = true, since = "nimbus provides JWK implementations")
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonWebKey {
   private final OctetKeyPair keyPair;

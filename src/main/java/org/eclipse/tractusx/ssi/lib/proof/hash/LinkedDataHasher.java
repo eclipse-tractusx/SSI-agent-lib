@@ -41,7 +41,7 @@ public class LinkedDataHasher {
       var value = digest.digest(transformedLinkedData.getValue().getBytes());
       return new HashedLinkedData(value);
     } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException(e);
+      throw new IllegalArgumentException(e);
     }
   }
 }

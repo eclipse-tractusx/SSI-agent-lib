@@ -37,12 +37,16 @@ import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-/** The type Linked data transformer test. */
+/**
+ * The type Linked data transformer test.
+ */
 class LinkedDataTransformerTest {
 
   private final LinkedDataTransformer linkedDataTransformer = new LinkedDataTransformer();
 
-  /** Test linked data transformer. */
+  /**
+   * Test linked data transformer.
+   */
   @Test
   @SneakyThrows
   void testLinkedDataTransformer() {
@@ -64,7 +68,8 @@ class LinkedDataTransformerTest {
             .build();
 
     // check status added in VC
-    Assertions.assertNotNull(credentialWithoutProof.getVerifiableCredentialStatus());
+
+    Assertions.assertTrue(credentialWithoutProof.getVerifiableCredentialStatus().isPresent());
 
     var transformedWithoutProof = linkedDataTransformer.transform(credentialWithoutProof);
 

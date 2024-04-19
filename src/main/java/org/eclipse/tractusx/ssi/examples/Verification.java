@@ -40,8 +40,8 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
 
 /**
- * This is example class to demonstrate how to verify @{@link SignedJWT} and {@link
- * VerifiableCredential}*
+ * This is example class to demonstrate how to verify @{@link SignedJWT} and
+ * {@link VerifiableCredential}*
  */
 public class Verification {
 
@@ -53,16 +53,16 @@ public class Verification {
    * Verify jwt.
    *
    * @param jwt the jwt
-   * @throws DidParseException the did parse exception
-   * @throws DidResolverException the did resolver exception
+   * @throws DidParseException                    the did parse exception
+   * @throws DidResolverException                 the did resolver exception
    * @throws SignatureVerificationFailedException the signature verification failed exception
-   * @throws SignatureVerificationException the signature verification exception
-   * @throws SignatureParseException the signature parse exception
-   * @throws SignatureException the signature exception
+   * @throws SignatureVerificationException       the signature verification exception
+   * @throws SignatureParseException              the signature parse exception
+   * @throws SignatureException                   the signature exception
    */
   public static void verifyJWT(SignedJWT jwt)
       throws DidParseException, DidResolverException, SignatureVerificationFailedException,
-          SignatureVerificationException, SignatureParseException, SignatureException {
+      SignatureVerificationException, SignatureParseException, SignatureException {
     {
       // DID Resolver constructor params
       DidWebParser didParser = new DidWebParser();
@@ -81,18 +81,18 @@ public class Verification {
    *
    * @param verifiableCredential the credential
    * @return true if the credential is valid
-   * @throws TransformJsonLdException the transform json ld exception
-   * @throws NoVerificationKeyFoundException the no verification key found exception
-   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
-   * @throws InvalidPublicKeyFormatException the invalid public key format exception
-   * @throws SignatureParseException the signature parse exception
-   * @throws DidParseException the did parse exception
+   * @throws TransformJsonLdException             the transform json ld exception
+   * @throws NoVerificationKeyFoundException      the no verification key found exception
+   * @throws UnsupportedSignatureTypeException    the unsupported signature type exception
+   * @throws InvalidPublicKeyFormatException      the invalid public key format exception
+   * @throws SignatureParseException              the signature parse exception
+   * @throws DidParseException                    the did parse exception
    * @throws SignatureVerificationFailedException the signature verification failed exception
    */
   public static boolean verifyJWSLD(VerifiableCredential verifiableCredential)
       throws TransformJsonLdException, NoVerificationKeyFoundException,
-          UnsupportedSignatureTypeException, InvalidPublicKeyFormatException,
-          SignatureParseException, DidParseException, SignatureVerificationFailedException {
+      UnsupportedSignatureTypeException, InvalidPublicKeyFormatException,
+      SignatureParseException, DidParseException, SignatureVerificationFailedException {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();

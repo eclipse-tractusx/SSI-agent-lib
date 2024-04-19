@@ -22,7 +22,6 @@
 package org.eclipse.tractusx.ssi.lib.did.web.util;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
@@ -32,7 +31,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.Did;
 public class DidWebParser {
 
   private static final String WELL_KNOWN_DID_JSON = "/.well-known/did.json";
-  private static final String PATH_DID_JSON = "/did.json";
+  private static final String PATH_DID_JSON = String.format("/%s", "did.json");
 
   /**
    * Parse uri.
@@ -75,10 +74,6 @@ public class DidWebParser {
       didUrl = didUrl + WELL_KNOWN_DID_JSON;
     }
 
-    try {
-      return new URI(didUrl);
-    } catch (URISyntaxException e) {
-      throw new DidParseException(e.getMessage());
-    }
+    return URI.create(didUrl);
   }
 }

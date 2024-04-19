@@ -21,6 +21,7 @@
 package org.eclipse.tractusx.ssi.lib.did.resolver;
 
 import java.util.Arrays;
+import java.util.Optional;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
@@ -46,14 +47,11 @@ public class CompositeDidResolver implements DidResolver {
   }
 
   @Override
-  public DidDocument resolve(Did did) throws DidResolverException {
+  public Optional<DidDocument> resolve(Did did) throws DidResolverException {
     for (DidResolver didResolver : didResolvers) {
       if (didResolver.isResolvable(did)) {
         try {
-          DidDocument result = didResolver.resolve(did);
-          if (result != null) {
-            return result;
-          }
+          return didResolver.resolve(did);
         } catch (DidResolverException dre) {
           throw dre;
         } catch (Exception th) {
@@ -63,7 +61,7 @@ public class CompositeDidResolver implements DidResolver {
         }
       }
     }
-    return null;
+    return Optional.empty();
   }
 
   @Override

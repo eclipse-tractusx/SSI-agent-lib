@@ -42,7 +42,7 @@ class TestIdentityTest {
     byte[] message = "Json String".getBytes(StandardCharsets.UTF_8);
 
     // Load public key
-    var identity = TestIdentityFactory.newIdentityWithED25519Keys();
+    var identity = TestIdentityFactory.newIdentityWithEDVerificationMethod();
 
     // Sign
     AsymmetricKeyParameter privateKeyParameters =

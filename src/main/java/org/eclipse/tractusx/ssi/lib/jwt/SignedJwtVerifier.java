@@ -62,16 +62,16 @@ public class SignedJwtVerifier {
    *
    * @param jwt a {@link SignedJWT} that was sent by the claiming party.
    * @return true if verified, false otherwise
-   * @throws DidParseException the did parse error
-   * @throws DidResolverException the did resolve error
-   * @throws SignatureVerificationException the signature verification error
-   * @throws SignatureParseException the signature parse error
-   * @throws SignatureException the signature exception
+   * @throws DidParseException                    the did parse error
+   * @throws DidResolverException                 the did resolve error
+   * @throws SignatureVerificationException       the signature verification error
+   * @throws SignatureParseException              the signature parse error
+   * @throws SignatureException                   the signature exception
    * @throws SignatureVerificationFailedException the signature verification failed exception
    */
   public boolean verify(SignedJWT jwt)
       throws DidParseException, DidResolverException, SignatureVerificationException,
-          SignatureParseException, SignatureException, SignatureVerificationFailedException {
+      SignatureParseException, SignatureException, SignatureVerificationFailedException {
 
     JWTClaimsSet jwtClaimsSet;
     try {
@@ -83,7 +83,7 @@ public class SignedJwtVerifier {
     final String issuer = jwtClaimsSet.getIssuer();
     final Did issuerDid = DidParser.parse(issuer);
 
-    final DidDocument issuerDidDocument = didResolver.resolve(issuerDid);
+    final DidDocument issuerDidDocument = didResolver.resolve(issuerDid).get();
     final List<VerificationMethod> verificationMethods = issuerDidDocument.getVerificationMethods();
 
     // verify JWT signature
@@ -91,7 +91,7 @@ public class SignedJwtVerifier {
     for (VerificationMethod verificationMethod : verificationMethods) {
       if (JWKVerificationMethod.isInstance(verificationMethod)) {
         final JWKVerificationMethod method = new JWKVerificationMethod(verificationMethod);
-        final String kty = method.getPublicKeyJwk().getKty();
+        final String kty = method..getPublicKeyJwk().getKty();
         final String crv = method.getPublicKeyJwk().getCrv();
         final String x = method.getPublicKeyJwk().getX();
 
@@ -116,7 +116,7 @@ public class SignedJwtVerifier {
             new Ed25519PublicKeyParameters(multibase.getDecoded(), 0);
         final OctetKeyPair keyPair =
             new OctetKeyPair.Builder(
-                    Curve.Ed25519, Base64URL.encode(publicKeyParameters.getEncoded()))
+                Curve.Ed25519, Base64URL.encode(publicKeyParameters.getEncoded()))
                 .build();
 
         try {

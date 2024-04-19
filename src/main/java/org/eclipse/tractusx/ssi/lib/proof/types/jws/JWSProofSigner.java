@@ -16,8 +16,7 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- * *******************************************************************************
- */
+ ********************************************************************************/
 
 package org.eclipse.tractusx.ssi.lib.proof.types.jws;
 
@@ -27,47 +26,42 @@ import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.Payload;
-import com.nimbusds.jose.crypto.Ed25519Signer;
-import com.nimbusds.jose.jwk.OctetKeyPair;
-import java.io.IOException;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
+import org.eclipse.tractusx.ssi.lib.crypt.util.SignerUtil;
 import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
 import org.eclipse.tractusx.ssi.lib.proof.ISigner;
+import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
-/** The type Jws proof signer. */
+/**
+ * The type Jws proof signer.
+ */
 public class JWSProofSigner implements ISigner {
-  /**
-   * Sign HashedLinkedData .
-   *
-   * @param hashedLinkedData the hashed linked data
-   * @param privateKey the private key
-   * @return the byte [ ]
-   * @throws InvalidPrivateKeyFormatException the invalid private key format exception
-   * @throws SignatureGenerateFailedException the signature generate failed exception
-   */
+
+
+  private final SignatureType signatureType;
+
+  public JWSProofSigner(final SignatureType signatureType) {
+    this.signatureType = signatureType;
+  }
+
+  public JWSProofSigner() {
+    this.signatureType = SignatureType.JWS;
+  }
+
   @Override
   public byte[] sign(HashedLinkedData hashedLinkedData, IPrivateKey privateKey)
       throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException {
 
-    OctetKeyPairFactory octetKeyPairFactory = new OctetKeyPairFactory();
-    OctetKeyPair keyPair;
-    try {
-      keyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
-    } catch (IOException e) {
-      throw new InvalidPrivateKeyFormatException(e.getCause());
-    }
-
     JWSSigner signer;
     try {
-      signer = new Ed25519Signer(keyPair);
+      signer = SignerUtil.getSigner(signatureType, privateKey);
     } catch (JOSEException e) {
       throw new InvalidPrivateKeyFormatException(e.getMessage());
     }
 
-    var header = new JWSHeader.Builder(JWSAlgorithm.EdDSA).build();
+    var header = new JWSHeader.Builder(new JWSAlgorithm(signatureType.algorithm)).build();
     Payload payload = new Payload(hashedLinkedData.getValue());
     JWSObject jwsObject = new JWSObject(header, payload);
 

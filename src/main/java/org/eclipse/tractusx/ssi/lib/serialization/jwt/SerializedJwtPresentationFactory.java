@@ -27,17 +27,19 @@ import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 
-/** The interface Serialized jwt presentation factory. */
+/**
+ * The interface Serialized jwt presentation factory.
+ */
 public interface SerializedJwtPresentationFactory {
 
   /**
    * Create presentation signed jwt.
    *
-   * @param issuer the issuer
+   * @param issuer      the issuer
    * @param credentials the credentials
-   * @param audience the audience
-   * @param privateKey the private key
-   * @param keyId the key id
+   * @param audience    the audience
+   * @param privateKey  the private key
+   * @param keyId       the key id
    * @return the signed jwt
    */
   SignedJWT createPresentation(
@@ -50,14 +52,15 @@ public interface SerializedJwtPresentationFactory {
   /**
    * Create presentation signed jwt.
    *
-   * @param issuer the issuer
+   * @param issuer      the issuer
    * @param credentials the credentials
-   * @param audience the audience
-   * @param privateKey the private key
-   * @param keyId the key id
-   * @param config jwt config
+   * @param audience    the audience
+   * @param privateKey  the private key
+   * @param keyId       the key id
+   * @param config      jwt config
    * @return the signed jwt
    */
+
   SignedJWT createPresentation(
       Did issuer,
       List<VerifiableCredential> credentials,

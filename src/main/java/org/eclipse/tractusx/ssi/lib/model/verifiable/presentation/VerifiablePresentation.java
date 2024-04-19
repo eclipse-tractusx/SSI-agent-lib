@@ -25,7 +25,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import lombok.NonNull;
 import lombok.ToString;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
@@ -81,6 +80,6 @@ public class VerifiablePresentation extends Verifiable {
     final List<Map<String, Object>> credentials =
         SerializeUtil.asList(this.get(VERIFIABLE_CREDENTIAL));
 
-    return credentials.stream().map(VerifiableCredential::new).collect(Collectors.toList());
+    return credentials.stream().map(VerifiableCredential::new).toList();
   }
 }

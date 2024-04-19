@@ -31,14 +31,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.RandomUtils;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialStatusList2021Entry;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 
-/** The type Test resource util. */
+/**
+ * The type Test resource util.
+ */
 public class TestResourceUtil {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -204,17 +205,14 @@ public class TestResourceUtil {
     return Objects.requireNonNull(inputStream, "Resource not found: " + resource);
   }
 
-  /**
-   * @return verifiableCredentialStatusList2021Entry
-   */
+
   public static VerifiableCredentialStatusList2021Entry getStatusListEntry() {
-    int index = RandomUtils.nextInt();
     return new VerifiableCredentialStatusList2021Entry(
         Map.of(
-            "id", "https://example.com/credentials/status/3#" + index,
-            "type", "BitstringStatusListEntry",
+            "id", "https://example.com/credentials/status/3#94567",
+            "type", "StatusList2021Entry",
             "statusPurpose", "revocation",
-            "statusListIndex", String.valueOf(index),
+            "statusListIndex", "94567",
             "statusListCredential", "https://example.com/credentials/status/3"));
   }
 }

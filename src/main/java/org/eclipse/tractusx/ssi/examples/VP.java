@@ -16,16 +16,13 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- * *******************************************************************************
- */
+ ********************************************************************************/
 
 package org.eclipse.tractusx.ssi.examples;
 
 import com.nimbusds.jwt.SignedJWT;
 import java.util.List;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
-import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -49,7 +46,7 @@ class VP {
   /**
    * Create a verifiable presentation.
    *
-   * @param issuer the issuer
+   * @param issuer      the issuer
    * @param credentials the credentials
    * @return the verifiable presentation
    */
@@ -64,31 +61,15 @@ class VP {
         .build();
   }
 
-  /**
-   * Create vp as a signed jwt.
-   *
-   * @param issuer the issuer
-   * @param credentials the credentials
-   * @param audience the audience
-   * @param privateKey the private key
-   * @param publicKey the public key
-   * @param keyId the key id
-   * @return the signed jwt
-   */
-  public static SignedJWT createVPAsJWT(
-      Did issuer,
-      List<VerifiableCredential> credentials,
-      String audience,
-      IPrivateKey privateKey,
-      IPublicKey publicKey,
-      String keyId) {
 
-    // Extracting keys
+  public static SignedJWT createVPAsJWT(
+      Did issuer, List<VerifiableCredential> credentials, String audience, IPrivateKey privateKey,
+      String keyId) {
 
     final SerializedJwtPresentationFactory presentationFactory =
         new SerializedJwtPresentationFactoryImpl(
-            new SignedJwtFactory(new OctetKeyPairFactory()), new JsonLdSerializerImpl(), issuer);
-
+            new SignedJwtFactory(), new JsonLdSerializerImpl(), issuer);
     return presentationFactory.createPresentation(issuer, credentials, audience, privateKey, keyId);
+
   }
 }

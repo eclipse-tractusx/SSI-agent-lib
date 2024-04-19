@@ -47,7 +47,9 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.proof.IVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
-/** The type Ed 25519 proof verifier. */
+/**
+ * The type Ed 25519 proof verifier.
+ */
 @RequiredArgsConstructor
 public class Ed25519ProofVerifier implements IVerifier {
 
@@ -55,10 +57,15 @@ public class Ed25519ProofVerifier implements IVerifier {
 
   @SneakyThrows({DidResolverException.class})
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable verifiable)
-      throws UnsupportedSignatureTypeException, InvalidPublicKeyFormatException,
-          NoVerificationKeyFoundException, DidParseException {
+      throws UnsupportedSignatureTypeException,
+      InvalidPublicKeyFormatException,
+      NoVerificationKeyFoundException,
+      DidParseException {
 
-    final Proof proof = verifiable.getProof();
+    final Proof proof =
+        verifiable
+            .getProof()
+            .orElseThrow(() -> new DidParseException("no proof found for verification"));
     final Ed25519Signature2020 ed25519Signature2020 = new Ed25519Signature2020(proof);
 
     if (!proof.getType().equals(Ed25519Signature2020.ED25519_VERIFICATION_KEY_2018)) {
@@ -74,11 +81,16 @@ public class Ed25519ProofVerifier implements IVerifier {
 
   private IPublicKey discoverPublicKey(Ed25519Signature2020 signature)
       throws InvalidPublicKeyFormatException, NoVerificationKeyFoundException, DidResolverException,
-          DidParseException {
+
+      DidParseException {
 
     final Did issuer = DidParser.parse(signature.getVerificationMethod());
 
-    final DidDocument document = this.didResolver.resolve(issuer);
+    final DidDocument document =
+        this.didResolver
+            .resolve(issuer)
+            .orElseThrow(() -> new IllegalStateException("document could not be resolved"));
+
     final URI verificationMethodId = signature.getVerificationMethod();
 
     final Ed25519VerificationMethod key =
@@ -106,8 +118,8 @@ public class Ed25519ProofVerifier implements IVerifier {
    * Verify hashedLinkedData.
    *
    * @param hashedLinkedData the hashed linked data
-   * @param signature the signature
-   * @param publicKey the public key
+   * @param signature        the signature
+   * @param publicKey        the public key
    * @return the boolean the verification result
    */
   @SneakyThrows

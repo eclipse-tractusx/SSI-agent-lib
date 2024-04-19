@@ -30,20 +30,23 @@ import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 
-/** This is an example class to demonstrate did document resolve from given did web url */
+/**
+ * This is an example class to demonstrate did document resolve from given did web url
+ */
 public class ResolveDIDDoc {
 
   private ResolveDIDDoc() {
     throw new IllegalStateException("Utility class");
   }
 
+
   /**
-   * Resolve did document.
+   * Resolve did document did document.
    *
    * @param didUrl the did url
    * @return the did document
-   * @throws DidResolverException the did resolve exception
-   * @throws DidParseException the did parse exception
+   * @throws DidParseException    the did parse exception
+   * @throws DidResolverException the did resolver exception
    */
   public static DidDocument resolveDidDocument(String didUrl)
       throws DidParseException, DidResolverException {
@@ -57,6 +60,9 @@ public class ResolveDIDDoc {
 
     var didResolver = new DidWebResolver(httpClient, didParser, enforceHttps);
 
-    return didResolver.resolve(did);
+    return didResolver
+        .resolve(did)
+        .orElseThrow(
+            () -> new DidParseException(String.format("no did document found for %s", didUrl)));
   }
 }
