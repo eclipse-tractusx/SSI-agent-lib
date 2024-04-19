@@ -3,14 +3,18 @@ package org.eclipse.tractusx.ssi.lib.model;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.ok;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 
 import com.apicatalog.jsonld.JsonLdError;
 import com.apicatalog.jsonld.JsonLdErrorCode;
 import com.apicatalog.jsonld.http.DefaultHttpClient;
+import com.apicatalog.jsonld.loader.DocumentLoader;
 import com.apicatalog.jsonld.loader.DocumentLoaderOptions;
+import com.apicatalog.jsonld.loader.FileLoader;
 import com.apicatalog.jsonld.loader.HttpLoader;
 import com.github.tomakehurst.wiremock.common.ssl.KeyStoreSettings;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
@@ -35,6 +39,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
 class RemoteDocumentLoaderTest {
+
   private static final String CA_PATH;
   private static final String KEYSTORE_PATH;
   private static final String TRUST_STORE_PATH;
@@ -102,6 +107,10 @@ class RemoteDocumentLoaderTest {
 
   @Test
   void shouldInitializeAndReturnDocumentLoader() {
+    RemoteDocumentLoader.setDefaultFileLoader(new FileLoader());
+    DocumentLoader defaultFileLoader = RemoteDocumentLoader.getDefaultFileLoader();
+    assertNotNull(defaultFileLoader);
+
     assertNotNull(RemoteDocumentLoader.getDefaultFileLoader());
   }
 
@@ -185,6 +194,7 @@ class RemoteDocumentLoaderTest {
 
   @RequiredArgsConstructor
   private static class TestConfig {
+
     final boolean httpsEnabled;
 
     final boolean enableLocalCache;
