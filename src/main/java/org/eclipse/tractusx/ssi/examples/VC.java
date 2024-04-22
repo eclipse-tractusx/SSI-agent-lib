@@ -120,13 +120,11 @@ public class VC {
    * @param privateKey the private key
    * @param issuer the issuer
    * @return the verifiable credential
-   * @throws UnsupportedSignatureTypeException the unsupported signature type exception <<<<<<< HEAD
-   * @throws SsiException the ssi exception
-   * @throws InvalidPrivateKeyFormatException the invalide private key format =======
+   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
+   * @throws InvalidPrivateKeyFormatException the invalid private key format
    * @throws SignatureGenerateFailedException the signature generation failed
    * @throws InvalidPrivateKeyFormatException the invalid private key format
-   * @throws TransformJsonLdException the json-ld transform error >>>>>>> ec99f9d (chroe: typos,
-   *     code refactor and class files removed)
+   * @throws TransformJsonLdException the json-ld transform error
    */
   public static VerifiableCredential createVCWithJWSProof(
       VerifiableCredential credential, IPrivateKey privateKey, Did issuer)

@@ -1,10 +1,6 @@
 /*
  * ******************************************************************************
-<<<<<<< HEAD
  * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
-=======
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
->>>>>>> main
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
