@@ -34,13 +34,14 @@ import org.junit.jupiter.api.Test;
 
 class SignerUtilTest {
 
-
   @SneakyThrows
   @Test
   void testGetSignerWithInvalidType() {
-    Assertions.assertThrows(IllegalArgumentException.class, () -> {
-      SignerUtil.getSigner(SignatureType.ED25519, null);
-    });
+    Assertions.assertThrows(
+        IllegalArgumentException.class,
+        () -> {
+          SignerUtil.getSigner(SignatureType.ED25519, null);
+        });
   }
 
   @SneakyThrows
@@ -55,7 +56,6 @@ class SignerUtilTest {
         () -> SignerUtil.getSigner(SignatureType.JWS_RSA, rsaPrivateKeyWrapper));
 
     Assertions.assertDoesNotThrow(() -> SignerUtil.getRSASigner(rsaPrivateKeyWrapper));
-
   }
 
   @Test

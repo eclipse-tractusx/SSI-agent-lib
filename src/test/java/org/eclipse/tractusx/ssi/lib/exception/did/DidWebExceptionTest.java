@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 class DidWebExceptionTest {
 
-
   @Test
   void testDidWebExceptionWithCause() {
     RuntimeException runtimeException = new RuntimeException("Some error occurred");
