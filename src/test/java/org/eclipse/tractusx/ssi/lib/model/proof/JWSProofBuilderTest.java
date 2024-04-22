@@ -21,20 +21,20 @@ class JWSProofBuilderTest {
     Date now = new Date();
     DateTimeFormatter formatter =
         DateTimeFormatter.ofPattern(JWSSignature2020.TIME_FORMAT).withZone(ZoneOffset.UTC);
-    URI uri = URI.create("http://example.com#key-1");
+    URI verificationMethod = URI.create("http://example.com#key-1");
     String proofValue = "proofValue";
-    JWSSignature2020 build =
+    JWSSignature2020 jwsSignature2020 =
         new JWSProofBuilder()
             .proofValue(proofValue)
             .proofPurpose(JWSSignature2020.ASSERTION_METHOD)
-            .verificationMethod(uri)
+            .verificationMethod(verificationMethod)
             .created(now.toInstant())
             .build();
 
-    Assertions.assertEquals(JWSSignature2020.ASSERTION_METHOD, build.getProofPurpose());
-    Assertions.assertEquals(uri, build.getVerificationMethod());
+    Assertions.assertEquals(JWSSignature2020.ASSERTION_METHOD, jwsSignature2020.getProofPurpose());
+    Assertions.assertEquals(verificationMethod, jwsSignature2020.getVerificationMethod());
     Assertions.assertEquals(
-        formatter.format(now.toInstant()), formatter.format(build.getCreated()));
-    Assertions.assertEquals(proofValue, build.getJws());
+        formatter.format(now.toInstant()), formatter.format(jwsSignature2020.getCreated()));
+    Assertions.assertEquals(proofValue, jwsSignature2020.getJws());
   }
 }
