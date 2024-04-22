@@ -7,6 +7,14 @@ import org.junit.jupiter.api.Test;
 
 class DidWebExceptionTest {
 
+
+  @Test
+  void testDidWebExceptionWithCause() {
+    RuntimeException runtimeException = new RuntimeException("Some error occurred");
+    DidWebException exception = new DidWebException(runtimeException);
+    assertEquals(runtimeException.getMessage(), exception.getCause().getMessage());
+  }
+
   @Test
   void testDidWebException() {
     DidWebException exception = new DidWebException("test message");
@@ -14,7 +22,7 @@ class DidWebExceptionTest {
   }
 
   @Test
-  void testDidWebExceptionWithCause() {
+  void testDidWebExceptionWithCauseAndMessage() {
     Throwable cause = new Throwable("test cause");
     DidWebException exception = new DidWebException("test message", cause);
     assertEquals("test message", exception.getMessage());

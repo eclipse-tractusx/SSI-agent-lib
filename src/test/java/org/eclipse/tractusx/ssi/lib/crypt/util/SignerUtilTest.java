@@ -21,11 +21,42 @@
 
 package org.eclipse.tractusx.ssi.lib.crypt.util;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
+import java.security.PrivateKey;
+import lombok.SneakyThrows;
+import org.eclipse.tractusx.ssi.lib.crypt.rsa.RSAPrivateKeyWrapper;
+import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class SignerUtilTest {
+
+
+  @SneakyThrows
+  @Test
+  void testGetSignerWithInvalidType() {
+    Assertions.assertThrows(IllegalArgumentException.class, () -> {
+      SignerUtil.getSigner(SignatureType.ED25519, null);
+    });
+  }
+
+  @SneakyThrows
+  @Test
+  void testGetSignerWithRSA() {
+    RSAKeyGenerator keyGen = new RSAKeyGenerator(4096);
+    RSAKey generate = keyGen.generate();
+    PrivateKey privateKey = generate.toPrivateKey();
+
+    RSAPrivateKeyWrapper rsaPrivateKeyWrapper = new RSAPrivateKeyWrapper(privateKey.getEncoded());
+    Assertions.assertDoesNotThrow(
+        () -> SignerUtil.getSigner(SignatureType.JWS_RSA, rsaPrivateKeyWrapper));
+
+    Assertions.assertDoesNotThrow(() -> SignerUtil.getRSASigner(rsaPrivateKeyWrapper));
+
+  }
 
   @Test
   void ecShouldThrow() {
