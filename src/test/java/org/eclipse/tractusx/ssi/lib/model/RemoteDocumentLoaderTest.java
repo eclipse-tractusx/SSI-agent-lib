@@ -30,6 +30,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -103,6 +104,26 @@ class RemoteDocumentLoaderTest {
     System.setProperty("javax.net.ssl.trustStore", TRUST_STORE_PATH);
     RemoteDocumentLoader.setDefaultHttpLoader(
         new HttpLoader(new DefaultHttpClient(trustallClient)));
+  }
+
+  @Test
+  void shouldReturnInstance() {
+    RemoteDocumentLoader instance = RemoteDocumentLoader.getInstance();
+    Assertions.assertNotNull(instance);
+  }
+
+  @Test
+  void shouldReturnDefault() {
+    RemoteDocumentLoader.setDefaultHttpLoader(null);
+    DocumentLoader defaultHttpLoader = RemoteDocumentLoader.getDefaultHttpLoader();
+    Assertions.assertNotNull(defaultHttpLoader);
+  }
+
+  @Test
+  void shouldReturnDefaultFileLoader() {
+    RemoteDocumentLoader.setDefaultFileLoader(null);
+    DocumentLoader defaultFileLoader = RemoteDocumentLoader.getDefaultFileLoader();
+    Assertions.assertNotNull(defaultFileLoader);
   }
 
   @Test
