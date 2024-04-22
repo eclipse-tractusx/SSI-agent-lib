@@ -8,6 +8,6 @@ class ConstantsTest {
 
   @Test
   void testDidMethod() {
-    Assertions.assertTrue(Constants.DID_WEB_METHOD.getValue().equals("web"));
+    Assertions.assertEquals("web", Constants.DID_WEB_METHOD.getValue());
   }
 }

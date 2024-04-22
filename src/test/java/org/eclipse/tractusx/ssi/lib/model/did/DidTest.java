@@ -26,12 +26,18 @@ import org.junit.jupiter.api.Test;
 
 /** The type Did test. */
 class DidTest {
+
+  public static final String MY_FRAGMENT = "myFragment";
+  public static final String MY_KEY = "myKey";
+  public static final String OTHER_KEY = "otherKey";
+  public static final String TEST = "test";
+
   /** Test did equals. */
   @Test
   void testDidEquals() {
 
-    Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "myFragment");
-    Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "myFragment");
+    Did did1 = new Did(new DidMethod(TEST), new DidMethodIdentifier(MY_KEY), MY_FRAGMENT);
+    Did did2 = new Did(new DidMethod(TEST), new DidMethodIdentifier(MY_KEY), MY_FRAGMENT);
 
     Assertions.assertEquals(did1, did2);
   }
@@ -39,8 +45,8 @@ class DidTest {
   @Test
   void testDidNotEqualsIdentifier() {
 
-    Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "myFragment");
-    Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("otherKey"), "myFragment");
+    Did did1 = new Did(new DidMethod(TEST), new DidMethodIdentifier(MY_KEY), MY_FRAGMENT);
+    Did did2 = new Did(new DidMethod(TEST), new DidMethodIdentifier(OTHER_KEY), MY_FRAGMENT);
 
     Assertions.assertNotEquals(did1, did2);
   }
@@ -48,8 +54,8 @@ class DidTest {
   @Test
   void testDidEqualsConvenienceConstructor() {
 
-    Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));
-    Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));
+    Did did1 = new Did(new DidMethod(TEST), new DidMethodIdentifier(MY_KEY));
+    Did did2 = new Did(new DidMethod(TEST), new DidMethodIdentifier(MY_KEY));
 
     Assertions.assertEquals(did1, did2);
   }
@@ -57,8 +63,8 @@ class DidTest {
   @Test
   void testDidNotEqualsFragment() {
 
-    Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "myFragment");
-    Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "otherFragment");
+    Did did1 = new Did(new DidMethod(TEST), new DidMethodIdentifier(MY_KEY), MY_FRAGMENT);
+    Did did2 = new Did(new DidMethod(TEST), new DidMethodIdentifier(MY_KEY), "otherFragment");
 
     Assertions.assertNotEquals(did1, did2);
   }
@@ -66,8 +72,8 @@ class DidTest {
   @Test
   void testDidEqualsFragmentNull() {
 
-    Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), null);
-    Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), null);
+    Did did1 = new Did(new DidMethod(TEST), new DidMethodIdentifier(MY_KEY), null);
+    Did did2 = new Did(new DidMethod(TEST), new DidMethodIdentifier(MY_KEY), null);
 
     Assertions.assertEquals(did1, did2);
   }
@@ -75,8 +81,8 @@ class DidTest {
   @Test
   void testDidEqualsFragmentBlank() {
 
-    Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "");
-    Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "");
+    Did did1 = new Did(new DidMethod(TEST), new DidMethodIdentifier(MY_KEY), "");
+    Did did2 = new Did(new DidMethod(TEST), new DidMethodIdentifier(MY_KEY), "");
 
     Assertions.assertEquals(did1, did2);
   }
@@ -84,8 +90,8 @@ class DidTest {
   @Test
   void testDidEqualsFragmentNullBlank() {
 
-    Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), null);
-    Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "");
+    Did did1 = new Did(new DidMethod(TEST), new DidMethodIdentifier(MY_KEY), null);
+    Did did2 = new Did(new DidMethod(TEST), new DidMethodIdentifier(MY_KEY), "");
 
     Assertions.assertEquals(did1, did2);
   }
@@ -93,8 +99,8 @@ class DidTest {
   @Test
   void testDidEqualsNoFragment() {
 
-    Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));
-    Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));
+    Did did1 = new Did(new DidMethod(TEST), new DidMethodIdentifier(MY_KEY));
+    Did did2 = new Did(new DidMethod(TEST), new DidMethodIdentifier(MY_KEY));
 
     Assertions.assertEquals(did1, did2);
   }
@@ -102,8 +108,8 @@ class DidTest {
   @Test
   void testDidNotEqualsFragmentNull() {
 
-    Did did1 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"), "myFragment");
-    Did did2 = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));
+    Did did1 = new Did(new DidMethod(TEST), new DidMethodIdentifier(MY_KEY), MY_FRAGMENT);
+    Did did2 = new Did(new DidMethod(TEST), new DidMethodIdentifier(MY_KEY));
 
     Assertions.assertNotEquals(did1, did2);
   }

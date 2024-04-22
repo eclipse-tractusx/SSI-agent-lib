@@ -76,11 +76,7 @@ public class Proof extends HashMap<String, Object> {
    * @return true if Configuation or false if Signature
    */
   public boolean isConfiguration() {
-    if (this instanceof Ed25519Signature2020 || this instanceof JWSSignature2020) {
-      return false;
-    }
-
-    return true;
+    return !(this instanceof Ed25519Signature2020) && !(this instanceof JWSSignature2020);
   }
 
   /**

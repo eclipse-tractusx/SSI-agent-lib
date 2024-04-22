@@ -2,6 +2,7 @@ package org.eclipse.tractusx.ssi.lib.model.did;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.nimbusds.jose.jwk.ECKey;
@@ -195,12 +196,12 @@ class JWKVerificationMethodTest {
 
     abstractJWKVerificationMethod2 = new JWKVerificationMethod(parsed);
 
-    assertFalse(abstractJWKVerificationMethod1.equals(null));
+    assertNotEquals(null, abstractJWKVerificationMethod1);
 
-    assertFalse(abstractJWKVerificationMethod1.equals(abstractJWKVerificationMethod2));
+    assertNotEquals(abstractJWKVerificationMethod1, abstractJWKVerificationMethod2);
 
-    assertFalse(
-        abstractJWKVerificationMethod1.hashCode() == abstractJWKVerificationMethod2.hashCode());
+    assertNotEquals(
+        abstractJWKVerificationMethod1.hashCode(), abstractJWKVerificationMethod2.hashCode());
   }
 
   @Test
