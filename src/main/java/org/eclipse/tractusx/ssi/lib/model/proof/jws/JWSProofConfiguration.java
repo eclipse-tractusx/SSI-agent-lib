@@ -21,12 +21,9 @@
 
 package org.eclipse.tractusx.ssi.lib.model.proof.jws;
 
-import java.net.URI;
-import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
-import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 /**
  * The type of Ed25519Configuration
@@ -75,32 +72,5 @@ public class JWSProofConfiguration extends Proof {
     } catch (Exception e) {
       throw new IllegalArgumentException("Invalid JsonWebSignature2020", e);
     }
-  }
-
-  /**
-   * Gets proof purpose.
-   *
-   * @return the proof purpose
-   */
-  public String getProofPurpose() {
-    return (String) this.get(PROOF_PURPOSE);
-  }
-
-  /**
-   * Gets verification method.
-   *
-   * @return the verification method
-   */
-  public URI getVerificationMethod() {
-    return SerializeUtil.asURI(this.get(VERIFICATION_METHOD));
-  }
-
-  /**
-   * Gets created.
-   *
-   * @return the created
-   */
-  public Instant getCreated() {
-    return Instant.parse((String) this.get(CREATED));
   }
 }

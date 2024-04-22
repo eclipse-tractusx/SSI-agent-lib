@@ -21,12 +21,9 @@
 
 package org.eclipse.tractusx.ssi.lib.model.proof.ed25519;
 
-import java.net.URI;
-import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
-import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 /**
  * The type of {@link Ed25519ProofConfiguration}
@@ -45,15 +42,6 @@ public class Ed25519ProofConfiguration extends Proof {
 
   /** The constant ASSERTION_METHOD. */
   public static final String ASSERTION_METHOD = "assertionMethod";
-
-  /** The constant PROOF_PURPOSE. */
-  public static final String PROOF_PURPOSE = "proofPurpose";
-
-  /** The constant CREATED. */
-  public static final String CREATED = "created";
-
-  /** The constant VERIFICATION_METHOD. */
-  public static final String VERIFICATION_METHOD = "verificationMethod";
 
   /**
    * Instantiates a new Ed 25519 signature 2020.
@@ -75,32 +63,5 @@ public class Ed25519ProofConfiguration extends Proof {
     } catch (Exception e) {
       throw new IllegalArgumentException("Invalid Ed25519ProofConfiguration", e);
     }
-  }
-
-  /**
-   * Gets proof purpose.
-   *
-   * @return the proof purpose
-   */
-  public String getProofPurpose() {
-    return (String) this.get(PROOF_PURPOSE);
-  }
-
-  /**
-   * Gets verification method.
-   *
-   * @return the verification method
-   */
-  public URI getVerificationMethod() {
-    return SerializeUtil.asURI(this.get(VERIFICATION_METHOD));
-  }
-
-  /**
-   * Gets created.
-   *
-   * @return the created
-   */
-  public Instant getCreated() {
-    return Instant.parse((String) this.get(CREATED));
   }
 }

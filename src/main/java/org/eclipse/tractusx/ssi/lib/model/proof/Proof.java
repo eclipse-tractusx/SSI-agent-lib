@@ -21,17 +21,29 @@
 
 package org.eclipse.tractusx.ssi.lib.model.proof;
 
+import java.net.URI;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import org.eclipse.tractusx.ssi.lib.model.proof.ed25519.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
+import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 /** The type Proof. */
 public class Proof extends HashMap<String, Object> {
 
   /** The constant TYPE. */
   public static final String TYPE = "type";
+
+  /** The constant PROOF_PURPOSE. */
+  public static final String PROOF_PURPOSE = "proofPurpose";
+
+  /** The constant CREATED. */
+  public static final String CREATED = "created";
+
+  /** The constant VERIFICATION_METHOD. */
+  public static final String VERIFICATION_METHOD = "verificationMethod";
 
   /**
    * Instantiates a new Proof.
@@ -64,7 +76,9 @@ public class Proof extends HashMap<String, Object> {
    * @return true if Configuation or false if Signature
    */
   public boolean isConfiguration() {
-    if (this instanceof Ed25519Signature2020 || this instanceof JWSSignature2020) return false;
+    if (this instanceof Ed25519Signature2020 || this instanceof JWSSignature2020) {
+      return false;
+    }
 
     return true;
   }
@@ -78,5 +92,32 @@ public class Proof extends HashMap<String, Object> {
     this.remove(Ed25519Signature2020.PROOF_VALUE);
     this.remove(JWSSignature2020.JWS);
     return this;
+  }
+
+  /**
+   * Gets proof purpose.
+   *
+   * @return the proof purpose
+   */
+  public String getProofPurpose() {
+    return (String) this.get(PROOF_PURPOSE);
+  }
+
+  /**
+   * Gets verification method.
+   *
+   * @return the verification method
+   */
+  public URI getVerificationMethod() {
+    return SerializeUtil.asURI(this.get(VERIFICATION_METHOD));
+  }
+
+  /**
+   * Gets created.
+   *
+   * @return the created
+   */
+  public Instant getCreated() {
+    return Instant.parse((String) this.get(CREATED));
   }
 }
