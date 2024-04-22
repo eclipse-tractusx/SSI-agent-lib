@@ -11,6 +11,7 @@ import static org.mockito.Mockito.doThrow;
 
 import com.apicatalog.jsonld.JsonLdError;
 import com.apicatalog.jsonld.JsonLdErrorCode;
+import com.apicatalog.jsonld.document.Document;
 import com.apicatalog.jsonld.http.DefaultHttpClient;
 import com.apicatalog.jsonld.loader.DocumentLoader;
 import com.apicatalog.jsonld.loader.DocumentLoaderOptions;
@@ -104,6 +105,20 @@ class RemoteDocumentLoaderTest {
     System.setProperty("javax.net.ssl.trustStore", TRUST_STORE_PATH);
     RemoteDocumentLoader.setDefaultHttpLoader(
         new HttpLoader(new DefaultHttpClient(trustallClient)));
+  }
+
+  @SneakyThrows
+  @Test
+  void testFileDocumentLoader() {
+    // String filePath = "/test/resources/schema/w3.org_2018_credentials_v1.json";
+    String filePath = "src/test/resources/schema/w3.org_2018_credentials_v1.json";
+
+    Path path = Path.of(filePath);
+    RemoteDocumentLoader remoteDocumentLoader = RemoteDocumentLoader.DOCUMENT_LOADER;
+    remoteDocumentLoader.setEnableFile(true);
+    Document document = remoteDocumentLoader.loadDocument(path.toUri(), null);
+
+    Assertions.assertNotNull(document);
   }
 
   @Test
