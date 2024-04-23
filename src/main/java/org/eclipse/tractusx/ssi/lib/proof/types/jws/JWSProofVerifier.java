@@ -100,6 +100,11 @@ public class JWSProofVerifier implements IVerifier {
             .getProof()
             .orElseThrow(() -> new DidParseException("no proof found for verification"));
 
+    if (!proof.getType().equals(JWSSignature2020.JWS_VERIFICATION_KEY_2020)) {
+      throw new SignatureParseException(
+          String.format("Unsupported verification method: %s", proof.getType()));
+    }
+
     final JWSSignature2020 jwsSignature2020 = new JWSSignature2020(proof);
 
     Payload payload = new Payload(hashedLinkedData.getValue());
