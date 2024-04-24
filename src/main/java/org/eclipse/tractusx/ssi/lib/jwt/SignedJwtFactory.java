@@ -48,6 +48,11 @@ public class SignedJwtFactory {
 
   private final OctetKeyPairFactory octetKeyPairFactory;
 
+  /**
+   * The public constructor
+   *
+   * @param octetKeyPairFactory a valid OKP factory
+   */
   public SignedJwtFactory(OctetKeyPairFactory octetKeyPairFactory) {
     this.octetKeyPairFactory = Objects.requireNonNull(octetKeyPairFactory);
   }
@@ -56,12 +61,12 @@ public class SignedJwtFactory {
    * Creates a signed JWT {@link SignedJWT} that contains a set of claims and an issuer with a
    * default configuration (60 second expiration time) {@link JwtConfig} for VP
    *
-   * @param didIssuer
-   * @param audience
-   * @param serializedPresentation
-   * @param privateKey
-   * @param keyId
-   * @return
+   * @param didIssuer the DID from the 'iss' claim
+   * @param audience the value in the 'aud' claim
+   * @param serializedPresentation a serialized VP
+   * @param privateKey a private key (format unspecified)
+   * @param keyId the id of the private key
+   * @return a signed JWT
    */
   @SneakyThrows
   public SignedJWT create(
@@ -78,13 +83,13 @@ public class SignedJwtFactory {
    * Creates a signed JWT {@link SignedJWT} that contains a set of claims and an issuer with a
    * specific configuration {@link JwtConfig} for VP
    *
-   * @param didIssuer
-   * @param audience
-   * @param serializedPresentation
-   * @param privateKey
-   * @param keyId
-   * @param config
-   * @return
+   * @param didIssuer the DID from the 'iss' claim
+   * @param audience the value in the 'aud' claim
+   * @param serializedPresentation a serialized VP
+   * @param privateKey a private key (format unspecified)
+   * @param keyId the id of the private key
+   * @param config a JWT creation configuration
+   * @return a signed JWT
    */
   @SneakyThrows
   public SignedJWT create(
@@ -125,12 +130,12 @@ public class SignedJwtFactory {
   /**
    * Creates a signed JWT {@link SignedJWT} from a Verifiable Credential
    *
-   * @param didIssuer
-   * @param holderIssuer
-   * @param vc
-   * @param privateKey
-   * @param keyId
-   * @return
+   * @param didIssuer the DID from the 'iss' claim
+   * @param holderDid the DID of the receiving party
+   * @param privateKey a private key (format unspecified)
+   * @param keyId the id of the private key
+   * @param vc a hash map representing a VC
+   * @return a signed JWT
    */
   @SneakyThrows
   public SignedJWT create(
@@ -172,11 +177,11 @@ public class SignedJwtFactory {
   /**
    * Create a signedJwt for ES256 JWT {@link SignedJWT} with a set of claims
    *
-   * @param privateKey
-   * @param claimsSet
-   * @param issuer
-   * @param keyId
-   * @return
+   * @param issuer the string representation of the 'iss' claim
+   * @param privateKey a private key (format unspecified)
+   * @param keyId the id of the private key
+   * @param claimsSet the JWT claims object
+   * @return a signed JWT
    */
   public SignedJWT createSignedES256Jwt(
       OctetKeyPair privateKey, JWTClaimsSet claimsSet, String issuer, String keyId) {

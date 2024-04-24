@@ -24,7 +24,14 @@ package org.eclipse.tractusx.ssi.lib.validation;
 import org.eclipse.tractusx.ssi.lib.exception.json.InvalidJsonLdException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 
+/** The json-ld validator interface */
 public interface JsonLdValidator {
 
+  /**
+   * Validate an object adhering to the 'Verifiable' contract (usually a VC or VP)
+   *
+   * @param verifiable an object adhering to the 'Verifiable' contract
+   * @throws InvalidJsonLdException is thrown if the verifiable object is not valid json-ld
+   */
   void validate(Verifiable verifiable) throws InvalidJsonLdException;
 }

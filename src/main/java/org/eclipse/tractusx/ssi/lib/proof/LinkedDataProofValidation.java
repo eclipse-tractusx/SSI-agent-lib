@@ -81,15 +81,16 @@ public class LinkedDataProofValidation {
    * depending on Verification Method to resolve the DID Document and fetching the required Public
    * Key
    *
-   * @throws UnsupportedSignatureTypeException
-   * @throws DidDocumentResolverNotRegisteredException
-   * @throws NoVerificationKeyFoundException
-   * @throws SignatureVerificationFailedException
-   * @throws InvalidPublicKeyFormatException
-   * @throws DidParseException
-   * @throws SignatureParseException
-   * @throws TransformJsonLdException
-   * @throws InvalidJsonLdException
+   * @param verifiable is an object adhering to the 'Verifiable' contract (usually a VC or VP)
+   * @return a boolean indicating if the object is valid
+   * @throws UnsupportedSignatureTypeException is thrown when the signature algorithm is unknown
+   * @throws SignatureParseException is thrown if the signature cannot be parsed
+   * @throws DidParseException is thrown if the DID cannot be parsed
+   * @throws InvalidPublicKeyFormatException is thrown if the public key is in an unknown format
+   * @throws SignatureVerificationFailedException is thrown if the signature cannot be verified
+   * @throws NoVerificationKeyFoundException is thrown if the required public verification key
+   *     cannot be found
+   * @throws TransformJsonLdException if the json-ld cannot be canonicalized
    */
   public boolean verify(Verifiable verifiable)
       throws UnsupportedSignatureTypeException, SignatureParseException, DidParseException,

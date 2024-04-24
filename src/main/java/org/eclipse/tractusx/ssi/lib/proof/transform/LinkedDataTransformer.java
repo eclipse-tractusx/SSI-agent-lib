@@ -41,6 +41,13 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 /** The type Linked data transformer. */
 public class LinkedDataTransformer {
 
+  /**
+   * Canonicalize an object adhering to the 'Verifiable' contract.
+   *
+   * @param document is a VC or a VP (or any 'Verifiable' object)
+   * @return The canonical representation of the linked data (canonical json-ld representation)
+   * @throws TransformJsonLdException is thrown if the data cannot be canonicalized
+   */
   public TransformedLinkedData transform(Verifiable document) throws TransformJsonLdException {
 
     // We need Deep Clone to keep the original

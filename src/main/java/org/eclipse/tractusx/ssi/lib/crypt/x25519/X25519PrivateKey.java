@@ -59,12 +59,8 @@ public class X25519PrivateKey implements IPrivateKey {
    * Instantiates a new X 25519 private key.
    *
    * @param privateKey the private key
-   * @param pemFormat the pem format <<<<<<<
-   *     HEAD:src/main/java/org/eclipse/tractusx/ssi/lib/crypt/x25519/x25519PrivateKey.java
-   * @throws InvalidPrivateKeyFormatException the invalide private key format =======
-   * @throws InvalidPrivateKeyFormatException the invalid private key format >>>>>>> 23fcfb3 (fix:
-   *     sonar
-   *     findings):src/main/java/org/eclipse/tractusx/ssi/lib/crypt/x25519/X25519PrivateKey.java
+   * @param pemFormat describes if the privateKey is in PEM format
+   * @throws InvalidPrivateKeyFormatException the invalide private key format
    */
   public X25519PrivateKey(String privateKey, boolean pemFormat)
       throws InvalidPrivateKeyFormatException {
@@ -90,6 +86,12 @@ public class X25519PrivateKey implements IPrivateKey {
     }
   }
 
+  /**
+   * Return the private key as a string for storing in a database
+   *
+   * @return the string representation of the private key
+   * @throws KeyTransformationException is thrown if the key cannot be transformed into a string
+   */
   @Override
   public String asStringForStoring() throws KeyTransformationException {
 

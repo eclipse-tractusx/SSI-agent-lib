@@ -23,6 +23,7 @@ package org.eclipse.tractusx.ssi.lib.exception.key;
 
 import org.eclipse.tractusx.ssi.lib.exception.SSIException;
 
+/** An exception thrown if a cryptographic key cannot be transformed to another format. */
 public class KeyTransformationException extends SSIException {
 
   private static final long serialVersionUID = 1L;

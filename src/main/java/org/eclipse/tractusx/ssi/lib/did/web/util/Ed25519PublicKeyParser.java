@@ -41,7 +41,7 @@ public class Ed25519PublicKeyParser {
    *
    * @param publicKey the public key
    * @return public key as multibase string
-   * @throws InvalidPublicKeyFormatException
+   * @throws InvalidPublicKeyFormatException is thrown if the public key is in an unknown format
    */
   public static MultibaseString parsePublicKey(String publicKey)
       throws InvalidPublicKeyFormatException {

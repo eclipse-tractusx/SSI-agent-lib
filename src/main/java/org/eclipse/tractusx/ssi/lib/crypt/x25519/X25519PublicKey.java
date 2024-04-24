@@ -45,12 +45,8 @@ public class X25519PublicKey implements IPublicKey {
   /**
    * Instantiates a new X 25519 public key.
    *
-   * @param publicKey the public key <<<<<<<
-   *     HEAD:src/main/java/org/eclipse/tractusx/ssi/lib/crypt/x25519/x25519PublicKey.java
-   * @throws InvalidPublicKeyFormatException the invalide public key format =======
-   * @throws InvalidPublicKeyFormatException the invalid public key format >>>>>>> 23fcfb3 (fix:
-   *     sonar
-   *     findings):src/main/java/org/eclipse/tractusx/ssi/lib/crypt/x25519/X25519PublicKey.java
+   * @param publicKey the public key
+   * @throws InvalidPublicKeyFormatException the invalide public key format
    */
   public X25519PublicKey(byte[] publicKey) throws InvalidPublicKeyFormatException {
     if (this.getKeyLength() != publicKey.length) {
@@ -63,7 +59,7 @@ public class X25519PublicKey implements IPublicKey {
    * Instantiates a new X25519 public key.
    *
    * @param publicKey the public key
-   * @param pemFormat the pe mformat
+   * @param pemFormat describes if the public key is PEM encoded
    * @throws InvalidPublicKeyFormatException the invalid public key format
    * @throws IOException the io exception
    */

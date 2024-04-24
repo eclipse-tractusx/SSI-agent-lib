@@ -77,8 +77,10 @@ public class Base58Bitcoin implements MultibaseString, Serializable {
     return new Base58Bitcoin(decoded, encoded);
   }
 
+  /** decoded: the base58 bitcoin decoded payload */
   @JsonIgnore byte @NonNull [] decoded;
 
+  /** encoded: the base58 bitcoin encoded payload */
   @NonNull String encoded;
 
   @Override

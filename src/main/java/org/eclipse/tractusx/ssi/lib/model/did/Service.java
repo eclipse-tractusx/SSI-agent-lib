@@ -28,6 +28,7 @@ import java.util.Objects;
 import lombok.ToString;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
+/** A 'service' representation for a DID document */
 @ToString
 public class Service extends HashMap<String, Object> {
   /** The constant ID. */

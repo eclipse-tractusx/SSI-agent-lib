@@ -36,7 +36,7 @@ public interface DidResolver {
    * @return the resolved DID document or <em>null</em> if the provided {@code did} could not be
    *     resolved
    * @throws DidResolverException if the DID is invalid or cannot be resolved to a DID document
-   * @throws DidParseException
+   * @throws DidParseException is thrown if the DID cannot be parsed
    */
   DidDocument resolve(Did did) throws DidResolverException, DidParseException;
 

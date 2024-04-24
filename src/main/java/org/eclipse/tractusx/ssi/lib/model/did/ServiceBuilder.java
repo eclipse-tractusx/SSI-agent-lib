@@ -25,6 +25,7 @@ import java.net.URI;
 import java.util.Map;
 import lombok.ToString;
 
+/** The DID service builder */
 @ToString
 public class ServiceBuilder {
   private URI id;
