@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### BREAKING CHANGES
+
+- New exception system
+
+### Added
+
+- Implemented credential service
+- VC in JWT format
+
+### Fixed
+
+- Fix did constructor
+- Fix VP token compliance
+- Fix VC missing expirationDate
+- Fix remove duplicate json validator
+- Fix 'titanium-jsonld' dependency
+- Fix integratin tests not running
+- Fix missing credential status
+- Fix code quality
+
 ## [0.0.18] - 2023-12-5
 
 ### Added
