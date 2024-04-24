@@ -21,14 +21,12 @@
 
 package org.eclipse.tractusx.ssi.lib.model.base;
 
+import lombok.experimental.UtilityClass;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 
 /** The type Multibase factory. */
+@UtilityClass
 public class MultibaseFactory {
-
-  private MultibaseFactory() {
-    // static
-  }
 
   /**
    * Create multibase string.
@@ -38,7 +36,7 @@ public class MultibaseFactory {
    * @return the multibase string
    */
   public static MultibaseString create(EncodeType encodeType, byte[] decoded) {
-    if (encodeType == EncodeType.BASE58) {
+    if (encodeType == EncodeType.BASE_58) {
       return Base58Bitcoin.create(decoded);
     } else {
       return Base64.create(decoded);

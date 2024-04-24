@@ -21,7 +21,7 @@
 
 package org.eclipse.tractusx.ssi.lib.exception.key;
 
-/** The type Invalide private key format. */
+/** The type Invalid private key format. */
 public class InvalidPrivateKeyFormatException extends KeyGenerationException {
   private static final long serialVersionUID = 1L;
 
@@ -34,7 +34,7 @@ public class InvalidPrivateKeyFormatException extends KeyGenerationException {
   public InvalidPrivateKeyFormatException(int correctLength, int providedLength) {
     super(
         String.format(
-            "Invalide Private Key Format, this key should have '%s' as lenght but we got %s",
+            "Invalid Private Key Format, this key should have '%s' as length but we got %s",
             correctLength, providedLength));
   }
 
@@ -51,7 +51,7 @@ public class InvalidPrivateKeyFormatException extends KeyGenerationException {
    * Instantiates a new Invalid private key format.
    *
    * @param message message
-   * @param cuase the cause
+   * @param cause the cause
    */
   public InvalidPrivateKeyFormatException(String message, Throwable cause) {
     super(message, cause);
@@ -60,7 +60,7 @@ public class InvalidPrivateKeyFormatException extends KeyGenerationException {
   /**
    * Instantiates a new Invalid private key format.
    *
-   * @param cuase the cause
+   * @param cause the cause
    */
   public InvalidPrivateKeyFormatException(Throwable cause) {
     super(cause);

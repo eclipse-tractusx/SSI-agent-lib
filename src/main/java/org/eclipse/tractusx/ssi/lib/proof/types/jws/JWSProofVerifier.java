@@ -16,12 +16,12 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.proof.types.jws;
 
 import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
@@ -39,6 +39,7 @@ import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.proc.JWSVerifierFactory;
+import com.nimbusds.jose.util.Base64URL;
 import java.net.URI;
 import java.text.ParseException;
 import java.util.List;
@@ -46,18 +47,15 @@ import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.ArrayUtils;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
-import org.eclipse.tractusx.ssi.lib.crypt.ec.ECPublicKeyWrapper;
-import org.eclipse.tractusx.ssi.lib.crypt.rsa.RSAPublicKeyWrapper;
-import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519PublicKey;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
@@ -66,7 +64,6 @@ import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.proof.IVerifier;
-import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
 /** The type Jws proof verifier. */
@@ -77,15 +74,32 @@ public class JWSProofVerifier implements IVerifier {
 
   private final DidResolver didResolver;
 
+  /**
+   * Verify Verifiable Document
+   *
+   * @param hashedLinkedData the hashed linked data
+   * @param document the document
+   * @return the boolean
+   * @throws SignatureParseException the signature parse exception
+   * @throws DidParseException the did parse exception
+   * @throws InvalidPublicKeyFormatException the invalid public key format exception
+   * @throws SignatureVerificationFailedException the signature verification failed exception
+   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
+   */
   @SneakyThrows({DidResolverException.class})
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable document)
       throws SignatureParseException,
           DidParseException,
           InvalidPublicKeyFormatException,
-          SignatureVerificationException {
+          SignatureVerificationFailedException,
+          UnsupportedSignatureTypeException,
+          NoVerificationKeyFoundException {
 
     final Proof proof =
-        document.getProof().orElseThrow(() -> new SignatureParseException("no proof found"));
+        document
+            .getProof()
+            .orElseThrow(() -> new DidParseException("no proof found for verification"));
+
     if (!proof.getType().equals(JWSSignature2020.JWS_VERIFICATION_KEY_2020)) {
       throw new SignatureParseException(
           String.format("Unsupported verification method: %s", proof.getType()));
@@ -96,6 +110,7 @@ public class JWSProofVerifier implements IVerifier {
     Payload payload = new Payload(hashedLinkedData.getValue());
 
     JWSObject jws;
+
     try {
       jws = JWSObject.parse(jwsSignature2020.getJws(), payload);
     } catch (ParseException e) {
@@ -116,13 +131,22 @@ public class JWSProofVerifier implements IVerifier {
     if (EdDSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm())) {
       return discoverOctetKey(signature);
     } else {
-      if (RSASSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm()))
+      if (RSASSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm())) {
         return discoverRSAKey(signature);
-      if (ECDSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm()))
+      }
+      if (ECDSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm())) {
         return discoverECKey(signature);
+      }
     }
     throw new IllegalArgumentException(
         String.format(ALGORITHM_IS_NOT_SUPPORTED, header.getAlgorithm().getName()));
+  }
+
+  private OctetKeyPair discoverOctetKey(JWSSignature2020 signature)
+      throws NoVerificationKeyFoundException, DidParseException, DidResolverException {
+    JWKVerificationMethod key = discoverKey(signature);
+    var x = ((OctetKeyPair) key.getJwk()).getX();
+    return new OctetKeyPair.Builder(Curve.Ed25519, x).build();
   }
 
   private JWSVerifier getVerifier(JWSHeader header, JWK jwk) throws JOSEException {
@@ -130,8 +154,9 @@ public class JWSProofVerifier implements IVerifier {
       return new Ed25519Verifier((OctetKeyPair) jwk);
     } else {
       JWSVerifierFactory verifierFactory = new DefaultJWSVerifierFactory();
-      if (RSASSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm()))
+      if (RSASSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm())) {
         return verifierFactory.createJWSVerifier(header, ((RSAKey) jwk).toRSAPublicKey());
+      }
       if (ECDSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm())) {
         ECDSAVerifier verifier =
             (ECDSAVerifier)
@@ -196,13 +221,6 @@ public class JWSProofVerifier implements IVerifier {
                     "No JWS verification Key found in DID Document"));
   }
 
-  private OctetKeyPair discoverOctetKey(JWSSignature2020 signature)
-      throws NoVerificationKeyFoundException, DidParseException, DidResolverException {
-    JWKVerificationMethod key = discoverKey(signature);
-    var x = ((OctetKeyPair) key.getJwk()).getX();
-    return new OctetKeyPair.Builder(Curve.Ed25519, x).build();
-  }
-
   // check if verificationMethodId is in verificationRelationship(proofPurpose) and return embedded
   // verificationMethod if is embedded
   private VerificationRelationShipResult validateVerificationRelationShip(
@@ -230,6 +248,34 @@ public class JWSProofVerifier implements IVerifier {
     return new VerificationRelationShipResult(false);
   }
 
+  public boolean verify(HashedLinkedData hashedLinkedData, byte[] signature, IPublicKey publicKey)
+      throws SignatureParseException,
+          SignatureVerificationFailedException,
+          InvalidPublicKeyFormatException {
+
+    var keyPair =
+        new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey.asByte())).build();
+    JWSVerifier verifier;
+    try {
+      verifier = new Ed25519Verifier(keyPair.toPublicJWK());
+    } catch (JOSEException e) {
+      throw new InvalidPublicKeyFormatException(e.getMessage());
+    }
+    Payload payload = new Payload(hashedLinkedData.getValue());
+    JWSObject jws;
+    try {
+
+      jws = JWSObject.parse(new String(signature), payload);
+    } catch (ParseException e) {
+      throw new SignatureParseException(String.format("Error while parsing JWS %s", signature));
+    }
+    try {
+      return jws.verify(verifier);
+    } catch (JOSEException e) {
+      throw new SignatureVerificationFailedException(e.getMessage());
+    }
+  }
+
   private static class VerificationRelationShipResult {
 
     final boolean valid;
@@ -243,49 +289,6 @@ public class JWSProofVerifier implements IVerifier {
     public VerificationRelationShipResult(boolean valid, JWKVerificationMethod verificationMethod) {
       this.valid = valid;
       this.verificationMethod = verificationMethod;
-    }
-  }
-
-  /**
-   * Verify hashedLinkedData.
-   *
-   * @param hashedLinkedData the hashed linked data
-   * @param signature the signature
-   * @param publicKey the public key
-   * @return the boolean
-   * @throws SignatureParseException
-   * @throws SignatureVerificationException
-   * @throws InvalidPublicKeyFormatException
-   */
-  @SneakyThrows
-  public boolean verify(
-      HashedLinkedData hashedLinkedData,
-      Byte[] signature,
-      IPublicKey publicKey,
-      SignatureType type) {
-    JWK jwk =
-        switch (type) {
-          case JWS -> ((X25519PublicKey) publicKey).toJwk();
-          case JWS_P256, JWS_P384, JWS_SEC_P_256K1 -> ((ECPublicKeyWrapper) publicKey).toJwk();
-          case JWS_RSA -> ((RSAPublicKeyWrapper) publicKey).toJwk();
-          default ->
-              throw new IllegalArgumentException(
-                  String.format(ALGORITHM_IS_NOT_SUPPORTED, type.algorithm));
-        };
-
-    JWSVerifier verifier = getVerifier(new JWSHeader(new JWSAlgorithm(type.algorithm)), jwk);
-
-    Payload payload = new Payload(hashedLinkedData.getValue());
-    JWSObject jws;
-    try {
-      jws = JWSObject.parse(new String(ArrayUtils.toPrimitive(signature)), payload);
-    } catch (ParseException e) {
-      throw new SignatureParseException("Error while parsing JWS");
-    }
-    try {
-      return jws.verify(verifier);
-    } catch (JOSEException e) {
-      throw new SignatureVerificationException(e.getMessage());
     }
   }
 }

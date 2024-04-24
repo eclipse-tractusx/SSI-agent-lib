@@ -58,7 +58,7 @@ public class JWSProofSigner implements ISigner {
       throw new InvalidPrivateKeyFormatException(e.getMessage());
     }
 
-    var header = new JWSHeader.Builder(new JWSAlgorithm(signatureType.algorithm)).build();
+    var header = new JWSHeader.Builder(new JWSAlgorithm(signatureType.getAlgorithm())).build();
     Payload payload = new Payload(hashedLinkedData.getValue());
     JWSObject jwsObject = new JWSObject(header, payload);
 

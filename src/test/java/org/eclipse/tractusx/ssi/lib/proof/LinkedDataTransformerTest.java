@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
+import org.eclipse.tractusx.ssi.lib.model.proof.ed25519.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
@@ -57,20 +58,36 @@ class LinkedDataTransformerTest {
             .issuer(URI.create("did:test:isser"))
             .expirationDate(Instant.now().plusSeconds(3600))
             .issuanceDate(Instant.now())
+            .verifiableCredentialStatus(TestResourceUtil.getStatusListEntry())
             .credentialSubject(verifiableCredentialSubject)
             .verifiableCredentialStatus(TestResourceUtil.getStatusListEntry())
             .build();
 
     // check status added in VC
+
     Assertions.assertTrue(credentialWithoutProof.getVerifiableCredentialStatus().isPresent());
 
     var transformedWithoutProof = linkedDataTransformer.transform(credentialWithoutProof);
 
     final VerifiableCredential verifiableCredentialWithProof =
-        verifiableCredentialBuilder.proof(new Proof(Map.of(Proof.TYPE, "foo"))).build();
+        verifiableCredentialBuilder
+            .proof(
+                new Ed25519Signature2020(
+                    Map.of(
+                        Proof.TYPE,
+                        "Ed25519Signature2020",
+                        Ed25519Signature2020.PROOF_PURPOSE,
+                        Ed25519Signature2020.ASSERTION_METHOD,
+                        Ed25519Signature2020.VERIFICATION_METHOD,
+                        "did:test:id",
+                        Ed25519Signature2020.CREATED,
+                        Instant.now().toString(),
+                        Ed25519Signature2020.PROOF_VALUE,
+                        "MnWjKcdzqVcpeH1bZGtvjw==")))
+            .build();
 
     var transformedWithProof = linkedDataTransformer.transform(verifiableCredentialWithProof);
 
-    Assertions.assertEquals(transformedWithProof.getValue(), transformedWithoutProof.getValue());
+    Assertions.assertNotEquals(transformedWithProof.getValue(), transformedWithoutProof.getValue());
   }
 }

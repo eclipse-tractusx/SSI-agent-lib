@@ -33,7 +33,6 @@ import io.setl.rdf.normalization.RdfNormalize;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.NoSuchAlgorithmException;
-import org.apache.commons.lang3.SerializationUtils;
 import org.eclipse.tractusx.ssi.lib.exception.json.TransformJsonLdException;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.RemoteDocumentLoader;
@@ -41,19 +40,18 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 
 /** The type Linked data transformer. */
 public class LinkedDataTransformer {
+
+  public TransformedLinkedData transform(Verifiable document) throws TransformJsonLdException {
+    return this.canocliztion(document);
+  }
+
   /**
-   * Transform linked data.
+   * Canocliztion transformed linked data.
    *
    * @param document the document
    * @return the transformed linked data
+   * @throws TransformJsonLdException the transform json ld exception
    */
-  public TransformedLinkedData transform(Verifiable document) throws TransformJsonLdException {
-    // Make a copy and remove proof, as it is not part of the linked data
-    var copy = (JsonLdObject) SerializationUtils.clone(document);
-    copy.remove(Verifiable.PROOF);
-    return this.canocliztion(copy);
-  }
-
   private TransformedLinkedData canocliztion(JsonLdObject document)
       throws TransformJsonLdException {
     try {
@@ -72,7 +70,14 @@ public class LinkedDataTransformer {
     }
   }
 
-  private RdfDataset toDataset(JsonLdObject jsonLdObject) {
+  /**
+   * To dataset rdf dataset.
+   *
+   * @param jsonLdObject the json ld object
+   * @return the rdf dataset
+   * @throws RuntimeException the runtime exception
+   */
+  private RdfDataset toDataset(JsonLdObject jsonLdObject) throws RuntimeException {
 
     var documentLoader = RemoteDocumentLoader.getInstance();
     documentLoader.setEnableHttps(true);

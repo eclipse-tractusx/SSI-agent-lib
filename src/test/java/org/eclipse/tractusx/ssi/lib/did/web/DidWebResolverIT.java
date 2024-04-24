@@ -28,7 +28,6 @@ import java.net.http.HttpClient;
 import java.util.Optional;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
-import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
@@ -64,11 +63,7 @@ public class DidWebResolverIT {
     httpsResolver = new DidWebResolver(HttpClient.newHttpClient(), new DidWebParser(), true);
   }
 
-  /**
-   * Should resolve valid web did.
-   *
-   * @throws DidResolverException the did resolver exception
-   */
+  /** Should resolve valid web did. */
   @Test
   @SneakyThrows
   void shouldResolveValidWebDid() {
@@ -82,11 +77,7 @@ public class DidWebResolverIT {
     assertEquals(new DidDocument(TestResourceUtil.getPublishedDidDocument()), actualDidDoc.get());
   }
 
-  /**
-   * Should resolve valid external web did.
-   *
-   * @throws DidResolverException the did resolver exception
-   */
+  /** Should resolve valid external web did. */
   @Test
   @SneakyThrows
   void shouldResolveValidExternalWebDid() {

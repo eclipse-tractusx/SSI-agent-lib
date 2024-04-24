@@ -1,23 +1,22 @@
 # Documentation
 
-
-
 ## Installation
 
-To install and use the lib, you have two options: building from source or using the pre-built package from Maven Github Repository.
+To install and use the lib, you have two options: building from source or using the pre-built
+package from Maven Github Repository.
 
 ### Build from Source
 
 To build the project from source, follow these steps:
 
-1. Clone the repository: 
+1. Clone the repository:
    ```
-   git clone https://github.com/eclipse-tractusx/SSI-agent-lib.git 
+   git clone https://github.com/eclipse-tractusx/SSI-agent-lib.git
    ```
 
 2. Navigate to the project directory:
    ```
-   cd cx-ssi-lib 
+   cd cx-ssi-lib
    ```
 
 3. Build the project using Maven:
@@ -29,9 +28,11 @@ To build the project from source, follow these steps:
 
 ### Use Maven Dependency
 
-Alternatively, you can use the pre-built package available on Maven Central Repository by adding the following Maven dependency to your project's `pom.xml` file:
+Alternatively, you can use the pre-built package available on Maven Central Repository by adding the
+following Maven dependency to your project's `pom.xml` file:
 
 ```xml
+
 <dependency>
   <groupId>org.eclipse.tractusx.ssi</groupId>
   <artifactId>cx-ssi-agent-lib</artifactId>
@@ -41,8 +42,8 @@ Alternatively, you can use the pre-built package available on Maven Central Repo
 
 Make sure to update the version number if a newer version is available.
 
-Once you've added the dependency, your build tool (e.g., Maven or Gradle) will automatically download the library and include it in your project.
-
+Once you've added the dependency, your build tool (e.g., Maven or Gradle) will automatically
+download the library and include it in your project.
 
 ## Usage
 
@@ -52,8 +53,9 @@ To integrate this library into your SSI agent, follow these guidelines:
 
 ```java
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
-public static void main(String[] args){
-    SsiLibrary.initialize();
+
+public static void main(String[] args) {
+  SsiLibrary.initialize();
 }
 // ...
 ```
@@ -77,38 +79,38 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocumentBuilder;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020Builder;
-public static DidDocument buildDidDocument(String hostName,byte[] privateKey,byte[] publicKey) {
-    final Did did = DidWebFactory.fromHostname(hostName);
-    
-    //Extracting keys 
-    final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
-    final MultibaseString publicKeyBase = MultibaseFactory.create(keySet.getPublicKey());
-    
-     
 
-    //Building Verification Methods:
-    final List<VerificationMethod> verificationMethods = new ArrayList<>();
-    final Ed25519VerificationKey2020Builder builder = new Ed25519VerificationKey2020Builder();
-    final Ed25519VerificationKey2020 key =
-         builder
-             .id(URI.create(did.toUri() + "#key-" + 1))
-             .controller(did.toUri())
-             .publicKeyMultiBase(publicKeyBase)
-             .build();
-    verificationMethods.add(key);
-    
-    final DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();
-    didDocumentBuilder.id(did.toUri());
-    didDocumentBuilder.verificationMethods(verificationMethods);
-    
-    return didDocumentBuilder.build();
+public static DidDocument buildDidDocument(String hostName, byte[] privateKey, byte[] publicKey) {
+  final Did did = DidWebFactory.fromHostname(hostName);
+
+  //Extracting keys
+  final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
+  final MultibaseString publicKeyBase = MultibaseFactory.create(keySet.getPublicKey());
+
+
+  //Building Verification Methods:
+  final List<VerificationMethod> verificationMethods = new ArrayList<>();
+  final Ed25519VerificationKey2020Builder builder = new Ed25519VerificationKey2020Builder();
+  final Ed25519VerificationKey2020 key =
+      builder
+          .id(URI.create(did.toUri() + "#key-" + 1))
+          .controller(did.toUri())
+          .publicKeyMultiBase(publicKeyBase)
+          .build();
+  verificationMethods.add(key);
+
+  final DidDocumentBuilder didDocumentBuilder = new DidDocumentBuilder();
+  didDocumentBuilder.id(did.toUri());
+  didDocumentBuilder.verificationMethods(verificationMethods);
+
+  return didDocumentBuilder.build();
 }
 
 
 // ...
 ```
 
-3. To Resolve DID document using DID Web: 
+3. To Resolve DID document using DID Web:
 
 ```java
 import java.net.http.HttpClient;
@@ -123,25 +125,24 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistryImpl;
 
 public static DidDocument resovleDocument(String didUrl) throws DidDocumentResolverNotRegisteredException {
-        
-    //DID Resolver Constracture params
-    DidWebParser didParser = new DidWebParser();
-    var httpClient = HttpClient.newHttpClient();
-    var enforceHttps = false; 
 
-    //DID Method
-    DidMethod didWeb = new DidMethod("web");
+  //DID Resolver Constracture params
+  DidWebParser didParser = new DidWebParser();
+  var httpClient = HttpClient.newHttpClient();
+  var enforceHttps = false;
 
-    //DID
-    Did did = DidWebFactory.fromHostname(didUrl);
+  //DID Method
+  DidMethod didWeb = new DidMethod("web");
 
-    var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
-    didDocumentResolverRegistry.register(new DidWebDocumentResolver(httpClient,didParser , enforceHttps) );
-    return didDocumentResolverRegistry.get(didWeb).resolve(did);
+  //DID
+  Did did = DidWebFactory.fromHostname(didUrl);
+
+  var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
+  didDocumentResolverRegistry.register(new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
+  return didDocumentResolverRegistry.get(didWeb).resolve(did);
 }
 
 ```
-
 
 4. To Generate VerifiableCredential:
 
@@ -156,36 +157,35 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialType;
 
-public static VerifiableCredential createVCWithoutProof() { 
-       
+public static VerifiableCredential createVCWithoutProof() {
 
-    //VC Bulider
-    final VerifiableCredentialBuilder verifiableCredentialBuilder =
-    new VerifiableCredentialBuilder();
 
-    //VC Subject
-    final VerifiableCredentialSubject verifiableCredentialSubject =
-    new VerifiableCredentialSubject(Map.of("test", "test"));
-       
-    //Using Builder
-    final VerifiableCredential credentialWithoutProof =
-    verifiableCredentialBuilder
-        .id(URI.create("did:test:id"))
-        .type(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
-        .issuer(URI.create("did:test:isser"))
-        .expirationDate(Instant.now().plusSeconds(3600))
-        .issuanceDate(Instant.now())
-        .credentialSubject(verifiableCredentialSubject)
-        .build();
+  //VC Bulider
+  final VerifiableCredentialBuilder verifiableCredentialBuilder =
+      new VerifiableCredentialBuilder();
 
-    return credentialWithoutProof;
+  //VC Subject
+  final VerifiableCredentialSubject verifiableCredentialSubject =
+      new VerifiableCredentialSubject(Map.of("test", "test"));
+
+  //Using Builder
+  final VerifiableCredential credentialWithoutProof =
+      verifiableCredentialBuilder
+          .id(URI.create("did:test:id"))
+          .type(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
+          .issuer(URI.create("did:test:isser"))
+          .expirationDate(Instant.now().plusSeconds(3600))
+          .issuanceDate(Instant.now())
+          .credentialSubject(verifiableCredentialSubject)
+          .build();
+
+  return credentialWithoutProof;
 
 }
 
 ```
 
 5. To Generate VerifiableCredential with ED25519/JWS proof:
-
 
 ```java
 import java.net.URI;
@@ -202,33 +202,33 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofGenerator;
 
 
- public static VerifiableCredential createVCWithED25519Proof(
-      VerifiableCredential credential, byte[] privateKey, Did issuer) {
+public static VerifiableCredential createVCWithED25519Proof(
+    VerifiableCredential credential, byte[] privateKey, Did issuer) {
 
-    // VC Builder
-    final VerifiableCredentialBuilder builder =
-        new VerifiableCredentialBuilder()
-            .context(credential.getContext())
-            .id(credential.getId())
-            .issuer(issuer.toUri())
-            .issuanceDate(Instant.now())
-            .credentialSubject(credential.getCredentialSubject())
-            .expirationDate(credential.getExpirationDate())
-            .type(credential.getTypes());
+  // VC Builder
+  final VerifiableCredentialBuilder builder =
+      new VerifiableCredentialBuilder()
+          .context(credential.getContext())
+          .id(credential.getId())
+          .issuer(issuer.toUri())
+          .issuanceDate(Instant.now())
+          .credentialSubject(credential.getCredentialSubject())
+          .expirationDate(credential.getExpirationDate())
+          .type(credential.getTypes());
 
-    // Ed25519 Proof Builder
-    final LinkedDataProofGenerator generator = LinkedDataProofGenerator.newInstance(SignatureType.ED25519);
-    final Ed25519Signature2020 proof =
-        (Ed25519Signature2020) generator.createProof(
-        builder.build(), URI.create(issuer + "#key-1"), privateKey);
+  // Ed25519 Proof Builder
+  final LinkedDataProofGenerator generator = LinkedDataProofGenerator.newInstance(SignatureType.ED25519);
+  final Ed25519Signature2020 proof =
+      (Ed25519Signature2020) generator.createProof(
+          builder.build(), URI.create(issuer + "#key-1"), privateKey);
 
-    // Adding Proof to VC
-    builder.proof(proof);
+  // Adding Proof to VC
+  builder.proof(proof);
 
-    return builder.build();
-  }
+  return builder.build();
+}
 
-  public static VerifiableCredential createVCWithJWSProof(
+public static VerifiableCredential createVCWithJWSProof(
     VerifiableCredential credential, byte[] privateKey, Did issuer) {
 
   // VC Builder
@@ -246,7 +246,7 @@ import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofGenerator;
   final LinkedDataProofGenerator generator = LinkedDataProofGenerator.newInstance(SignatureType.JWS);
   final JWSSignature2020 proof =
       (JWSSignature2020) generator.createProof(
-      builder.build(), URI.create(issuer + "#key-1"), privateKey);
+          builder.build(), URI.create(issuer + "#key-1"), privateKey);
 
   // Adding Proof to VC
   builder.proof(proof);
@@ -261,23 +261,24 @@ import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofGenerator;
 
 ```java
 import java.util.List;
+
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 
-public static VerifiablePresentation createVP( Did issuer, List<VerifiableCredential> credentials){
-    //VP Builder
-    final VerifiablePresentationBuilder verifiablePresentationBuilder =
-        new VerifiablePresentationBuilder();
+public static VerifiablePresentation createVP(Did issuer, List<VerifiableCredential> credentials) {
+  //VP Builder
+  final VerifiablePresentationBuilder verifiablePresentationBuilder =
+      new VerifiablePresentationBuilder();
 
-    // Build VP
-    final VerifiablePresentation verifiablePresentation =
-        verifiablePresentationBuilder
-            .id(issuer.toUri()) // NOTE: Provide unique ID number to each VP you create!!
-            .type(List.of(VerifiablePresentationType.VERIFIABLE_PRESENTATION))
-            .verifiableCredentials(credentials)
-            .build();
-    return verifiablePresentation;
- }
+  // Build VP
+  final VerifiablePresentation verifiablePresentation =
+      verifiablePresentationBuilder
+          .id(issuer.toUri()) // NOTE: Provide unique ID number to each VP you create!!
+          .type(List.of(VerifiablePresentationType.VERIFIABLE_PRESENTATION))
+          .verifiableCredentials(credentials)
+          .build();
+  return verifiablePresentation;
+}
 
 ```
 
@@ -299,31 +300,31 @@ import com.nimbusds.jwt.SignedJWT;
 
 
 public static SignedJWT createVPAsJWT(
-        Did issuer,
-        List<VerifiableCredential> credentials,
-        String audience,
-        byte[] privateKey,
-        byte[] publicKey
+    Did issuer,
+    List<VerifiableCredential> credentials,
+    String audience,
+    byte[] privateKey,
+    byte[] publicKey
 ) {
 
-    //Extracting keys 
-    final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
-    final Ed25519Key signingKey = new Ed25519Key(keySet.getPrivateKey());
+  //Extracting keys
+  final Ed25519KeySet keySet = new Ed25519KeySet(privateKey, publicKey);
+  final Ed25519Key signingKey = new Ed25519Key(keySet.getPrivateKey());
 
-    //JWT Factory
-    final SerializedJwtPresentationFactory presentationFactory = new SerializedJwtPresentationFactoryImpl(
-            new SignedJwtFactory(new OctetKeyPairFactory()), new JsonLdSerializerImpl(), issuer);
+  //JWT Factory
+  final SerializedJwtPresentationFactory presentationFactory = new SerializedJwtPresentationFactoryImpl(
+      new SignedJwtFactory(new OctetKeyPairFactory()), new JsonLdSerializerImpl(), issuer);
 
-    //Build JWT
-    return presentationFactory.createPresentation(
-            issuer, credentials, audience, signingKey);
-
+  //Build JWT
+  return presentationFactory.createPresentation(
+      issuer, credentials, audience, signingKey);
 
 }
 
 ```
 
 8. To Verfiy JWT (VC or VP) :
+
 ```java
 package org.eclipse.tractusx.ssi.examples;
 
@@ -339,23 +340,23 @@ import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistryImpl;
 import com.nimbusds.jwt.SignedJWT;
 
 public static boolean verifyJWT(SignedJWT jwt) {
-    // DID Resolver Constracture params
-    DidWebParser didParser = new DidWebParser();
-    var httpClient = HttpClient.newHttpClient();
-    var enforceHttps = false;
+  // DID Resolver Constracture params
+  DidWebParser didParser = new DidWebParser();
+  var httpClient = HttpClient.newHttpClient();
+  var enforceHttps = false;
 
-    var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
-    didDocumentResolverRegistry.register(
-            new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
+  var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
+  didDocumentResolverRegistry.register(
+      new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
 
-    SignedJwtVerifier jwtVerifier = new SignedJwtVerifier(didDocumentResolverRegistry);
-    try {
-        return jwtVerifier.verify(jwt);
-    } catch (JwtException | DidDocumentResolverNotRegisteredException e) {
-        // An ecxeption will be thrown here in case JWT verification failed or DID
-        // Document Resolver not able to resolver.
-        e.printStackTrace();
-    }
+  SignedJwtVerifier jwtVerifier = new SignedJwtVerifier(didDocumentResolverRegistry);
+  try {
+    return jwtVerifier.verify(jwt);
+  } catch (JwtException | DidDocumentResolverNotRegisteredException e) {
+    // An ecxeption will be thrown here in case JWT verification failed or DID
+    // Document Resolver not able to resolver.
+    e.printStackTrace();
+  }
 
 }
 
@@ -366,7 +367,9 @@ public static boolean verifyJWT(SignedJWT jwt) {
 ```java
 
 import com.nimbusds.jwt.SignedJWT;
+
 import java.net.http.HttpClient;
+
 import org.eclipse.tractusx.ssi.lib.did.web.DidWebDocumentResolver;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -374,38 +377,39 @@ import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
 import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistryImpl;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 
- public static boolean verifyED25519LD(VerifiableCredential verifiableCredential) {
-    // DID Resolver Constracture params
-    DidWebParser didParser = new DidWebParser();
-    var httpClient = HttpClient.newHttpClient();
-    var enforceHttps = false;
+public static boolean verifyED25519LD(VerifiableCredential verifiableCredential) {
+  // DID Resolver Constracture params
+  DidWebParser didParser = new DidWebParser();
+  var httpClient = HttpClient.newHttpClient();
+  var enforceHttps = false;
 
-    var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
-    didDocumentResolverRegistry.register(
-        new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
+  var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
+  didDocumentResolverRegistry.register(
+      new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
 
-    LinkedDataProofValidation proofValidation =
-        LinkedDataProofValidation.newInstance(SignatureType.ED25519,didDocumentResolverRegistry);
-    return proofValidation.verify(verifiableCredential);
-  }
+  LinkedDataProofValidation proofValidation =
+      LinkedDataProofValidation.newInstance(SignatureType.ED25519, didDocumentResolverRegistry);
+  return proofValidation.verify(verifiableCredential);
+}
 
-  public static boolean verifyJWSLD(VerifiableCredential verifiableCredential) {
-    // DID Resolver Constracture params
-    DidWebParser didParser = new DidWebParser();
-    var httpClient = HttpClient.newHttpClient();
-    var enforceHttps = false;
+public static boolean verifyJWSLD(VerifiableCredential verifiableCredential) {
+  // DID Resolver Constracture params
+  DidWebParser didParser = new DidWebParser();
+  var httpClient = HttpClient.newHttpClient();
+  var enforceHttps = false;
 
-    var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
-    didDocumentResolverRegistry.register(
-        new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
+  var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
+  didDocumentResolverRegistry.register(
+      new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
 
-    LinkedDataProofValidation proofValidation =
-        LinkedDataProofValidation.newInstance(SignatureType.JWS,didDocumentResolverRegistry);
-    return proofValidation.verify(verifiableCredential);
-  }
+  LinkedDataProofValidation proofValidation =
+      LinkedDataProofValidation.newInstance(SignatureType.JWS, didDocumentResolverRegistry);
+  return proofValidation.verify(verifiableCredential);
+}
 ```
 
 10. To Validate JWT expiry date and audience:
+
 ```java
 import com.nimbusds.jwt.SignedJWT;
 import org.eclipse.tractusx.ssi.lib.exception.JwtAudienceCheckFailedException;
@@ -413,17 +417,17 @@ import org.eclipse.tractusx.ssi.lib.exception.JwtExpiredException;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtValidator;
 
 public class Validation {
-    public static void validateJWTDate(SignedJWT signedJWT, String audience)
-            throws JwtAudienceCheckFailedException, JwtExpiredException {
-        SignedJwtValidator jwtValidator = new SignedJwtValidator();
-        jwtValidator.validateDate(signedJWT);
-    }
+  public static void validateJWTDate(SignedJWT signedJWT, String audience)
+      throws JwtAudienceCheckFailedException, JwtExpiredException {
+    SignedJwtValidator jwtValidator = new SignedJwtValidator();
+    jwtValidator.validateDate(signedJWT);
+  }
 
-    public static void validateJWTAudiences(SignedJWT signedJWT, String audience)
-            throws JwtAudienceCheckFailedException, JwtExpiredException {
-        SignedJwtValidator jwtValidator = new SignedJwtValidator();
-        jwtValidator.validateAudiences(signedJWT, audience);
-    }
+  public static void validateJWTAudiences(SignedJWT signedJWT, String audience)
+      throws JwtAudienceCheckFailedException, JwtExpiredException {
+    SignedJwtValidator jwtValidator = new SignedJwtValidator();
+    jwtValidator.validateAudiences(signedJWT, audience);
+  }
 }
 ```
 

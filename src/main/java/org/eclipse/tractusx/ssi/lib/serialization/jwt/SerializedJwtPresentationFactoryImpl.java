@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -51,15 +51,11 @@ public class SerializedJwtPresentationFactoryImpl implements SerializedJwtPresen
       IPrivateKey privateKey,
       String keyId) {
 
-    SerializationData serializationData = buildSerializedPresentation(credentials);
+    SerializedVerifiablePresentation serializedVerifiablePresentation =
+        buildSerializedPresentation(credentials);
 
     return signedJwtFactory.create(
-        serializationData.id,
-        issuer,
-        audience,
-        serializationData.serializedVerifiablePresentation,
-        privateKey,
-        keyId);
+        issuer, audience, serializedVerifiablePresentation, privateKey, keyId);
   }
 
   @Override
@@ -71,19 +67,15 @@ public class SerializedJwtPresentationFactoryImpl implements SerializedJwtPresen
       String keyId,
       JwtConfig config) {
 
-    SerializationData serializationData = buildSerializedPresentation(credentials);
+    SerializedVerifiablePresentation serializedVerifiablePresentation =
+        buildSerializedPresentation(credentials);
 
     return signedJwtFactory.create(
-        serializationData.id,
-        issuer,
-        audience,
-        serializationData.serializedVerifiablePresentation,
-        privateKey,
-        keyId,
-        config);
+        issuer, audience, serializedVerifiablePresentation, privateKey, keyId, config);
   }
 
-  private SerializationData buildSerializedPresentation(List<VerifiableCredential> credentials) {
+  private SerializedVerifiablePresentation buildSerializedPresentation(
+      List<VerifiableCredential> credentials) {
     final VerifiablePresentationBuilder verifiablePresentationBuilder =
         new VerifiablePresentationBuilder();
     final VerifiablePresentation verifiablePresentation =
@@ -97,16 +89,6 @@ public class SerializedJwtPresentationFactoryImpl implements SerializedJwtPresen
             .verifiableCredentials(credentials)
             .build();
 
-    return new SerializationData(
-        verifiablePresentation.getId(),
-        jsonLdSerializer.serializePresentation(verifiablePresentation));
-  }
-
-  @RequiredArgsConstructor
-  private class SerializationData {
-
-    final URI id;
-
-    final SerializedVerifiablePresentation serializedVerifiablePresentation;
+    return jsonLdSerializer.serializePresentation(verifiablePresentation);
   }
 }

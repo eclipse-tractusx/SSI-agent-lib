@@ -42,8 +42,9 @@ import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 
 /** This is example class to demonstrate how create Verifiable Credentials */
 public class VC {
+
   private VC() {
-    // static
+    throw new IllegalStateException("Example class");
   }
 
   /**
@@ -53,19 +54,16 @@ public class VC {
    */
   public static VerifiableCredential createVCWithoutProof() {
 
-    // VC Bulider
     final VerifiableCredentialBuilder verifiableCredentialBuilder =
         new VerifiableCredentialBuilder();
 
-    // VC Subject
     final VerifiableCredentialSubject verifiableCredentialSubject =
         new VerifiableCredentialSubject(Map.of("test", "test"));
 
-    // Using Builder
     return verifiableCredentialBuilder
         .id(URI.create("did:test:id"))
         .type(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
-        .issuer(URI.create("did:test:isser"))
+        .issuer(URI.create("did:test:issuer"))
         .expirationDate(Instant.now().plusSeconds(3600))
         .issuanceDate(Instant.now())
         .credentialSubject(verifiableCredentialSubject)
@@ -80,8 +78,9 @@ public class VC {
    * @param issuer the issuer
    * @return the verifiable credential
    * @throws UnsupportedSignatureTypeException the unsupported signature type exception
-   * @throws SsiException the ssi exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws SignatureGenerateFailedException the ssi exception
+   * @throws InvalidPrivateKeyFormatException the invalid private key format
+   * @throws TransformJsonLdException the json-ld transform error
    */
   public static VerifiableCredential createVCWithED25519Proof(
       VerifiableCredential credential, IPrivateKey privateKey, Did issuer)
@@ -122,8 +121,10 @@ public class VC {
    * @param issuer the issuer
    * @return the verifiable credential
    * @throws UnsupportedSignatureTypeException the unsupported signature type exception
-   * @throws SsiException the ssi exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws InvalidPrivateKeyFormatException the invalid private key format
+   * @throws SignatureGenerateFailedException the signature generation failed
+   * @throws InvalidPrivateKeyFormatException the invalid private key format
+   * @throws TransformJsonLdException the json-ld transform error
    */
   public static VerifiableCredential createVCWithJWSProof(
       VerifiableCredential credential, IPrivateKey privateKey, Did issuer)

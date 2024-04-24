@@ -28,6 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.SneakyThrows;
+import lombok.experimental.UtilityClass;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
@@ -37,11 +38,8 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 
 /** The type Serialize util. */
+@UtilityClass
 public final class SerializeUtil {
-
-  private SerializeUtil() {
-    // static class
-  }
 
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 

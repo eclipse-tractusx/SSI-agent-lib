@@ -21,13 +21,15 @@
 
 package org.eclipse.tractusx.ssi.lib.did.web.util;
 
+import lombok.experimental.UtilityClass;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
 /** The type Constants. */
+@UtilityClass
 public class Constants {
-  private Constants() {
-    // static
-  }
+
+  public static final String ISSUANCE_DATE = "issuanceDate";
+  public static final String EXPIRATION_DATE = "expirationDate";
 
   /** The constant DID_WEB_METHOD. */
   public static final DidMethod DID_WEB_METHOD = new DidMethod("web");

@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -22,14 +22,20 @@
 package org.eclipse.tractusx.ssi.lib.model.verifiable;
 
 import java.net.URI;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.NonNull;
+import lombok.SneakyThrows;
+import org.apache.commons.lang3.SerializationUtils;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 /** The type Verifiable. */
@@ -71,6 +77,22 @@ public abstract class Verifiable extends JsonLdObject {
   }
 
   /**
+   * Gets proof.
+   *
+   * @return the proof
+   */
+  public Optional<Proof> getProof() {
+
+    final Object subject = this.get(PROOF);
+
+    if (subject == null) {
+      return Optional.empty();
+    }
+
+    return Optional.of(new Proof((Map<String, Object>) subject));
+  }
+
+  /**
    * Gets id.
    *
    * @return the id
@@ -88,22 +110,6 @@ public abstract class Verifiable extends JsonLdObject {
   @NonNull
   public List<String> getTypes() {
     return (List<String>) this.get(TYPE);
-  }
-
-  /**
-   * Gets proof.
-   *
-   * @return the proof
-   */
-  public Optional<Proof> getProof() {
-
-    final Object subject = this.get(PROOF);
-
-    if (subject == null) {
-      return Optional.empty();
-    }
-
-    return Optional.of(new Proof((Map<String, Object>) subject));
   }
 
   /**
@@ -131,19 +137,60 @@ public abstract class Verifiable extends JsonLdObject {
     }
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    if (!super.equals(o)) return false;
-    Verifiable that = (Verifiable) o;
-    return getId().equals(that.getId())
-        && verifableType == that.verifableType
-        && new HashSet<>(getTypes()).containsAll(that.getTypes());
+  /**
+   * Deep Clone for Verifiable instance
+   *
+   * @return new deep copy
+   */
+  public Verifiable deepClone() {
+    return SerializationUtils.clone(this);
   }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(super.hashCode(), verifableType);
+  /**
+   * To get verifiable object with Proof Configuration attribute
+   *
+   * @return Verifiable
+   */
+  @SneakyThrows
+  public Verifiable removeProofSignature() {
+
+    // Be careful, this function will return new object
+    Proof proof =
+        this.getProof().orElseThrow(() -> new DidParseException("no proof found for verification"));
+
+    if (proof != null) {
+      var proofConfiguration = proof.toConfiguration();
+
+      // We need to update this object with new Proof
+      this.put(PROOF, proofConfiguration);
+    }
+
+    if (this.getType() == VerifiableType.VP) {
+
+      VerifiablePresentation vp = (VerifiablePresentation) this;
+      List<VerifiableCredential> newVCsWithConfiguration = new ArrayList<>();
+
+      for (Iterator<VerifiableCredential> iterator = vp.getVerifiableCredentials().iterator();
+          iterator.hasNext(); ) {
+
+        VerifiableCredential vc = iterator.next();
+        proof =
+            vc.getProof()
+                .orElseThrow(() -> new DidParseException("no proof found for verification"));
+
+        if (proof != null) {
+          var proofConfiguration = proof.toConfiguration();
+
+          // We need to update the copy object with new Proof
+          vc.put(PROOF, proofConfiguration);
+        }
+        newVCsWithConfiguration.add(vc);
+      }
+
+      vp.remove(VerifiablePresentation.VERIFIABLE_CREDENTIAL);
+      vp.put(VerifiablePresentation.VERIFIABLE_CREDENTIAL, newVCsWithConfiguration);
+    }
+
+    return this;
   }
 }

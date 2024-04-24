@@ -11,8 +11,10 @@ import java.util.Objects;
  */
 public class JWKVerificationMethod extends VerificationMethod {
 
+  /** The constant DEFAULT_TYPE. */
   public static final String DEFAULT_TYPE = "JsonWebKey2020";
 
+  /** The constant PUBLIC_KEY_JWK. */
   public static final String PUBLIC_KEY_JWK = "publicKeyJwk";
 
   private final JWK jwk;
@@ -53,9 +55,15 @@ public class JWKVerificationMethod extends VerificationMethod {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    if (!super.equals(o)) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
     JWKVerificationMethod that = (JWKVerificationMethod) o;
     return Objects.equals(jwk, that.jwk)
         && this.getId().equals(that.getId())

@@ -32,7 +32,6 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
 import java.util.Optional;
@@ -68,14 +67,7 @@ class DidWebResolverTest {
     resolver = new DidWebResolver(httpClient, parser, false);
   }
 
-  /**
-   * Should resolve valid web did.
-   *
-   * @throws DidResolverException the did resolver exception
-   * @throws IOException the io exception
-   * @throws InterruptedException the interrupted exception
-   * @throws URISyntaxException the uri syntax exception
-   */
+  /** Should resolve valid web did. */
   @Test
   @SneakyThrows
   void shouldResolveValidWebDid() {
@@ -90,11 +82,7 @@ class DidWebResolverTest {
     assertEquals(new DidDocument(TestResourceUtil.getPublishedDidDocument()), actualDidDoc.get());
   }
 
-  /**
-   * Should not resolve non web did.
-   *
-   * @throws DidResolverException the did resolver exception
-   */
+  /** Should not resolve non web did. */
   @Test
   @SneakyThrows
   void shouldNotResolveNonWebDid() {

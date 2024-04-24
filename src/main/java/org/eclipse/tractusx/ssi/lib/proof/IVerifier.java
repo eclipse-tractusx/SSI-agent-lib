@@ -24,9 +24,8 @@ package org.eclipse.tractusx.ssi.lib.proof;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -34,24 +33,26 @@ import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
 /** The interface Verifier. */
 public interface IVerifier {
+
   /**
    * {@link VerifiableCredential} verification method, This method depends on Issuer in VC data
    * model to get the public key of issuer.
    *
    * @param hashedLinkedData the hashed linked data
-   * @param document {@link VerifiableCredential} the verifiable
-   * @return boolean if verified or not
-   * @throws UnsupportedSignatureTypeException
-   * @throws SignatureParseException
-   * @throws InvalidPublicKeyFormatException
-   * @throws SignatureGenerateFailedException
-   * @throws SignatureVerificationException
-   * @throws DidParseException
-   * @throws NoVerificationKeyFoundException
+   * @param verifiable the verifiable
+   * @return the boolean
+   * @throws SignatureParseException the signature parse exception
+   * @throws DidParseException the did parse exception
+   * @throws InvalidPublicKeyFormatException the invalid public key format exception
+   * @throws SignatureVerificationFailedException the signature verification failed exception
+   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
+   * @throws NoVerificationKeyFoundException the no verification key found exception
    */
-  public boolean verify(HashedLinkedData hashedLinkedData, Verifiable verifiable)
+  boolean verify(HashedLinkedData hashedLinkedData, Verifiable verifiable)
       throws SignatureParseException,
           DidParseException,
           InvalidPublicKeyFormatException,
-          SignatureVerificationException;
+          SignatureVerificationFailedException,
+          UnsupportedSignatureTypeException,
+          NoVerificationKeyFoundException;
 }

@@ -1,6 +1,8 @@
 package org.eclipse.tractusx.ssi.lib.model.did;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.nimbusds.jose.jwk.ECKey;
@@ -11,6 +13,7 @@ import com.nimbusds.jose.util.JSONObjectUtils;
 import java.text.ParseException;
 import java.util.Map;
 import java.util.UUID;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -95,6 +98,18 @@ class JWKVerificationMethodTest {
           + "      }\n"
           + "    }";
 
+  static final String ED_JWK_STRING_1 =
+      "{\n"
+          + "      \"id\": \"did:example1:123#_Qq0UL2Fq651Q0Fjd6TvnYE-faHiOpRlPVQcY_-tA4A\",\n"
+          + "      \"type\": \"JsonWebKey2020\",\n"
+          + "      \"controller\": \"did:example:1234\",\n"
+          + "      \"publicKeyJwk\": {\n"
+          + "        \"kty\": \"OKP\",\n"
+          + "        \"crv\": \"Ed25519\",\n"
+          + "        \"x\": \"VCpo2LMLhn6iWku8MKvSLg2ZAoC-nlOyPVQa45FxVeQ\"\n"
+          + "      }\n"
+          + "    }";
+
   @Test
   void testSecp256k1() throws ParseException {
     Map<String, Object> parsed = JSONObjectUtils.parse(EC_SECP256k1_JWK_STRING);
@@ -157,6 +172,36 @@ class JWKVerificationMethodTest {
     assertEquals(
         "ANIbFeRdPHf1WYMCUjcPz-ZhecZFybOqLIJjVOlLETH7uPlyG0gEoMWnIZXhQVypPy_HtUiUzdnSEPAylYhHBTX2",
         ((ECKey) jwk).getY().toString());
+  }
+
+  @SneakyThrows
+  @Test
+  void testEqualsAndHasCode() {
+    Map<String, Object> parsed = JSONObjectUtils.parse(ED_JWK_STRING);
+    JWKVerificationMethod abstractJWKVerificationMethod1 = new JWKVerificationMethod(parsed);
+    JWKVerificationMethod abstractJWKVerificationMethod2 = new JWKVerificationMethod(parsed);
+
+    assertFalse(
+        JWKVerificationMethod.isInstance(
+            Map.of(VerificationMethod.TYPE, "Test Verification Method")));
+
+    assertEquals(abstractJWKVerificationMethod1, abstractJWKVerificationMethod1);
+
+    assertEquals(abstractJWKVerificationMethod1, abstractJWKVerificationMethod2);
+
+    assertEquals(
+        abstractJWKVerificationMethod1.hashCode(), abstractJWKVerificationMethod2.hashCode());
+
+    parsed = JSONObjectUtils.parse(ED_JWK_STRING_1);
+
+    abstractJWKVerificationMethod2 = new JWKVerificationMethod(parsed);
+
+    assertNotEquals(null, abstractJWKVerificationMethod1);
+
+    assertNotEquals(abstractJWKVerificationMethod1, abstractJWKVerificationMethod2);
+
+    assertNotEquals(
+        abstractJWKVerificationMethod1.hashCode(), abstractJWKVerificationMethod2.hashCode());
   }
 
   @Test

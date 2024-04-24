@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -47,6 +47,7 @@ public class SerializedJwtVCFactoryImpl implements SerializedJwtVCFactory {
       String keyId) {
     var clonedVC = new LinkedHashMap<String, Object>();
     clonedVC.putAll(credentials);
+
     return signedJwtFactory.create(id, issuer, holder, expDate, clonedVC, privateKey, keyId);
   }
 }

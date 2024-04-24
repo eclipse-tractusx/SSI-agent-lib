@@ -31,7 +31,7 @@ import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 
 /** The type Ed 25519 signature 2020 builder. */
 @NoArgsConstructor
-public class Ed25519Signature2020Builder {
+public class Ed25519ProofBuilder {
 
   private String proofPurpose;
   private String proofValue;
@@ -44,7 +44,7 @@ public class Ed25519Signature2020Builder {
    * @param proofPurpose the proof purpose
    * @return the ed 25519 signature 2020 builder
    */
-  public Ed25519Signature2020Builder proofPurpose(String proofPurpose) {
+  public Ed25519ProofBuilder proofPurpose(String proofPurpose) {
     this.proofPurpose = proofPurpose;
     return this;
   }
@@ -55,7 +55,7 @@ public class Ed25519Signature2020Builder {
    * @param proofValue the proof value
    * @return the ed 25519 signature 2020 builder
    */
-  public Ed25519Signature2020Builder proofValue(String proofValue) {
+  public Ed25519ProofBuilder proofValue(String proofValue) {
     this.proofValue = proofValue;
     return this;
   }
@@ -66,7 +66,7 @@ public class Ed25519Signature2020Builder {
    * @param verificationMethod the verification method
    * @return the ed 25519 signature 2020 builder
    */
-  public Ed25519Signature2020Builder verificationMethod(URI verificationMethod) {
+  public Ed25519ProofBuilder verificationMethod(URI verificationMethod) {
     this.verificationMethod = verificationMethod;
     return this;
   }
@@ -77,7 +77,7 @@ public class Ed25519Signature2020Builder {
    * @param created the created
    * @return the ed 25519 signature 2020 builder
    */
-  public Ed25519Signature2020Builder created(Instant created) {
+  public Ed25519ProofBuilder created(Instant created) {
     this.created = created;
     return this;
   }
@@ -105,5 +105,28 @@ public class Ed25519Signature2020Builder {
             formatter.format(created));
 
     return new Ed25519Signature2020(map);
+  }
+
+  /**
+   * Build Ed25519 signature 2020 Proof Configuration.
+   *
+   * @return the Ed25519 Configuration 2020
+   */
+  public Ed25519ProofConfiguration buildProofConfiguration() {
+    DateTimeFormatter formatter =
+        DateTimeFormatter.ofPattern(Ed25519Signature2020.TIME_FORMAT).withZone(ZoneOffset.UTC);
+
+    Map<String, Object> map =
+        Map.of(
+            Proof.TYPE,
+            Ed25519Signature2020.ED25519_VERIFICATION_KEY_2018,
+            Ed25519Signature2020.PROOF_PURPOSE,
+            proofPurpose,
+            Ed25519Signature2020.VERIFICATION_METHOD,
+            verificationMethod.toString(),
+            Ed25519Signature2020.CREATED,
+            formatter.format(created));
+
+    return new Ed25519ProofConfiguration(map);
   }
 }

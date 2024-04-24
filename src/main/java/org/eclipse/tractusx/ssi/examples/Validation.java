@@ -31,15 +31,14 @@ import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtValidator;
 public class Validation {
 
   private Validation() {
-    // static
+    throw new IllegalStateException("Example class");
   }
 
   /**
    * Validate jwt date.
    *
    * @param signedJWT the signed jwt
-   * @param audience the audience
-   * @throws JwtAudienceCheckException the jwt audience check failed exception
+   * @throws SignatureParseException the jwt signature check failed exception
    * @throws JwtExpiredException the jwt expired exception
    */
   public static void validateJWTDate(SignedJWT signedJWT)
@@ -54,7 +53,7 @@ public class Validation {
    * @param signedJWT the signed jwt
    * @param audience the audience
    * @throws JwtAudienceCheckException the jwt audience check failed exception
-   * @throws JwtExpiredException the jwt expired exception
+   * @throws SignatureParseException the jwt signature check failed exception
    */
   public static void validateJWTAudiences(SignedJWT signedJWT, String audience)
       throws JwtAudienceCheckException, SignatureParseException {

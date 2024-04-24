@@ -138,17 +138,21 @@ public class DidDocumentBuilder {
             verificationMethods);
 
     HashMap<String, Object> entries = new HashMap<>(requiredEntries);
-    if (CollectionUtils.isNotEmpty(assertionMethod))
+    if (CollectionUtils.isNotEmpty(assertionMethod)) {
       entries.put(ProofPurpose.ASSERTION_METHOD.purpose, assertionMethod);
+    }
 
-    if (CollectionUtils.isNotEmpty(authentication))
+    if (CollectionUtils.isNotEmpty(authentication)) {
       entries.put(ProofPurpose.AUTHENTICATION.purpose, authentication);
+    }
 
-    if (CollectionUtils.isNotEmpty(capabilityDelegation))
+    if (CollectionUtils.isNotEmpty(capabilityDelegation)) {
       entries.put(ProofPurpose.CAPABILITY_DELEGATION.purpose, capabilityDelegation);
+    }
 
-    if (CollectionUtils.isNotEmpty(capabilityInvocation))
+    if (CollectionUtils.isNotEmpty(capabilityInvocation)) {
       entries.put(ProofPurpose.CAPABILITY_INVOCATION.purpose, capabilityInvocation);
+    }
 
     return new DidDocument(entries);
   }

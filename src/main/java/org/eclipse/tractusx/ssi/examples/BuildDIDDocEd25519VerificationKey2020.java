@@ -43,7 +43,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 public class BuildDIDDocEd25519VerificationKey2020 {
 
   private BuildDIDDocEd25519VerificationKey2020() {
-    // static
+    throw new IllegalStateException("Example class");
   }
 
   /**

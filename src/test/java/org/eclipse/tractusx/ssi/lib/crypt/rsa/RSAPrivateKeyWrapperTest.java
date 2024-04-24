@@ -1,7 +1,11 @@
 package org.eclipse.tractusx.ssi.lib.crypt.rsa;
 
 import static org.junit.Assert.assertThrows;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
@@ -15,6 +19,7 @@ import org.junit.jupiter.api.Test;
  * @author Pascal Manaras <a href="mailto:manaras@xignsys.com">manaras@xignsys.com</a>
  */
 class RSAPrivateKeyWrapperTest {
+
   @Test
   void shouldResultInValidRSAWrapper()
       throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
@@ -27,7 +32,7 @@ class RSAPrivateKeyWrapperTest {
 
     assertTrue(wrapper.getKeyLength() > 0);
     assertFalse(wrapper.asStringForStoring().isBlank());
-    assertNull(wrapper.asStringForExchange(EncodeType.BASE58));
+    assertNull(wrapper.asStringForExchange(EncodeType.BASE_58));
     assertTrue(wrapper.asByte().length > 0);
     assertNotNull(wrapper.getPrivateKey());
   }

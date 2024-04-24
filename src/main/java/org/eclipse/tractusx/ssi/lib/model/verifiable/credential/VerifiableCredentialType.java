@@ -21,8 +21,12 @@
 
 package org.eclipse.tractusx.ssi.lib.model.verifiable.credential;
 
+import lombok.experimental.UtilityClass;
+
 /** The type Verifiable credential type. */
+@UtilityClass
 public class VerifiableCredentialType {
+
   /** The constant VERIFIABLE_CREDENTIAL. */
   public static final String VERIFIABLE_CREDENTIAL = "VerifiableCredential";
 

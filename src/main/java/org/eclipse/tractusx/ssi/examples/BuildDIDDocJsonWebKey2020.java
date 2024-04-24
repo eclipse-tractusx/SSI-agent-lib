@@ -43,9 +43,15 @@ import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 public class BuildDIDDocJsonWebKey2020 {
 
   private BuildDIDDocJsonWebKey2020() {
-    // static
+    throw new IllegalStateException("Example class");
   }
 
+  /**
+   * Build did document.
+   *
+   * @param hostName the host name
+   * @return the did document
+   */
   @SneakyThrows
   public static DidDocument buildDidDocumentWithEDJWKVerificationMethod(String hostName) {
     OctetKeyPair octetKeyPair = new OctetKeyPairGenerator(Curve.Ed25519).keyID("1").generate();

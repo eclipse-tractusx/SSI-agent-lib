@@ -35,12 +35,7 @@ class VerifiableCredentialTest {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
-  /**
-   * Can serialize vc.
-   *
-   * @throws JsonMappingException the json mapping exception
-   * @throws JsonProcessingException the json processing exception
-   */
+  /** Can serialize vc. */
   @Test
   @SneakyThrows
   void canSerializeVC() {

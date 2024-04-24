@@ -16,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.jwt;
 
@@ -33,7 +34,6 @@ import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.proc.JWSVerifierFactory;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import java.security.SignatureException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +44,6 @@ import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedVerificationMethodException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
@@ -61,18 +60,6 @@ public class SignedJwtVerifier {
 
   private final DidResolver didResolver;
 
-  /**
-   * Verifies a VerifiableCredential using the issuer's public key
-   *
-   * @param jwt a {@link SignedJWT} that was sent by the claiming party.
-   * @return true if verified, false otherwise
-   * @throws DidParseException
-   * @throws SignatureException
-   * @throws DidResolverException
-   * @throws SignatureVerificationException
-   * @throws UnsupportedVerificationMethodException
-   * @throws SignatureParseException
-   */
   public boolean verify(SignedJWT jwt)
       throws DidParseException,
           DidResolverException,
@@ -132,10 +119,12 @@ public class SignedJwtVerifier {
       return new Ed25519Verifier(((OctetKeyPair) key).toPublicJWK());
     } else {
       JWSVerifierFactory verifierFactory = new DefaultJWSVerifierFactory();
-      if (RSASSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm()))
+      if (RSASSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm())) {
         return verifierFactory.createJWSVerifier(header, key.toRSAKey().toRSAPublicKey());
-      if (ECDSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm()))
+      }
+      if (ECDSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm())) {
         return verifierFactory.createJWSVerifier(header, key.toECKey().toPublicKey());
+      }
     }
     throw new IllegalArgumentException(
         String.format("algorithm %s is not supported", header.getAlgorithm().getName()));

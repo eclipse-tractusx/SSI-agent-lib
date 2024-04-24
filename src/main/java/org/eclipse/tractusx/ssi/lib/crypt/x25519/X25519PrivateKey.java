@@ -46,7 +46,7 @@ public class X25519PrivateKey implements IPrivateKey {
    * Instantiates a new X 25519 private key.
    *
    * @param privateKey the private key
-   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws InvalidPrivateKeyFormatException the invalid private key format
    */
   public X25519PrivateKey(byte[] privateKey) throws InvalidPrivateKeyFormatException {
     if (this.getKeyLength() != privateKey.length) {
@@ -60,8 +60,7 @@ public class X25519PrivateKey implements IPrivateKey {
    *
    * @param privateKey the private key
    * @param pemFormat the pem format
-   * @throws InvalidePrivateKeyFormat the invalide private key format
-   * @throws IOException the io exception
+   * @throws InvalidPrivateKeyFormatException the invalid private key format
    */
   public X25519PrivateKey(String privateKey, boolean pemFormat)
       throws InvalidPrivateKeyFormatException {

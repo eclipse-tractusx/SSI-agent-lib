@@ -16,7 +16,8 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
@@ -30,12 +31,14 @@ import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatExcepti
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
-import org.eclipse.tractusx.ssi.lib.model.ProofPurpose;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
-import org.eclipse.tractusx.ssi.lib.model.proof.ed25519.Ed25519Signature2020Builder;
-import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020Builder;
+import org.eclipse.tractusx.ssi.lib.model.proof.ed25519.Ed25519ProofBuilder;
+import org.eclipse.tractusx.ssi.lib.model.proof.ed25519.Ed25519Signature2020;
+import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSProofBuilder;
+import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable.VerifiableType;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.hash.LinkedDataHasher;
 import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
@@ -73,52 +76,62 @@ public class LinkedDataProofGenerator {
   /**
    * Create proof.
    *
-   * @param document the document
+   * @param verifiable the document
    * @param verificationMethodId the verification method id
    * @param privateKey the private key
    * @return the proof
    * @throws SsiException the ssi exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
+   * @throws InvalidPrivateKeyFormatException the invalide private key format
    */
-  public Proof createProof(Verifiable document, URI verificationMethodId, IPrivateKey privateKey)
+  public Proof createProof(Verifiable verifiable, URI verificationMethodId, IPrivateKey privateKey)
       throws InvalidPrivateKeyFormatException,
           SignatureGenerateFailedException,
           TransformJsonLdException {
 
-    return createProof(document, verificationMethodId, privateKey, ProofPurpose.ASSERTION_METHOD);
-  }
+    Proof proof = null;
+    if (type == SignatureType.ED25519) {
+      proof =
+          new Ed25519ProofBuilder()
+              .proofPurpose(Ed25519Signature2020.ASSERTION_METHOD)
+              .verificationMethod(verificationMethodId)
+              .created(Instant.now())
+              .buildProofConfiguration();
+    } else {
+      proof =
+          new JWSProofBuilder()
+              .proofPurpose(JWSSignature2020.ASSERTION_METHOD)
+              .verificationMethod(verificationMethodId)
+              .created(Instant.now())
+              .buildProofConfiguration();
+    }
 
-  public Proof createProof(
-      Verifiable document,
-      URI verificationMethodId,
-      IPrivateKey privateKey,
-      ProofPurpose proofPurpose)
-      throws InvalidPrivateKeyFormatException,
-          SignatureGenerateFailedException,
-          TransformJsonLdException {
+    // Adding proof configuration to document
+    verifiable.put(Verifiable.PROOF, proof);
+    final TransformedLinkedData transformedData;
 
-    final TransformedLinkedData transformedData = transformer.transform(document);
+    // if it's VP then we need to remove the Signature from VCs
+    if (verifiable.getType() == VerifiableType.VP) {
+      // We need to make a deep copy to keep the original Verifiable as it is for
+      // Verification step
+      var verifiableWithoutProofSignature = verifiable.deepClone().removeProofSignature();
+      transformedData = transformer.transform(verifiableWithoutProofSignature);
+    } else {
+      transformedData = transformer.transform(verifiable);
+    }
+
     final HashedLinkedData hashedData = hasher.hash(transformedData);
+
     byte[] signature;
     signature = signer.sign(new HashedLinkedData(hashedData.getValue()), privateKey);
 
     if (type == SignatureType.ED25519) {
 
       final MultibaseString multibaseString = MultibaseFactory.create(signature);
-      return new Ed25519Signature2020Builder()
-          .proofPurpose(proofPurpose.purpose)
-          .proofValue(multibaseString.getEncoded())
-          .verificationMethod(verificationMethodId)
-          .created(Instant.now())
-          .build();
+      proof.put(Ed25519Signature2020.PROOF_VALUE, multibaseString);
     } else {
-
-      return new JWSSignature2020Builder()
-          .proofPurpose(proofPurpose.purpose)
-          .proofValue(new String(signature, StandardCharsets.UTF_8))
-          .verificationMethod(verificationMethodId)
-          .created(Instant.now())
-          .build();
+      proof.put(JWSSignature2020.JWS, new String(signature, StandardCharsets.UTF_8));
     }
+
+    return proof;
   }
 }

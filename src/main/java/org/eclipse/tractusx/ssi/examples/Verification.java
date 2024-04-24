@@ -35,27 +35,31 @@ import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedVerificationMethodException;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtVerifier;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
 
 /**
  * This is example class to demonstrate how to verify @{@link SignedJWT} and {@link
- * VerifiableCredential}
- *
- * @throws DidParseException
- * @throws SignatureException
- * @throws DidResolverException
- * @throws SignatureVerificationException
- * @throws UnsupportedVerificationMethodException
+ * VerifiableCredential}*
  */
 public class Verification {
 
   private Verification() {
-    // static
+    throw new IllegalStateException("Example class");
   }
 
+  /**
+   * Verify jwt.
+   *
+   * @param jwt the jwt
+   * @throws DidParseException the did parse exception
+   * @throws DidResolverException the did resolver exception
+   * @throws SignatureVerificationFailedException the signature verification failed exception
+   * @throws SignatureVerificationException the signature verification exception
+   * @throws SignatureParseException the signature parse exception
+   * @throws SignatureException the signature exception
+   */
   public static void verifyJWT(SignedJWT jwt)
       throws DidParseException,
           DidResolverException,
@@ -73,21 +77,26 @@ public class Verification {
   }
 
   /**
-   * Verify ed25519 signed ld.
+   * Verify jwsld boolean.
    *
-   * @param verifiableCredential the verifiable credential
-   * @return the boolean
-   * @throws DidDocumentResolverNotRegisteredException
-   * @throws TransformJsonLdException
-   * @throws NoVerificationKeyFoundException
-   * @throws SignatureVerificationException
-   * @throws InvalidPublicKeyFormatException
-   * @throws DidParseException
-   * @throws SignatureParseException
-   * @throws UnsupportedSignatureTypeException
-   * @throws SignatureVerificationFailedException
+   * @param verifiableCredential the credential
+   * @return true if the credential is valid
+   * @throws TransformJsonLdException the transform json ld exception
+   * @throws NoVerificationKeyFoundException the no verification key found exception
+   * @throws UnsupportedSignatureTypeException the unsupported signature type exception
+   * @throws InvalidPublicKeyFormatException the invalid public key format exception
+   * @throws SignatureParseException the signature parse exception
+   * @throws DidParseException the did parse exception
+   * @throws SignatureVerificationFailedException the signature verification failed exception
    */
-  public static boolean verifyED25519LD(VerifiableCredential verifiableCredential) {
+  public static boolean verifyJWSLD(VerifiableCredential verifiableCredential)
+      throws TransformJsonLdException,
+          NoVerificationKeyFoundException,
+          UnsupportedSignatureTypeException,
+          InvalidPublicKeyFormatException,
+          SignatureParseException,
+          DidParseException,
+          SignatureVerificationFailedException {
     // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();

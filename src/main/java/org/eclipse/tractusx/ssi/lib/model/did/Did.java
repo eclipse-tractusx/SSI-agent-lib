@@ -38,7 +38,7 @@ public class Did {
   @EqualsAndHashCode.Include @Setter @Getter @NonNull DidMethodIdentifier methodIdentifier;
 
   /** The Fragment. */
-  @EqualsAndHashCode.Include @Setter @Getter String fragment;
+  @EqualsAndHashCode.Include @Getter String fragment;
 
   /**
    * Instantiates a new Did.
@@ -50,7 +50,7 @@ public class Did {
   public Did(DidMethod method, DidMethodIdentifier didMethodIdentifier, String fragment) {
     this.method = method;
     this.methodIdentifier = didMethodIdentifier;
-    this.fragment = fragment;
+    setFragment(fragment);
   }
 
   /**
@@ -61,6 +61,19 @@ public class Did {
    */
   public Did(DidMethod method, DidMethodIdentifier didMethodIdentifier) {
     this(method, didMethodIdentifier, null);
+  }
+
+  /**
+   * Override lombok setter implementation as fragment must not be blank.
+   *
+   * @param fragment the new fragment
+   */
+  public void setFragment(String fragment) {
+    if (fragment != null && !fragment.isBlank()) {
+      this.fragment = fragment;
+    } else {
+      this.fragment = null;
+    }
   }
 
   /**
@@ -84,7 +97,7 @@ public class Did {
   @Override
   public String toString() {
     StringBuilder uri = new StringBuilder(String.format("did:%s:%s", method, methodIdentifier));
-    if (fragment != null && !fragment.isBlank()) {
+    if (fragment != null) {
       uri.append(String.format("#%s", fragment));
     }
     return uri.toString();

@@ -1,5 +1,6 @@
-/********************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+/*
+ * ******************************************************************************
+ * Copyright (c) 2021,2024 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -20,7 +21,6 @@
 package org.eclipse.tractusx.ssi.examples;
 
 import com.nimbusds.jwt.SignedJWT;
-import java.io.IOException;
 import java.util.List;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
@@ -38,8 +38,9 @@ import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedJwtPresentationF
  * JWT format
  */
 class VP {
+
   private VP() {
-    // static
+    throw new IllegalStateException("Example class");
   }
 
   /**
@@ -60,24 +61,16 @@ class VP {
         .build();
   }
 
-  /**
-   * Create vp as a signed jwt.
-   *
-   * @param issuer the issuer
-   * @param credentials the credentials
-   * @param audience the audience
-   * @param privateKey the private key
-   * @return the signed jwt
-   * @throws IOException the io exception
-   */
   public static SignedJWT createVPAsJWT(
-      Did issuer, List<VerifiableCredential> credentials, String audience, IPrivateKey privateKey) {
+      Did issuer,
+      List<VerifiableCredential> credentials,
+      String audience,
+      IPrivateKey privateKey,
+      String keyId) {
 
     final SerializedJwtPresentationFactory presentationFactory =
         new SerializedJwtPresentationFactoryImpl(
             new SignedJwtFactory(), new JsonLdSerializerImpl(), issuer);
-
-    return presentationFactory.createPresentation(
-        issuer, credentials, audience, privateKey, "keyId");
+    return presentationFactory.createPresentation(issuer, credentials, audience, privateKey, keyId);
   }
 }

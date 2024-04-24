@@ -29,7 +29,6 @@ import java.util.List;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
-import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestDidResolver;
@@ -60,6 +59,7 @@ class LinkedDataProofValidationComponentTest {
   @Test
   @SneakyThrows
   void testVCProofFailureOnManipulatedCredential() {
+
     credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
     didResolver.register(credentialIssuer);
 
@@ -145,10 +145,9 @@ class LinkedDataProofValidationComponentTest {
     final VerifiableCredential credential =
         TestVerifiableFactory.createVerifiableCredential(credentialIssuer, null);
 
-    final JWSSignature2020 proof =
-        (JWSSignature2020)
-            linkedDataProofGenerator.createProof(
-                credential, verificationMethod, credentialIssuer.getPrivateKey());
+    final Proof proof =
+        linkedDataProofGenerator.createProof(
+            credential, verificationMethod, credentialIssuer.getPrivateKey());
 
     final VerifiableCredential credentialWithProof =
         TestVerifiableFactory.attachProof(credential, proof);
@@ -219,10 +218,9 @@ class LinkedDataProofValidationComponentTest {
     final VerifiableCredential vc =
         TestVerifiableFactory.createVerifiableCredential(credentialIssuer, null);
 
-    final JWSSignature2020 vcProof =
-        (JWSSignature2020)
-            linkedDataProofGenerator.createProof(
-                vc, verificationMethod, credentialIssuer.getPrivateKey());
+    final Proof vcProof =
+        linkedDataProofGenerator.createProof(
+            vc, verificationMethod, credentialIssuer.getPrivateKey());
 
     final VerifiableCredential vcWithProof = TestVerifiableFactory.attachProof(vc, vcProof);
 
@@ -230,10 +228,9 @@ class LinkedDataProofValidationComponentTest {
         TestVerifiableFactory.createVerifiablePresentation(
             credentialIssuer, List.of(vcWithProof), null);
 
-    final JWSSignature2020 vpProof =
-        (JWSSignature2020)
-            linkedDataProofGenerator.createProof(
-                vp, verificationMethod, credentialIssuer.getPrivateKey());
+    final Proof vpProof =
+        linkedDataProofGenerator.createProof(
+            vp, verificationMethod, credentialIssuer.getPrivateKey());
 
     final VerifiablePresentation vpWithProof = TestVerifiableFactory.attachProof(vp, vpProof);
 
@@ -242,7 +239,49 @@ class LinkedDataProofValidationComponentTest {
     Assertions.assertTrue(isOk);
   }
 
-  /** Test verification method. */
+  /** Test Proof configuration signature */
+  @Test
+  @SneakyThrows
+  void testVCProofFailureOnManipulatedProofOptions() {
+
+    credentialIssuer = TestIdentityFactory.newIdentityWithEDVerificationMethod();
+    didResolver.register(credentialIssuer);
+
+    // Generator
+    linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED25519);
+
+    // Verification
+    linkedDataProofValidation = LinkedDataProofValidation.newInstance(this.didResolver);
+
+    final URI verificationMethod =
+        credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
+
+    final VerifiableCredential credential =
+        TestVerifiableFactory.createVerifiableCredential(credentialIssuer, null);
+
+    final Proof proof =
+        linkedDataProofGenerator.createProof(
+            credential, verificationMethod, credentialIssuer.getPrivateKey());
+
+    final VerifiableCredential credentialWithProof =
+        TestVerifiableFactory.attachProof(credential, proof);
+
+    credentialWithProof.put(VerifiableCredential.PROOF, proof);
+
+    var isOk = linkedDataProofValidation.verify(credentialWithProof);
+
+    Assertions.assertTrue(isOk);
+
+    // now with updated Proof Options
+    proof.put("proofPurpose", "something");
+    credentialWithProof.put(VerifiableCredential.PROOF, proof);
+
+    var isOkUpdatedProof = linkedDataProofValidation.verify(credentialWithProof);
+
+    Assertions.assertFalse(isOkUpdatedProof);
+  }
+
+  /** Test Verification Method and Issuer should be equal */
   @Test
   @SneakyThrows
   void testVerificationMethodOfVC() {
@@ -263,6 +302,7 @@ class LinkedDataProofValidationComponentTest {
         TestVerifiableFactory.createVerifiableCredential(credentialIssuer, null);
 
     credential.replace("issuer", "did:test:4efee956-GGGG-42c0-8efb-0716e5e3f8de");
+
     final Proof proof =
         linkedDataProofGenerator.createProof(
             credential, verificationMethod, credentialIssuer.getPrivateKey());

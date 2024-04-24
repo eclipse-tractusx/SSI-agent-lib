@@ -48,20 +48,21 @@ public class X25519PublicKey implements IPublicKey {
    * Instantiates a new X 25519 public key.
    *
    * @param publicKey the public key
-   * @throws InvalidPublicKeyFormatException the invalide public key format
+   * @throws InvalidPublicKeyFormatException the invalid public key format exception
    */
   public X25519PublicKey(byte[] publicKey) throws InvalidPublicKeyFormatException {
-    if (this.getKeyLength() != publicKey.length)
+    if (this.getKeyLength() != publicKey.length) {
       throw new InvalidPublicKeyFormatException(getKeyLength(), publicKey.length);
+    }
     this.originalKey = publicKey;
   }
 
   /**
-   * Instantiates a new X25519 public key.
+   * Instantiates a new X 25519 public key.
    *
    * @param publicKey the public key
-   * @param pemFormat the pe mformat
-   * @throws InvalidPublicKeyFormatException the invalide public key format
+   * @param pemFormat the pem format
+   * @throws InvalidPublicKeyFormatException the invalid public key format exception
    * @throws IOException the io exception
    */
   public X25519PublicKey(String publicKey, boolean pemFormat)
@@ -79,8 +80,9 @@ public class X25519PublicKey implements IPublicKey {
       this.originalKey = MultibaseFactory.create(publicKey).getDecoded();
     }
 
-    if (this.getKeyLength() != originalKey.length)
+    if (this.getKeyLength() != originalKey.length) {
       throw new InvalidPublicKeyFormatException(getKeyLength(), originalKey.length);
+    }
   }
 
   @Override

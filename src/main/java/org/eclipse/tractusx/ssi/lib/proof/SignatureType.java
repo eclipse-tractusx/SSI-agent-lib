@@ -16,12 +16,14 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
 import com.nimbusds.jose.JWSAlgorithm;
 
+/** The enum Signature type. */
 public enum SignatureType {
   ED25519("Ed25519Signature2020", ""),
   JWS(Constants.JSON_WEB_SIGNATURE_2020, JWSAlgorithm.EdDSA.getName()),
@@ -30,13 +32,21 @@ public enum SignatureType {
   JWS_P384(Constants.JSON_WEB_SIGNATURE_2020, JWSAlgorithm.ES384.getName()),
   JWS_RSA(Constants.JSON_WEB_SIGNATURE_2020, JWSAlgorithm.PS256.getName());
 
-  public final String type;
+  private final String type;
 
-  public final String algorithm;
+  private final String algorithm;
 
   private SignatureType(String type, String algorithm) {
     this.type = type;
     this.algorithm = algorithm;
+  }
+
+  public String getType() {
+    return this.type;
+  }
+
+  public String getAlgorithm() {
+    return this.algorithm;
   }
 
   private static class Constants {

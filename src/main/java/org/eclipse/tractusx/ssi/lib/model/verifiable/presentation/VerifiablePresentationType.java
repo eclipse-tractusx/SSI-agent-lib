@@ -21,11 +21,11 @@
 
 package org.eclipse.tractusx.ssi.lib.model.verifiable.presentation;
 
+import lombok.experimental.UtilityClass;
+
 /** The type Verifiable presentation type. */
+@UtilityClass
 public class VerifiablePresentationType {
-  private VerifiablePresentationType() {
-    // static
-  }
 
   /** The constant VERIFIABLE_PRESENTATION. */
   public static final String VERIFIABLE_PRESENTATION = "VerifiablePresentation";

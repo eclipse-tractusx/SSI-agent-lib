@@ -16,19 +16,24 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ * *******************************************************************************
+ */
 
 package org.eclipse.tractusx.ssi.lib.proof;
 
-import java.util.Optional;
 import java.util.logging.Logger;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
+import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.json.InvalidJsonLdException;
+import org.eclipse.tractusx.ssi.lib.exception.json.TransformJsonLdException;
+import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.NoVerificationKeyFoundException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
+import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedSignatureTypeException;
-import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable.VerifiableType;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
@@ -42,11 +47,18 @@ import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofVerifier;
 import org.eclipse.tractusx.ssi.lib.validation.JsonLdValidator;
 import org.eclipse.tractusx.ssi.lib.validation.JsonLdValidatorImpl;
 
+/** The type Linked data proof validation. */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class LinkedDataProofValidation {
 
   static final Logger LOG = Logger.getLogger(LinkedDataProofValidation.class.getName());
 
+  /**
+   * New instance linked data proof validation.
+   *
+   * @param didResolver the did resolver
+   * @return the linked data proof validation
+   */
   public static LinkedDataProofValidation newInstance(DidResolver didResolver) {
 
     if (didResolver == null) {
@@ -61,64 +73,76 @@ public class LinkedDataProofValidation {
   }
 
   private final LinkedDataHasher hasher;
-
   private final LinkedDataTransformer transformer;
-
   private final DidResolver didResolver;
-
   private final JsonLdValidator jsonLdValidator;
 
   /**
-   * To verifiy {@link VerifiableCredential} or {@link VerifiablePresentation} In this method we are
+   * To verify {@link VerifiableCredential} or {@link VerifiablePresentation}. In this method we are
    * depending on Verification Method to resolve the DID Document and fetching the required Public
    * Key
+   *
+   * @throws UnsupportedSignatureTypeException
+   * @throws DidDocumentResolverNotRegisteredException
+   * @throws NoVerificationKeyFoundException
+   * @throws SignatureVerificationFailedException
+   * @throws InvalidPublicKeyFormatException
+   * @throws DidParseException
+   * @throws SignatureParseException
+   * @throws TransformJsonLdException
+   * @throws InvalidJsonLdException
    */
-  @SneakyThrows
-  public boolean verify(Verifiable verifiable) {
-    Optional<Proof> proof = verifiable.getProof();
-    if (proof.isEmpty()) {
-      throw new UnsupportedSignatureTypeException("Proof can't be empty");
-    }
-    boolean isVerified;
+  public boolean verify(Verifiable verifiable)
+      throws UnsupportedSignatureTypeException,
+          SignatureParseException,
+          DidParseException,
+          InvalidPublicKeyFormatException,
+          SignatureVerificationFailedException,
+          NoVerificationKeyFoundException,
+          TransformJsonLdException {
 
-    var type = proof.get().getType();
+    var type =
+        verifiable
+            .getProof()
+            .orElseThrow(() -> new DidParseException("no proof found for verification"))
+            .getType();
+    IVerifier verifier = null;
 
-    IVerifier verifier;
     if (type != null && !type.isBlank()) {
-      if (type.equals(SignatureType.ED25519.type))
+      if (type.equals(SignatureType.ED25519.getType())) {
         verifier = new Ed25519ProofVerifier(this.didResolver);
-      else if (type.equals(SignatureType.JWS.type))
+      } else if (type.equals(SignatureType.JWS.getType())) {
         verifier = new JWSProofVerifier(this.didResolver);
-      else
+      } else {
         throw new UnsupportedSignatureTypeException(
             String.format("%s is not supported type", type));
+      }
     } else {
       throw new UnsupportedSignatureTypeException("Proof type can't be empty");
     }
 
-    final TransformedLinkedData transformedData = transformer.transform(verifiable);
+    // We need to make a deep copy to keep the original Verifiable as it is for Verification step
+    var verifiableWithoutProofSignature = verifiable.deepClone().removeProofSignature();
+
+    final TransformedLinkedData transformedData =
+        transformer.transform(verifiableWithoutProofSignature);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
 
     try {
-      jsonLdValidator.validate(verifiable);
+      jsonLdValidator.validate(verifiableWithoutProofSignature);
+      return verifier.verify(hashedData, verifiable) && validateVerificationMethodOfVC(verifiable);
     } catch (InvalidJsonLdException e) {
       LOG.severe("Could not valiate " + verifiable.getId());
       LOG.throwing(this.getClass().getName(), "verify", e);
       return false;
     }
-
-    isVerified =
-        verifier.verify(hashedData, verifiable) && validateVerificationMethodOfVC(verifiable);
-
-    return isVerified;
   }
 
   /**
    * This method is to validate the Verification Method of VC
    *
-   * @param verifiable
-   * @return
-   * @throws UnsupportedSignatureTypeException
+   * @param verifiable the verifiable
+   * @return validation result
    */
   @SneakyThrows
   private Boolean validateVerificationMethodOfVC(Verifiable verifiable) {
@@ -128,8 +152,8 @@ public class LinkedDataProofValidation {
     }
     final VerifiableCredential vc = new VerifiableCredential(verifiable);
     final String issuer = vc.getIssuer().toString();
-    final String verficationMethod = getVerificationMethod(verifiable);
-    final String[] splitVerificationMethod = verficationMethod.split("#");
+    final String verificationMethod = getVerificationMethod(verifiable);
+    final String[] splitVerificationMethod = verificationMethod.split("#");
     return splitVerificationMethod[0].equals(issuer);
   }
 
@@ -140,14 +164,17 @@ public class LinkedDataProofValidation {
    * @return
    * @throws UnsupportedSignatureTypeException
    */
-  @SneakyThrows
-  private String getVerificationMethod(Verifiable verifiable) {
-
-    Proof proof =
-        verifiable
-            .getProof()
-            .orElseThrow(
-                () -> new UnsupportedSignatureTypeException("Signature type is not supported"));
-    return (String) proof.get("verificationMethod");
+  private String getVerificationMethod(Verifiable verifiable)
+      throws UnsupportedSignatureTypeException {
+    final String VERIFICATION_METHOD = "verificationMethod";
+    try {
+      return (String)
+          verifiable
+              .getProof()
+              .orElseThrow(() -> new DidParseException("no proof found for verification"))
+              .get(VERIFICATION_METHOD);
+    } catch (Exception e) {
+      throw new UnsupportedSignatureTypeException("Signature type is not supported");
+    }
   }
 }

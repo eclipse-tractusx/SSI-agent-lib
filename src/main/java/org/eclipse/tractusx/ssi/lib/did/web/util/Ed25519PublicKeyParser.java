@@ -23,17 +23,15 @@ package org.eclipse.tractusx.ssi.lib.did.web.util;
 
 import java.io.IOException;
 import java.io.StringReader;
+import lombok.experimental.UtilityClass;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 
 /** The type Ed 25519 public key parser. */
+@UtilityClass
 public class Ed25519PublicKeyParser {
-
-  private Ed25519PublicKeyParser() {
-    // static
-  }
 
   /**
    * Parses public key in format -----BEGIN PUBLIC KEY-----

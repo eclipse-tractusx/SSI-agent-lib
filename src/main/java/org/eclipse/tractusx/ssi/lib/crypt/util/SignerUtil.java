@@ -34,16 +34,14 @@ import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import lombok.experimental.UtilityClass;
 import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureGenerateFailedException;
 import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 
+@UtilityClass
 public class SignerUtil {
-
-  private SignerUtil() {
-    // all static
-  }
 
   public static JWSSigner getSigner(SignatureType type, IPrivateKey privateKey)
       throws JOSEException, SignatureGenerateFailedException {
@@ -53,7 +51,7 @@ public class SignerUtil {
       case JWS_RSA -> SignerUtil.getRSASigner(privateKey);
       default ->
           throw new IllegalArgumentException(
-              String.format("algorithm %s is not supported", type.algorithm));
+              String.format("algorithm %s is not supported", type.getAlgorithm()));
     };
   }
 

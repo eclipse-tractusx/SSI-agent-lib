@@ -34,21 +34,20 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 public class ResolveDIDDoc {
 
   private ResolveDIDDoc() {
-    // static
+    throw new IllegalStateException("Utility class");
   }
 
   /**
-   * Resolve did document.
+   * Resolve did document did document.
    *
    * @param didUrl the did url
    * @return the did document
-   * @throws DidResolverException when no document found or retrieving failed
-   * @throws DidParseException exception
+   * @throws DidParseException the did parse exception
+   * @throws DidResolverException the did resolver exception
    */
-  public static DidDocument resovleDocument(String didUrl)
+  public static DidDocument resolveDidDocument(String didUrl)
       throws DidParseException, DidResolverException {
 
-    // DID Resolver Constracture params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();
     var enforceHttps = false;

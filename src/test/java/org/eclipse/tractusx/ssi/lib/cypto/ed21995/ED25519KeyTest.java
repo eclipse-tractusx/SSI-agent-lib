@@ -24,7 +24,6 @@ package org.eclipse.tractusx.ssi.lib.cypto.ed21995;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.util.Arrays;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IKeyGenerator;
@@ -32,8 +31,6 @@ import org.eclipse.tractusx.ssi.lib.crypt.KeyPair;
 import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519Generator;
 import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519PrivateKey;
 import org.eclipse.tractusx.ssi.lib.crypt.x25519.X25519PublicKey;
-import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPrivateKeyFormatException;
-import org.eclipse.tractusx.ssi.lib.exception.key.InvalidPublicKeyFormatException;
 import org.eclipse.tractusx.ssi.lib.exception.key.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.model.base.EncodeType;
 import org.junit.jupiter.api.Test;
@@ -54,42 +51,28 @@ class ED25519KeyTest {
     assertNotNull(keyPair.getPublicKey());
   }
 
-  /**
-   * Test ed 25519 key serliztion.
-   *
-   * @throws KeyGenerationException the key generation exception
-   * @throws IOException the io exception
-   */
+  /** Test ed 25519 key serliztion. */
   @Test
   @SneakyThrows
-  void testED25519KeySerialization() throws KeyGenerationException, IOException {
+  void testED25519KeySerliztion() {
+
     IKeyGenerator keyGenerator = new X25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
 
     assertNotNull(keyPair.getPrivateKey().asStringForStoring());
 
-    assertNotNull(keyPair.getPrivateKey().asStringForExchange(EncodeType.BASE64));
+    assertNotNull(keyPair.getPrivateKey().asStringForExchange(EncodeType.BASE_64));
 
     assertNotNull(keyPair.getPublicKey().asStringForStoring());
 
-    assertNotNull(keyPair.getPublicKey().asStringForExchange(EncodeType.BASE64));
+    assertNotNull(keyPair.getPublicKey().asStringForExchange(EncodeType.BASE_64));
   }
 
-  /**
-   * Test ed 25519 key deserliztion.
-   *
-   * @throws KeyGenerationException the key generation exception
-   * @throws IOException the io exception
-   * @throws InvalidePrivateKeyFormat the invalide private key format
-   * @throws InvalidePublicKeyFormat the invalide public key format
-   */
+  /** Test ed 25519 key deserliztion. */
   @Test
   @SneakyThrows
-  void testED25519KeyDeserliztion()
-      throws KeyGenerationException,
-          IOException,
-          InvalidPrivateKeyFormatException,
-          InvalidPublicKeyFormatException {
+  void testED25519KeyDeserliztion() {
+
     IKeyGenerator keyGenerator = new X25519Generator();
     KeyPair keyPair = keyGenerator.generateKey();
 

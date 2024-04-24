@@ -3,14 +3,19 @@ package org.eclipse.tractusx.ssi.lib.model;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.ok;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 
 import com.apicatalog.jsonld.JsonLdError;
 import com.apicatalog.jsonld.JsonLdErrorCode;
+import com.apicatalog.jsonld.document.Document;
 import com.apicatalog.jsonld.http.DefaultHttpClient;
+import com.apicatalog.jsonld.loader.DocumentLoader;
 import com.apicatalog.jsonld.loader.DocumentLoaderOptions;
+import com.apicatalog.jsonld.loader.FileLoader;
 import com.apicatalog.jsonld.loader.HttpLoader;
 import com.github.tomakehurst.wiremock.common.ssl.KeyStoreSettings;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
@@ -26,6 +31,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -35,6 +41,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
 class RemoteDocumentLoaderTest {
+
   private static final String CA_PATH;
   private static final String KEYSTORE_PATH;
   private static final String TRUST_STORE_PATH;
@@ -100,8 +107,46 @@ class RemoteDocumentLoaderTest {
         new HttpLoader(new DefaultHttpClient(trustallClient)));
   }
 
+  @SneakyThrows
+  @Test
+  void testFileDocumentLoader() {
+    // String filePath = "/test/resources/schema/w3.org_2018_credentials_v1.json";
+    String filePath = "src/test/resources/schema/w3.org_2018_credentials_v1.json";
+
+    Path path = Path.of(filePath);
+    RemoteDocumentLoader remoteDocumentLoader = RemoteDocumentLoader.DOCUMENT_LOADER;
+    remoteDocumentLoader.setEnableFile(true);
+    Document document = remoteDocumentLoader.loadDocument(path.toUri(), null);
+
+    Assertions.assertNotNull(document);
+  }
+
+  @Test
+  void shouldReturnInstance() {
+    RemoteDocumentLoader instance = RemoteDocumentLoader.getInstance();
+    Assertions.assertNotNull(instance);
+  }
+
+  @Test
+  void shouldReturnDefault() {
+    RemoteDocumentLoader.setDefaultHttpLoader(null);
+    DocumentLoader defaultHttpLoader = RemoteDocumentLoader.getDefaultHttpLoader();
+    Assertions.assertNotNull(defaultHttpLoader);
+  }
+
+  @Test
+  void shouldReturnDefaultFileLoader() {
+    RemoteDocumentLoader.setDefaultFileLoader(null);
+    DocumentLoader defaultFileLoader = RemoteDocumentLoader.getDefaultFileLoader();
+    Assertions.assertNotNull(defaultFileLoader);
+  }
+
   @Test
   void shouldInitializeAndReturnDocumentLoader() {
+    RemoteDocumentLoader.setDefaultFileLoader(new FileLoader());
+    DocumentLoader defaultFileLoader = RemoteDocumentLoader.getDefaultFileLoader();
+    assertNotNull(defaultFileLoader);
+
     assertNotNull(RemoteDocumentLoader.getDefaultFileLoader());
   }
 
@@ -185,6 +230,7 @@ class RemoteDocumentLoaderTest {
 
   @RequiredArgsConstructor
   private static class TestConfig {
+
     final boolean httpsEnabled;
 
     final boolean enableLocalCache;
