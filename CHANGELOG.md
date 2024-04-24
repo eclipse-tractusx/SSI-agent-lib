@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.0.19] - 2024-04-24
+
 ### BREAKING CHANGES
 
 - New exception system
