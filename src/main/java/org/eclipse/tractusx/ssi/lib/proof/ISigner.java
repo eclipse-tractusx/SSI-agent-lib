@@ -34,8 +34,9 @@ public interface ISigner {
    * @param hashedLinkedData the hashed linked data
    * @param privateKey the private key
    * @return the byte [ ]
-   * @throws SsiException the ssi exception
    * @throws InvalidPrivateKeyFormatException the invalide private key format
+   * @throws SignatureGenerateFailedException is thrown if the signature cannot be generatedction
+   *     Maven.ExecuteGoal
    */
   public byte[] sign(HashedLinkedData hashedLinkedData, IPrivateKey privateKey)
       throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException;

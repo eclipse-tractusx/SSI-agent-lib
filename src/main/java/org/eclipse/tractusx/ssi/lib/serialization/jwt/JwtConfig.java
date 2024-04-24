@@ -22,6 +22,7 @@ package org.eclipse.tractusx.ssi.lib.serialization.jwt;
 import lombok.Builder;
 import lombok.Getter;
 
+/** A configuration for creating a JWT */
 @Getter
 @Builder
 public class JwtConfig {

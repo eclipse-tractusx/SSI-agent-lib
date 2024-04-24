@@ -26,7 +26,19 @@ import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 
+/** The interface describing how a VC as JWT serialization factory should work. */
 public interface SerializedJwtVCFactory {
+
+  /**
+   * Create a signed JWT representation of a VC
+   *
+   * @param issuer the DID of the issuer
+   * @param holder the DID of the receiver
+   * @param credentials the VCs to include in the VP
+   * @param privateKey the private key to use when signing
+   * @param keyId the key id of the private key
+   * @return a signed JWT
+   */
   SignedJWT createVCJwt(
       Did issuer,
       Did holder,

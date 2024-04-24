@@ -29,6 +29,7 @@ import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 
+/** A concrete implementation of the serialized VC as JWT contract */
 @RequiredArgsConstructor
 public class SerializedJwtVCFactoryImpl implements SerializedJwtVCFactory {
   private final SignedJwtFactory signedJwtFactory;

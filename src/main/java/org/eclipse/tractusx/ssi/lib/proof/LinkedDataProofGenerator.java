@@ -82,8 +82,9 @@ public class LinkedDataProofGenerator {
    * @param verificationMethodId the verification method id
    * @param privateKey the private key
    * @return the proof
-   * @throws SsiException the ssi exception
-   * @throws InvalidPrivateKeyFormatException the invalide private key format
+   * @throws InvalidPrivateKeyFormatException is thrown if the private key is in an unknown format
+   * @throws SignatureGenerateFailedException is thrown if the signature cannot be created
+   * @throws TransformJsonLdException is thrown if the json-ld cannot be canonicalized
    */
   public Proof createProof(Verifiable verifiable, URI verificationMethodId, IPrivateKey privateKey)
       throws InvalidPrivateKeyFormatException, SignatureGenerateFailedException,

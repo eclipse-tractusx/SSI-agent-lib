@@ -135,6 +135,17 @@ public class JWSProofVerifier implements IVerifier {
     return new OctetKeyPair.Builder(Curve.Ed25519, x).build();
   }
 
+  /**
+   * Verify JWS of a JWT
+   *
+   * @param hashedLinkedData a json-ld as a hash map
+   * @param signature the byte representation of the signature
+   * @param publicKey the public key to use for the verification
+   * @return a boolean indicating if the signature is valid
+   * @throws SignatureParseException is thrown if the signature cannot be parsed
+   * @throws SignatureVerificationFailedException is thrown if the signature is invalid
+   * @throws InvalidPublicKeyFormatException is thrown if the public key is in an unsupported format
+   */
   public boolean verify(HashedLinkedData hashedLinkedData, byte[] signature, IPublicKey publicKey)
       throws SignatureParseException, SignatureVerificationFailedException,
           InvalidPublicKeyFormatException {

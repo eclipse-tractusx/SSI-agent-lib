@@ -32,6 +32,13 @@ import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
 /** The type Signed jwt validator. */
 public class SignedJwtValidator {
 
+  /**
+   * Validate the JWT has not expired
+   *
+   * @param jwt a signed JWT object
+   * @throws JwtExpiredException is thrown if the expiredDate is in the past
+   * @throws SignatureParseException is thrown if the signature cannot be validated
+   */
   public void validateDate(SignedJWT jwt) throws JwtExpiredException, SignatureParseException {
     Date expiryDate;
     try {
@@ -45,8 +52,16 @@ public class SignedJwtValidator {
     }
   }
 
+  /**
+   * Validates the audience of the JWT
+   *
+   * @param jwt as signed JWT
+   * @param expectedAudience is the expected audience inside the 'aud' claim
+   * @throws JwtAudienceCheckException is thrown if the audiences don't match
+   * @throws SignatureParseException is thrown if the signature cannot be verified
+   */
   public void validateAudiences(SignedJWT jwt, String expectedAudience)
-      throws JwtAudienceCheckException, SignatureParseException, JwtAudienceCheckException {
+      throws SignatureParseException, JwtAudienceCheckException {
     List<String> audiences;
     try {
       audiences = jwt.getJWTClaimsSet().getAudience();
