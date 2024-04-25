@@ -117,15 +117,13 @@ public class LinkedDataProofGenerator {
     if (type == SignatureType.ED25519) {
       proof =
           new Ed25519ProofBuilder()
-              .proofPurpose(Ed25519Signature2020.ASSERTION_METHOD)
               .verificationMethod(verificationMethodId)
               .created(Instant.now())
-              .proofValue(proofPurpose.purpose)
+              .proofPurpose(proofPurpose.purpose)
               .buildProofConfiguration();
     } else {
       proof =
           new JWSProofBuilder()
-              .proofPurpose(JWSSignature2020.ASSERTION_METHOD)
               .verificationMethod(verificationMethodId)
               .proofPurpose(proofPurpose.purpose)
               .created(Instant.now())
