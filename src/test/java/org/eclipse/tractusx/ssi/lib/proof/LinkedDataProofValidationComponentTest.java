@@ -28,6 +28,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
+import org.eclipse.tractusx.ssi.lib.model.ProofPurpose;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
@@ -79,6 +80,8 @@ class LinkedDataProofValidationComponentTest {
         linkedDataProofGenerator.createProof(
             credential, verificationMethod, credentialIssuer.getPrivateKey());
 
+    Assertions.assertEquals(proof.getProofPurpose(), ProofPurpose.ASSERTION_METHOD.purpose);
+
     final VerifiableCredential credentialWithProof =
         TestVerifiableFactory.attachProof(credential, proof);
 
@@ -115,7 +118,12 @@ class LinkedDataProofValidationComponentTest {
 
     final Proof proof =
         linkedDataProofGenerator.createProof(
-            credential, verificationMethod, credentialIssuer.getPrivateKey());
+            credential,
+            verificationMethod,
+            credentialIssuer.getPrivateKey(),
+            ProofPurpose.AUTHENTICATION);
+
+    Assertions.assertEquals(proof.getProofPurpose(), ProofPurpose.AUTHENTICATION.purpose);
 
     final VerifiableCredential credentialWithProof =
         TestVerifiableFactory.attachProof(credential, proof);
@@ -147,7 +155,12 @@ class LinkedDataProofValidationComponentTest {
 
     final Proof proof =
         linkedDataProofGenerator.createProof(
-            credential, verificationMethod, credentialIssuer.getPrivateKey());
+            credential,
+            verificationMethod,
+            credentialIssuer.getPrivateKey(),
+            ProofPurpose.CAPABILITY_DELEGATION);
+
+    Assertions.assertEquals(proof.getProofPurpose(), ProofPurpose.CAPABILITY_DELEGATION.purpose);
 
     final VerifiableCredential credentialWithProof =
         TestVerifiableFactory.attachProof(credential, proof);
