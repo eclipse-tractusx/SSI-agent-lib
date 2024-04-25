@@ -152,7 +152,7 @@ public class LinkedDataProofGenerator {
     if (type == SignatureType.ED25519) {
 
       final MultibaseString multibaseString = MultibaseFactory.create(signature);
-      proof.put(Ed25519Signature2020.PROOF_VALUE, multibaseString);
+      proof.put(Ed25519Signature2020.PROOF_VALUE, multibaseString.getEncoded());
     } else {
       proof.put(JWSSignature2020.JWS, new String(signature, StandardCharsets.UTF_8));
     }
