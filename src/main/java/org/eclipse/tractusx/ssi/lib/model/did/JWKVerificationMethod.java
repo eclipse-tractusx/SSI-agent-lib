@@ -21,6 +21,9 @@
 
 package org.eclipse.tractusx.ssi.lib.model.did;
 
+import com.nimbusds.jose.jwk.JWK;
+import java.text.ParseException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
@@ -31,6 +34,7 @@ import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 /** The type Jwk verification method. */
 @ToString
 public class JWKVerificationMethod extends VerificationMethod {
+
   /** The constant DEFAULT_TYPE. */
   public static final String DEFAULT_TYPE = "JsonWebKey2020";
 
@@ -45,6 +49,8 @@ public class JWKVerificationMethod extends VerificationMethod {
 
   /** The constant JWK_X. */
   public static final String JWK_X = "x";
+
+  private final JWK jwk;
 
   /**
    * Instantiates a new Jwk verification method.
@@ -66,6 +72,45 @@ public class JWKVerificationMethod extends VerificationMethod {
       throw new IllegalArgumentException(
           String.format("Invalid JsonWebKey2020: %s", SerializeUtil.toJson(json)), e);
     }
+    Object object = this.get(PUBLIC_KEY_JWK);
+
+    try {
+      jwk = JWK.parse(convertToMap(object));
+    } catch (ParseException e) {
+      throw new IllegalStateException(e);
+    }
+  }
+
+  /**
+   * Gets jwk.
+   *
+   * @return the jwk
+   */
+  public JWK getJwk() {
+    return jwk;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    JWKVerificationMethod that = (JWKVerificationMethod) o;
+    return Objects.equals(jwk, that.jwk)
+        && this.getId().equals(that.getId())
+        && this.getType().equals(that.getType())
+        && this.getController().equals(that.getController());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), jwk);
   }
 
   /**
@@ -97,5 +142,15 @@ public class JWKVerificationMethod extends VerificationMethod {
     private String kty;
     private String crv;
     private String x;
+  }
+
+  private Map<String, Object> convertToMap(Object o) {
+    if (o instanceof Map) {
+      Map<String, Object> result = new HashMap<>();
+      Map<?, ?> rawMap = (Map<?, ?>) o;
+      rawMap.forEach((k, v) -> result.put((String) k, v));
+      return result;
+    }
+    throw new IllegalArgumentException("object is not a map");
   }
 }
