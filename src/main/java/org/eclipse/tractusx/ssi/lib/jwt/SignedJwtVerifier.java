@@ -22,25 +22,31 @@
 package org.eclipse.tractusx.ssi.lib.jwt;
 
 import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSHeader;
+import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.Ed25519Verifier;
-import com.nimbusds.jose.jwk.Curve;
+import com.nimbusds.jose.crypto.factories.DefaultJWSVerifierFactory;
+import com.nimbusds.jose.crypto.impl.ECDSAProvider;
+import com.nimbusds.jose.crypto.impl.EdDSAProvider;
+import com.nimbusds.jose.crypto.impl.RSASSAProvider;
+import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.OctetKeyPair;
-import com.nimbusds.jose.util.Base64URL;
+import com.nimbusds.jose.proc.JWSVerifierFactory;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import java.security.SignatureException;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidParseException;
 import org.eclipse.tractusx.ssi.lib.exception.did.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureParseException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationException;
 import org.eclipse.tractusx.ssi.lib.exception.proof.SignatureVerificationFailedException;
-import org.eclipse.tractusx.ssi.lib.exception.proof.UnsupportedVerificationMethodException;
-import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
@@ -69,6 +75,7 @@ public class SignedJwtVerifier {
    * @throws SignatureException the signature exception
    * @throws SignatureVerificationFailedException the signature verification failed exception
    */
+  @SneakyThrows
   public boolean verify(SignedJWT jwt)
       throws DidParseException, DidResolverException, SignatureVerificationException,
           SignatureParseException, SignatureException, SignatureVerificationFailedException {
@@ -86,49 +93,44 @@ public class SignedJwtVerifier {
     final DidDocument issuerDidDocument = didResolver.resolve(issuerDid);
     final List<VerificationMethod> verificationMethods = issuerDidDocument.getVerificationMethods();
 
-    // verify JWT signature
-    // TODO Don't try out each key. Better -> use key authorization key
-    for (VerificationMethod verificationMethod : verificationMethods) {
-      if (JWKVerificationMethod.isInstance(verificationMethod)) {
-        final JWKVerificationMethod method = new JWKVerificationMethod(verificationMethod);
-        final String kty = method.getPublicKeyJwk().getKty();
-        final String crv = method.getPublicKeyJwk().getCrv();
-        final String x = method.getPublicKeyJwk().getX();
+    Map<String, VerificationMethod> verificationMethodMap = toMap(verificationMethods);
 
-        if (kty.equals("OKP") && crv.equals("Ed25519")) {
-          final OctetKeyPair keyPair =
-              new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.from(x)).build();
-          try {
-            if (jwt.verify(new Ed25519Verifier(keyPair))) {
-              return true;
-            }
-          } catch (JOSEException e) {
-            throw new SignatureVerificationFailedException(e.getMessage());
-          }
-        } else {
-          throw new UnsupportedVerificationMethodException(
-              method, "only kty:OKP with crv:Ed25519 is supported");
-        }
-      } else if (Ed25519VerificationMethod.isInstance(verificationMethod)) {
-        final Ed25519VerificationMethod method = new Ed25519VerificationMethod(verificationMethod);
-        final MultibaseString multibase = method.getPublicKeyBase58();
-        final Ed25519PublicKeyParameters publicKeyParameters =
-            new Ed25519PublicKeyParameters(multibase.getDecoded(), 0);
-        final OctetKeyPair keyPair =
-            new OctetKeyPair.Builder(
-                    Curve.Ed25519, Base64URL.encode(publicKeyParameters.getEncoded()))
-                .build();
-
-        try {
-          if (jwt.verify(new Ed25519Verifier(keyPair))) {
-            return true;
-          }
-        } catch (JOSEException e) {
-          throw new SignatureVerificationFailedException(e.getMessage());
-        }
-      }
+    String keyID = jwt.getHeader().getKeyID();
+    VerificationMethod verificationMethod = verificationMethodMap.get(keyID);
+    if (verificationMethod == null) {
+      throw new IllegalArgumentException(
+          String.format("no verification method for keyID %s found", keyID));
     }
 
-    return false;
+    if (JWKVerificationMethod.isInstance(verificationMethod)) {
+      final JWKVerificationMethod method = new JWKVerificationMethod(verificationMethod);
+      JWSVerifier verifier = getVerifier(jwt.getHeader(), method.getJwk());
+      return jwt.verify(verifier);
+    } else if (Ed25519VerificationMethod.isInstance(verificationMethod)) {
+      final Ed25519VerificationMethod method = new Ed25519VerificationMethod(verificationMethod);
+      return jwt.verify(new Ed25519Verifier(method.getOctetKeyPair()));
+    } else {
+      return false;
+    }
+  }
+
+  private Map<String, VerificationMethod> toMap(List<VerificationMethod> l) {
+    Map<String, VerificationMethod> result = new HashMap<>();
+    l.forEach(v -> result.put(v.getId().toString(), v));
+    return result;
+  }
+
+  private JWSVerifier getVerifier(JWSHeader header, JWK key) throws JOSEException {
+    if (EdDSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm())) {
+      return new Ed25519Verifier(((OctetKeyPair) key).toPublicJWK());
+    } else {
+      JWSVerifierFactory verifierFactory = new DefaultJWSVerifierFactory();
+      if (RSASSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm()))
+        return verifierFactory.createJWSVerifier(header, key.toRSAKey().toRSAPublicKey());
+      if (ECDSAProvider.SUPPORTED_ALGORITHMS.contains(header.getAlgorithm()))
+        return verifierFactory.createJWSVerifier(header, key.toECKey().toPublicKey());
+    }
+    throw new IllegalArgumentException(
+        String.format("algorithm %s is not supported", header.getAlgorithm().getName()));
   }
 }

@@ -21,9 +21,13 @@
 
 package org.eclipse.tractusx.ssi.lib.serialization.jwt;
 
+import static org.junit.Assert.assertNotNull;
+
 import com.nimbusds.jwt.SignedJWT;
 import java.net.URI;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.UUID;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
 import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
@@ -43,6 +47,7 @@ import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityFactory;
 import org.eclipse.tractusx.ssi.lib.util.vc.TestVerifiableFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /** The type Serialized jwt presentation factory impl test. */
@@ -79,6 +84,31 @@ class SerializedJwtPresentationFactoryImplTest {
             new Ed25519ProofSigner());
   }
 
+  @Test
+  @DisplayName("Sign JWT with EdSA and verify signature")
+  void testJwtVerificationWithEdDSA() {
+    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
+    didResolver.register(credentialIssuer);
+    jwtVerifier = new SignedJwtVerifier(didResolver);
+
+    LinkedHashMap<String, Object> claims = new LinkedHashMap<>();
+    SignedJwtFactory signedJwtFactory = new SignedJwtFactory(new OctetKeyPairFactory());
+    String keyId = "key-1";
+    // When
+
+    SignedJWT signedJWT =
+        signedJwtFactory.create(
+            credentialIssuer.getDid(),
+            credentialIssuer.getDid(),
+            claims,
+            credentialIssuer.getPrivateKey(),
+            keyId);
+
+    // Then
+    assertNotNull(signedJWT);
+    Assertions.assertDoesNotThrow(() -> jwtVerifier.verify(signedJWT));
+  }
+
   /** Test jwt serialization. */
   @SneakyThrows
   @Test
@@ -108,6 +138,38 @@ class SerializedJwtPresentationFactoryImplTest {
         (presentation.getJWTClaimsSet().getExpirationTime().getTime()
                 - presentation.getJWTClaimsSet().getIssueTime().getTime())
             / 1000);
+  }
+
+  @Test
+  @DisplayName("Try to verify JWT when we do not have matching verification method in did document")
+  void testJwtSerializationWithInvalidKid() {
+    SerializedJwtPresentationFactory presentationFactory =
+        new SerializedJwtPresentationFactoryImpl(
+            new SignedJwtFactory(new OctetKeyPairFactory()),
+            new JsonLdSerializerImpl(),
+            credentialIssuer.getDid());
+
+    VerifiableCredential credentialWithProof = getCredential();
+
+    JwtConfig jwtConfig = JwtConfig.builder().expirationTime(CUSTOM_EXPIRATION_TIME).build();
+
+    // Build JWT
+    SignedJWT presentation =
+        presentationFactory.createPresentation(
+            credentialIssuer.getDid(),
+            List.of(credentialWithProof),
+            "test-audience",
+            credentialIssuer.getPrivateKey(),
+            "kid_"
+                + UUID.randomUUID(), // pass random kid which will be not part of the did document
+            jwtConfig);
+
+    Assertions.assertNotNull(presentation);
+    try {
+      jwtVerifier.verify(presentation);
+    } catch (Exception e) {
+      Assertions.assertInstanceOf(IllegalArgumentException.class, e);
+    }
   }
 
   @SneakyThrows
